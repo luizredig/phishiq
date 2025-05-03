@@ -1,0 +1,17 @@
+model TesteDepartamento {
+  id             String       @id @default(uuid())
+  testeId        String
+  teste          Teste        @relation(fields: [testeId], references: [id])
+  departamentoId String
+  departamento   Departamento @relation(fields: [departamentoId], references: [id])
+
+  ativo       Boolean   @default(true)
+  criadoEm    DateTime  @default(now())
+  criadoPor   String?
+  editadoEm   DateTime  @updatedAt
+  editadoPor  String?
+  deletadoEm  DateTime?
+  deletadoPor String?
+
+  @@unique([testeId, departamentoId])
+}

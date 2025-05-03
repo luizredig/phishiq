@@ -1,0 +1,21 @@
+model Log {
+  id        String  @id @default(uuid())
+  tipo      TipoLog
+  descricao String?
+
+  ativo          Boolean       @default(true)
+  criadoEm       DateTime      @default(now())
+  criadoPor      String?
+  editadoEm      DateTime      @updatedAt
+  editadoPor     String?
+  deletadoEm     DateTime?
+  deletadoPor    String?
+  Campanha       Campanha?     @relation(fields: [campanhaId], references: [id])
+  campanhaId     String?
+  Departamento   Departamento? @relation(fields: [departamentoId], references: [id])
+  departamentoId String?
+  Teste          Teste?        @relation(fields: [testeId], references: [id])
+  testeId        String?
+  TipoDeTeste    TipoDeTeste?  @relation(fields: [tipoDeTesteId], references: [id])
+  tipoDeTesteId  String?
+}

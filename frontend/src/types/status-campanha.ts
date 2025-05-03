@@ -1,0 +1,5 @@
+export enum StatusCampanha {
+  INICIADA = 'INICIADA',
+  EM_ANDAMENTO = 'EM_ANDAMENTO',
+  FINALIZADA = 'FINALIZADA',
+}

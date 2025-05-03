@@ -1,0 +1,7 @@
+enum StatusTeste {
+  ENVIADO
+  ABERTO
+  CLIQUE
+  SUCESSO
+  FALHA
+}

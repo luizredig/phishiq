@@ -1,0 +1,5 @@
+enum StatusCampanha {
+  INICIADA
+  EM_ANDAMENTO
+  FINALIZADA
+}

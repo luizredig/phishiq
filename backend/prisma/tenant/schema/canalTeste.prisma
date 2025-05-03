@@ -1,0 +1,4 @@
+enum CanalTeste {
+  EMAIL
+  WHATSAPP
+}
