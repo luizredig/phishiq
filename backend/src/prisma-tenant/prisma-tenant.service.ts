@@ -7,7 +7,7 @@ export class PrismaTenantService
   implements OnModuleInit, OnModuleDestroy
 {
   constructor() {
-    super({ datasources: { db: { url: process.env.DATABASE_URL_B } } })
+    super({ datasources: { db: { url: process.env.TENANT_DATABASE_URL } } })
   }
 
   async onModuleInit() {
