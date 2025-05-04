@@ -44,13 +44,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: 'Testes',
-            url: '/tests',
+            url: '/testes',
             icon: <TestTubeDiagonal className={'text-primary'} />,
             show: isAdmin,
           },
           {
             title: 'Campanhas',
-            url: '/campaigns',
+            url: '/campanhas',
             icon: <Megaphone className={'text-primary'} />,
             show: isAdmin,
           },
@@ -60,13 +60,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: 'Usuários',
-            url: '/users',
+            url: '/usuarios',
             icon: <UsersIcon className={'text-primary'} />,
             show: isAdmin,
           },
           {
             title: 'Departamentos',
-            url: '/departments',
+            url: '/departamentos',
             icon: <Grid2x2Plus className={'text-primary'} />,
             show: isAdmin,
           },
@@ -98,7 +98,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {isAdmin && (
           <div className="w-full p-2">
-            <Link href={'/tests/create'}>
+            <Link href={'/testes/criar'}>
               <Button className="w-full">
                 <Plus /> Novo teste
               </Button>

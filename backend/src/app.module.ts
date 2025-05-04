@@ -6,8 +6,8 @@ import { ConfigModule } from '@nestjs/config'
 import { KeycloakModule } from './keycloak/keycloak.module'
 import { PrismaMasterModule } from './prisma-master/prisma-master.module'
 import { PrismaTenantModule } from './prisma-tenant/prisma-tenant.module'
-import { UsuarioModule } from './usuario/usuario.module'
-import { DepartamentoModule } from './departamento/departamento.module'
+import { UsuarioModule } from './usuarios/usuario.module'
+import { DepartamentoModule } from './departamentos/departamento.module'
 
 @Module({
   imports: [

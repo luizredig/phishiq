@@ -1,4 +1,4 @@
-import SignupForm from '@/components/formularios/signup/signup-form'
+import SignupForm from '@/components/signup/formulario-signup'
 
 const Page = () => {
   return <SignupForm />

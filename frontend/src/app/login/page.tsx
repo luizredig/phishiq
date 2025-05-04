@@ -1,4 +1,4 @@
-import LoginForm from '@/components/formularios/login/login-form'
+import LoginForm from '@/components/login/formulario-login'
 
 const Page = () => {
   return <LoginForm />

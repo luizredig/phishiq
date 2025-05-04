@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { AuthProvider } from '@/contexts/auth-provider'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
-import { UserDropdown } from '@/components/usuario/usuario-dropdown'
+import { UserDropdown } from '@/components/usuario/menu-avatar-usuario'
 import { useKeycloak } from '@/hooks/use-keycloak'
 import { logoutFromKeycloak } from '@/server/keycloak/actions'
 
