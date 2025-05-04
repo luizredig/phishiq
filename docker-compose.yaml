@@ -1,49 +1,61 @@
 services:
   frontend:
+    container_name: phishiq-frontend
     image: node:latest
+    restart: unless-stopped
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
     ports:
-      - '1413:3000'
+      - '1413:1413'
     depends_on:
       - backend
       - keycloak
     networks:
       - phishiq-network
+    stdin_open: true
+    tty: true
 
   backend:
+    container_name: phishiq-backend
     image: node:latest
+    restart: unless-stopped
     working_dir: /backend
     volumes:
       - ./backend:/backend
     ports:
-      - '1421:3000'
+      - '1421:1421'
     depends_on:
       - keycloak
       - postgres
     networks:
       - phishiq-network
+    stdin_open: true
+    tty: true
 
   keycloak:
+    container_name: phishiq-keycloak
     image: quay.io/keycloak/keycloak:latest
+    restart: unless-stopped
     command: start-dev
     ports:
       - '8080:8080'
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - keycloak-data:/opt/keycloak/data
     networks:
       - phishiq-network
 
   postgres:
+    container_name: phishiq-postgres
     image: postgres:16
-    container_name: postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: master
+      POSTGRES_DB: postgres
     ports:
       - '5432:5432'
     volumes:
@@ -52,8 +64,8 @@ services:
       - phishiq-network
 
   pgadmin:
+    container_name: phishiq-pgadmin
     image: dpage/pgadmin4
-    container_name: pgadmin
     restart: unless-stopped
     ports:
       - '8081:80'
@@ -71,3 +83,4 @@ networks:
 
 volumes:
   postgres-data:
+  keycloak-data:
