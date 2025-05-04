@@ -1,5 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
+  previewFeatures = ["prismaSchemaFolder"]
   output          = "../../../node_modules/@prisma/client-tenant"
 }
 
