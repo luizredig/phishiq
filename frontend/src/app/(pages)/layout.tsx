@@ -7,6 +7,7 @@ import { AppSidebar } from '@/components/layout/app-sidebar'
 import { UserDropdown } from '@/components/usuario/menu-avatar-usuario'
 import { useKeycloak } from '@/hooks/use-keycloak'
 import { logoutFromKeycloak } from '@/server/keycloak/actions'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export default function RealmLayout({ children }: { children: ReactNode }) {
   return (
@@ -54,15 +55,19 @@ function RealmLayoutContent({ children }: { children: ReactNode }) {
             <SidebarTrigger />
           </div>
 
-          {usuario && (
-            <UserDropdown
-              user={usuario}
-              variant="default"
-              onEditProfile={handleEditProfile}
-              onSettings={handleSettings}
-              onLogout={handleLogout}
-            />
-          )}
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+
+            {usuario && (
+              <UserDropdown
+                user={usuario}
+                variant="default"
+                onEditProfile={handleEditProfile}
+                onSettings={handleSettings}
+                onLogout={handleLogout}
+              />
+            )}
+          </div>
         </div>
 
         <div className="flex flex-1 p-4">{children}</div>

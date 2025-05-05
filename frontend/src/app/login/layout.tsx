@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 export const metadata = {
   title: 'Login | PhishIQ',
@@ -15,6 +16,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 PhishIQ
               </span>
             </Link>
+          </div>
+          <div className="flex items-center">
+            <ThemeToggle />
           </div>
         </div>
       </header>
