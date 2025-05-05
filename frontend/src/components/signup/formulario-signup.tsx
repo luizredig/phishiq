@@ -1,10 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
-import StepOne from './etapa-um'
-import StepTwo from './etapa-dois'
-import StepThree from './etapa-tres'
+import EtapaUm from './etapa-um'
+import EtapaDois from './etapa-dois'
+import EtapaTres from './etapa-tres'
 
 export default function SignupForm() {
   const [currentStep, setCurrentStep] = useState(1)
@@ -31,24 +30,12 @@ export default function SignupForm() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col-reverse px-5 md:flex-row lg:px-40">
-      <div className="bg-background flex w-full flex-col justify-center rounded-md p-8 md:w-1/2 md:p-16">
-        <Image
-          priority
-          src="/images/signup.png"
-          alt="Logo"
-          width={0}
-          height={0}
-          sizes="100vh"
-          className="h-[70%] w-full rounded-md object-contain"
-        />
-      </div>
-
+    <div className="flex min-h-screen flex-col-reverse justify-center px-5 md:flex-row lg:px-40">
       <div className="bg-background flex w-full items-center justify-center p-8 md:w-1/2 md:p-16">
         <div className="w-full max-w-md">
           {currentStep === 1 && (
             <div>
-              <StepOne
+              <EtapaUm
                 email={formData.email}
                 updateFormData={updateFormData}
                 handleNext={handleNext}
@@ -66,7 +53,7 @@ export default function SignupForm() {
           )}
 
           {currentStep === 2 && (
-            <StepTwo
+            <EtapaDois
               companyName={formData.companyName}
               updateFormData={updateFormData}
               handleNext={handleNext}
@@ -75,7 +62,7 @@ export default function SignupForm() {
           )}
 
           {currentStep === 3 && (
-            <StepThree
+            <EtapaTres
               email={formData.email}
               companyName={formData.companyName}
               password={formData.password}

@@ -72,18 +72,6 @@ export default function LoginForm() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 md:flex-row lg:px-40">
-      <div className="bg-background hidden h-full w-full flex-col justify-center rounded-md p-8 md:w-1/2 md:p-16 lg:flex">
-        <Image
-          priority
-          src="/images/login.png"
-          alt="Logo"
-          width={0}
-          height={0}
-          sizes="100vh"
-          className="hidden h-[70%] w-full rounded-md object-contain lg:flex"
-        />
-      </div>
-
       <div className="bg-background flex w-full items-center justify-center p-8 md:w-1/2 md:p-16">
         <div className="w-full max-w-md">
           <Form {...form}>
