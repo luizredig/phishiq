@@ -31,8 +31,8 @@ export default function SignupForm() {
 
   return (
     <div className="flex min-h-screen flex-col-reverse justify-center px-5 md:flex-row lg:px-40">
-      <div className="bg-background flex w-full items-center justify-center p-8 md:w-1/2 md:p-16">
-        <div className="w-full max-w-md">
+      <div className="bg-background flex w-full items-center justify-center md:w-1/2 md:p-16">
+        <div className="w-full">
           {currentStep === 1 && (
             <div>
               <EtapaUm

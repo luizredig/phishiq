@@ -15,7 +15,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import Image from 'next/image'
 import api from '@/lib/axios'
 import Link from 'next/link'
 
@@ -72,8 +71,8 @@ export default function LoginForm() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 md:flex-row lg:px-40">
-      <div className="bg-background flex w-full items-center justify-center p-8 md:w-1/2 md:p-16">
-        <div className="w-full max-w-md">
+      <div className="bg-background flex w-full items-center justify-center md:w-1/2 md:p-16">
+        <div className="w-full">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2 text-left">
