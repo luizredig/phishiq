@@ -1,142 +1,135 @@
-'use client'
-
-import {
-  ChartNoAxesCombined,
-  Cpu,
-  Grid2x2Plus,
-  Megaphone,
-  Plus,
-  TestTubeDiagonal,
-  UsersIcon,
-} from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import * as React from 'react'
-
+import { Users, Calendar, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
-} from '@/components/ui/sidebar'
+  SidebarMenuButton,
+  useSidebar,
+} from "../ui/sidebar";
+import { useKeycloak } from "../../hooks/use-keycloak";
+import { useState, useEffect } from "react";
+import { api } from "../../lib/axios";
+import LoadingSpinner from "./loading-spinner";
 
-import { useAuth } from '@/contexts/auth-provider'
-import { Button } from '../ui/button'
+type SidebarItem = {
+  href: string;
+  icon: React.ElementType;
+  title: string;
+  visible: boolean;
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin } = useAuth()
-  const pathname = usePathname()
+export function AppSidebar() {
+  const { realm, isAdmin, roles, usuario, token, initialized } = useKeycloak();
 
-  const data = {
-    navMain: [
-      {
-        items: [
-          {
-            title: 'Dashboard',
-            url: '/dashboard',
-            icon: <ChartNoAxesCombined className={'text-primary'} />,
-            show: isAdmin,
+  const isVisitante = roles.includes("VISITANTE");
+  const [userApproved, setUserApproved] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleClick = () => {
+    if (isMobile) setOpenMobile(false);
+  };
+
+  useEffect(() => {
+    if (!initialized) return;
+
+    if (!isVisitante || isAdmin || !usuario?.id || !token) return;
+
+    const checkCadastroStatus = async () => {
+      setIsLoading(true);
+      try {
+        const response = await api.get(`/usuarios/keycloak/${usuario.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          {
-            title: 'Testes',
-            url: '/testes',
-            icon: <TestTubeDiagonal className={'text-primary'} />,
-            show: isAdmin,
-          },
-          {
-            title: 'Campanhas',
-            url: '/campanhas',
-            icon: <Megaphone className={'text-primary'} />,
-            show: isAdmin,
-          },
-        ],
-      },
-      {
-        items: [
-          {
-            title: 'Usuários',
-            url: '/usuarios',
-            icon: <UsersIcon className={'text-primary'} />,
-            show: isAdmin,
-          },
-          {
-            title: 'Departamentos',
-            url: '/departamentos',
-            icon: <Grid2x2Plus className={'text-primary'} />,
-            show: isAdmin,
-          },
-        ],
-      },
-      {
-        items: [
-          {
-            title: 'Logs',
-            url: '/logs',
-            icon: <Cpu className={'text-primary'} />,
-            show: isAdmin,
-          },
-        ],
-      },
-    ],
+        });
+
+        const status = response?.data?.statusCadastro;
+        if (status === "APROVADO") {
+          setUserApproved(true);
+        } else {
+          setUserApproved(false);
+        }
+      } catch (error) {
+        console.error("Erro ao verificar status do cadastro:", error);
+        setUserApproved(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkCadastroStatus();
+  }, [initialized, isVisitante, isAdmin, usuario?.id, token]);
+
+  const isVisitanteWithAccess = isVisitante && !isAdmin && userApproved;
+
+  const sidebarItems: SidebarItem[] = [
+    {
+      href: "/agendamentos/",
+      icon: Calendar,
+      title: "Agendamentos",
+      visible: isAdmin,
+    },
+    {
+      href: "/agendamentos/visitante",
+      icon: Calendar,
+      title: "Meus Agendamentos",
+      visible: isVisitanteWithAccess,
+    },
+    {
+      href: "/usuarios",
+      icon: Users,
+      title: "Usuários",
+      visible: isAdmin,
+    },
+    {
+      href: "/usuarios/pendentes",
+      icon: AlertCircle,
+      title: "Pendências de Cadastro",
+      visible: isAdmin,
+    },
+    {
+      href: "/cadastro-pendente",
+      icon: AlertCircle,
+      title: "Status do Cadastro",
+      visible: isVisitante && !isAdmin && !userApproved,
+    },
+  ];
+
+  if (isLoading && isVisitante && !isAdmin) {
+    return (
+      <Sidebar>
+        <SidebarContent className="p-3">
+          <div className="flex justify-center py-4">
+            <LoadingSpinner />
+          </div>
+        </SidebarContent>
+      </Sidebar>
+    );
   }
 
   return (
-    <Sidebar {...props}>
-      <SidebarHeader>
-        <Link href={'/dashboard'}>
-          <h1 className="text-primary pl-2 text-xl font-bold select-none">
-            PhishIQ
-          </h1>
-        </Link>
-      </SidebarHeader>
+    <Sidebar>
+      <SidebarContent className="p-3">
+        <SidebarMenu>
+          {sidebarItems
+            .filter((item) => item.visible)
+            .map((item, index) => (
+              <SidebarMenuItem key={index}>
+                <SidebarMenuButton asChild>
+                  <Link to={`/${realm}${item.href}`} onClick={handleClick}>
+                    <item.icon className="mr-2 h-4 w-4" />
 
-      <SidebarContent>
-        {isAdmin && (
-          <div className="w-full p-2">
-            <Link href={'/testes/criar'}>
-              <Button className="w-full">
-                <Plus /> Novo teste
-              </Button>
-            </Link>
-          </div>
-        )}
-
-        {data.navMain.map((group, index) => (
-          <SidebarGroup key={index}>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.items
-                  .filter((item) => item.show)
-                  .map((item) => (
-                    <Link href={item.url} key={item.title}>
-                      <SidebarMenuItem>
-                        <SidebarMenuButton asChild>
-                          <div
-                            className={`flex items-center gap-2 rounded-md px-2 py-1 ${
-                              pathname === item.url
-                                ? 'bg-muted'
-                                : 'hover:bg-muted'
-                            }`}
-                          >
-                            {item.icon}
-                            {item.title}
-                          </div>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    </Link>
-                  ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+        </SidebarMenu>
       </SidebarContent>
-
-      <SidebarRail />
     </Sidebar>
-  )
+  );
 }

@@ -1,11 +1,10 @@
-import { useContext } from 'react'
-import { AuthContext } from '@/contexts/auth-provider'
+import { useContext } from "react";
+import { KeycloakContext } from "../contexts/keycloak-context";
 
-export function useKeycloak() {
-  const context = useContext(AuthContext)
-
+export const useKeycloak = () => {
+  const context = useContext(KeycloakContext);
   if (!context) {
-    throw new Error('useKeycloak deve ser usado dentro de <AuthProvider>')
+    throw new Error("useKeycloak deve ser usado dentro de KeycloakProvider");
   }
-  return context
-}
+  return context;
+};

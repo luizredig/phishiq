@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common'
-import { KeycloakService } from './keycloak.service'
+import { PrismaModule } from 'src/prisma/prisma.module'
 import { KeycloakController } from './keycloak.controller'
-import { PrismaMasterModule } from 'src/prisma-master/prisma-master.module'
+import { KeycloakGateway } from './keycloak.gateway'
+import { KeycloakService } from './keycloak.service'
+import { KeycloakAuthModule } from './keycloak.auth.module'
 
 @Module({
-  imports: [PrismaMasterModule],
+  imports: [PrismaModule, KeycloakAuthModule],
   controllers: [KeycloakController],
-  providers: [KeycloakService],
+  providers: [KeycloakService, KeycloakGateway],
   exports: [KeycloakService],
 })
 export class KeycloakModule {}
