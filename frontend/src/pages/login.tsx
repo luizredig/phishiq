@@ -1,12 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { cn } from "../lib/utils";
 import { Button } from "../components/ui/button";
-import { Card, CardContent } from "../components/ui/card";
 import {
   Form,
   FormControl,
@@ -16,91 +15,83 @@ import {
   FormMessage,
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
-import { getLoginUrl, getRegisterUrl } from "../handlers/redirect-urls";
-import { emailExists } from "../api/usuarios/exists";
+import { useState } from "react";
 
-const emailSchema = z.object({
-  email: z.string().email({ message: "Digite um e-mail válido." }),
+import { Link } from "react-router-dom";
+
+const loginSchema = z.object({
+  email: z
+    .string()
+    .nonempty("Por favor, insira seu email.")
+    .email("Por favor, insira um email válido."),
 });
 
-type EmailFormData = z.infer<typeof emailSchema>;
+type LoginFormSchema = z.infer<typeof loginSchema>;
 
 export default function TelaLogin() {
-  const form = useForm<EmailFormData>({
-    resolver: zodResolver(emailSchema),
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<LoginFormSchema>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
     },
-    mode: "onChange",
   });
 
-  const onSubmit = async (data: EmailFormData) => {
-    const email = data.email.toLowerCase();
-
-    const { realm, exists } = await emailExists(email);
-
-    if (exists) {
-      sessionStorage.setItem("realm", realm);
-      window.location.href = getLoginUrl(realm, email);
-    } else {
-      window.location.href = getRegisterUrl(email);
-    }
-  };
+  const onSubmit = async (data: LoginFormSchema) => {};
 
   return (
-    <div className="h-screen flex w-full justify-center items-center px-5">
-      <div
-        className={cn(
-          "flex flex-col gap-6 w-full h-full max-w-4xl max-h-[500px] justify-center items-center"
-        )}
-      >
-        <Card className="overflow-hidden h-full justify-center items-center w-full max-w-xl">
-          <CardContent className="grid p-0 h-full w-full">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="p-6 h-full justify-center items-center flex w-full"
-              >
-                <div className="flex flex-col gap-6 w-full">
-                  <div className="flex flex-col items-center text-center">
-                    <h1 className="text-2xl font-bold select-none">
-                      Boas-vindas!
-                    </h1>
-                    <p className="text-balance text-muted-foreground select-none">
-                      Informe seu email para continuar
-                    </p>
-                  </div>
+    <div className="flex min-h-screen flex-col items-center justify-center px-5 md:flex-row lg:px-40">
+      <div className="rounded-lg p-6 flex w-full items-center justify-center md:w-1/2 md:p-16">
+        <div className="w-full">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="space-y-2 text-left">
+                <h2 className="text-foreground text-lg font-semibold">
+                  Acesse sua conta
+                </h2>
+              </div>
 
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="select-none">Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Digite seu email"
-                            type="email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="select-none" />
-                      </FormItem>
-                    )}
-                  />
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          type="text"
+                          placeholder="Digite seu email"
+                          {...field}
+                          className="h-12 rounded-lg border"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <Button
-                    type="submit"
-                    className="w-full select-none"
-                    disabled={!form.formState.isValid}
-                  >
-                    Login
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </CardContent>
-        </Card>
+                <Button
+                  type="submit"
+                  className="bg-primary w-full rounded-lg py-3 font-medium text-white hover:bg-blue-700"
+                  disabled={loading}
+                >
+                  {loading ? "Enviando..." : "Entrar"}
+                </Button>
+              </div>
+            </form>
+          </Form>
+          <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+            <p>
+              Não tem uma conta?{" "}
+              <Link to="/signup" className="text-primary hover:underline">
+                Cadastre-se
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

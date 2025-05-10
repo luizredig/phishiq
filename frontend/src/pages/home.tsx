@@ -5,10 +5,10 @@ export default function Home() {
   const { isAdmin, roles, realm } = useKeycloak();
 
   if (isAdmin) {
-    return <Navigate to={`/${realm}/agendamentos/`} />;
+    return <Navigate to={`/${realm}/dashboard`} />;
   }
 
-  if (roles.includes("VISITANTE") && !isAdmin) {
+  if (roles.includes("USUARIO") && !isAdmin) {
     return <Navigate to={`/${realm}/inicio`} />;
   }
 

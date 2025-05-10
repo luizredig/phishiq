@@ -82,7 +82,7 @@ export default function UsuariosPendentes() {
   }, [token]);
 
   useEffect(() => {
-    if (!isAdmin && roles?.includes("VISITANTE")) {
+    if (!isAdmin && roles?.includes("USUARIO")) {
       navigate(`/${realm}/inicio`);
       return;
     }

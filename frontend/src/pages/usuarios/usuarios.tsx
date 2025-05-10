@@ -51,7 +51,7 @@ const usuarioSchema = z.object({
   nome: z.string().min(2, "O nome deve ter pelo menos 2 caracteres"),
   sobrenome: z.string().min(2, "O sobrenome deve ter pelo menos 2 caracteres"),
   email: z.string().email("Email inválido"),
-  cargo: z.enum(["ADMINISTRADOR", "VISITANTE"], {
+  cargo: z.enum(["ADMINISTRADOR", "USUARIO"], {
     errorMap: () => ({ message: "Selecione um cargo válido" }),
   }),
 });
@@ -70,17 +70,16 @@ export default function Usuarios() {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
 
- useEffect(() => {
-   if (!isAdmin && roles?.includes("VISITANTE")) {
-     navigate(`/${realm}/inicio`);
-     return;
-   }
+  useEffect(() => {
+    if (!isAdmin && roles?.includes("USUARIO")) {
+      navigate(`/${realm}/inicio`);
+      return;
+    }
 
-   if (isAdmin || roles?.includes("ADMINISTRADOR")) {
-     fetchUsuarios();
-   }
- }, [isAdmin, roles, navigate, realm]);
-
+    if (isAdmin || roles?.includes("ADMINISTRADOR")) {
+      fetchUsuarios();
+    }
+  }, [isAdmin, roles, navigate, realm]);
 
   const form = useForm<UsuarioFormData>({
     resolver: zodResolver(usuarioSchema),
@@ -88,7 +87,7 @@ export default function Usuarios() {
       nome: "",
       sobrenome: "",
       email: "",
-      cargo: "VISITANTE",
+      cargo: "USUARIO",
     },
   });
 
@@ -137,7 +136,7 @@ export default function Usuarios() {
       nome: user.nome,
       sobrenome: user.sobrenome,
       email: user.email,
-      cargo: user.cargo as "ADMINISTRADOR" | "VISITANTE",
+      cargo: user.cargo as "ADMINISTRADOR" | "USUARIO",
     });
     setIsFormOpen(true);
   };
@@ -148,7 +147,7 @@ export default function Usuarios() {
       nome: "",
       sobrenome: "",
       email: "",
-      cargo: "VISITANTE",
+      cargo: "USUARIO",
     });
     setIsFormOpen(true);
   };
@@ -398,7 +397,7 @@ export default function Usuarios() {
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                         {...field}
                       >
-                        <option value="VISITANTE">Visitante</option>
+                        <option value="USUARIO">Visitante</option>
                         <option value="ADMINISTRADOR">Administrador</option>
                       </select>
                     </FormControl>

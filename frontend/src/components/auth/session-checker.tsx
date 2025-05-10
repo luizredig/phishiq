@@ -48,7 +48,7 @@ const SessionChecker = () => {
 
             if (isAdmin) {
               navigate(`/${savedRealm}/agendamentos`, { replace: true });
-            } else if (roles.includes("VISITANTE")) {
+            } else if (roles.includes("USUARIO")) {
               navigate(`/${savedRealm}/inicio`, {
                 replace: true,
               });

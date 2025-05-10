@@ -175,7 +175,7 @@ export class UsuariosService {
         return existingUser
       }
 
-      const cargoAttr = keycloakUser.attributes?.cargo ?? ['VISITANTE']
+      const cargoAttr = keycloakUser.attributes?.cargo ?? ['USUARIO']
 
       const novoUsuario = await this.createUser({
         realm,
