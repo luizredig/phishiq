@@ -8,32 +8,30 @@ import KcAdminClient from 'keycloak-admin'
 
 @Injectable()
 export class KeycloakService {
-  private kcAdminClient: KcAdminClient
-
   constructor(private keycloakGateway: KeycloakGateway) {}
 
-  private async auth() {
-    this.kcAdminClient = new KcAdminClient({
-      baseUrl: process.env.KEYCLOAK_URL,
-      realmName: process.env.KEYCLOAK_REALM,
+  private async getClient(realm: string): Promise<KcAdminClient> {
+    const kc = new KcAdminClient({
+      baseUrl: process.env.KEYCLOAK_BASE_URL!,
+      realmName: realm,
     })
 
-    await this.kcAdminClient.auth({
-      username: process.env.KEYCLOAK_REALM_USERNAME,
-      password: process.env.KEYCLOAK_REALM_PASSWORD,
+    console.log(process.env.KEYCLOAK_ADMIN_USERNAME!)
+    console.log(process.env.KEYCLOAK_ADMIN_PASSWORD!)
+
+    await kc.auth({
+      username: process.env.KEYCLOAK_ADMIN_USERNAME!,
+      password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
       grantType: 'password',
       clientId: process.env.KEYCLOAK_CLIENT_ID!,
     })
+
+    return kc
   }
 
   async getUserById({ realm, id }: { realm: string; id: string }) {
-    await this.auth()
-
-    this.kcAdminClient.setConfig({ realmName: realm })
-
-    const user = await this.kcAdminClient.users.findOne({ id })
-
-    return user
+    const kc = await this.getClient(realm)
+    return kc.users.findOne({ id })
   }
 
   async updateUser({
@@ -45,11 +43,9 @@ export class KeycloakService {
     id: string
     dto: any
   }) {
-    await this.auth()
+    const kc = await this.getClient(realm)
 
-    this.kcAdminClient.setConfig({ realmName: realm })
-
-    const user = await this.kcAdminClient.users.update(
+    await kc.users.update(
       { id },
       {
         firstName: dto.nome,
@@ -60,41 +56,44 @@ export class KeycloakService {
       },
     )
 
+    const user = await kc.users.findOne({ id })
+
     this.keycloakGateway.broadcast('kc_user_updated', user)
 
     return user
   }
 
   async deleteUser({ realm, id }: { realm: string; id: string }) {
-    await this.auth()
+    const kc = await this.getClient(realm)
 
-    this.kcAdminClient.setConfig({ realmName: realm })
-
-    await this.kcAdminClient.users.del({ id })
+    await kc.users.del({ id })
 
     this.keycloakGateway.broadcast('kc_user_deleted', { id })
 
     return { success: true }
   }
 
-  async getAllUsers() {}
-
   async userExistsByEmail(
     email: string,
   ): Promise<{ statusCode: number; realm: string; exists: boolean }> {
-    await this.auth()
+    const kc = new KcAdminClient({ baseUrl: process.env.KEYCLOAK_BASE_URL! })
 
-    const realms = await this.kcAdminClient.realms.find()
+    await kc.auth({
+      username: process.env.KEYCLOAK_ADMIN_USERNAME!,
+      password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
+      grantType: 'password',
+      clientId: process.env.KEYCLOAK_CLIENT_ID!,
+    })
+
+    const realms = await kc.realms.find()
 
     for (const realm of realms) {
       try {
-        this.kcAdminClient.setConfig({ realmName: realm.realm })
+        kc.setConfig({ realmName: realm.realm })
 
-        const users = await this.kcAdminClient.users.find({
-          email,
-        })
+        const users = await kc.users.find({ email })
 
-        if (users && users.length > 0) {
+        if (users.length > 0) {
           return {
             statusCode: 200,
             realm: realm.realm as string,
@@ -115,13 +114,10 @@ export class KeycloakService {
   }
 
   async createUser({ realm, userData }: { realm: string; userData: any }) {
-    await this.auth()
+    const kc = await this.getClient(realm)
 
-    this.kcAdminClient.setConfig({ realmName: realm })
-
-    const userId = await this.kcAdminClient.users.create(userData)
-
-    const user = await this.kcAdminClient.users.findOne({ id: userId.id })
+    const userId = await kc.users.create(userData)
+    const user = await kc.users.findOne({ id: userId.id })
 
     this.keycloakGateway.broadcast('kc_user_created', user)
 

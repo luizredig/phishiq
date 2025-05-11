@@ -16,6 +16,10 @@ import {
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { emailExists } from "../api/usuarios/exists";
+import { getLoginUrl } from "../handlers/redirect-urls";
+import { toast } from "sonner";
 
 import { Link } from "react-router-dom";
 
@@ -30,6 +34,7 @@ type LoginFormSchema = z.infer<typeof loginSchema>;
 
 export default function TelaLogin() {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginSchema),
@@ -38,7 +43,25 @@ export default function TelaLogin() {
     },
   });
 
-  const onSubmit = async (data: LoginFormSchema) => {};
+  const onSubmit = async (data: LoginFormSchema) => {
+    try {
+      setLoading(true);
+      const response = await emailExists(data.email);
+
+      if (response.exists) {
+        window.location.href = getLoginUrl(response.realm, data.email);
+      } else {
+        navigate("/signup", { state: { email: data.email } });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao verificar email", {
+        description: "Ocorreu um erro ao verificar seu email. Tente novamente.",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-5 md:flex-row lg:px-40">
