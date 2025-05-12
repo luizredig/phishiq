@@ -1,29 +1,17 @@
-import { useEffect, useState } from "react";
-import { ReactKeycloakProvider } from "@react-keycloak/web";
-import { initKeycloakFromStorage } from "./auth/init-keycloak";
 import { Route, Routes } from "react-router-dom";
 import Inicio from "./pages/inicio";
 import Login from "./pages/login";
+import Callback from "./pages/callback";
+import { AuthProvider } from "./contexts/AuthContext";
+
 export default function App() {
-  const [keycloak, setKeycloak] = useState<any>(null);
-
-  useEffect(() => {
-    initKeycloakFromStorage()
-      .then(({ keycloak }) => setKeycloak(keycloak))
-      .catch(() => {
-        sessionStorage.clear();
-        window.location.href = "/login";
-      });
-  }, []);
-
-  if (!keycloak) return null;
-
   return (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Inicio />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/callback" element={<Callback />} />
       </Routes>
-    </ReactKeycloakProvider>
+    </AuthProvider>
   );
 }

@@ -1,26 +1,33 @@
-import { useKeycloak } from "@react-keycloak/web";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import LoadingSpinner from "../components/layout/loading-spinner";
 
-const Inicio = () => {
-  const { keycloak, initialized } = useKeycloak();
+export default function Inicio() {
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
 
-  if (!initialized) {
-    return <p>Carregando...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
-  if (!keycloak.authenticated) {
-    return <p>Usuário não autenticado</p>;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
   }
 
   return (
-    <div>
-      <h1>Bem-vindo, {keycloak.tokenParsed?.preferred_username}</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold mb-4">
+        Bem-vindo, {user?.preferred_username || user?.name}
+      </h1>
       <button
-        onClick={() => keycloak.logout({ redirectUri: window.location.origin })}
+        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+        onClick={logout}
       >
         Sair
       </button>
     </div>
   );
-};
-
-export default Inicio;
+}
