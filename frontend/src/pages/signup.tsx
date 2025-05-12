@@ -1,7 +1,7 @@
-import SignupForm from "../components/signup/formulario-signup";
+import FormularioSignup from "../components/signup/formulario-signup";
 
-const TelaSignup = () => {
-  return <SignupForm />;
+const Signup = () => {
+  return <FormularioSignup />;
 };
 
-export default TelaSignup;
+export default Signup;

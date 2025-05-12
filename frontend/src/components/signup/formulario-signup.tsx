@@ -45,9 +45,9 @@ const signupSchema = z
     path: ["confirmPassword"],
   });
 
-type SignupFormSchema = z.infer<typeof signupSchema>;
+type FormularioSignupSchema = z.infer<typeof signupSchema>;
 
-export default function SignupForm() {
+export default function FormularioSignup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ export default function SignupForm() {
     passwordsMatch: false,
   });
 
-  const form = useForm<SignupFormSchema>({
+  const form = useForm<FormularioSignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       email: location.state?.email || "",
@@ -90,7 +90,7 @@ export default function SignupForm() {
     });
   }, [password, confirmPassword]);
 
-  const onSubmit = async (data: SignupFormSchema) => {
+  const onSubmit = async (data: FormularioSignupSchema) => {
     try {
       setLoading(true);
       setError("");
@@ -105,7 +105,7 @@ export default function SignupForm() {
       sessionStorage.setItem("realm", response.data.data.realm);
       sessionStorage.setItem("userId", response.data.data.userId);
 
-      navigate("/dashboard");
+      navigate("/inicio");
     } catch (err) {
       console.error("Erro no cadastro:", err);
       setError(
@@ -166,6 +166,7 @@ export default function SignupForm() {
                           <Input
                             type="email"
                             placeholder="Digite seu email"
+                            autoComplete="email"
                             {...field}
                             className="h-12 rounded-lg border"
                           />
@@ -189,6 +190,7 @@ export default function SignupForm() {
                           <Input
                             type="text"
                             placeholder="Nome da sua empresa"
+                            autoComplete="organization"
                             {...field}
                             className="h-12 rounded-lg border"
                           />
@@ -210,9 +212,11 @@ export default function SignupForm() {
                           <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Mínimo de 8 caracteres"
+                            autoComplete="new-password"
                             {...field}
                             className="h-12 rounded-lg border pr-10"
                           />
+
                           <button
                             type="button"
                             className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"
@@ -243,9 +247,11 @@ export default function SignupForm() {
                           <Input
                             type={showConfirmPassword ? "text" : "password"}
                             placeholder="Digite a senha novamente"
+                            autoComplete="new-password"
                             {...field}
                             className="h-12 rounded-lg border pr-10"
                           />
+
                           <button
                             type="button"
                             className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500"

@@ -18,7 +18,7 @@ import { Input } from "../components/ui/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { emailExists } from "../api/usuarios/exists";
-import { getLoginUrl } from "../handlers/redirect-urls";
+import { redirectToRealmLogin } from "../handlers/redirect-urls";
 import { toast } from "sonner";
 
 import { Link } from "react-router-dom";
@@ -32,7 +32,7 @@ const loginSchema = z.object({
 
 type LoginFormSchema = z.infer<typeof loginSchema>;
 
-export default function TelaLogin() {
+export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export default function TelaLogin() {
       const response = await emailExists(data.email);
 
       if (response.exists) {
-        window.location.href = getLoginUrl(response.realm, data.email);
+        redirectToRealmLogin(response.realm, data.email, response.clientId);
       } else {
         navigate("/signup", { state: { email: data.email } });
       }

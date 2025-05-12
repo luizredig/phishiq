@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/button";
 import { useNavigation } from "../handlers/navigate";
 
-const NaoEncontradoPage = () => {
+const NaoEncontrado = () => {
   const { goBack } = useNavigation();
 
   return (
@@ -15,4 +15,4 @@ const NaoEncontradoPage = () => {
   );
 };
 
-export default NaoEncontradoPage;
+export default NaoEncontrado;

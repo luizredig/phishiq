@@ -36,7 +36,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Dashboard",
-            url: "/dashboard",
+            url: "/inicio",
             icon: <ChartNoAxesCombined className={"text-primary"} />,
             show: isAdmin,
           },

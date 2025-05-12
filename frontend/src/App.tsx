@@ -1,78 +1,56 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SessionChecker from "./components/auth/session-checker";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useAuthContext } from "./auth/auth-provider";
+import { PrivateRoute } from "./auth/private-route";
 import AppLayout from "./components/layout/app-layout";
-import { Toaster } from "./components/ui/toaster";
-import { KeycloakProvider } from "./contexts/keycloak-context";
+import Callback from "./pages/callback";
 import TelaInicial from "./pages/inicio";
-import TelaLogin from "./pages/login";
-import LoginRedirect from "./pages/login-redirect";
-import NaoEncontradoPage from "./pages/nao-encontrado";
-import EmpresaRouter from "./pages/routers/empresa-router";
-import TelaSignup from "./pages/signup";
-import UsuariosPendentes from "./pages/usuarios/pendentes";
+import Login from "./pages/login";
+import NaoEncontrado from "./pages/nao-encontrado";
+import Signup from "./pages/signup";
 import Usuarios from "./pages/usuarios/usuarios";
+
+function RootRedirect() {
+  const { token } = useAuthContext();
+
+  if (token) {
+    return <Navigate to="/inicio" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
+}
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<TelaLogin />} />
-        
-        <Route path="/signup" element={<TelaSignup />} />
-
-        <Route path="/nao-encontrado" element={<NaoEncontradoPage />} />
-
-        <Route path="/:empresa" element={<EmpresaRouter />} />
-
-        <Route
-          path="/:empresa/*"
-          element={
-            <KeycloakProvider>
-              <RoutesWrapper />
-            </KeycloakProvider>
-          }
-        />
-
-        <Route path="/" element={<SessionChecker />} />
-      </Routes>
-      <Toaster />
-    </BrowserRouter>
-  );
-}
-
-function RoutesWrapper() {
-  return (
     <Routes>
-      <Route path="login" element={<LoginRedirect />} />
+      <Route path="/" element={<RootRedirect />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/callback" element={<Callback />} />
+      <Route path="/nao-encontrado" element={<NaoEncontrado />} />
 
       <Route
-        path="inicio"
+        path="/inicio"
         element={
-          <AppLayout>
-            <TelaInicial />
-          </AppLayout>
+          <PrivateRoute>
+            <AppLayout>
+              <TelaInicial />
+            </AppLayout>
+          </PrivateRoute>
         }
       />
 
       <Route
-        path="usuarios"
+        path="/usuarios"
         element={
-          <AppLayout>
-            <Usuarios />
-          </AppLayout>
+          <PrivateRoute>
+            <AppLayout>
+              <Usuarios />
+            </AppLayout>
+          </PrivateRoute>
         }
       />
 
-      <Route
-        path="usuarios/pendentes"
-        element={
-          <AppLayout>
-            <UsuariosPendentes />
-          </AppLayout>
-        }
-      />
-
-      <Route path="*" element={<NaoEncontradoPage />} />
+      <Route path="*" element={<NaoEncontrado />} />
     </Routes>
   );
 }

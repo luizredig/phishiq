@@ -114,9 +114,12 @@ export class KeycloakService {
     return { success: true }
   }
 
-  async userExistsByEmail(
-    email: string,
-  ): Promise<{ statusCode: number; realm: string; exists: boolean }> {
+  async userExistsByEmail(email: string): Promise<{
+    statusCode: number
+    realm: string
+    exists: boolean
+    clientId: string
+  }> {
     const kc = new KcAdminClient({ baseUrl: process.env.KEYCLOAK_BASE_URL! })
 
     await kc.auth({
@@ -138,6 +141,7 @@ export class KeycloakService {
           return {
             statusCode: 200,
             realm: realm.realm as string,
+            clientId: `${realm.realm}-frontend-cli`,
             exists: true,
           }
         }
@@ -150,6 +154,7 @@ export class KeycloakService {
     return {
       statusCode: 404,
       realm: '',
+      clientId: '',
       exists: false,
     }
   }
