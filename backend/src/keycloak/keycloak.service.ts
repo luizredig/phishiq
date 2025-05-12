@@ -14,44 +14,27 @@ export class KeycloakService {
   constructor(private keycloakGateway: KeycloakGateway) {}
 
   private async getClient(realm: string): Promise<KcAdminClient> {
-    try {
-      const kc = new KcAdminClient({
-        baseUrl: process.env.KEYCLOAK_BASE_URL!,
-        realmName: realm,
-      })
+    const kc = new KcAdminClient({
+      baseUrl: process.env.KEYCLOAK_BASE_URL!,
+      realmName: realm,
+    })
 
-      if (realm === 'master') {
-        await kc.auth({
-          username: process.env.KEYCLOAK_ADMIN_USERNAME!,
-          password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
-          grantType: 'password',
-          clientId: 'admin-cli',
-        })
-      } else {
-        const masterKc = new KcAdminClient({
-          baseUrl: process.env.KEYCLOAK_BASE_URL!,
-          realmName: 'master',
-        })
+    const masterKc = new KcAdminClient({
+      baseUrl: process.env.KEYCLOAK_BASE_URL!,
+      realmName: 'master',
+    })
 
-        await masterKc.auth({
-          username: process.env.KEYCLOAK_ADMIN_USERNAME!,
-          password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
-          grantType: 'password',
-          clientId: 'admin-cli',
-        })
+    await masterKc.auth({
+      username: process.env.KEYCLOAK_ADMIN_USERNAME!,
+      password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
+      grantType: 'password',
+      clientId: 'admin-cli',
+    })
 
-        kc.setAccessToken(masterKc.accessToken)
-        kc.setConfig({ realmName: realm })
-      }
+    kc.setAccessToken(masterKc.accessToken)
+    kc.setConfig({ realmName: realm })
 
-      return kc
-    } catch (error) {
-      console.error(
-        `Erro ao obter cliente Keycloak para realm ${realm}:`,
-        error,
-      )
-      throw error
-    }
+    return kc
   }
 
   private async getMasterClient(): Promise<KcAdminClient> {
@@ -126,7 +109,7 @@ export class KeycloakService {
       username: process.env.KEYCLOAK_ADMIN_USERNAME!,
       password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
       grantType: 'password',
-      clientId: process.env.KEYCLOAK_CLIENT_ID!,
+      clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
     })
 
     const realms = await kc.realms.find()
@@ -268,16 +251,16 @@ export class KeycloakService {
       const kc = await this.getClient(realm)
 
       const clients = await kc.clients.find({
-        clientId: process.env.KEYCLOAK_CLIENT_ID!,
+        clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
       })
 
       if (!clients || clients.length === 0) {
         console.log(
-          `Criando client ${process.env.KEYCLOAK_CLIENT_ID} no realm ${realm}`,
+          `Criando client ${process.env.KEYCLOAK_ADMIN_CLIENT_ID} no realm ${realm}`,
         )
 
         await kc.clients.create({
-          clientId: process.env.KEYCLOAK_CLIENT_ID!,
+          clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
           enabled: true,
           publicClient: true,
           directAccessGrantsEnabled: true,
@@ -296,7 +279,7 @@ export class KeycloakService {
           },
           body: new URLSearchParams({
             grant_type: 'password',
-            client_id: process.env.KEYCLOAK_CLIENT_ID!,
+            client_id: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
             username,
             password,
           }).toString(),
@@ -336,14 +319,16 @@ export class KeycloakService {
 
       const kc = await this.getClient(realm)
 
+      kc.setConfig({ realmName: realm })
+
       try {
         const clients = await kc.clients.find({
-          clientId: process.env.KEYCLOAK_CLIENT_ID,
+          clientId: `${realm}-frontend-cli`,
         })
 
         if (!clients || clients.length === 0) {
           await kc.clients.create({
-            clientId: process.env.KEYCLOAK_CLIENT_ID!,
+            clientId: `${realm}-frontend-cli`,
             enabled: true,
             publicClient: true,
             directAccessGrantsEnabled: true,
@@ -483,7 +468,7 @@ export class KeycloakService {
             },
             body: new URLSearchParams({
               grant_type: 'password',
-              client_id: process.env.KEYCLOAK_CLIENT_ID!,
+              client_id: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
               username: email,
               password: password,
             }).toString(),
