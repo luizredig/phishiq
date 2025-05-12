@@ -1,58 +1,29 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useAuthContext } from "./auth/auth-provider";
-import { PrivateRoute } from "./auth/private-route";
-import AppLayout from "./components/layout/app-layout";
-import Callback from "./pages/callback";
-import TelaInicial from "./pages/inicio";
+import { useEffect, useState } from "react";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import { initKeycloakFromStorage } from "./auth/init-keycloak";
+import { Route, Routes } from "react-router-dom";
+import Inicio from "./pages/inicio";
 import Login from "./pages/login";
-import NaoEncontrado from "./pages/nao-encontrado";
-import Signup from "./pages/signup";
-import Usuarios from "./pages/usuarios/usuarios";
+export default function App() {
+  const [keycloak, setKeycloak] = useState<any>(null);
 
-function RootRedirect() {
-  const { token } = useAuthContext();
+  useEffect(() => {
+    initKeycloakFromStorage()
+      .then(({ keycloak }) => setKeycloak(keycloak))
+      .catch(() => {
+        sessionStorage.clear();
+        window.location.href = "/login";
+      });
+  }, []);
 
-  if (token) {
-    return <Navigate to="/inicio" replace />;
-  }
+  if (!keycloak) return null;
 
-  return <Navigate to="/login" replace />;
-}
-
-function App() {
   return (
-    <Routes>
-      <Route path="/" element={<RootRedirect />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/callback" element={<Callback />} />
-      <Route path="/nao-encontrado" element={<NaoEncontrado />} />
-
-      <Route
-        path="/inicio"
-        element={
-          <PrivateRoute>
-            <AppLayout>
-              <TelaInicial />
-            </AppLayout>
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/usuarios"
-        element={
-          <PrivateRoute>
-            <AppLayout>
-              <Usuarios />
-            </AppLayout>
-          </PrivateRoute>
-        }
-      />
-
-      <Route path="*" element={<NaoEncontrado />} />
-    </Routes>
+    <ReactKeycloakProvider authClient={keycloak}>
+      <Routes>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </ReactKeycloakProvider>
   );
 }
-
-export default App;

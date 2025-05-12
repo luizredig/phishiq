@@ -95,15 +95,11 @@ export default function FormularioSignup() {
       setLoading(true);
       setError("");
 
-      const response = await api.post("/keycloak/register", {
+      await api.post("/keycloak/register", {
         email: data.email,
         companyName: data.companyName,
         password: data.password,
       });
-
-      sessionStorage.setItem("token", response.data.data.token);
-      sessionStorage.setItem("realm", response.data.data.realm);
-      sessionStorage.setItem("userId", response.data.data.userId);
 
       navigate("/inicio");
     } catch (err) {
@@ -310,7 +306,7 @@ export default function FormularioSignup() {
                   className="bg-primary w-full rounded-lg py-3 font-medium text-white hover:bg-blue-700"
                   disabled={loading}
                 >
-                  {loading ? <LoadingSpinner /> : "Finalizar Cadastro"}
+                  {loading ? <LoadingSpinner /> : "Cadastrar-se"}
                 </Button>
 
                 <p className="text-sm text-center text-gray-600">

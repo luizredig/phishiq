@@ -1,16 +1,16 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import App from "./App.tsx";
-import { AuthProvider } from "./auth/auth-provider";
+import { KeycloakAuthProvider } from "./providers/keycloak-provider.tsx";
+import { StrictMode } from "react";
 
-createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthProvider>
+      <KeycloakAuthProvider>
         <App />
-      </AuthProvider>
+      </KeycloakAuthProvider>
     </BrowserRouter>
   </StrictMode>
 );

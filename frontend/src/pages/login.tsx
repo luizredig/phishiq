@@ -18,10 +18,10 @@ import { Input } from "../components/ui/input";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { emailExists } from "../api/usuarios/exists";
-import { redirectToRealmLogin } from "../handlers/redirect-urls";
-import { toast } from "sonner";
 
 import { Link } from "react-router-dom";
+import LoadingSpinner from "../components/layout/loading-spinner";
+import { redirectToRealmLogin } from "../utils/redirect-to-realm-login";
 
 const loginSchema = z.object({
   email: z
@@ -49,15 +49,16 @@ export default function Login() {
       const response = await emailExists(data.email);
 
       if (response.exists) {
-        redirectToRealmLogin(response.realm, data.email, response.clientId);
+        redirectToRealmLogin({
+          realm: response.realm,
+          clientId: response.clientId,
+          email: data.email,
+        });
       } else {
         navigate("/signup", { state: { email: data.email } });
       }
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao verificar email", {
-        description: "Ocorreu um erro ao verificar seu email. Tente novamente.",
-      });
     } finally {
       setLoading(false);
     }
@@ -101,7 +102,7 @@ export default function Login() {
                   className="bg-primary w-full rounded-lg py-3 font-medium text-white hover:bg-blue-700"
                   disabled={loading}
                 >
-                  {loading ? "Enviando..." : "Entrar"}
+                  {loading ? <LoadingSpinner /> : "Entrar"}
                 </Button>
               </div>
             </form>

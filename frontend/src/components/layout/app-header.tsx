@@ -1,30 +1,16 @@
-import { LogOut, User } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuItem, DropdownMenuSeparator,
+  DropdownMenuTrigger
 } from "../ui/dropdown-menu";
 import { SidebarTrigger } from "../ui/sidebar";
-import { useKeycloak } from "../../hooks/use-keycloak";
 
 export function AppHeader() {
-  const { usuario, keycloak, realm } = useKeycloak();
-
-  const handleLogout = async () => {
-    try {
-      await keycloak?.logout({
-        redirectUri: `${window.location.origin}/${realm}/login`,
-      });
-      sessionStorage.clear();
-    } catch (error) {
-      console.error("Erro ao deslogar:", error);
-    }
-  };
+  const handleLogout = async () => {};
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4">
@@ -37,33 +23,21 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar>
-                <AvatarImage src="" alt={usuario?.nome || ""} />
+                <AvatarImage src="" alt="" />
 
-                <AvatarFallback>
-                  {usuario?.nome?.charAt(0).toUpperCase() || (
-                    <User className="h-4 w-4" />
-                  )}
-                </AvatarFallback>
+                <AvatarFallback></AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-48">
-            {usuario && (
-              <>
-                <DropdownMenuLabel>
-                  <div className="flex flex-col text-xs">
-                    <span className="font-semibold">{usuario.nome}</span>
+            <DropdownMenuItem onClick={handleLogout}>
+              <span className="font-semibold">Nome</span>
 
-                    <span className="text-muted-foreground">
-                      {usuario.email}
-                    </span>
-                  </div>
-                </DropdownMenuLabel>
+              <span className="text-muted-foreground">Email</span>
 
-                <DropdownMenuSeparator />
-              </>
-            )}
+              <DropdownMenuSeparator />
+            </DropdownMenuItem>
 
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />

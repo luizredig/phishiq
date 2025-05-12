@@ -23,10 +23,8 @@ import {
 } from "../../components/ui/sidebar";
 
 import { Button } from "../ui/button";
-import { useKeycloak } from "../../hooks/use-keycloak";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin } = useKeycloak();
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -38,19 +36,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Dashboard",
             url: "/inicio",
             icon: <ChartNoAxesCombined className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
           {
             title: "Testes",
             url: "/testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
           {
             title: "Campanhas",
             url: "/campanhas",
             icon: <Megaphone className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
         ],
       },
@@ -60,13 +58,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Usuários",
             url: "/usuarios",
             icon: <UsersIcon className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
           {
             title: "Departamentos",
             url: "/departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
         ],
       },
@@ -76,7 +74,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Logs",
             url: "/logs",
             icon: <Cpu className={"text-primary"} />,
-            show: isAdmin,
+            show: true,
           },
         ],
       },
@@ -94,15 +92,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {isAdmin && (
-          <div className="w-full p-2">
-            <Link to="/testes/criar">
-              <Button className="w-full">
+        <div className="w-full p-2">
+          <Link to="/testes/criar">
+            <Button className="w-full">
                 <Plus /> Novo teste
               </Button>
             </Link>
-          </div>
-        )}
+        </div>
 
         {data.navMain.map((group, index) => (
           <SidebarGroup key={index}>

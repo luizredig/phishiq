@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { socket } from "../../lib/socket";
 import { api } from "../../lib/axios";
-import { useKeycloak } from "../../hooks/use-keycloak";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -59,9 +57,6 @@ const usuarioSchema = z.object({
 type UsuarioFormData = z.infer<typeof usuarioSchema>;
 
 export default function Usuarios() {
-  const { isAdmin, realm, usuario, token, roles } = useKeycloak();
-
-  const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<Usuario | null>(null);
@@ -69,17 +64,6 @@ export default function Usuarios() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Usuario | null>(null);
-
-  useEffect(() => {
-    if (!isAdmin && roles?.includes("USUARIO")) {
-      navigate(`/${realm}/inicio`);
-      return;
-    }
-
-    if (isAdmin || roles?.includes("ADMINISTRADOR")) {
-      fetchUsuarios();
-    }
-  }, [isAdmin, roles, navigate, realm]);
 
   const form = useForm<UsuarioFormData>({
     resolver: zodResolver(usuarioSchema),
@@ -96,7 +80,7 @@ export default function Usuarios() {
       setIsLoading(true);
       const res = await api.get("/usuarios", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer token`,
         },
       });
       setUsuarios(res.data);
@@ -169,12 +153,12 @@ export default function Usuarios() {
           `/usuarios/${editingUser.id}`,
           {
             ...data,
-            userId: usuario?.email,
-            realm: realm,
+            userId: "usuario?.email",
+            realm: "realm",
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer token`,
             },
           }
         );
@@ -183,12 +167,12 @@ export default function Usuarios() {
           "/usuarios",
           {
             ...data,
-            userId: usuario?.email,
-            realm: realm,
+            userId: "usuario?.email",
+            realm: "realm",
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer token`,
             },
           }
         );
@@ -205,9 +189,9 @@ export default function Usuarios() {
 
     try {
       await api.delete(`/usuarios/${selectedUser.id}`, {
-        data: { realm },
+        data: { realm: "" },
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer token`,
         },
       });
       setIsDeleteDialogOpen(false);
@@ -225,12 +209,12 @@ export default function Usuarios() {
         {
           ...selectedUser,
           ativo: !selectedUser.ativo,
-          userId: usuario?.email,
-          realm: realm,
+          userId: "usuario?.email",
+          realm: "realm",
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer token`,
           },
         }
       );
@@ -239,10 +223,6 @@ export default function Usuarios() {
       console.error("Erro ao alterar status do usuário:", error);
     }
   };
-
-  if (!isAdmin) {
-    return null;
-  }
 
   return (
     <div className="container mx-auto py-6 space-y-6">
