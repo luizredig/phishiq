@@ -15,7 +15,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Eye, EyeOff, Check, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoadingSpinner from "../layout/loading-spinner";
 import { api } from "../../lib/axios";
 
@@ -53,6 +53,7 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
@@ -66,7 +67,7 @@ export default function SignupForm() {
   const form = useForm<SignupFormSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      email: "",
+      email: location.state?.email || "",
       companyName: "",
       password: "",
       confirmPassword: "",
