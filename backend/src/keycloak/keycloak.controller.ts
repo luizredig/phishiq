@@ -57,7 +57,7 @@ export class KeycloakController {
         success: true,
         message: 'Empresa registrada com sucesso',
         data: {
-          realm: result.realm,
+          clientId: result.clientId,
           token: result.token || null,
           userId: result.userId,
         },

@@ -6,6 +6,9 @@ import { Injectable } from '@nestjs/common'
 import { UsuariosGateway } from './usuarios.gateway'
 import { KeycloakService } from 'src/keycloak/keycloak.service'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { Request } from 'express'
+import { REQUEST } from '@nestjs/core'
+import { Inject } from '@nestjs/common'
 
 @Injectable()
 export class UsuariosService {
@@ -13,7 +16,12 @@ export class UsuariosService {
     private readonly usuariosGateway: UsuariosGateway,
     private readonly keycloakService: KeycloakService,
     private readonly prisma: PrismaService,
+    @Inject(REQUEST) private readonly request: Request,
   ) {}
+
+  private getClientId() {
+    return this.request['tenantId']
+  }
 
   async getUserById(id: string) {
     const usuario = await this.prisma.usuario.findUnique({
@@ -31,15 +39,7 @@ export class UsuariosService {
     return usuario
   }
 
-  async updateUser({
-    realm,
-    id,
-    dto,
-  }: {
-    realm: string
-    id: string
-    dto: any
-  }) {
+  async updateUser({ id, dto }: { id: string; dto: any }) {
     const usuarioAtualizado = await this.prisma.usuario.update({
       where: { id },
       data: {
@@ -56,7 +56,6 @@ export class UsuariosService {
     })
 
     await this.keycloakService.updateUser({
-      realm,
       id: usuarioAtualizado.keycloakId,
       dto: {
         nome: dto.nome,
@@ -71,7 +70,7 @@ export class UsuariosService {
     return usuarioAtualizado
   }
 
-  async deleteUser({ realm, id }: { realm: string; id: string }) {
+  async deleteUser({ id }: { id: string }) {
     const usuario = await this.prisma.usuario.findUnique({
       where: { id },
       select: { keycloakId: true },
@@ -82,7 +81,6 @@ export class UsuariosService {
     }
 
     await this.keycloakService.deleteUser({
-      realm,
       id: usuario.keycloakId,
     })
 
@@ -108,15 +106,15 @@ export class UsuariosService {
     return usuarios
   }
 
-  async createUser({ realm, dto }: { realm: string; dto: any }) {
+  async createUser({ dto }: { dto: any }) {
+    const clientId = this.getClientId()
+
     let keycloakUser = await this.keycloakService.getUserById({
-      realm,
       id: dto.keycloakId,
     })
 
     if (!keycloakUser) {
       keycloakUser = await this.keycloakService.createUser({
-        realm,
         userData: {
           username: dto.email,
           firstName: dto.nome,
@@ -134,6 +132,7 @@ export class UsuariosService {
             },
           ],
         },
+        clientId,
       })
     }
 
@@ -154,48 +153,5 @@ export class UsuariosService {
     this.usuariosGateway.broadcast('user_created', novoUsuario)
 
     return novoUsuario
-  }
-
-  async syncUser({ realm, keycloakId }: { realm: string; keycloakId: string }) {
-    try {
-      const keycloakUser = await this.keycloakService.getUserById({
-        realm,
-        id: keycloakId,
-      })
-
-      if (!keycloakUser) {
-        throw new Error('User not found in Keycloak')
-      }
-
-      const existingUser = await this.prisma.usuario.findUnique({
-        where: { keycloakId },
-      })
-
-      if (existingUser) {
-        return existingUser
-      }
-
-      const cargoAttr = keycloakUser.attributes?.cargo ?? ['USUARIO']
-
-      const novoUsuario = await this.createUser({
-        realm,
-        dto: {
-          nome: keycloakUser.firstName || '',
-          sobrenome: keycloakUser.lastName || '',
-          email: keycloakUser.email || '',
-          cargo: cargoAttr[0],
-          keycloakId: keycloakUser.id,
-          userId: null,
-          statusCadastro: 'PENDENTE',
-        },
-      })
-
-      this.usuariosGateway.broadcast('user_created', novoUsuario)
-
-      return novoUsuario
-    } catch (error) {
-      console.error('Error syncing user to Prisma:', error)
-      throw error
-    }
   }
 }

@@ -26,31 +26,21 @@ export class UsuariosController {
     return this.usuariosService.getUserById(id)
   }
 
-  @Post('sync-user')
-  @Roles('ADMINISTRADOR')
-  syncUser(@Body() dto: any) {
-    const { realm, keycloakId } = dto
-    return this.usuariosService.syncUser({ realm, keycloakId })
-  }
-
   @Post()
   @Roles('ADMINISTRADOR')
   create(@Body() dto: any) {
-    const { realm, ...userData } = dto
-    return this.usuariosService.createUser({ realm, dto: userData })
+    return this.usuariosService.createUser({ dto: dto })
   }
 
   @Put(':id')
   @Roles('ADMINISTRADOR')
   update(@Param('id') id: string, @Body() dto: any) {
-    const { realm, ...userData } = dto
-    return this.usuariosService.updateUser({ realm, id, dto: userData })
+    return this.usuariosService.updateUser({ id, dto: dto })
   }
 
   @Delete(':id')
   @Roles('ADMINISTRADOR')
-  delete(@Param('id') id: string, @Body() body: any) {
-    const { realm } = body
-    return this.usuariosService.deleteUser({ id, realm })
+  delete(@Param('id') id: string) {
+    return this.usuariosService.deleteUser({ id })
   }
 }

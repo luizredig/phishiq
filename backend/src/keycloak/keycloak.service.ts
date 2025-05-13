@@ -8,39 +8,17 @@ import { Injectable, ConflictException } from '@nestjs/common'
 import { KeycloakGateway } from './keycloak.gateway'
 import KcAdminClient from 'keycloak-admin'
 import { RoleMappingPayload } from 'keycloak-admin/lib/defs/roleRepresentation'
+import ClientRepresentation from 'keycloak-admin/lib/defs/clientRepresentation'
 
 @Injectable()
 export class KeycloakService {
   constructor(private keycloakGateway: KeycloakGateway) {}
 
-  private async getClient(realm: string): Promise<KcAdminClient> {
+  private async getClient(): Promise<KcAdminClient> {
+    const realm = process.env.KEYCLOAK_REALM || 'master'
     const kc = new KcAdminClient({
       baseUrl: process.env.KEYCLOAK_BASE_URL!,
       realmName: realm,
-    })
-
-    const masterKc = new KcAdminClient({
-      baseUrl: process.env.KEYCLOAK_BASE_URL!,
-      realmName: 'master',
-    })
-
-    await masterKc.auth({
-      username: process.env.KEYCLOAK_ADMIN_USERNAME!,
-      password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
-      grantType: 'password',
-      clientId: 'admin-cli',
-    })
-
-    kc.setAccessToken(masterKc.accessToken)
-    kc.setConfig({ realmName: realm })
-
-    return kc
-  }
-
-  private async getMasterClient(): Promise<KcAdminClient> {
-    const kc = new KcAdminClient({
-      baseUrl: process.env.KEYCLOAK_BASE_URL!,
-      realmName: 'master',
     })
 
     await kc.auth({
@@ -53,21 +31,13 @@ export class KeycloakService {
     return kc
   }
 
-  async getUserById({ realm, id }: { realm: string; id: string }) {
-    const kc = await this.getClient(realm)
+  async getUserById({ id }: { id: string }) {
+    const kc = await this.getClient()
     return kc.users.findOne({ id })
   }
 
-  async updateUser({
-    realm,
-    id,
-    dto,
-  }: {
-    realm: string
-    id: string
-    dto: any
-  }) {
-    const kc = await this.getClient(realm)
+  async updateUser({ id, dto }: { id: string; dto: any }) {
+    const kc = await this.getClient()
 
     await kc.users.update(
       { id },
@@ -87,8 +57,8 @@ export class KeycloakService {
     return user
   }
 
-  async deleteUser({ realm, id }: { realm: string; id: string }) {
-    const kc = await this.getClient(realm)
+  async deleteUser({ id }: { id: string }) {
+    const kc = await this.getClient()
 
     await kc.users.del({ id })
 
@@ -99,51 +69,42 @@ export class KeycloakService {
 
   async userExistsByEmail(email: string): Promise<{
     statusCode: number
-    realm: string
     exists: boolean
     clientId: string
   }> {
-    const kc = new KcAdminClient({ baseUrl: process.env.KEYCLOAK_BASE_URL! })
+    const kc = await this.getClient()
 
-    await kc.auth({
-      username: process.env.KEYCLOAK_ADMIN_USERNAME!,
-      password: process.env.KEYCLOAK_ADMIN_PASSWORD!,
-      grantType: 'password',
-      clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
-    })
+    const users = await kc.users.find({ email })
 
-    const realms = await kc.realms.find()
+    if (users.length > 0) {
+      // Encontrar em qual client/grupo o usuário pertence
+      const user = users[0]
+      const groups = await kc.users.listGroups({ id: user.id! })
 
-    for (const realm of realms) {
-      try {
-        kc.setConfig({ realmName: realm.realm })
-
-        const users = await kc.users.find({ email })
-
-        if (users.length > 0) {
-          return {
-            statusCode: 200,
-            realm: realm.realm as string,
-            clientId: `${realm.realm}-frontend-cli`,
-            exists: true,
-          }
+      if (groups.length > 0) {
+        return {
+          statusCode: 200,
+          clientId: groups[0].name!,
+          exists: true,
         }
-      } catch (err) {
-        console.warn(`Erro ao verificar realm '${realm.realm}':`, err)
-        continue
       }
     }
 
     return {
       statusCode: 404,
-      realm: '',
       clientId: '',
       exists: false,
     }
   }
 
-  async createUser({ realm, userData }: { realm: string; userData: any }) {
-    const kc = await this.getClient(realm)
+  async createUser({
+    userData,
+    clientId,
+  }: {
+    userData: any
+    clientId: string
+  }) {
+    const kc = await this.getClient()
 
     if (!userData.firstName) {
       userData.firstName = userData.username || 'User'
@@ -160,48 +121,90 @@ export class KeycloakService {
     const userId = await kc.users.create(userData)
     const user = await kc.users.findOne({ id: userId.id })
 
+    await this.addUserToClientGroup(userId.id, clientId)
+
     this.keycloakGateway.broadcast('kc_user_created', user)
 
     return user
   }
 
-  async realmExists(realmName: string): Promise<boolean> {
-    const kc = await this.getMasterClient()
-    const realms = await kc.realms.find()
-    return realms.some((realm) => realm.realm === realmName)
+  async clientExists(clientId: string): Promise<boolean> {
+    const kc = await this.getClient()
+    const clients = await kc.clients.find({ clientId })
+    return clients.length > 0
   }
 
-  async createRealm(realmName: string, displayName: string): Promise<void> {
-    const kc = await this.getMasterClient()
+  async getGroupByName(groupName: string) {
+    const kc = await this.getClient()
+    const groups = await kc.groups.find({ search: groupName })
+    return groups.find((g) => g.name === groupName)
+  }
 
-    await kc.realms.create({
-      realm: realmName,
+  async createClientGroup(groupName: string) {
+    const kc = await this.getClient()
+    const existingGroup = await this.getGroupByName(groupName)
+
+    if (!existingGroup) {
+      const groupId = await kc.groups.create({ name: groupName })
+      return groupId
+    }
+
+    return { id: existingGroup.id }
+  }
+
+  async addUserToClientGroup(userId: string, clientId: string) {
+    const kc = await this.getClient()
+    const group = await this.getGroupByName(clientId)
+
+    if (group) {
+      await kc.users.addToGroup({ id: userId, groupId: group.id! })
+    } else {
+      const newGroupId = await this.createClientGroup(clientId)
+      await kc.users.addToGroup({
+        id: userId,
+        groupId: newGroupId.id as string,
+      })
+    }
+  }
+
+  async createClient(clientId: string, clientName: string): Promise<string> {
+    const kc = await this.getClient()
+
+    const clientConfig: ClientRepresentation = {
+      clientId: clientId,
+      name: clientName,
       enabled: true,
-      displayName: displayName,
-    })
+      publicClient: true,
+      directAccessGrantsEnabled: true,
+      standardFlowEnabled: true,
+      redirectUris: [process.env.FRONTEND_URL + '/*'],
+      webOrigins: [process.env.FRONTEND_URL!, '+'],
+    }
+
+    const client = await kc.clients.create(clientConfig)
+
+    await this.createClientGroup(clientId)
+
+    return client.id
   }
 
-  async getOrCreateRealm(companyName: string): Promise<string> {
-    const realmName = companyName
+  async getOrCreateClient(companyName: string): Promise<string> {
+    const clientId = companyName
       .toLowerCase()
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '')
 
-    const exists = await this.realmExists(realmName)
+    const exists = await this.clientExists(clientId)
 
     if (!exists) {
-      await this.createRealm(realmName, companyName)
+      await this.createClient(clientId, companyName)
     }
 
-    return realmName
+    return clientId
   }
 
-  async assignRoleToUser(
-    realm: string,
-    userId: string,
-    roleName: string,
-  ): Promise<void> {
-    const kc = await this.getClient(realm)
+  async assignRoleToUser(userId: string, roleName: string): Promise<void> {
+    const kc = await this.getClient()
 
     const roles = await kc.roles.find()
     const role = roles.find((r) => r.name === roleName)
@@ -242,33 +245,9 @@ export class KeycloakService {
     }
   }
 
-  async getToken(
-    realm: string,
-    username: string,
-    password: string,
-  ): Promise<string | null> {
+  async getToken(username: string, password: string): Promise<string | null> {
     try {
-      const kc = await this.getClient(realm)
-
-      const clients = await kc.clients.find({
-        clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
-      })
-
-      if (!clients || clients.length === 0) {
-        console.log(
-          `Criando client ${process.env.KEYCLOAK_ADMIN_CLIENT_ID} no realm ${realm}`,
-        )
-
-        await kc.clients.create({
-          clientId: process.env.KEYCLOAK_ADMIN_CLIENT_ID!,
-          enabled: true,
-          publicClient: true,
-          directAccessGrantsEnabled: true,
-          standardFlowEnabled: true,
-          redirectUris: [process.env.FRONTEND_URL + '/*'],
-          webOrigins: [process.env.FRONTEND_URL!, '+'],
-        })
-      }
+      const realm = process.env.KEYCLOAK_REALM || 'master'
 
       const response = await fetch(
         `${process.env.KEYCLOAK_BASE_URL}/realms/${realm}/protocol/openid-connect/token`,
@@ -304,7 +283,7 @@ export class KeycloakService {
     email: string
     companyName: string
     password: string
-  }): Promise<{ realm: string; token?: string; userId: string }> {
+  }): Promise<{ clientId: string; token?: string; userId: string }> {
     const { email, companyName, password } = formData
 
     try {
@@ -313,33 +292,7 @@ export class KeycloakService {
         throw new ConflictException('Este email já está registrado')
       }
 
-      const realm = await this.getOrCreateRealm(companyName)
-
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      const kc = await this.getClient(realm)
-
-      kc.setConfig({ realmName: realm })
-
-      try {
-        const clients = await kc.clients.find({
-          clientId: `${realm}-frontend-cli`,
-        })
-
-        if (!clients || clients.length === 0) {
-          await kc.clients.create({
-            clientId: `${realm}-frontend-cli`,
-            enabled: true,
-            publicClient: true,
-            directAccessGrantsEnabled: true,
-            standardFlowEnabled: true,
-            redirectUris: [process.env.FRONTEND_URL + '/*'],
-            webOrigins: [process.env.FRONTEND_URL!, '+'],
-          })
-        }
-      } catch (err) {
-        console.error('Erro ao verificar/criar cliente:', err)
-      }
+      const clientId = await this.getOrCreateClient(companyName)
 
       const emailParts = email.split('@')
       const namePart = emailParts[0] || ''
@@ -353,8 +306,8 @@ export class KeycloakService {
         lastName = nameParts[1].charAt(0).toUpperCase() + nameParts[1].slice(1)
       }
 
+      // Criar usuário admin
       const adminUser = await this.createUser({
-        realm,
         userData: {
           username: email,
           email,
@@ -370,26 +323,23 @@ export class KeycloakService {
             },
           ],
         },
+        clientId,
       })
 
       try {
-        await this.assignRoleToUser(
-          realm,
-          adminUser.id as string,
-          'ADMINISTRADOR',
-        )
+        await this.assignRoleToUser(adminUser.id as string, 'ADMINISTRADOR')
       } catch (err) {
         console.error('Erro ao atribuir role ADMINISTRADOR:', err)
       }
 
+      // Criar usuário admindev
       try {
         const devAdminUser = await this.createUser({
-          realm,
           userData: {
-            username: process.env.KEYCLOAK_ADMIN_USERNAME!,
+            username: `${clientId}-${process.env.KEYCLOAK_ADMIN_USERNAME!}`,
             email:
               process.env.KEYCLOAK_ADMIN_EMAIL ||
-              process.env.KEYCLOAK_ADMIN_USERNAME!,
+              `${clientId}-${process.env.KEYCLOAK_ADMIN_USERNAME!}`,
             firstName: 'Admin',
             lastName: 'Keycloak',
             enabled: true,
@@ -402,11 +352,11 @@ export class KeycloakService {
               },
             ],
           },
+          clientId,
         })
 
         try {
           await this.assignRoleToUser(
-            realm,
             devAdminUser.id as string,
             'ADMINISTRADOR',
           )
@@ -420,47 +370,10 @@ export class KeycloakService {
         console.error('Erro ao criar usuário admin Keycloak:', error)
       }
 
-      try {
-        if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASS) {
-          const devEmail = process.env.ADMIN_EMAIL
-
-          const devUser = await this.createUser({
-            realm,
-            userData: {
-              username: devEmail,
-              email: devEmail,
-              firstName: 'Developer',
-              lastName: 'Admin',
-              enabled: true,
-              emailVerified: true,
-              credentials: [
-                {
-                  type: 'password',
-                  value: process.env.ADMIN_PASS,
-                  temporary: false,
-                },
-              ],
-            },
-          })
-
-          try {
-            await this.assignRoleToUser(
-              realm,
-              devUser.id as string,
-              'ADMINISTRADOR',
-            )
-          } catch (err) {
-            console.error('Erro ao atribuir role ADMINISTRADOR ao dev:', err)
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao criar usuário dev com ADMIN_EMAIL:', error)
-      }
-
       let token = null
       try {
         const tokenResponse = await fetch(
-          `${process.env.KEYCLOAK_BASE_URL}/realms/${realm}/protocol/openid-connect/token`,
+          `${process.env.KEYCLOAK_BASE_URL}/realms/${process.env.KEYCLOAK_REALM || 'master'}/protocol/openid-connect/token`,
           {
             method: 'POST',
             headers: {
@@ -486,7 +399,7 @@ export class KeycloakService {
       }
 
       return {
-        realm,
+        clientId,
         token: token as unknown as string,
         userId: adminUser.id as string,
       }
