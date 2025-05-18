@@ -4,6 +4,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { Button } from "../components/ui/button";
 import {
@@ -16,34 +17,9 @@ import {
 } from "../components/ui/form";
 import { Input } from "../components/ui/input";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { emailExists } from "../api/usuarios/exists";
 
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/layout/loading-spinner";
-
-// Função para gerar código de desafio PKCE
-function generateCodeVerifier() {
-  const array = new Uint8Array(32);
-  window.crypto.getRandomValues(array);
-  return Array.from(array, (byte) =>
-    ("0" + (byte & 0xff).toString(16)).slice(-2)
-  ).join("");
-}
-
-// Função para codificar em base64-url
-function base64UrlEncode(str: string) {
-  return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-}
-
-// Função para criar um code challenge a partir do code verifier
-async function generateCodeChallenge(codeVerifier: string) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", data);
-
-  return base64UrlEncode(String.fromCharCode(...new Uint8Array(digest)));
-}
 
 const loginSchema = z.object({
   email: z
@@ -57,6 +33,8 @@ type LoginFormSchema = z.infer<typeof loginSchema>;
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/inicio";
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginSchema),
@@ -68,45 +46,23 @@ export default function Login() {
   const onSubmit = async (data: LoginFormSchema) => {
     try {
       setLoading(true);
-      const response = await emailExists(data.email);
+      const response = await fetch('http://localhost:1421/keycloak/email-exists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: data.email }),
+      });
 
-      if (response.exists) {
-        // Gerar e armazenar PKCE code verifier
-        const codeVerifier = generateCodeVerifier();
-        localStorage.setItem("code_verifier", codeVerifier);
+      const { exists } = await response.json();
 
-        // Gerar code challenge
-        const codeChallenge = await generateCodeChallenge(codeVerifier);
-
-        // Armazenar informações no sessionStorage
-        sessionStorage.setItem("realm", response.realm);
-        sessionStorage.setItem("clientId", response.clientId);
-        sessionStorage.setItem("login_email", data.email);
-
-        // Construir URL do Keycloak com suporte PKCE
-        const baseUrl = import.meta.env.VITE_KEYCLOAK_URL;
-        const redirectUri = `${window.location.origin}/callback`;
-        const state = Math.random().toString(36).substring(2);
-
-        const url = new URL(
-          `${baseUrl}/realms/${response.realm}/protocol/openid-connect/auth`
-        );
-        url.searchParams.append("client_id", response.clientId);
-        url.searchParams.append("redirect_uri", redirectUri);
-        url.searchParams.append("response_type", "code");
-        url.searchParams.append("scope", "openid profile email");
-        url.searchParams.append("state", state);
-        url.searchParams.append("code_challenge", codeChallenge);
-        url.searchParams.append("code_challenge_method", "S256");
-        url.searchParams.append("login_hint", data.email);
-
-        // Redirecionar para o Keycloak
-        window.location.replace(url.toString());
+      if (exists) {
+        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413&response_type=code&state=${encodeURIComponent(from)}`;
       } else {
-        navigate("/signup", { state: { email: data.email } });
+        navigate('/signup');
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error checking email:', error);
     } finally {
       setLoading(false);
     }

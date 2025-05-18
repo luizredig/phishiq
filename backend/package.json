@@ -37,6 +37,7 @@
     "reset:all": "npm run reset:master && npm run reset:tenant"
   },
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^26.2.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",

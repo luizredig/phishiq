@@ -1,8 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { useNavigation } from "../handlers/navigate";
+
 
 const NaoEncontrado = () => {
-  const { goBack } = useNavigation();
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col flex-1 justify-center items-center h-screen px-5 gap-4">
@@ -10,7 +11,7 @@ const NaoEncontrado = () => {
         A página que você está procurando não existe.
       </span>
 
-      <Button onClick={goBack}>Voltar</Button>
+      <Button onClick={() => navigate("/")}>Voltar</Button>
     </div>
   );
 };
