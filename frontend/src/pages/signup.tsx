@@ -72,7 +72,7 @@ export default function Signup() {
       });
 
       if (response.ok) {
-        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413&response_type=code&state=${encodeURIComponent(
+        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413/callback&response_type=code&scope=openid%20profile%20email&state=${encodeURIComponent(
           from
         )}`;
       } else {
@@ -104,7 +104,9 @@ export default function Signup() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700">Nome da empresa</FormLabel>
+                      <FormLabel className="text-gray-700">
+                        Nome da empresa
+                      </FormLabel>
                       <FormControl>
                         <Input
                           id="name"
@@ -124,7 +126,9 @@ export default function Signup() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700">Email da empresa</FormLabel>
+                      <FormLabel className="text-gray-700">
+                        Email da empresa
+                      </FormLabel>
                       <FormControl>
                         <Input
                           id="email"

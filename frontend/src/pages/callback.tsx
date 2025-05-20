@@ -45,9 +45,10 @@ export default function Callback() {
         const data = await response.json();
 
         localStorage.setItem("access_token", data.access_token);
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
         const redirectPath = state || "/home";
-        navigate(redirectPath);
+        navigate(redirectPath, { replace: true });
       } catch (error) {
         console.error("[Callback] Error during authentication:", error);
         navigate("/login");

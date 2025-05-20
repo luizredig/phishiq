@@ -101,7 +101,7 @@ export function AppHeader() {
                 <Avatar>
                   <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
                   <AvatarFallback>
-                    {userInfo?.name ? getInitials(userInfo.name) : "U"}
+                    {userInfo?.name ? getInitials(userInfo.name) : "?"}
                   </AvatarFallback>
                 </Avatar>
               )}
@@ -125,7 +125,7 @@ export function AppHeader() {
               <>
                 <DropdownMenuItem className="flex flex-col items-start">
                   <span className="font-semibold">
-                    {userInfo?.name || "Usuário"}
+                    {userInfo?.name || "?"}
                   </span>
                   <span className="text-muted-foreground text-sm">
                     {userInfo?.email || ""}

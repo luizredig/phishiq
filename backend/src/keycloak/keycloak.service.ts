@@ -59,12 +59,11 @@ export class KeycloakService {
     try {
       await this.init()
 
-      await this.keycloakAdmin.users.create({
+      const user = await this.keycloakAdmin.users.create({
         realm: 'phishiq',
         username: email,
         email,
         firstName: name,
-        lastName: name,
         enabled: true,
         emailVerified: true,
         requiredActions: [],
@@ -75,9 +74,26 @@ export class KeycloakService {
             temporary: false,
           },
         ],
-        clientRoles: {
-          'phishiq-cli': ['user'],
-        },
+      })
+
+      const adminRole = await this.keycloakAdmin.roles.findOneByName({
+        realm: 'phishiq',
+        name: 'ADMIN',
+      })
+
+      if (!adminRole || !adminRole.id || !adminRole.name) {
+        throw new Error('ADMIN role not found in realm or is invalid')
+      }
+
+      await this.keycloakAdmin.users.addRealmRoleMappings({
+        id: user.id,
+        realm: 'phishiq',
+        roles: [
+          {
+            id: adminRole.id,
+            name: adminRole.name,
+          },
+        ],
       })
     } catch (error) {
       console.error('Error registering user in Keycloak:', error)
