@@ -1,8 +1,11 @@
-import { AppSidebar } from "./app-sidebar";
 import { AppHeader } from "./app-header";
+import { useAuthGuard } from "../../hooks/use-auth-guard";
 import { SidebarProvider } from "../ui/sidebar";
+import { AppSidebar } from "./app-sidebar";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  useAuthGuard();
+
   return (
     <SidebarProvider>
       <AppSidebar />

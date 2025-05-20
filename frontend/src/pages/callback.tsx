@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import LoadingSpinner from "../components/layout/loading-spinner";
 
 export default function Callback() {
   const navigate = useNavigate();
@@ -58,10 +59,7 @@ export default function Callback() {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-lg font-semibold">Autenticando...</h2>
-        <p className="text-muted-foreground">Por favor, aguarde.</p>
-      </div>
+      <LoadingSpinner />
     </div>
   );
 }

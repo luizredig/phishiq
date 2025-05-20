@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 import ProtectedRoute from "./components/auth/protected-route";
 import AppLayout from "./components/layout/app-layout";
 
@@ -11,23 +11,26 @@ import Signup from "./pages/signup";
 export default function App() {
   return (
     <Routes>
+      {/* Rotas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/callback" element={<Callback />} />
+
+      {/* Rotas protegidas */}
       <Route
-        path="/"
         element={
           <ProtectedRoute>
             <AppLayout>
-              <Routes>
-                <Route index element={<Home />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="*" element={<NaoEncontrado />} />
-              </Routes>
+              <Outlet />
             </AppLayout>
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+      </Route>
+
+      {/* Rota 404 para URLs não encontradas */}
       <Route path="*" element={<NaoEncontrado />} />
     </Routes>
   );

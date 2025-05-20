@@ -13,12 +13,13 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-          return <Navigate to="/login" state={{ from: location }} replace />;
-        }
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
 
+      try {
         const response = await fetch(
           "http://localhost:1421/keycloak/verify-token",
           {
@@ -34,6 +35,24 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     };
 
     checkAuth();
+
+    const handleStorageChange = () => {
+      checkAuth();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setIsAuthenticated(false);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (isAuthenticated === null) {
