@@ -101,7 +101,11 @@ export function AppHeader() {
                 <Avatar>
                   <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
                   <AvatarFallback>
-                    {userInfo?.name ? getInitials(userInfo.name) : "?"}
+                    {userInfo?.name ? (
+                      getInitials(userInfo.name)
+                    ) : (
+                      <Skeleton className="h-6 w-6 rounded-full" />
+                    )}
                   </AvatarFallback>
                 </Avatar>
               )}
@@ -124,9 +128,7 @@ export function AppHeader() {
             ) : (
               <>
                 <DropdownMenuItem className="flex flex-col items-start">
-                  <span className="font-semibold">
-                    {userInfo?.name || "?"}
-                  </span>
+                  <span className="font-semibold">{userInfo?.name || "?"}</span>
                   <span className="text-muted-foreground text-sm">
                     {userInfo?.email || ""}
                   </span>
