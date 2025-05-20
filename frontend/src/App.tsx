@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/auth/protected-route";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Inicio from "./pages/inicio";
+import NaoEncontrado from "./pages/pagina-nao-encontrada";
 
 export default function App() {
   return (
@@ -15,13 +16,17 @@ export default function App() {
         path="/"
         element={
           <ProtectedRoute>
-            <AppLayout />
+            <AppLayout>
+              <Routes>
+                <Route index element={<Inicio />} />
+                <Route path="inicio" element={<Inicio />} />
+                <Route path="*" element={<NaoEncontrado />} />
+              </Routes>
+            </AppLayout>
           </ProtectedRoute>
         }
-      >
-        <Route index element={<Inicio />} />
-        <Route path="inicio" element={<Inicio />} />
-      </Route>
+      />
+      <Route path="*" element={<NaoEncontrado />} />
     </Routes>
   );
 }

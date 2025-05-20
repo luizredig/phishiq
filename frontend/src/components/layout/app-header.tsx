@@ -4,13 +4,18 @@ import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem, DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarTrigger } from "../ui/sidebar";
 
 export function AppHeader() {
-  const handleLogout = async () => {};
+  const handleLogout = () => {
+    // Redirect to Keycloak logout endpoint
+    window.location.href =
+      "http://localhost:8080/realms/phishiq/protocol/openid-connect/logout?client_id=phishiq-cli&post_logout_redirect_uri=http://localhost:1413/login";
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4">
@@ -24,7 +29,6 @@ export function AppHeader() {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar>
                 <AvatarImage src="" alt="" />
-
                 <AvatarFallback></AvatarFallback>
               </Avatar>
             </Button>
@@ -33,9 +37,7 @@ export function AppHeader() {
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem onClick={handleLogout}>
               <span className="font-semibold">Nome</span>
-
               <span className="text-muted-foreground">Email</span>
-
               <DropdownMenuSeparator />
             </DropdownMenuItem>
 
