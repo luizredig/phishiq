@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 
-
-const NaoEncontrado = () => {
+const PaginaNaoEncontrada = () => {
   const navigate = useNavigate();
 
   return (
@@ -16,4 +15,4 @@ const NaoEncontrado = () => {
   );
 };
 
-export default NaoEncontrado;
+export default PaginaNaoEncontrada;

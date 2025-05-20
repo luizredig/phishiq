@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { Button } from "../components/ui/button";
 import {
@@ -20,31 +20,31 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/layout/loading-spinner";
 
-const signupSchema = z.object({
-  name: z.string().nonempty("Por favor, insira seu nome."),
-  email: z
-    .string()
-    .nonempty("Por favor, insira seu email.")
-    .email("Por favor, insira um email válido."),
-  password: z
-    .string()
-    .nonempty("Por favor, insira sua senha.")
-    .min(8, "A senha deve ter pelo menos 8 caracteres."),
-  confirmPassword: z
-    .string()
-    .nonempty("Por favor, confirme sua senha."),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "As senhas não coincidem.",
-  path: ["confirmPassword"],
-});
+const signupSchema = z
+  .object({
+    name: z.string().nonempty("Por favor, insira seu nome."),
+    email: z
+      .string()
+      .nonempty("Por favor, insira seu email.")
+      .email("Por favor, insira um email válido."),
+    password: z
+      .string()
+      .nonempty("Por favor, insira sua senha.")
+      .min(8, "A senha deve ter pelo menos 8 caracteres."),
+    confirmPassword: z.string().nonempty("Por favor, confirme sua senha."),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem.",
+    path: ["confirmPassword"],
+  });
 
 type SignupFormSchema = z.infer<typeof signupSchema>;
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/inicio";
+  const from = location.state?.from?.pathname || "/home";
 
   const form = useForm<SignupFormSchema>({
     resolver: zodResolver(signupSchema),
@@ -59,10 +59,10 @@ export default function Signup() {
   const onSubmit = async (data: SignupFormSchema) => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:1421/keycloak/register', {
-        method: 'POST',
+      const response = await fetch("http://localhost:1421/keycloak/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: data.name,
@@ -72,13 +72,15 @@ export default function Signup() {
       });
 
       if (response.ok) {
-        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413&response_type=code&state=${encodeURIComponent(from)}`;
+        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413&response_type=code&state=${encodeURIComponent(
+          from
+        )}`;
       } else {
         const error = await response.json();
-        console.error('Registration error:', error);
+        console.error("Registration error:", error);
       }
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error("Error during registration:", error);
     } finally {
       setLoading(false);
     }
@@ -162,7 +164,9 @@ export default function Signup() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700">Confirmar Senha</FormLabel>
+                      <FormLabel className="text-gray-700">
+                        Confirmar Senha
+                      </FormLabel>
                       <FormControl>
                         <Input
                           id="confirmPassword"

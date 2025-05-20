@@ -101,7 +101,7 @@ export default function FormularioSignup() {
         password: data.password,
       });
 
-      navigate("/inicio");
+      navigate("/home");
     } catch (err) {
       console.error("Erro no cadastro:", err);
       setError(

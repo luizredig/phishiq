@@ -1,6 +1,7 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import LoadingSpinner from '../layout/loading-spinner';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Navigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import LoadingSpinner from "../layout/loading-spinner";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -13,9 +14,19 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch('http://localhost:1421/keycloak/verify-token', {
-          credentials: 'include',
-        });
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          return <Navigate to="/login" state={{ from: location }} replace />;
+        }
+
+        const response = await fetch(
+          "http://localhost:1421/keycloak/verify-token",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setIsAuthenticated(response.ok);
       } catch (error) {
         setIsAuthenticated(false);
@@ -38,4 +49,4 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   return <>{children}</>;
-} 
+}

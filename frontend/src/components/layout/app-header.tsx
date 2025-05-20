@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -9,12 +10,78 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarTrigger } from "../ui/sidebar";
+import { useEffect, useState } from "react";
+
+interface UserInfo {
+  name: string;
+  email: string;
+  picture?: string;
+}
 
 export function AppHeader() {
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+          console.error("[AppHeader] No token found in localStorage");
+          setLoading(false);
+          return;
+        }
+
+        const response = await fetch(
+          "http://localhost:1421/keycloak/user-info",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+
+          setUserInfo({
+            name: data.name || data.preferred_username,
+            email: data.email,
+            picture: data.picture,
+          });
+        } else {
+          const errorText = await response.text();
+          console.error("[AppHeader] Failed to fetch user info:", {
+            status: response.status,
+            statusText: response.statusText,
+            error: errorText,
+          });
+        }
+      } catch (error) {
+        console.error("[AppHeader] Error fetching user info:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   const handleLogout = () => {
-    // Redirect to Keycloak logout endpoint
+    localStorage.removeItem("access_token");
     window.location.href =
       "http://localhost:8080/realms/phishiq/protocol/openid-connect/logout?client_id=phishiq-cli&post_logout_redirect_uri=http://localhost:1413/login";
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
@@ -28,19 +95,24 @@ export function AppHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
               <Avatar>
-                <AvatarImage src="" alt="" />
-                <AvatarFallback></AvatarFallback>
+                <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
+                <AvatarFallback>
+                  {userInfo?.name ? getInitials(userInfo.name) : "U"}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onClick={handleLogout}>
-              <span className="font-semibold">Nome</span>
-              <span className="text-muted-foreground">Email</span>
-              <DropdownMenuSeparator />
+            <DropdownMenuItem className="flex flex-col items-start">
+              <span className="font-semibold">
+                {userInfo?.name || "Carregando..."}
+              </span>
+              <span className="text-muted-foreground text-sm">
+                {userInfo?.email || ""}
+              </span>
             </DropdownMenuItem>
-
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
               Sair

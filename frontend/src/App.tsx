@@ -1,25 +1,27 @@
 import { Route, Routes } from "react-router-dom";
-import AppLayout from "./components/layout/app-layout";
 import ProtectedRoute from "./components/auth/protected-route";
+import AppLayout from "./components/layout/app-layout";
 
+import Callback from "./pages/callback";
+import Home from "./pages/home";
 import Login from "./pages/login";
-import Signup from "./pages/signup";
-import Inicio from "./pages/inicio";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
+import Signup from "./pages/signup";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/callback" element={<Callback />} />
       <Route
         path="/"
         element={
           <ProtectedRoute>
             <AppLayout>
               <Routes>
-                <Route index element={<Inicio />} />
-                <Route path="inicio" element={<Inicio />} />
+                <Route index element={<Home />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="*" element={<NaoEncontrado />} />
               </Routes>
             </AppLayout>

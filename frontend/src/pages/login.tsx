@@ -34,7 +34,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/inicio";
+  const from = location.state?.from?.pathname || "/home";
 
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginSchema),
@@ -46,23 +46,28 @@ export default function Login() {
   const onSubmit = async (data: LoginFormSchema) => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:1421/keycloak/email-exists', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: data.email }),
-      });
+      const response = await fetch(
+        "http://localhost:1421/keycloak/email-exists",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: data.email }),
+        }
+      );
 
       const { exists } = await response.json();
 
       if (exists) {
-        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413&response_type=code&state=${encodeURIComponent(from)}`;
+        window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413/callback&response_type=code&scope=openid%20profile%20email&state=${encodeURIComponent(
+          from
+        )}`;
       } else {
-        navigate('/signup');
+        navigate("/signup");
       }
     } catch (error) {
-      console.error('Error checking email:', error);
+      console.error("Error checking email:", error);
     } finally {
       setLoading(false);
     }
