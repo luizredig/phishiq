@@ -11,6 +11,7 @@ import {
 } from "../ui/dropdown-menu";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface UserInfo {
   name: string;
@@ -94,29 +95,49 @@ export function AppHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <Avatar>
-                <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
-                <AvatarFallback>
-                  {userInfo?.name ? getInitials(userInfo.name) : "U"}
-                </AvatarFallback>
-              </Avatar>
+              {loading ? (
+                <Skeleton className="h-10 w-10 rounded-full" />
+              ) : (
+                <Avatar>
+                  <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
+                  <AvatarFallback>
+                    {userInfo?.name ? getInitials(userInfo.name) : "U"}
+                  </AvatarFallback>
+                </Avatar>
+              )}
             </Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem className="flex flex-col items-start">
-              <span className="font-semibold">
-                {userInfo?.name || "Carregando..."}
-              </span>
-              <span className="text-muted-foreground text-sm">
-                {userInfo?.email || ""}
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4" />
-              Sair
-            </DropdownMenuItem>
+            {loading ? (
+              <>
+                <div className="p-2">
+                  <Skeleton className="h-4 w-24 mb-2" />
+                  <Skeleton className="h-3 w-32" />
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem disabled>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sair
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <DropdownMenuItem className="flex flex-col items-start">
+                  <span className="font-semibold">
+                    {userInfo?.name || "Usuário"}
+                  </span>
+                  <span className="text-muted-foreground text-sm">
+                    {userInfo?.email || ""}
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sair
+                </DropdownMenuItem>
+              </>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
