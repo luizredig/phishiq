@@ -1,5 +1,3 @@
-'use client'
-
 import {
   ChartNoAxesCombined,
   Cpu,
@@ -8,10 +6,9 @@ import {
   Plus,
   TestTubeDiagonal,
   UsersIcon,
-} from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import * as React from 'react'
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import * as React from "react";
 
 import {
   Sidebar,
@@ -23,72 +20,71 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from '@/components/ui/sidebar'
+} from "../../components/ui/sidebar";
 
-import { useAuth } from '@/contexts/auth-provider'
-import { Button } from '../ui/button'
+import { Button } from "../ui/button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { isAdmin } = useAuth()
-  const pathname = usePathname()
+  const location = useLocation();
+  const pathname = location.pathname;
 
   const data = {
     navMain: [
       {
         items: [
           {
-            title: 'Dashboard',
-            url: '/dashboard',
-            icon: <ChartNoAxesCombined className={'text-primary'} />,
-            show: isAdmin,
+            title: "Dashboard",
+            url: "/dashboard",
+            icon: <ChartNoAxesCombined className={"text-primary"} />,
+            show: true,
           },
           {
-            title: 'Testes',
-            url: '/testes',
-            icon: <TestTubeDiagonal className={'text-primary'} />,
-            show: isAdmin,
+            title: "Testes",
+            url: "/testes",
+            icon: <TestTubeDiagonal className={"text-primary"} />,
+            show: true,
           },
           {
-            title: 'Campanhas',
-            url: '/campanhas',
-            icon: <Megaphone className={'text-primary'} />,
-            show: isAdmin,
-          },
-        ],
-      },
-      {
-        items: [
-          {
-            title: 'Usuários',
-            url: '/usuarios',
-            icon: <UsersIcon className={'text-primary'} />,
-            show: isAdmin,
-          },
-          {
-            title: 'Departamentos',
-            url: '/departamentos',
-            icon: <Grid2x2Plus className={'text-primary'} />,
-            show: isAdmin,
+            title: "Campanhas",
+            url: "/campanhas",
+            icon: <Megaphone className={"text-primary"} />,
+            show: true,
           },
         ],
       },
       {
         items: [
           {
-            title: 'Logs',
-            url: '/logs',
-            icon: <Cpu className={'text-primary'} />,
-            show: isAdmin,
+            title: "Usuários",
+            url: "/usuarios",
+            icon: <UsersIcon className={"text-primary"} />,
+            show: true,
+          },
+          {
+            title: "Departamentos",
+            url: "/departamentos",
+            icon: <Grid2x2Plus className={"text-primary"} />,
+            show: true,
+          },
+        ],
+      },
+      {
+        items: [
+          {
+            title: "Logs",
+            url: "/logs",
+            icon: <Cpu className={"text-primary"} />,
+            show: true,
           },
         ],
       },
     ],
-  }
+  };
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link href={'/dashboard'}>
+        <Link to="/dashboard">
           <h1 className="text-primary pl-2 text-xl font-bold select-none">
             PhishIQ
           </h1>
@@ -96,15 +92,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {isAdmin && (
-          <div className="w-full p-2">
-            <Link href={'/testes/criar'}>
-              <Button className="w-full">
+        <div className="w-full p-2">
+          <Link to="/testes/criar">
+            <Button className="w-full">
                 <Plus /> Novo teste
               </Button>
             </Link>
-          </div>
-        )}
+        </div>
 
         {data.navMain.map((group, index) => (
           <SidebarGroup key={index}>
@@ -113,14 +107,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {group.items
                   .filter((item) => item.show)
                   .map((item) => (
-                    <Link href={item.url} key={item.title}>
+                    <Link to={item.url} key={item.title}>
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild>
                           <div
                             className={`flex items-center gap-2 rounded-md px-2 py-1 ${
                               pathname === item.url
-                                ? 'bg-muted'
-                                : 'hover:bg-muted'
+                                ? "bg-muted"
+                                : "hover:bg-muted"
                             }`}
                           >
                             {item.icon}
@@ -138,5 +132,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

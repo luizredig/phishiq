@@ -1,13 +1,11 @@
-'use client'
-
-import React from 'react'
+"use client";
 
 export default function LoadingSpinner() {
   return (
     <div role="status" className="flex items-center justify-center">
       <svg
         aria-hidden="true"
-        className="fill-primary h-8 w-8 animate-spin text-gray-200 dark:text-gray-600"
+        className="fill-primary h-8 w-8 animate-spin text-gray-200"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -44,5 +42,5 @@ export default function LoadingSpinner() {
         />
       </svg>
     </div>
-  )
+  );
 }
