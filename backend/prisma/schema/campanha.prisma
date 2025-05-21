@@ -1,0 +1,17 @@
+model Campanha {
+  id           String          @id @default(uuid())
+  titulo       String
+  descricao    String?
+  status       StatusCampanha
+  logs         Log[]
+  tiposDeTeste TipoDeTeste[]
+  testes       CampanhaTeste[]
+
+  ativo         Boolean   @default(true)
+  criadoEm      DateTime  @default(now())
+  criadoPor     String?
+  atualizadoEm  DateTime  @updatedAt
+  atualizadoPor String?
+  inativadoEm   DateTime?
+  inativadoPor  String?
+}

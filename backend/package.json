@@ -37,6 +37,7 @@
     "reset:all": "npm run reset:master && npm run reset:tenant"
   },
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^26.2.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -48,6 +49,7 @@
     "@nestjs/websockets": "^11.0.12",
     "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
+    "jwks-rsa": "^3.2.0",
     "keycloak-admin": "^1.14.22",
     "nestjs-zod": "^4.3.1",
     "passport": "^0.7.0",
