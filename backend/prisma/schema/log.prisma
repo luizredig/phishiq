@@ -3,13 +3,13 @@ model Log {
   tipo      TipoLog
   descricao String?
 
-  Campanha       Campanha?     @relation(fields: [campanhaId], references: [id])
+  campanha       Campanha?     @relation(fields: [campanhaId], references: [id])
   campanhaId     String?
-  Departamento   Departamento? @relation(fields: [departamentoId], references: [id])
+  departamento   Departamento? @relation(fields: [departamentoId], references: [id])
   departamentoId String?
-  Teste          Teste?        @relation(fields: [testeId], references: [id])
+  teste          Teste?        @relation(fields: [testeId], references: [id])
   testeId        String?
-  TipoDeTeste    TipoDeTeste?  @relation(fields: [tipoDeTesteId], references: [id])
+  tipoDeTeste    TipoDeTeste?  @relation(fields: [tipoDeTesteId], references: [id])
   tipoDeTesteId  String?
 
   ativo         Boolean   @default(true)

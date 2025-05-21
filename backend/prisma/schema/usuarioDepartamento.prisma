@@ -1,0 +1,17 @@
+model UsuarioDepartamento {
+  id            String      @id @default(uuid())
+  usuarioId     String
+  departamentoId String
+  usuario       Usuario     @relation(fields: [usuarioId], references: [id])
+  departamento  Departamento @relation(fields: [departamentoId], references: [id])
+
+  ativo         Boolean   @default(true)
+  criadoEm      DateTime  @default(now())
+  criadoPor     String?
+  atualizadoEm  DateTime  @updatedAt
+  atualizadoPor String?
+  inativadoEm   DateTime?
+  inativadoPor  String?
+
+  @@unique([usuarioId, departamentoId])
+} 

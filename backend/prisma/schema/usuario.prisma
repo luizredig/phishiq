@@ -6,6 +6,8 @@ model Usuario {
   cargo      CargoUsuario @default(FUNCIONARIO)
   keycloakId String       @unique
 
+  departamentos UsuarioDepartamento[]
+
   ativo         Boolean   @default(true)
   criadoEm      DateTime  @default(now())
   criadoPor     String?
