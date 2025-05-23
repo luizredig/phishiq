@@ -182,6 +182,29 @@ function useToast() {
     };
   }, [state]);
 
+  const toast = ({
+    title,
+    description,
+    variant,
+  }: {
+    title: string;
+    description: string;
+    variant?: "success" | "error";
+  }) => {
+    const backgroundColor =
+      variant === "success"
+        ? "bg-green-100"
+        : variant === "error"
+        ? "bg-red-100"
+        : "bg-white";
+    const textColor =
+      variant === "success"
+        ? "text-green-800"
+        : variant === "error"
+        ? "text-red-800"
+        : "text-black";
+  };
+
   return {
     ...state,
     toast,

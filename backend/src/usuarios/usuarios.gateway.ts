@@ -57,7 +57,7 @@ export class UsuariosGateway
     client: Socket,
     data: {
       nome: string
-      sobrenome?: string
+      sobrenome: string
       email: string
       cargo?: CargoUsuario
       keycloakId?: string

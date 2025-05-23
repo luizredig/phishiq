@@ -51,11 +51,11 @@ export class KeycloakService {
     }
   }
 
-  async registerUser(
+  async registerAdminUser(
     name: string,
     email: string,
     password: string,
-  ): Promise<void> {
+  ): Promise<{ id: string }> {
     try {
       await this.init()
 
@@ -95,6 +95,41 @@ export class KeycloakService {
           },
         ],
       })
+
+      return { id: user.id }
+    } catch (error) {
+      console.error('Error registering admin user in Keycloak:', error)
+      throw error
+    }
+  }
+
+  async registerUser(
+    name: string,
+    sobrenome: string,
+    email: string,
+  ): Promise<{ id: string }> {
+    try {
+      await this.init()
+
+      const user = await this.keycloakAdmin.users.create({
+        realm: 'phishiq',
+        username: email,
+        email,
+        firstName: name,
+        lastName: sobrenome,
+        enabled: true,
+        emailVerified: true,
+        requiredActions: [],
+        credentials: [
+          {
+            type: 'password',
+            value: '123456',
+            temporary: false,
+          },
+        ],
+      })
+
+      return { id: user.id }
     } catch (error) {
       console.error('Error registering user in Keycloak:', error)
       throw error

@@ -41,7 +41,7 @@ export class UsuariosController {
     @Body()
     createUsuarioDto: {
       nome: string
-      sobrenome?: string
+      sobrenome: string
       email: string
       cargo?: CargoUsuario
       keycloakId?: string

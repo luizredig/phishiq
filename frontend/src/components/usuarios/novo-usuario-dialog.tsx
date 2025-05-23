@@ -47,7 +47,7 @@ interface NovoUsuarioDialogProps {
 
 const formSchema = z.object({
   nome: z.string().min(1, "Nome é obrigatório"),
-  sobrenome: z.string().optional(),
+  sobrenome: z.string().min(1, "Sobrenome é obrigatório"),
   email: z.string().email("Email inválido"),
   cargo: z.enum(["FUNCIONARIO"]),
 });
@@ -91,6 +91,10 @@ export function NovoUsuarioDialog({
   }, [usuarioParaEditar, form]);
 
   async function onSubmit(data: FormValues) {
+    data.nome = data.nome.charAt(0).toUpperCase() + data.nome.slice(1);
+    data.sobrenome =
+      data.sobrenome.charAt(0).toUpperCase() + data.sobrenome.slice(1);
+
     try {
       if (usuarioParaEditar) {
         const response = await put(`/usuarios/${usuarioParaEditar.id}`, data);
@@ -100,6 +104,7 @@ export function NovoUsuarioDialog({
             description: "Usuário atualizado com sucesso.",
           });
           onOpenChange(false);
+          form.reset();
         }
       } else {
         const response = await post("/usuarios", data);
@@ -109,6 +114,7 @@ export function NovoUsuarioDialog({
             description: "Usuário criado com sucesso.",
           });
           onOpenChange(false);
+          form.reset();
         }
       }
     } catch (error) {
@@ -117,7 +123,7 @@ export function NovoUsuarioDialog({
         description: usuarioParaEditar
           ? "Não foi possível atualizar o usuário."
           : "Não foi possível criar o usuário.",
-        variant: "destructive",
+        variant: "error",
       });
     }
   }
@@ -127,7 +133,7 @@ export function NovoUsuarioDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {usuarioParaEditar ? "Editar Usuário" : "Novo Usuário"}
+            {usuarioParaEditar ? "Editar usuário" : "Novo usuário"}
           </DialogTitle>
           <DialogDescription>
             {usuarioParaEditar
@@ -216,6 +222,7 @@ export function NovoUsuarioDialog({
               >
                 Cancelar
               </Button>
+
               <Button type="submit" disabled={loading}>
                 {usuarioParaEditar ? "Salvar" : "Criar"}
               </Button>
@@ -225,4 +232,4 @@ export function NovoUsuarioDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

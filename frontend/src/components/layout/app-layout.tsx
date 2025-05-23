@@ -2,6 +2,7 @@ import { AppHeader } from "./app-header";
 import { useAuthGuard } from "../../hooks/use-auth-guard";
 import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
+import { Toaster } from "../ui/toaster";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   useAuthGuard();
@@ -15,6 +16,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         <div className="flex flex-1 p-4">{children}</div>
       </div>
+
+      <Toaster position="top-right" duration={3000} />
     </SidebarProvider>
   );
 }

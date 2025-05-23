@@ -1,13 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { Usuario, CargoUsuario, Departamento } from '@prisma/client'
+import { KeycloakService } from '../keycloak/keycloak.service'
 
 @Injectable()
 export class UsuariosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private keycloakService: KeycloakService,
+  ) {}
 
   async findAll(includeInactive = false): Promise<Usuario[]> {
     return this.prisma.usuario.findMany({
@@ -66,25 +71,24 @@ export class UsuariosService {
 
   async create(data: {
     nome: string
-    sobrenome?: string
+    sobrenome: string
     email: string
     cargo?: CargoUsuario
     keycloakId?: string
   }): Promise<Usuario> {
-    const keycloakId = data.keycloakId || `temp_${Date.now()}`
+    const keycloakUser = await this.keycloakService.registerUser(
+      data.nome,
+      data.sobrenome,
+      data.email,
+    )
+
+    const keycloakId = keycloakUser.id
 
     return this.prisma.usuario.create({
       data: {
         ...data,
         keycloakId,
         ativo: true,
-      },
-      include: {
-        departamentos: {
-          include: {
-            departamento: true,
-          },
-        },
       },
     })
   }
