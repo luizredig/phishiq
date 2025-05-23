@@ -40,13 +40,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: "Testes",
-            url: "/testes",
+            url: "/gerenciar-testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
             show: true,
           },
           {
             title: "Campanhas",
-            url: "/campanhas",
+            url: "/gerenciar-campanhas",
             icon: <Megaphone className={"text-primary"} />,
             show: true,
           },
@@ -56,13 +56,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         items: [
           {
             title: "Usuários",
-            url: "/usuarios",
+            url: "/gerenciar-usuarios",
             icon: <UsersIcon className={"text-primary"} />,
             show: true,
           },
           {
             title: "Departamentos",
-            url: "/departamentos",
+            url: "/gerenciar-departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
             show: true,
           },

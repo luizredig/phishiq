@@ -29,7 +29,6 @@ export function AppHeader() {
         const token = localStorage.getItem("access_token");
 
         if (!token) {
-          console.error("[AppHeader] No token found in localStorage");
           setLoading(false);
           return;
         }
@@ -54,14 +53,14 @@ export function AppHeader() {
           });
         } else {
           const errorText = await response.text();
-          console.error("[AppHeader] Failed to fetch user info:", {
+          console.error("Failed to fetch user info:", {
             status: response.status,
             statusText: response.statusText,
             error: errorText,
           });
         }
       } catch (error) {
-        console.error("[AppHeader] Error fetching user info:", error);
+        console.error("Error fetching user info:", error);
       } finally {
         setLoading(false);
       }

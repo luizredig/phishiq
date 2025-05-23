@@ -29,8 +29,8 @@ export class UsuariosGateway
   handleDisconnect(client: Socket) {}
 
   @SubscribeMessage('findAllUsuarios')
-  async handleFindAllUsuarios() {
-    const usuarios = await this.usuariosService.findAll()
+  async handleFindAllUsuarios(client: Socket, includeInactive: boolean) {
+    const usuarios = await this.usuariosService.findAll(includeInactive)
     return usuarios
   }
 
@@ -60,7 +60,7 @@ export class UsuariosGateway
       sobrenome?: string
       email: string
       cargo?: CargoUsuario
-      keycloakId: string
+      keycloakId?: string
     },
   ) {
     const usuario = await this.usuariosService.create(data)
@@ -135,6 +135,19 @@ export class UsuariosGateway
       payload.departamentoId,
     )
     this.server.emit('usuarioDepartamentoRemoved', usuario)
+    return usuario
+  }
+
+  @SubscribeMessage('updateUsuarioStatus')
+  async handleUpdateUsuarioStatus(
+    client: Socket,
+    payload: { id: string; ativo: boolean },
+  ) {
+    const usuario = await this.usuariosService.updateStatus(
+      payload.id,
+      payload.ativo,
+    )
+    this.server.emit('usuarioStatusUpdated', usuario)
     return usuario
   }
 }

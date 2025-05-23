@@ -1,0 +1,1 @@
+export type CargoUsuario = "ADMIN" | "FUNCIONARIO";

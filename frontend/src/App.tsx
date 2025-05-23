@@ -7,6 +7,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
+import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
       >
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
       </Route>
 
       {/* Rota 404 para URLs não encontradas */}

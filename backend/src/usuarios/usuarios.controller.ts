@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Put,
 } from '@nestjs/common'
 import { UsuariosService } from './usuarios.service'
 import { CargoUsuario } from '@prisma/client'
@@ -15,8 +17,8 @@ export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 
   @Get()
-  findAll() {
-    return this.usuariosService.findAll()
+  findAll(@Query('includeInactive') includeInactive?: string) {
+    return this.usuariosService.findAll(includeInactive === 'true')
   }
 
   @Get(':id')
@@ -42,7 +44,7 @@ export class UsuariosController {
       sobrenome?: string
       email: string
       cargo?: CargoUsuario
-      keycloakId: string
+      keycloakId?: string
     },
   ) {
     return this.usuariosService.create(createUsuarioDto)
@@ -94,5 +96,10 @@ export class UsuariosController {
     @Param('departamentoId') departamentoId: string,
   ) {
     return this.usuariosService.removeDepartamento(id, departamentoId)
+  }
+
+  @Put(':id/status')
+  updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
+    return this.usuariosService.updateStatus(id, ativo)
   }
 }

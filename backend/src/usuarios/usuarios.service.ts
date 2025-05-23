@@ -9,9 +9,12 @@ import { Usuario, CargoUsuario, Departamento } from '@prisma/client'
 export class UsuariosService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(): Promise<Usuario[]> {
+  async findAll(includeInactive = false): Promise<Usuario[]> {
     return this.prisma.usuario.findMany({
-      where: { ativo: true },
+      where: {
+        NOT: { cargo: 'ADMIN' },
+        ativo: includeInactive ? false : true,
+      },
       include: {
         departamentos: {
           include: {
@@ -66,28 +69,16 @@ export class UsuariosService {
     sobrenome?: string
     email: string
     cargo?: CargoUsuario
-    keycloakId: string
+    keycloakId?: string
   }): Promise<Usuario> {
-    // Se o keycloakId começa com 'temp_', criar usuário sem autenticação
-    if (data.keycloakId.startsWith('temp_')) {
-      return this.prisma.usuario.create({
-        data: {
-          ...data,
-          ativo: true,
-        },
-        include: {
-          departamentos: {
-            include: {
-              departamento: true,
-            },
-          },
-        },
-      })
-    }
+    const keycloakId = data.keycloakId || `temp_${Date.now()}`
 
-    // Caso contrário, criar usuário normalmente com autenticação
     return this.prisma.usuario.create({
-      data,
+      data: {
+        ...data,
+        keycloakId,
+        ativo: true,
+      },
       include: {
         departamentos: {
           include: {
@@ -201,5 +192,23 @@ export class UsuariosService {
     })
 
     return usuario?.departamentos.map((ud) => ud.departamento) || []
+  }
+
+  async updateStatus(id: string, ativo: boolean): Promise<Usuario> {
+    return this.prisma.usuario.update({
+      where: { id },
+      data: {
+        ativo,
+        inativadoEm: ativo ? null : new Date(),
+        inativadoPor: ativo ? null : 'system',
+      },
+      include: {
+        departamentos: {
+          include: {
+            departamento: true,
+          },
+        },
+      },
+    })
   }
 }
