@@ -1,5 +1,6 @@
 import { Route, Routes, Outlet } from "react-router-dom";
 import ProtectedRoute from "./components/auth/protected-route";
+import RedirectRoute from "./components/auth/redirect-route";
 import AppLayout from "./components/layout/app-layout";
 
 import Callback from "./pages/callback";
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/callback" element={<Callback />} />
+      <Route path="/" element={<RedirectRoute />} />
 
       {/* Rotas protegidas */}
       <Route
@@ -27,7 +29,6 @@ export default function App() {
           </ProtectedRoute>
         }
       >
-        <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
       </Route>
