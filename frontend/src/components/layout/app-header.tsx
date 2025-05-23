@@ -12,6 +12,7 @@ import {
 import { SidebarTrigger } from "../ui/sidebar";
 import { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { useAuth } from "../../hooks/use-auth";
 
 interface UserInfo {
   name: string;
@@ -22,16 +23,12 @@ interface UserInfo {
 export function AppHeader() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const { getValidToken } = useAuth();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-          setLoading(false);
-          return;
-        }
+        const token = await getValidToken();
 
         const response = await fetch(
           "http://localhost:1421/keycloak/user-info",
@@ -43,34 +40,33 @@ export function AppHeader() {
           }
         );
 
-        if (response.ok) {
-          const data = await response.json();
-
-          setUserInfo({
-            name: data.name || data.preferred_username,
-            email: data.email,
-            picture: data.picture,
-          });
-        } else {
-          const errorText = await response.text();
+        if (!response.ok) {
           console.error("Failed to fetch user info:", {
             status: response.status,
             statusText: response.statusText,
-            error: errorText,
+            error: await response.text(),
           });
+          window.location.href = "/login";
+          return;
         }
+
+        const data = await response.json();
+        setUserInfo(data);
       } catch (error) {
-        console.error("Error fetching user info:", error);
+        console.error("Failed to fetch user info:", error);
+        window.location.href = "/login";
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserInfo();
-  }, []);
+  }, [getValidToken]);
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("token_expiry");
     window.location.href =
       "http://localhost:8080/realms/phishiq/protocol/openid-connect/logout?client_id=phishiq-cli&post_logout_redirect_uri=http://localhost:1413/login";
   };

@@ -52,4 +52,11 @@ export class KeycloakController {
   ): Promise<TokenResponse> {
     return await this.keycloakService.exchangeCodeForToken(body.code)
   }
+
+  @Post('refresh')
+  async refreshToken(
+    @Body() body: { refresh_token: string },
+  ): Promise<TokenResponse> {
+    return await this.keycloakService.refreshToken(body.refresh_token)
+  }
 }

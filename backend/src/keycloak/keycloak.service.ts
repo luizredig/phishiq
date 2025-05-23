@@ -193,4 +193,41 @@ export class KeycloakService {
       throw error
     }
   }
+
+  async refreshToken(refreshToken: string): Promise<TokenResponse> {
+    try {
+      const tokenUrl = `${process.env.KEYCLOAK_URL}/realms/phishiq/protocol/openid-connect/token`
+
+      const params = new URLSearchParams({
+        grant_type: 'refresh_token',
+        client_id: 'phishiq-cli',
+        client_secret: process.env.KEYCLOAK_CLIENT_SECRET || '',
+        refresh_token: refreshToken,
+      })
+
+      const response = await fetch(tokenUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params,
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        console.error('Token refresh failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+        })
+        throw new Error('Failed to refresh token')
+      }
+
+      const data = await response.json()
+      return data
+    } catch (error) {
+      console.error('Error refreshing token:', error)
+      throw error
+    }
+  }
 }

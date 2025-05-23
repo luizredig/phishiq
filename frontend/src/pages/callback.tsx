@@ -45,6 +45,8 @@ export default function Callback() {
         const data = await response.json();
 
         localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("refresh_token", data.refresh_token);
+        localStorage.setItem("token_expiry", String(Date.now() + (data.expires_in * 1000)));
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         const redirectPath = state || "/home";

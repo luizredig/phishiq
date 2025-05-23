@@ -2,6 +2,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../layout/loading-spinner";
+import { useAuth } from "../../hooks/use-auth";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -10,16 +11,12 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const location = useLocation();
+  const { getValidToken } = useAuth();
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        setIsAuthenticated(false);
-        return;
-      }
-
       try {
+        const token = await getValidToken();
         const response = await fetch(
           "http://localhost:1421/keycloak/verify-token",
           {
@@ -35,25 +32,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     };
 
     checkAuth();
-
-    const handleStorageChange = () => {
-      checkAuth();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        setIsAuthenticated(false);
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
+  }, [getValidToken]);
 
   if (isAuthenticated === null) {
     return (
