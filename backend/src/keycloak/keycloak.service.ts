@@ -265,4 +265,32 @@ export class KeycloakService {
       throw error
     }
   }
+
+  async updateUser(
+    keycloakId: string,
+    data: {
+      firstName?: string
+      lastName?: string
+      email?: string
+    },
+  ): Promise<void> {
+    try {
+      await this.init()
+
+      await this.keycloakAdmin.users.update(
+        {
+          id: keycloakId,
+          realm: 'phishiq',
+        },
+        {
+          ...(data.firstName && { firstName: data.firstName }),
+          ...(data.lastName && { lastName: data.lastName }),
+          ...(data.email && { email: data.email, username: data.email }),
+        },
+      )
+    } catch (error) {
+      console.error('Error updating user in Keycloak:', error)
+      throw error
+    }
+  }
 }

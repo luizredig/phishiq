@@ -64,6 +64,20 @@ export class UsuariosController {
     return this.usuariosService.update(id, updateUsuarioDto)
   }
 
+  @Put(':id')
+  updatePut(
+    @Param('id') id: string,
+    @Body()
+    updateUsuarioDto: {
+      nome?: string
+      sobrenome?: string
+      email?: string
+      cargo?: CargoUsuario
+    },
+  ) {
+    return this.usuariosService.update(id, updateUsuarioDto)
+  }
+
   @Patch(':id/keycloak')
   updateKeycloakId(
     @Param('id') id: string,

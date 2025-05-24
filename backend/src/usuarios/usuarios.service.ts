@@ -102,6 +102,22 @@ export class UsuariosService {
       cargo?: CargoUsuario
     },
   ): Promise<Usuario> {
+    const usuario = await this.prisma.usuario.findUnique({
+      where: { id },
+    })
+
+    if (!usuario) {
+      throw new Error('Usuário não encontrado')
+    }
+
+    // Atualiza no Keycloak
+    await this.keycloakService.updateUser(usuario.keycloakId, {
+      firstName: data.nome,
+      lastName: data.sobrenome,
+      email: data.email,
+    })
+
+    // Atualiza no banco de dados
     return this.prisma.usuario.update({
       where: { id },
       data,
