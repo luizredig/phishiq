@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  Put,
 } from '@nestjs/common'
 import { DepartamentosService } from './departamentos.service'
 
@@ -14,8 +16,8 @@ export class DepartamentosController {
   constructor(private readonly departamentosService: DepartamentosService) {}
 
   @Get()
-  findAll() {
-    return this.departamentosService.findAll()
+  findAll(@Query('includeInactive') includeInactive?: string) {
+    return this.departamentosService.findAll(includeInactive === 'true')
   }
 
   @Get(':id')
@@ -36,6 +38,19 @@ export class DepartamentosController {
     return this.departamentosService.update(id, updateDepartamentoDto)
   }
 
+  @Put(':id')
+  updatePut(
+    @Param('id') id: string,
+    @Body() updateDepartamentoDto: { nome?: string },
+  ) {
+    return this.departamentosService.update(id, updateDepartamentoDto)
+  }
+
+  @Put(':id/status')
+  updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
+    return this.departamentosService.updateStatus(id, ativo)
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.departamentosService.remove(id)
@@ -49,6 +64,14 @@ export class DepartamentosController {
   @Post(':id/usuarios/:usuarioId')
   addUsuario(@Param('id') id: string, @Param('usuarioId') usuarioId: string) {
     return this.departamentosService.addUsuario(id, usuarioId)
+  }
+
+  @Put(':id/usuarios/:usuarioId/inativar')
+  inativarUsuario(
+    @Param('id') id: string,
+    @Param('usuarioId') usuarioId: string,
+  ) {
+    return this.departamentosService.removeUsuario(id, usuarioId)
   }
 
   @Delete(':id/usuarios/:usuarioId')

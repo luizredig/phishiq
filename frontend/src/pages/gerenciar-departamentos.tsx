@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  BadgeCheck,
-  Building2,
-  Edit,
-  Plus,
-  Search,
-  Trash,
-  X,
-} from "lucide-react";
+import { BadgeCheck, Edit, Plus, Search, Trash, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
@@ -32,38 +24,37 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoUsuarioDialog } from "../components/usuarios/novo-usuario-dialog";
+import { NovoDepartamentoDialog } from "../components/departamentos/novo-departamento-dialog";
 import { useApi } from "../hooks/use-api";
 import { useToast } from "../hooks/use-toast";
 
 interface Usuario {
   id: string;
   nome: string;
-  sobrenome: string | null;
   email: string;
-  cargo: "ADMIN" | "FUNCIONARIO";
-  keycloakId: string;
+}
+
+interface Departamento {
+  id: string;
+  nome: string;
   ativo: boolean;
   criadoEm: string;
-  departamentos: {
-    departamento: {
-      id: string;
-      nome: string;
-    };
+  usuarios: {
+    usuario: Usuario;
   }[];
 }
 
-export default function GerenciarUsuarios() {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+export default function GerenciarDepartamentos() {
+  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
-  const [isNovoUsuarioOpen, setIsNovoUsuarioOpen] = useState(false);
-  const [usuarioParaEditar, setUsuarioParaEditar] = useState<
-    Usuario | undefined
+  const [isNovoDepartamentoOpen, setIsNovoDepartamentoOpen] = useState(false);
+  const [departamentoParaEditar, setDepartamentoParaEditar] = useState<
+    Departamento | undefined
   >(undefined);
-  const [usuarioParaExcluir, setUsuarioParaExcluir] = useState<string | null>(
-    null
-  );
+  const [departamentoParaExcluir, setDepartamentoParaExcluir] = useState<
+    string | null
+  >(null);
   const [includeInactive, setIncludeInactive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -71,22 +62,22 @@ export default function GerenciarUsuarios() {
   const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
 
   useEffect(() => {
-    fetchUsuarios();
+    fetchDepartamentos();
   }, [includeInactive]);
 
-  async function fetchUsuarios() {
+  async function fetchDepartamentos() {
     setLoading(true);
     try {
-      const response = await get<Usuario[]>(
-        `/usuarios?includeInactive=${includeInactive}`
+      const response = await get<Departamento[]>(
+        `/departamentos?includeInactive=${includeInactive}`
       );
       if (response) {
-        setUsuarios(response);
+        setDepartamentos(response);
       }
     } catch (error) {
       toast({
         title: "Erro!",
-        description: "Não foi possível carregar os usuários.",
+        description: "Não foi possível carregar os departamentos.",
         variant: "error",
       });
     } finally {
@@ -96,18 +87,20 @@ export default function GerenciarUsuarios() {
 
   async function handleToggleStatus(id: string, ativo: boolean) {
     try {
-      const response = await put<Usuario>(`/usuarios/${id}/status`, { ativo });
+      const response = await put<Departamento>(`/departamentos/${id}/status`, {
+        ativo,
+      });
 
       if (response) {
-        setUsuarios((prev) =>
-          prev.map((usuario) =>
-            usuario.id === id ? { ...usuario, ativo } : usuario
+        setDepartamentos((prev) =>
+          prev.map((departamento) =>
+            departamento.id === id ? { ...departamento, ativo } : departamento
           )
         );
 
         toast({
           title: "Sucesso!",
-          description: `Usuário ${
+          description: `Departamento ${
             ativo ? "ativado" : "desativado"
           } com sucesso.`,
         });
@@ -115,73 +108,74 @@ export default function GerenciarUsuarios() {
     } catch (error) {
       toast({
         title: "Erro!",
-        description: "Não foi possível alterar o status do usuário.",
+        description: "Não foi possível alterar o status do departamento.",
         variant: "error",
       });
     }
   }
 
-  function handleEditar(usuario: Usuario) {
-    setUsuarioParaEditar(usuario);
-    setIsNovoUsuarioOpen(true);
+  function handleEditar(departamento: Departamento) {
+    setDepartamentoParaEditar(departamento);
+    setIsNovoDepartamentoOpen(true);
   }
 
   async function handleExcluir() {
-    if (!usuarioParaExcluir) return;
+    if (!departamentoParaExcluir) return;
 
     try {
       const response = await deleteRequest<{ success: boolean }>(
-        `/usuarios/${usuarioParaExcluir}`
+        `/departamentos/${departamentoParaExcluir}`
       );
 
       if (response) {
-        setUsuarios((prev) =>
-          prev.filter((usuario) => usuario.id !== usuarioParaExcluir)
+        setDepartamentos((prev) =>
+          prev.filter(
+            (departamento) => departamento.id !== departamentoParaExcluir
+          )
         );
 
         toast({
           title: "Sucesso!",
-          description: "Usuário excluído com sucesso.",
+          description: "Departamento excluído com sucesso.",
         });
       }
     } catch (error) {
       toast({
         title: "Erro!",
-        description: "Não foi possível excluir o usuário.",
+        description: "Não foi possível excluir o departamento.",
         variant: "error",
       });
     } finally {
-      setUsuarioParaExcluir(null);
+      setDepartamentoParaExcluir(null);
     }
   }
 
-  const filteredUsuarios = usuarios.filter((usuario) => {
+  const filteredDepartamentos = departamentos.filter((departamento) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
-      usuario.nome.toLowerCase().includes(termoBusca) ||
-      usuario.email.toLowerCase().includes(termoBusca) ||
-      (usuario.sobrenome &&
-        usuario.sobrenome.toLowerCase().includes(termoBusca)) ||
-      usuario.departamentos.some((d) =>
-        d.departamento.nome.toLowerCase().includes(termoBusca)
+      departamento.nome.toLowerCase().includes(termoBusca) ||
+      departamento.usuarios.some(
+        (u) =>
+          u.usuario.nome.toLowerCase().includes(termoBusca) ||
+          u.usuario.email.toLowerCase().includes(termoBusca)
       )
     );
   });
 
   // Pagination calculations
-  const totalPages = Math.ceil(filteredUsuarios.length / itemsPerPage);
-  const paginatedUsuarios = filteredUsuarios.slice(
+  const totalPages = Math.ceil(filteredDepartamentos.length / itemsPerPage);
+  const paginatedDepartamentos = filteredDepartamentos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  function getStatusBadge(usuario: Usuario) {
-    if (!usuario.ativo) {
+  function getStatusBadge(departamento: Departamento) {
+    if (!departamento.ativo) {
       return (
         <Badge
           variant="outline"
-          className="flex items-center gap-1 text-red-500 border-red-200 w-fit"
+          className="flex items-center gap-1 text-red-500 border-red-200"
         >
           <X className="h-3 w-3" />
           Inativo
@@ -192,7 +186,7 @@ export default function GerenciarUsuarios() {
     return (
       <Badge
         variant="outline"
-        className="flex items-center gap-1 text-green-500 border-green-200 w-fit"
+        className="flex items-center gap-1 text-green-500 border-green-200"
       >
         <BadgeCheck className="h-3 w-3" />
         Ativo
@@ -203,10 +197,10 @@ export default function GerenciarUsuarios() {
   return (
     <div className="container py-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gerenciar usuários</h1>
-        <Button onClick={() => setIsNovoUsuarioOpen(true)}>
+        <h1 className="text-2xl font-bold">Gerenciar departamentos</h1>
+        <Button onClick={() => setIsNovoDepartamentoOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Novo Usuário
+          Novo Departamento
         </Button>
       </div>
 
@@ -215,7 +209,7 @@ export default function GerenciarUsuarios() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             className="pl-10 truncate w-full"
-            placeholder="Buscar por nome, email ou departamento"
+            placeholder="Buscar por nome ou usuário"
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
           />
@@ -243,10 +237,7 @@ export default function GerenciarUsuarios() {
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead className="text-center">
-                  Qtde. de Departamentos
-                </TableHead>
+                <TableHead className="text-center">Qtde. de Usuários</TableHead>
                 <TableHead className="text-center">Status</TableHead>
                 <TableHead className="text-center">Ativo</TableHead>
                 <TableHead className="text-right">Ações</TableHead>
@@ -254,53 +245,45 @@ export default function GerenciarUsuarios() {
             </TableHeader>
 
             <TableBody>
-              {paginatedUsuarios.length === 0 ? (
+              {paginatedDepartamentos.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={7}
+                    colSpan={5}
                     className="text-center py-4 text-muted-foreground"
                   >
-                    Nenhum usuário cadastrado.
+                    Nenhum departamento cadastrado.
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedUsuarios.map((usuario) => (
-                  <TableRow key={usuario.id}>
+                paginatedDepartamentos.map((departamento) => (
+                  <TableRow key={departamento.id}>
                     <TableCell className="font-medium">
-                      {usuario.nome} {usuario.sobrenome}
+                      {departamento.nome}
                     </TableCell>
-
-                    <TableCell>{usuario.email}</TableCell>
 
                     <TableCell>
                       <div className="flex justify-center items-center">
-                        {usuario.departamentos.length > 0 ? (
-                          <Badge
-                            variant="secondary"
-                            className="flex items-center gap-1"
-                          >
-                            <Building2 className="h-3 w-3" />
-                            {usuario.departamentos.length}
-                          </Badge>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">
-                            Sem departamento.
-                          </span>
-                        )}
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          <User className="h-3 w-3" />
+                          {departamento.usuarios.length}
+                        </Badge>
                       </div>
                     </TableCell>
 
                     <TableCell className="text-center">
                       <div className="flex justify-center items-center">
-                        {getStatusBadge(usuario)}
+                        {getStatusBadge(departamento)}
                       </div>
                     </TableCell>
 
                     <TableCell className="text-center">
                       <Switch
-                        checked={usuario.ativo}
+                        checked={departamento.ativo}
                         onCheckedChange={(checked) =>
-                          handleToggleStatus(usuario.id, checked)
+                          handleToggleStatus(departamento.id, checked)
                         }
                       />
                     </TableCell>
@@ -310,21 +293,11 @@ export default function GerenciarUsuarios() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleEditar(usuario)}
+                          onClick={() => handleEditar(departamento)}
                           title="Editar"
                           className="text-xs sm:text-sm"
                         >
                           <Edit className="h-4 w-4 text-primary" />
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setUsuarioParaExcluir(usuario.id)}
-                          title="Excluir"
-                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
-                        >
-                          <Trash className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -381,23 +354,23 @@ export default function GerenciarUsuarios() {
         </div>
       )}
 
-      <NovoUsuarioDialog
-        open={isNovoUsuarioOpen}
+      <NovoDepartamentoDialog
+        open={isNovoDepartamentoOpen}
         onOpenChange={(open) => {
-          setIsNovoUsuarioOpen(open);
+          setIsNovoDepartamentoOpen(open);
           if (!open) {
-            setUsuarioParaEditar(undefined);
-            fetchUsuarios();
+            setDepartamentoParaEditar(undefined);
+            fetchDepartamentos();
           }
         }}
-        usuarioParaEditar={usuarioParaEditar}
+        departamentoParaEditar={departamentoParaEditar}
       />
 
       <ConfirmDialog
-        open={!!usuarioParaExcluir}
-        onOpenChange={() => setUsuarioParaExcluir(null)}
-        title="Excluir Usuário"
-        description="Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita."
+        open={!!departamentoParaExcluir}
+        onOpenChange={() => setDepartamentoParaExcluir(null)}
+        title="Excluir Departamento"
+        description="Tem certeza que deseja excluir este departamento? Esta ação não pode ser desfeita."
         confirmText="Sim, excluir"
         cancelText="Não, cancelar"
         onConfirm={handleExcluir}

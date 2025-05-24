@@ -29,8 +29,9 @@ export class DepartamentosGateway
   handleDisconnect(client: Socket) {}
 
   @SubscribeMessage('findAllDepartamentos')
-  async handleFindAllDepartamentos() {
-    const departamentos = await this.departamentosService.findAll()
+  async handleFindAll(client: Socket, includeInactive = false) {
+    const departamentos =
+      await this.departamentosService.findAll(includeInactive)
     return departamentos
   }
 
@@ -52,9 +53,27 @@ export class DepartamentosGateway
     client: Socket,
     payload: { id: string; data: { nome?: string } },
   ) {
-    const departamento = await this.departamentosService.update(
+    try {
+      const departamento = await this.departamentosService.update(
+        payload.id,
+        payload.data,
+      )
+      this.server.emit('departamentoUpdated', departamento)
+      return departamento
+    } catch (error) {
+      console.error('Error updating department:', error)
+      throw error
+    }
+  }
+
+  @SubscribeMessage('updateDepartamentoStatus')
+  async handleUpdateStatus(
+    client: Socket,
+    payload: { id: string; ativo: boolean },
+  ) {
+    const departamento = await this.departamentosService.updateStatus(
       payload.id,
-      payload.data,
+      payload.ativo,
     )
     this.server.emit('departamentoUpdated', departamento)
     return departamento
@@ -83,6 +102,19 @@ export class DepartamentosGateway
       payload.usuarioId,
     )
     this.server.emit('departamentoUsuarioAdded', departamento)
+    return departamento
+  }
+
+  @SubscribeMessage('inativarDepartamentoUsuario')
+  async handleInativarDepartamentoUsuario(
+    client: Socket,
+    payload: { departamentoId: string; usuarioId: string },
+  ) {
+    const departamento = await this.departamentosService.removeUsuario(
+      payload.departamentoId,
+      payload.usuarioId,
+    )
+    this.server.emit('departamentoUsuarioRemoved', departamento)
     return departamento
   }
 

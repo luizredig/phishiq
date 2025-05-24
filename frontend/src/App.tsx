@@ -9,6 +9,7 @@ import Login from "./pages/login";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
 import GerenciarUsuarios from "./pages/gerenciar-usuarios";
+import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
 
 export default function App() {
   return (
@@ -31,6 +32,10 @@ export default function App() {
       >
         <Route path="/home" element={<Home />} />
         <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
+        <Route
+          path="/gerenciar-departamentos"
+          element={<GerenciarDepartamentos />}
+        />
       </Route>
 
       {/* Rota 404 para URLs não encontradas */}
