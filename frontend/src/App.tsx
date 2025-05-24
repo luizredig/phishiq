@@ -1,15 +1,16 @@
-import { Route, Routes, Outlet } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/protected-route";
 import RedirectRoute from "./components/auth/redirect-route";
 import AppLayout from "./components/layout/app-layout";
 
 import Callback from "./pages/callback";
+import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
+import GerenciarTestes from "./pages/gerenciar-testes";
+import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
-import GerenciarUsuarios from "./pages/gerenciar-usuarios";
-import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           path="/gerenciar-departamentos"
           element={<GerenciarDepartamentos />}
         />
+        <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
       </Route>
 
       {/* Rota 404 para URLs não encontradas */}

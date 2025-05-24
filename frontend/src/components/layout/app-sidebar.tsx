@@ -93,7 +93,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <div className="w-full p-2">
-          <Link to="/testes/criar">
+          <Link to="/gerenciar-testes">
             <Button className="w-full">
                 <Plus /> Novo teste
               </Button>

@@ -64,6 +64,7 @@ export class KeycloakService {
         username: email,
         email,
         firstName: name,
+        lastName: name,
         enabled: true,
         emailVerified: true,
         requiredActions: [],

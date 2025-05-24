@@ -1,8 +1,8 @@
 model Departamento {
-  id     String              @id @default(uuid())
-  nome   String
-  testes TesteDepartamento[]
-  logs   Log[]
+  id       String                @id @default(uuid())
+  nome     String
+  testes   TesteDepartamento[]
+  logs     Log[]
   usuarios UsuarioDepartamento[]
 
   ativo         Boolean   @default(true)
