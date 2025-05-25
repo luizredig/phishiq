@@ -22,7 +22,16 @@ import {
   Legend,
   Tooltip,
 } from "recharts";
-import { AlertCircle, CheckCircle2, XCircle, Send } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  Send,
+  Smile,
+  Frown,
+  Laugh,
+  Annoyed,
+} from "lucide-react";
 import LoadingSpinner from "../components/layout/loading-spinner";
 
 interface DashboardStats {
@@ -71,6 +80,52 @@ export function Dashboard() {
     }
   }
 
+  const getMeterInfo = () => {
+    if (!stats) {
+      return {
+        icon: Smile,
+        color: "stroke-gray-500",
+        message: "Você ainda não fez nenhuma simulação.",
+      };
+    }
+
+    const { testesSucesso, testesFalha } = stats;
+    const total = testesSucesso + testesFalha;
+
+    if (total === 0) {
+      return {
+        icon: Smile,
+        color: "stroke-gray-500",
+        message: "Você ainda não fez nenhuma simulação.",
+      };
+    }
+
+    const diferenca = testesSucesso - testesFalha;
+    const percentualDiferenca = Math.abs(diferenca) / total;
+
+    if (percentualDiferenca < 0.2) {
+      return {
+        icon: Annoyed,
+        color: "stroke-yellow-500",
+        message: "Cuidado! Você está quase lá.",
+      };
+    }
+
+    if (diferenca > 0) {
+      return {
+        icon: Laugh,
+        color: "stroke-green-500",
+        message: "Excelente! Continue assim.",
+      };
+    }
+
+    return {
+      icon: Frown,
+      color: "stroke-red-500",
+      message: "Atenção! Você precisa melhorar.",
+    };
+  };
+
   if (loading || !stats) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -97,9 +152,28 @@ export function Dashboard() {
     },
   ];
 
+  const meterInfo = getMeterInfo();
+  const Icon = meterInfo.icon;
+
   return (
     <div className="p-6 space-y-6 w-full">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <h1 className="text-2xl font-bold">Dashboard</h1>
+
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Icon className={`h-8 w-8 ${meterInfo.color}`} />
+            <span>Medidor de segurança</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p
+            className={`text-lg ${meterInfo.color.replace("stroke-", "text-")}`}
+          >
+            {meterInfo.message}
+          </p>
+        </CardContent>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -107,7 +181,7 @@ export function Dashboard() {
             <CardTitle className="text-sm font-medium">
               Total de testes
             </CardTitle>
-            <Send className="h-4 w-4 text-muted-foreground" />
+            <Send className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalTestes}</div>

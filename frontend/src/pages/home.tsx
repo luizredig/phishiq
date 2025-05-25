@@ -15,7 +15,6 @@ export default function Home() {
         <h1 className="text-3xl font-bold">
           Bem-vindo ao <span className="text-primary">PhishIQ</span>
         </h1>
-
         <p className="text-muted-foreground">
           Sua plataforma de conscientização e treinamento contra phishing.
         </p>
