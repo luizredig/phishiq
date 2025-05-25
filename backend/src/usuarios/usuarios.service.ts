@@ -22,6 +22,7 @@ export class UsuariosService {
       },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -35,6 +36,7 @@ export class UsuariosService {
       where: { id },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -48,6 +50,7 @@ export class UsuariosService {
       where: { email },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -61,6 +64,7 @@ export class UsuariosService {
       where: { keycloakId },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -121,6 +125,7 @@ export class UsuariosService {
       data,
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -138,6 +143,7 @@ export class UsuariosService {
       },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -152,6 +158,7 @@ export class UsuariosService {
       data: { keycloakId },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },
@@ -180,14 +187,10 @@ export class UsuariosService {
     usuarioId: string,
     departamentoId: string,
   ): Promise<Usuario> {
-    await this.prisma.usuarioDepartamento.updateMany({
+    await this.prisma.usuarioDepartamento.deleteMany({
       where: {
         usuarioId,
         departamentoId,
-      },
-      data: {
-        ativo: false,
-        inativadoEm: new Date(),
       },
     })
 
@@ -222,6 +225,7 @@ export class UsuariosService {
       },
       include: {
         departamentos: {
+          where: { ativo: true },
           include: {
             departamento: true,
           },

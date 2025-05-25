@@ -200,7 +200,7 @@ export default function GerenciarDepartamentos() {
         <h1 className="text-2xl font-bold">Gerenciar departamentos</h1>
         <Button onClick={() => setIsNovoDepartamentoOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Novo Departamento
+          Novo departamento
         </Button>
       </div>
 

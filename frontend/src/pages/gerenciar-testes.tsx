@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadgeCheck, Edit, Plus, Search, Trash, X, Mail } from "lucide-react";
+import { Plus, Search, Mail, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { ConfirmDialog } from "../components/ui/confirm-dialog";
 import { Input } from "../components/ui/input";
 import {
   Pagination,
@@ -15,7 +14,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../components/ui/pagination";
-import { Switch } from "../components/ui/switch";
 import {
   Table,
   TableBody,
@@ -27,6 +25,14 @@ import {
 import { NovoTesteDialog } from "../components/testes/novo-teste-dialog";
 import { useApi } from "../hooks/use-api";
 import { useToast } from "../hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { CustomDatePicker } from "../components/ui/date-picker";
 
 interface Teste {
   id: string;
@@ -44,20 +50,35 @@ interface Teste {
   criadoEm: string;
 }
 
+type TipoEnvio = "TODOS" | "INDIVIDUAL" | "DEPARTAMENTO";
+type Status = "TODOS" | "ENVIADO" | "ABERTO" | "CLIQUE" | "SUCESSO" | "FALHA";
+type Resultado = "TODOS" | "CAIU" | "REPORTOU" | "NAO_REPORTOU";
+
+interface Filtros {
+  tipoEnvio: TipoEnvio;
+  dataInicio: Date | undefined;
+  dataFim: Date | undefined;
+  status: Status;
+  resultado: Resultado;
+}
+
 export default function GerenciarTestes() {
   const [testes, setTestes] = useState<Teste[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoTesteOpen, setIsNovoTesteOpen] = useState(false);
-  const [testeParaEditar, setTesteParaEditar] = useState<Teste | undefined>(
-    undefined
-  );
-  const [testeParaExcluir, setTesteParaExcluir] = useState<string | null>(null);
   const [includeInactive, setIncludeInactive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filtros, setFiltros] = useState<Filtros>({
+    tipoEnvio: "TODOS",
+    dataInicio: undefined,
+    dataFim: undefined,
+    status: "TODOS",
+    resultado: "TODOS",
+  });
   const itemsPerPage = 5;
   const { toast } = useToast();
-  const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
+  const { get, loading: apiLoading } = useApi();
 
   useEffect(() => {
     fetchTestes();
@@ -83,69 +104,62 @@ export default function GerenciarTestes() {
     }
   }
 
-  async function handleToggleStatus(id: string, ativo: boolean) {
-    try {
-      const response = await put<Teste>(`/testes/${id}/status`, { ativo });
-
-      if (response) {
-        setTestes((prev) =>
-          prev.map((teste) => (teste.id === id ? { ...teste, ativo } : teste))
-        );
-
-        toast({
-          title: "Sucesso!",
-          description: `Teste ${ativo ? "ativado" : "desativado"} com sucesso.`,
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível alterar o status do teste.",
-        variant: "error",
-      });
-    }
-  }
-
-  function handleEditar(teste: Teste) {
-    setTesteParaEditar(teste);
-    setIsNovoTesteOpen(true);
-  }
-
-  async function handleExcluir() {
-    if (!testeParaExcluir) return;
-
-    try {
-      const response = await deleteRequest<{ success: boolean }>(
-        `/testes/${testeParaExcluir}`
-      );
-
-      if (response) {
-        setTestes((prev) =>
-          prev.filter((teste) => teste.id !== testeParaExcluir)
-        );
-
-        toast({
-          title: "Sucesso!",
-          description: "Teste excluído com sucesso.",
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível excluir o teste.",
-        variant: "error",
-      });
-    } finally {
-      setTesteParaExcluir(null);
-    }
-  }
-
   const filteredTestes = testes.filter((teste) => {
-    if (!busca) return true;
-    const termoBusca = busca.toLowerCase();
-    return teste.departamentos.some((d) =>
-      d.departamento.nome.toLowerCase().includes(termoBusca)
-    );
+    // Filtro de busca por departamento
+    if (busca) {
+      const termoBusca = busca.toLowerCase();
+      if (
+        !teste.departamentos.some((d) =>
+          d.departamento.nome.toLowerCase().includes(termoBusca)
+        )
+      ) {
+        return false;
+      }
+    }
+
+    // Filtro por tipo de envio
+    if (filtros.tipoEnvio !== "TODOS") {
+      if (
+        filtros.tipoEnvio === "INDIVIDUAL" &&
+        teste.departamentos.length > 0
+      ) {
+        return false;
+      }
+      if (
+        filtros.tipoEnvio === "DEPARTAMENTO" &&
+        teste.departamentos.length === 0
+      ) {
+        return false;
+      }
+    }
+
+    // Filtro por data
+    if (filtros.dataInicio && filtros.dataFim) {
+      const dataTeste = new Date(teste.criadoEm);
+      if (dataTeste < filtros.dataInicio || dataTeste > filtros.dataFim) {
+        return false;
+      }
+    }
+
+    // Filtro por status
+    if (filtros.status !== "TODOS" && teste.status !== filtros.status) {
+      return false;
+    }
+
+    // Filtro por resultado
+    if (filtros.resultado !== "TODOS") {
+      if (filtros.resultado === "CAIU" && !teste.caiuNoTeste) {
+        return false;
+      }
+      if (filtros.resultado === "REPORTOU" && !teste.reportouPhishing) {
+        return false;
+      }
+      if (filtros.resultado === "NAO_REPORTOU" && teste.reportouPhishing) {
+        return false;
+      }
+    }
+
+    return true;
   });
 
   // Pagination calculations
@@ -154,30 +168,6 @@ export default function GerenciarTestes() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  function getStatusBadge(teste: Teste) {
-    if (!teste.ativo) {
-      return (
-        <Badge
-          variant="outline"
-          className="flex items-center gap-1 text-red-500 border-red-200 w-fit"
-        >
-          <X className="h-3 w-3" />
-          Inativo
-        </Badge>
-      );
-    }
-
-    return (
-      <Badge
-        variant="outline"
-        className="flex items-center gap-1 text-green-500 border-green-200 w-fit"
-      >
-        <BadgeCheck className="h-3 w-3" />
-        Ativo
-      </Badge>
-    );
-  }
 
   function getTesteStatusBadge(teste: Teste) {
     const statusColors = {
@@ -191,11 +181,21 @@ export default function GerenciarTestes() {
     return (
       <Badge
         variant="secondary"
-        className={`${statusColors[teste.status]} border-0`}
+        className={`${statusColors[teste.status]} border-0 w-fit`}
       >
         {teste.status}
       </Badge>
     );
+  }
+
+  function limparFiltros() {
+    setFiltros({
+      tipoEnvio: "TODOS",
+      dataInicio: undefined,
+      dataFim: undefined,
+      status: "TODOS",
+      resultado: "TODOS",
+    });
   }
 
   return (
@@ -208,27 +208,120 @@ export default function GerenciarTestes() {
         </Button>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-10 truncate w-full"
-            placeholder="Buscar por departamento"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              className="pl-10 truncate w-full"
+              placeholder="Buscar por departamento"
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            {(filtros.tipoEnvio !== "TODOS" ||
+              filtros.dataInicio ||
+              filtros.dataFim ||
+              filtros.status !== "TODOS" ||
+              filtros.resultado !== "TODOS") && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={limparFiltros}
+                className="h-9"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Limpar filtros
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2 justify-end my-4">
-        <label className="text-sm" htmlFor="mostrar-inativos">
-          Mostrar inativos
-        </label>
-        <Switch
-          id="mostrar-inativos"
-          checked={includeInactive}
-          onCheckedChange={setIncludeInactive}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Tipo de Envio</label>
+            <Select
+              value={filtros.tipoEnvio}
+              onValueChange={(value: TipoEnvio) =>
+                setFiltros((prev) => ({ ...prev, tipoEnvio: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Tipo de envio" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="TODOS">Todos</SelectItem>
+                <SelectItem value="INDIVIDUAL">Individual</SelectItem>
+                <SelectItem value="DEPARTAMENTO">Departamento</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Data Inicial</label>
+            <CustomDatePicker
+              date={filtros.dataInicio}
+              setDate={(date) =>
+                setFiltros((prev) => ({ ...prev, dataInicio: date }))
+              }
+              placeholder="Data inicial"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Data Final</label>
+            <CustomDatePicker
+              date={filtros.dataFim}
+              setDate={(date) =>
+                setFiltros((prev) => ({ ...prev, dataFim: date }))
+              }
+              placeholder="Data final"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Status</label>
+            <Select
+              value={filtros.status}
+              onValueChange={(value: Status) =>
+                setFiltros((prev) => ({ ...prev, status: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="TODOS">Todos</SelectItem>
+                <SelectItem value="ENVIADO">Enviado</SelectItem>
+                <SelectItem value="ABERTO">Aberto</SelectItem>
+                <SelectItem value="CLIQUE">Clique</SelectItem>
+                <SelectItem value="SUCESSO">Sucesso</SelectItem>
+                <SelectItem value="FALHA">Falha</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Resultado</label>
+            <Select
+              value={filtros.resultado}
+              onValueChange={(value: Resultado) =>
+                setFiltros((prev) => ({ ...prev, resultado: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Resultado" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="TODOS">Todos</SelectItem>
+                <SelectItem value="CAIU">Caiu no teste</SelectItem>
+                <SelectItem value="REPORTOU">Reportou</SelectItem>
+                <SelectItem value="NAO_REPORTOU">Não reportou</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
       </div>
 
       {loading || apiLoading ? (
@@ -240,13 +333,11 @@ export default function GerenciarTestes() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Departamentos</TableHead>
+                <TableHead>Tipo de Envio</TableHead>
+                <TableHead>Data de Envio</TableHead>
                 <TableHead>Canal</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Resultado</TableHead>
-                <TableHead className="text-center">Status</TableHead>
-                <TableHead className="text-center">Ativo</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -254,7 +345,7 @@ export default function GerenciarTestes() {
               {paginatedTestes.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={7}
+                    colSpan={5}
                     className="text-center py-4 text-muted-foreground"
                   >
                     Nenhum teste cadastrado.
@@ -264,19 +355,38 @@ export default function GerenciarTestes() {
                 paginatedTestes.map((teste) => (
                   <TableRow key={teste.id}>
                     <TableCell>
-                      <div className="flex flex-wrap gap-1">
-                        {teste.departamentos.map((d) => (
-                          <Badge key={d.departamento.id} variant="secondary">
-                            {d.departamento.nome}
-                          </Badge>
-                        ))}
-                      </div>
+                      {teste.departamentos.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {teste.departamentos.map((d) => (
+                            <Badge key={d.departamento.id} variant="secondary">
+                              {d.departamento.nome}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="bg-orange-100 text-orange-800 border-0"
+                        >
+                          Individual
+                        </Badge>
+                      )}
+                    </TableCell>
+
+                    <TableCell>
+                      {new Intl.DateTimeFormat("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }).format(new Date(teste.criadoEm))}
                     </TableCell>
 
                     <TableCell>
                       <Badge
-                        variant="outline"
-                        className="flex items-center gap-1"
+                        variant="secondary"
+                        className="bg-blue-100 text-blue-800 border-0 flex items-center gap-1 w-fit"
                       >
                         <Mail className="h-3 w-3" />
                         {teste.canal}
@@ -286,60 +396,18 @@ export default function GerenciarTestes() {
                     <TableCell>{getTesteStatusBadge(teste)}</TableCell>
 
                     <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <Badge
-                          variant={
-                            teste.caiuNoTeste ? "destructive" : "secondary"
-                          }
-                        >
-                          {teste.caiuNoTeste ? "Caiu no teste" : "Não caiu"}
-                        </Badge>
-                        <Badge
-                          variant={
-                            teste.reportouPhishing ? "default" : "secondary"
-                          }
-                        >
-                          {teste.reportouPhishing ? "Reportou" : "Não reportou"}
-                        </Badge>
-                      </div>
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      <div className="flex justify-center items-center">
-                        {getStatusBadge(teste)}
-                      </div>
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      <Switch
-                        checked={teste.ativo}
-                        onCheckedChange={(checked) =>
-                          handleToggleStatus(teste.id, checked)
-                        }
-                      />
-                    </TableCell>
-
-                    <TableCell className="text-right">
-                      <div className="flex flex-row justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEditar(teste)}
-                          title="Editar"
-                          className="text-xs sm:text-sm"
-                        >
-                          <Edit className="h-4 w-4 text-primary" />
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setTesteParaExcluir(teste.id)}
-                          title="Excluir"
-                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
+                      <div className="flex flex-col gap-1 w-fit">
+                        {teste.caiuNoTeste ? (
+                          <Badge variant="destructive" className="w-fit">
+                            Caiu no teste
+                          </Badge>
+                        ) : (
+                          <Badge variant={"default"} className="w-fit">
+                            {teste.reportouPhishing
+                              ? "Reportou"
+                              : "Ainda não reportou"}
+                          </Badge>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>
@@ -400,21 +468,9 @@ export default function GerenciarTestes() {
         onOpenChange={(open) => {
           setIsNovoTesteOpen(open);
           if (!open) {
-            setTesteParaEditar(undefined);
             fetchTestes();
           }
         }}
-        testeParaEditar={testeParaEditar}
-      />
-
-      <ConfirmDialog
-        open={!!testeParaExcluir}
-        onOpenChange={() => setTesteParaExcluir(null)}
-        title="Excluir Teste"
-        description="Tem certeza que deseja excluir este teste? Esta ação não pode ser desfeita."
-        confirmText="Sim, excluir"
-        cancelText="Não, cancelar"
-        onConfirm={handleExcluir}
       />
     </div>
   );

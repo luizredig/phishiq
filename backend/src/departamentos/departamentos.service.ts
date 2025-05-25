@@ -189,14 +189,10 @@ export class DepartamentosService {
     usuarioId: string,
   ): Promise<Departamento> {
     try {
-      await this.prisma.usuarioDepartamento.updateMany({
+      await this.prisma.usuarioDepartamento.deleteMany({
         where: {
           departamentoId,
           usuarioId,
-        },
-        data: {
-          ativo: false,
-          inativadoEm: new Date(),
         },
       })
 

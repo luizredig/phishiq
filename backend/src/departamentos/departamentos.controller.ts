@@ -66,14 +66,6 @@ export class DepartamentosController {
     return this.departamentosService.addUsuario(id, usuarioId)
   }
 
-  @Put(':id/usuarios/:usuarioId/inativar')
-  inativarUsuario(
-    @Param('id') id: string,
-    @Param('usuarioId') usuarioId: string,
-  ) {
-    return this.departamentosService.removeUsuario(id, usuarioId)
-  }
-
   @Delete(':id/usuarios/:usuarioId')
   removeUsuario(
     @Param('id') id: string,

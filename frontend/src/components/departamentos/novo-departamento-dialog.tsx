@@ -89,7 +89,7 @@ export function NovoDepartamentoDialog({
     []
   );
   const [buscaUsuario, setBuscaUsuario] = useState("");
-  const { post, put, get, loading } = useApi();
+  const { post, put, get, delete: deleteRequest, loading } = useApi();
   const { toast } = useToast();
 
   const form = useForm<DepartamentoFormData>({
@@ -152,16 +152,17 @@ export function NovoDepartamentoDialog({
         );
 
         await Promise.all([
+          // Adiciona novos usuários
           ...usuariosParaAdicionar.map((usuarioId) =>
             post(
               `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`,
               {}
             )
           ),
+          // Remove usuários (exclui o registro da tabela de relacionamento)
           ...usuariosParaRemover.map((usuarioId) =>
-            put(
-              `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}/inativar`,
-              {}
+            deleteRequest(
+              `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`
             )
           ),
         ]);
