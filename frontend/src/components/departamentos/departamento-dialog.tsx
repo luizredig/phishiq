@@ -42,7 +42,7 @@ interface Departamento {
   }[];
 }
 
-interface NovoDepartamentoDialogProps {
+interface DepartamentoDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   departamentoParaEditar?: Departamento;
@@ -78,11 +78,11 @@ const departamentoFormSchema = z.object({
 
 type DepartamentoFormData = z.infer<typeof departamentoFormSchema>;
 
-export function NovoDepartamentoDialog({
+export function DepartamentoDialog({
   open,
   onOpenChange,
   departamentoParaEditar,
-}: NovoDepartamentoDialogProps) {
+}: DepartamentoDialogProps) {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [usuariosSelecionados, setUsuariosSelecionados] = useState<string[]>(
     []

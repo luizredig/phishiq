@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -58,6 +58,7 @@ export function CampanhaDialog({
   campanha,
 }: CampanhaDialogProps) {
   const { post, put, loading } = useApi();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -87,6 +88,9 @@ export function CampanhaDialog({
   }, [open, campanha, form]);
 
   async function onSubmit(data: FormValues) {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       console.log("Submitting form data:", data);
       if (campanha) {
@@ -94,11 +98,12 @@ export function CampanhaDialog({
         socket.emit("updateCampanha", { id: campanha.id, data });
       } else {
         await post("/campanhas", data);
-        socket.emit("createCampanha", data);
       }
       onOpenChange(false);
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -174,7 +179,15 @@ export function CampanhaDialog({
             />
 
             <DialogFooter>
-              <Button type="submit" disabled={loading}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+                disabled={isSubmitting}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={loading || isSubmitting}>
                 {campanha ? "Salvar" : "Criar"}
               </Button>
             </DialogFooter>

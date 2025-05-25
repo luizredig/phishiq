@@ -39,7 +39,7 @@ interface Departamento {
   nome: string;
 }
 
-interface NovoUsuarioDialogProps {
+interface UsuarioDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   usuarioParaEditar?: {
@@ -63,11 +63,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function NovoUsuarioDialog({
+export function UsuarioDialog({
   open,
   onOpenChange,
   usuarioParaEditar,
-}: NovoUsuarioDialogProps) {
+}: UsuarioDialogProps) {
   const { post, put, get, delete: deleteRequest, loading } = useApi();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [departamentosSelecionados, setDepartamentosSelecionados] = useState<

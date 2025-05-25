@@ -14,13 +14,23 @@ export class DepartamentosService {
 
   async findAll(includeInactive = false): Promise<Departamento[]> {
     return this.prisma.departamento.findMany({
-      where: includeInactive ? { ativo: false } : { ativo: true },
+      where: {
+        ativo: includeInactive ? undefined : true,
+        usuarios: {
+          some: {
+            ativo: true,
+          },
+        },
+      },
       include: {
         usuarios: {
           include: {
             usuario: true,
           },
         },
+      },
+      orderBy: {
+        nome: 'asc',
       },
     })
   }

@@ -18,6 +18,9 @@ export class CampanhasService {
           },
         },
       },
+      orderBy: {
+        titulo: 'asc',
+      },
     })
   }
 

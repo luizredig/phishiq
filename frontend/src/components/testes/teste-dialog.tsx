@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { X } from "lucide-react";
+import { X, Info } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -33,8 +33,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Alert, AlertDescription } from "../ui/alert";
 
-interface NovoTesteDialogProps {
+interface TesteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   testeParaEditar?: {
@@ -64,26 +65,34 @@ interface Usuario {
   email: string;
 }
 
+interface Campanha {
+  id: string;
+  titulo: string;
+}
+
 const baseFormSchema = z.object({
   canal: z.enum(["EMAIL"]),
   departamentos: z.array(z.string()).optional(),
   usuarioId: z.string().optional(),
+  campanhaId: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof baseFormSchema>;
 
-export function NovoTesteDialog({
+export function TesteDialog({
   open,
   onOpenChange,
   testeParaEditar,
-}: NovoTesteDialogProps) {
+}: TesteDialogProps) {
   const { post, put, get, loading } = useApi();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [campanhas, setCampanhas] = useState<Campanha[]>([]);
   const [selectedDepartamentos, setSelectedDepartamentos] = useState<
     Departamento[]
   >([]);
   const [activeTab, setActiveTab] = useState("departamentos");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formSchema = baseFormSchema.refine(
     (data) => {
@@ -95,7 +104,11 @@ export function NovoTesteDialog({
       return !!data.usuarioId;
     },
     {
-      message: "Selecione pelo menos um departamento ou um usuário",
+      message:
+        activeTab === "departamentos"
+          ? "Selecione pelo menos um departamento"
+          : "Selecione um usuário",
+      path: activeTab === "departamentos" ? ["departamentos"] : ["usuarioId"],
     }
   );
 
@@ -105,12 +118,14 @@ export function NovoTesteDialog({
       canal: "EMAIL",
       departamentos: [],
       usuarioId: undefined,
+      campanhaId: undefined,
     },
   });
 
   useEffect(() => {
     fetchDepartamentos();
     fetchUsuarios();
+    fetchCampanhas();
   }, []);
 
   useEffect(() => {
@@ -121,6 +136,7 @@ export function NovoTesteDialog({
           (d) => d.departamento.id
         ),
         usuarioId: undefined,
+        campanhaId: undefined,
       });
       setSelectedDepartamentos(
         testeParaEditar.departamentos.map((d) => d.departamento)
@@ -131,10 +147,21 @@ export function NovoTesteDialog({
         canal: "EMAIL",
         departamentos: [],
         usuarioId: undefined,
+        campanhaId: undefined,
       });
       setSelectedDepartamentos([]);
     }
   }, [testeParaEditar, form]);
+
+  // Limpa os campos da tab inativa quando trocar de tab
+  useEffect(() => {
+    if (activeTab === "departamentos") {
+      form.setValue("usuarioId", undefined);
+    } else {
+      form.setValue("departamentos", []);
+      setSelectedDepartamentos([]);
+    }
+  }, [activeTab, form]);
 
   async function fetchDepartamentos() {
     try {
@@ -155,6 +182,17 @@ export function NovoTesteDialog({
       }
     } catch (error) {
       console.error("Error fetching usuarios:", error);
+    }
+  }
+
+  async function fetchCampanhas() {
+    try {
+      const response = await get<Campanha[]>("/campanhas");
+      if (response) {
+        setCampanhas(response);
+      }
+    } catch (error) {
+      console.error("Error fetching campanhas:", error);
     }
   }
 
@@ -180,6 +218,9 @@ export function NovoTesteDialog({
   }
 
   async function onSubmit(data: FormValues) {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       // Limpa os campos não utilizados baseado na aba ativa
       const payload = {
@@ -187,6 +228,8 @@ export function NovoTesteDialog({
         ...(activeTab === "departamentos"
           ? { departamentos: data.departamentos }
           : { usuarioId: data.usuarioId }),
+        ...(data.campanhaId &&
+          data.campanhaId !== "none" && { campanhaId: data.campanhaId }),
       };
 
       if (testeParaEditar) {
@@ -204,6 +247,8 @@ export function NovoTesteDialog({
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -256,6 +301,13 @@ export function NovoTesteDialog({
               </TabsList>
 
               <TabsContent value="departamentos">
+                <Alert className="mb-4 bg-yellow-50 border-yellow-200 text-yellow-800">
+                  <Info className="h-4 w-4 stroke-yellow-800" />
+                  <AlertDescription>
+                    Apenas departamentos com usuários cadastrados serão
+                    exibidos.
+                  </AlertDescription>
+                </Alert>
                 <FormField
                   control={form.control}
                   name="departamentos"
@@ -280,37 +332,44 @@ export function NovoTesteDialog({
                             </Badge>
                           ))}
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          {departamentos
-                            .filter(
-                              (d) =>
-                                !selectedDepartamentos.some(
-                                  (selected) => selected.id === d.id
-                                )
-                            )
-                            .map((departamento) => (
-                              <div
-                                key={departamento.id}
-                                className="flex items-center space-x-2"
-                              >
-                                <Checkbox
-                                  id={departamento.id}
-                                  checked={selectedDepartamentos.some(
-                                    (d) => d.id === departamento.id
-                                  )}
-                                  onCheckedChange={() =>
-                                    handleDepartamentoSelect(departamento)
-                                  }
-                                />
-                                <label
-                                  htmlFor={departamento.id}
-                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        {departamentos.length === 0 ? (
+                          <div className="text-center py-4 text-muted-foreground">
+                            Nenhum departamento com usuários cadastrados
+                            encontrado.
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-2">
+                            {departamentos
+                              .filter(
+                                (d) =>
+                                  !selectedDepartamentos.some(
+                                    (selected) => selected.id === d.id
+                                  )
+                              )
+                              .map((departamento) => (
+                                <div
+                                  key={departamento.id}
+                                  className="flex items-center space-x-2"
                                 >
-                                  {departamento.nome}
-                                </label>
-                              </div>
-                            ))}
-                        </div>
+                                  <Checkbox
+                                    id={departamento.id}
+                                    checked={selectedDepartamentos.some(
+                                      (d) => d.id === departamento.id
+                                    )}
+                                    onCheckedChange={() =>
+                                      handleDepartamentoSelect(departamento)
+                                    }
+                                  />
+                                  <label
+                                    htmlFor={departamento.id}
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                  >
+                                    {departamento.nome}
+                                  </label>
+                                </div>
+                              ))}
+                          </div>
+                        )}
                       </div>
                       <FormMessage />
                     </FormItem>
@@ -325,24 +384,30 @@ export function NovoTesteDialog({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Usuário</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione um usuário" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {usuarios.map((usuario) => (
-                            <SelectItem key={usuario.id} value={usuario.id}>
-                              {usuario.nome} {usuario.sobrenome} (
-                              {usuario.email})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {usuarios.length === 0 ? (
+                        <div className="text-center py-4 text-muted-foreground">
+                          Nenhum usuário cadastrado.
+                        </div>
+                      ) : (
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um usuário" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {usuarios.map((usuario) => (
+                              <SelectItem key={usuario.id} value={usuario.id}>
+                                {usuario.nome} {usuario.sobrenome} (
+                                {usuario.email})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
@@ -350,16 +415,53 @@ export function NovoTesteDialog({
               </TabsContent>
             </Tabs>
 
+            <FormField
+              control={form.control}
+              name="campanhaId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Campanha{" "}
+                    <span className="text-muted-foreground">(opcional)</span>
+                  </FormLabel>
+                  <Alert className="mb-4 bg-blue-50 border-blue-200 text-blue-800">
+                    <Info className="h-4 w-4 stroke-blue-800" />
+                    <AlertDescription>
+                      Atribuir um teste a uma campanha significa que ele possui
+                      um objetivo específico, o da campanha.
+                    </AlertDescription>
+                  </Alert>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione uma campanha" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="none">Nenhuma</SelectItem>
+                      {campanhas.map((campanha) => (
+                        <SelectItem key={campanha.id} value={campanha.id}>
+                          {campanha.titulo}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                disabled={isSubmitting}
               >
                 Cancelar
               </Button>
 
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading || isSubmitting}>
                 {testeParaEditar ? "Salvar" : "Criar"}
               </Button>
             </DialogFooter>

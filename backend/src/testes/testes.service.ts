@@ -55,6 +55,7 @@ export class TestesService {
     canal: CanalTeste
     departamentos?: string[]
     usuarioId?: string
+    campanhaId?: string
   }): Promise<Teste> {
     // Se tiver usuarioId, buscar informações do usuário
     let usuario: UsuarioComDepartamentos | null = null
@@ -72,6 +73,17 @@ export class TestesService {
 
       if (!usuario) {
         throw new Error('Usuário não encontrado')
+      }
+    }
+
+    // Se tiver campanhaId, verificar se a campanha existe
+    if (data.campanhaId) {
+      const campanha = await this.prisma.campanha.findUnique({
+        where: { id: data.campanhaId },
+      })
+
+      if (!campanha) {
+        throw new Error('Campanha não encontrada')
       }
     }
 
@@ -93,6 +105,15 @@ export class TestesService {
                 },
               })),
         },
+        ...(data.campanhaId && {
+          campanhas: {
+            create: {
+              campanha: {
+                connect: { id: data.campanhaId },
+              },
+            },
+          },
+        }),
       },
       include: {
         departamentos: {
@@ -106,6 +127,11 @@ export class TestesService {
                 },
               },
             },
+          },
+        },
+        campanhas: {
+          include: {
+            campanha: true,
           },
         },
       },
@@ -144,12 +170,15 @@ export class TestesService {
     data: {
       canal?: CanalTeste
       departamentos?: string[]
+      usuarioId?: string
+      campanhaId?: string
     },
   ): Promise<Teste> {
     const teste = await this.prisma.teste.findUnique({
       where: { id },
       include: {
         departamentos: true,
+        campanhas: true,
       },
     })
 
@@ -173,6 +202,24 @@ export class TestesService {
       })
     }
 
+    // Se houver nova campanha, atualiza a relação
+    if (data.campanhaId !== undefined) {
+      // Remove as relações antigas
+      await this.prisma.campanhaTeste.deleteMany({
+        where: { testeId: id },
+      })
+
+      // Se tiver uma nova campanha, cria a relação
+      if (data.campanhaId) {
+        await this.prisma.campanhaTeste.create({
+          data: {
+            testeId: id,
+            campanhaId: data.campanhaId,
+          },
+        })
+      }
+    }
+
     // Atualiza os dados do teste
     return this.prisma.teste.update({
       where: { id },
@@ -183,6 +230,11 @@ export class TestesService {
         departamentos: {
           include: {
             departamento: true,
+          },
+        },
+        campanhas: {
+          include: {
+            campanha: true,
           },
         },
       },

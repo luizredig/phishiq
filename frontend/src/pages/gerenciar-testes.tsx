@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoTesteDialog } from "../components/testes/teste-dialog";
+import { TesteDialog } from "../components/testes/teste-dialog";
 import { useApi } from "../hooks/use-api";
 
 import {
@@ -471,7 +471,7 @@ export default function GerenciarTestes() {
         </div>
       )}
 
-      <NovoTesteDialog
+      <TesteDialog
         open={isNovoTesteOpen}
         onOpenChange={(open) => {
           setIsNovoTesteOpen(open);

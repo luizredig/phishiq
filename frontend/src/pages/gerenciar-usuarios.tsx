@@ -32,7 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoUsuarioDialog } from "../components/usuarios/usuario-dialog";
+import { UsuarioDialog } from "../components/usuarios/usuario-dialog";
 import { useApi } from "../hooks/use-api";
 
 interface Usuario {
@@ -356,7 +356,7 @@ export default function GerenciarUsuarios() {
         </div>
       )}
 
-      <NovoUsuarioDialog
+      <UsuarioDialog
         open={isNovoUsuarioOpen}
         onOpenChange={(open) => {
           setIsNovoUsuarioOpen(open);

@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoDepartamentoDialog } from "../components/departamentos/departamento-dialog";
+import { DepartamentoDialog } from "../components/departamentos/departamento-dialog";
 import { useApi } from "../hooks/use-api";
 
 interface Usuario {
@@ -329,7 +329,7 @@ export default function GerenciarDepartamentos() {
         </div>
       )}
 
-      <NovoDepartamentoDialog
+      <DepartamentoDialog
         open={isNovoDepartamentoOpen}
         onOpenChange={(open) => {
           setIsNovoDepartamentoOpen(open);

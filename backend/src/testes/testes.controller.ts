@@ -30,7 +30,9 @@ export class TestesController {
     @Body()
     createTesteDto: {
       canal: CanalTeste
-      departamentos: string[]
+      departamentos?: string[]
+      usuarioId?: string
+      campanhaId?: string
     },
   ) {
     return this.testesService.create(createTesteDto)
@@ -43,6 +45,8 @@ export class TestesController {
     updateTesteDto: {
       canal?: CanalTeste
       departamentos?: string[]
+      usuarioId?: string
+      campanhaId?: string
     },
   ) {
     return this.testesService.update(id, updateTesteDto)

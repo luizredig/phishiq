@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Edit, Plus, Search, Trash, X } from "lucide-react";
+import { Edit, Plus, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
@@ -164,11 +164,6 @@ export default function GerenciarCampanhas() {
     setCampanhaDialogOpen(true);
   }
 
-  function handleInativarCampanha(campanha: Campanha) {
-    setSelectedCampanha(campanha);
-    setInativarDialogOpen(true);
-  }
-
   async function handleToggleStatus(id: string, ativo: boolean) {
     try {
       const response = await put<Campanha>(`/campanhas/${id}/status`, {
@@ -198,16 +193,38 @@ export default function GerenciarCampanhas() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              className="pl-10 truncate w-full"
-              placeholder="Buscar por título"
-              value={busca}
-              onChange={(e) => setBusca(e.target.value)}
-            />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 w-full">
+          <div className="flex flex-col md:flex-row justify-between flex-1 w-full gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-10 truncate w-full"
+                placeholder="Buscar por título"
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2 w-full md:w-[200px]">
+              <Select
+                value={filtros.status}
+                onValueChange={(value: Status) =>
+                  setFiltros((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="TODOS">Todos</SelectItem>
+                  <SelectItem value="INICIADA">Iniciada</SelectItem>
+                  <SelectItem value="EM_ANDAMENTO">Em andamento</SelectItem>
+                  <SelectItem value="FINALIZADA">Finalizada</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+
           <div className="flex items-center gap-2">
             {filtros.status !== "TODOS" && (
               <Button
@@ -232,28 +249,6 @@ export default function GerenciarCampanhas() {
             checked={includeInactive}
             onCheckedChange={setIncludeInactive}
           />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Status</label>
-            <Select
-              value={filtros.status}
-              onValueChange={(value: Status) =>
-                setFiltros((prev) => ({ ...prev, status: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="TODOS">Todos</SelectItem>
-                <SelectItem value="INICIADA">Iniciada</SelectItem>
-                <SelectItem value="EM_ANDAMENTO">Em andamento</SelectItem>
-                <SelectItem value="FINALIZADA">Finalizada</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
       </div>
 
@@ -308,16 +303,6 @@ export default function GerenciarCampanhas() {
                           className="text-xs sm:text-sm"
                         >
                           <Edit className="h-4 w-4 text-primary" />
-                        </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleInativarCampanha(campanha)}
-                          title="Inativar"
-                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
-                        >
-                          <Trash className="h-4 w-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -376,7 +361,13 @@ export default function GerenciarCampanhas() {
 
       <CampanhaDialog
         open={campanhaDialogOpen}
-        onOpenChange={setCampanhaDialogOpen}
+        onOpenChange={(open) => {
+          setCampanhaDialogOpen(open);
+          if (!open) {
+            setSelectedCampanha(null);
+            fetchCampanhas();
+          }
+        }}
         campanha={selectedCampanha || undefined}
       />
 
