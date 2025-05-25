@@ -62,9 +62,9 @@ export default function Login() {
       if (exists) {
         window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413/callback&response_type=code&scope=openid%20profile%20email&state=${encodeURIComponent(
           from
-        )}`;
+        )}&login_hint=${encodeURIComponent(data.email)}`;
       } else {
-        navigate("/signup");
+        navigate("/signup", { state: { email: data.email } });
       }
     } catch (error) {
       console.error("Error checking email:", error);

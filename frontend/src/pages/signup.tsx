@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import { Button } from "../components/ui/button";
 import {
@@ -22,7 +23,17 @@ import LoadingSpinner from "../components/layout/loading-spinner";
 
 const signupSchema = z
   .object({
-    name: z.string().nonempty("Por favor, insira seu nome."),
+    name: z
+      .string()
+      .nonempty("Por favor, insira seu nome.")
+      .transform((val) =>
+        val
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          )
+          .join(" ")
+      ),
     email: z
       .string()
       .nonempty("Por favor, insira seu email.")
@@ -42,19 +53,27 @@ type SignupFormSchema = z.infer<typeof signupSchema>;
 
 export default function Signup() {
   const [loading, setLoading] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   const location = useLocation();
   const from = location.state?.from?.pathname || "/home";
+  const emailFromLogin = location.state?.email;
 
   const form = useForm<SignupFormSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       name: "",
-      email: "",
+      email: emailFromLogin || "",
       password: "",
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (emailFromLogin && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [emailFromLogin]);
 
   const onSubmit = async (data: SignupFormSchema) => {
     try {
@@ -74,7 +93,7 @@ export default function Signup() {
       if (response.ok) {
         window.location.href = `http://localhost:8080/realms/phishiq/protocol/openid-connect/auth?client_id=phishiq-cli&redirect_uri=http://localhost:1413/callback&response_type=code&scope=openid%20profile%20email&state=${encodeURIComponent(
           from
-        )}`;
+        )}&login_hint=${encodeURIComponent(data.email)}`;
       } else {
         const error = await response.json();
         console.error("Registration error:", error);
@@ -94,33 +113,11 @@ export default function Signup() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2 text-left">
                 <h2 className="text-foreground text-lg font-semibold">
-                  Criar nova conta
+                  Criar nova conta empresarial
                 </h2>
               </div>
 
               <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700">
-                        Nome da empresa
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          id="name"
-                          type="text"
-                          placeholder="Digite seu nome"
-                          {...field}
-                          className="h-12 rounded-lg border"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
                 <FormField
                   control={form.control}
                   name="email"
@@ -133,8 +130,31 @@ export default function Signup() {
                         <Input
                           id="email"
                           type="email"
-                          placeholder="Digite seu email"
+                          placeholder="Digite o email da empresa"
                           {...field}
+                          className="h-12 rounded-lg border"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700">
+                        Nome da empresa
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          id="name"
+                          type="text"
+                          placeholder="Digite o nome da empresa"
+                          {...field}
+                          ref={nameInputRef}
                           className="h-12 rounded-lg border"
                         />
                       </FormControl>
