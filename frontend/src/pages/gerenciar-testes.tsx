@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Plus, Search, Mail, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { socket } from "../lib/socket";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
@@ -33,7 +34,6 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { CustomDatePicker } from "../components/ui/date-picker";
-import { Switch } from "../components/ui/switch";
 
 interface Teste {
   id: string;
@@ -68,7 +68,7 @@ export default function GerenciarTestes() {
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoTesteOpen, setIsNovoTesteOpen] = useState(false);
-  const [includeInactive, setIncludeInactive] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [filtros, setFiltros] = useState<Filtros>({
     tipoEnvio: "TODOS",
@@ -83,14 +83,25 @@ export default function GerenciarTestes() {
 
   useEffect(() => {
     fetchTestes();
-  }, [includeInactive]);
+
+    // Escuta o evento de atualização do teste
+    socket.on("testeAtualizado", (testeAtualizado: Teste) => {
+      setTestes((prevTestes) =>
+        prevTestes.map((teste) =>
+          teste.id === testeAtualizado.id ? testeAtualizado : teste
+        )
+      );
+    });
+
+    return () => {
+      socket.off("testeAtualizado");
+    };
+  }, []);
 
   async function fetchTestes() {
     setLoading(true);
     try {
-      const response = await get<Teste[]>(
-        `/testes?includeInactive=${includeInactive}`
-      );
+      const response = await get<Teste[]>(`/testes`);
       if (response) {
         setTestes(response);
       }
@@ -168,7 +179,7 @@ export default function GerenciarTestes() {
 
   function getTesteStatusBadge(teste: Teste) {
     const statusColors = {
-      ENVIADO: "bg-blue-100 text-blue-800",
+      ENVIADO: "bg-blue-100 text-primary",
       ABERTO: "bg-yellow-100 text-yellow-800",
       CLIQUE: "bg-orange-100 text-orange-800",
       SUCESSO: "bg-green-100 text-green-800",
@@ -196,7 +207,7 @@ export default function GerenciarTestes() {
   }
 
   return (
-    <div className="container py-6 space-y-6">
+    <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Gerenciar testes</h1>
         <Button onClick={() => setIsNovoTesteOpen(true)}>
@@ -233,17 +244,6 @@ export default function GerenciarTestes() {
               </Button>
             )}
           </div>
-        </div>
-
-        <div className="flex items-center gap-2 justify-end">
-          <label className="text-sm" htmlFor="mostrar-inativos">
-            Mostrar inativos
-          </label>
-          <Switch
-            id="mostrar-inativos"
-            checked={includeInactive}
-            onCheckedChange={setIncludeInactive}
-          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">

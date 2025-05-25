@@ -7,9 +7,26 @@ import {
   Post,
   Put,
   Query,
+  Patch,
 } from '@nestjs/common'
-import { CanalTeste, StatusTeste } from '@prisma/client'
+import { StatusTeste } from '@prisma/client'
 import { TestesService } from './testes.service'
+
+interface CreateTesteDto {
+  canal: 'EMAIL'
+  departamentos?: string[]
+  usuarioId?: string
+  campanhaId?: string
+  nomeEmpresa: string
+}
+
+interface UpdateTesteDto {
+  canal?: 'EMAIL'
+  departamentos?: string[]
+  usuarioId?: string
+  campanhaId?: string
+  nomeEmpresa?: string
+}
 
 @Controller('testes')
 export class TestesController {
@@ -26,29 +43,12 @@ export class TestesController {
   }
 
   @Post()
-  create(
-    @Body()
-    createTesteDto: {
-      canal: CanalTeste
-      departamentos?: string[]
-      usuarioId?: string
-      campanhaId?: string
-    },
-  ) {
+  create(@Body() createTesteDto: CreateTesteDto) {
     return this.testesService.create(createTesteDto)
   }
 
-  @Put(':id')
-  update(
-    @Param('id') id: string,
-    @Body()
-    updateTesteDto: {
-      canal?: CanalTeste
-      departamentos?: string[]
-      usuarioId?: string
-      campanhaId?: string
-    },
-  ) {
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateTesteDto: UpdateTesteDto) {
     return this.testesService.update(id, updateTesteDto)
   }
 

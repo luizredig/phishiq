@@ -7,6 +7,7 @@ model Usuario {
   keycloakId String       @unique
 
   departamentos UsuarioDepartamento[]
+  testes        Teste[]
 
   ativo         Boolean   @default(true)
   criadoEm      DateTime  @default(now())

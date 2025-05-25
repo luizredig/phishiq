@@ -74,7 +74,7 @@ export class NodemailerService {
   }) {
     try {
       const mailOptions = {
-        from: this.configService.get('SMTP_FROM'),
+        from: this.configService.get('SMTP_USER'),
         ...options,
       }
 

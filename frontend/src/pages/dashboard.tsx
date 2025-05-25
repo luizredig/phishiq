@@ -128,7 +128,7 @@ export function Dashboard() {
 
   if (loading || !stats) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center h-screen w-full">
         <LoadingSpinner />
       </div>
     );
@@ -246,7 +246,7 @@ export function Dashboard() {
                       `${name}: ${(percent * 100).toFixed(0)}%`
                     }
                   >
-                    {overallPieData.map((entry, index) => (
+                    {overallPieData.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={SUCCESS_COLORS[index % SUCCESS_COLORS.length]}
@@ -281,7 +281,7 @@ export function Dashboard() {
                       `${name} (${(percent * 100).toFixed(0)}%)`
                     }
                   >
-                    {pieData.map((entry, index) => (
+                    {pieData.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}

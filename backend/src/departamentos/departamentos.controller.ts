@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Controller,
   Get,
@@ -18,6 +20,11 @@ export class DepartamentosController {
   @Get()
   findAll(@Query('includeInactive') includeInactive?: string) {
     return this.departamentosService.findAll(includeInactive === 'true')
+  }
+
+  @Get('ativos-com-usuarios')
+  findActiveWithUsers() {
+    return this.departamentosService.findActiveWithUsers()
   }
 
   @Get(':id')

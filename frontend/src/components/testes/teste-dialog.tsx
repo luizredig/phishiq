@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { X, Info } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
+import { useAuth } from "../../hooks/use-auth";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -85,6 +86,7 @@ export function TesteDialog({
   testeParaEditar,
 }: TesteDialogProps) {
   const { post, put, get, loading } = useApi();
+  const { userInfo } = useAuth();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [campanhas, setCampanhas] = useState<Campanha[]>([]);
@@ -165,7 +167,9 @@ export function TesteDialog({
 
   async function fetchDepartamentos() {
     try {
-      const response = await get<Departamento[]>("/departamentos");
+      const response = await get<Departamento[]>(
+        "/departamentos/ativos-com-usuarios"
+      );
       if (response) {
         setDepartamentos(response);
       }
@@ -225,6 +229,7 @@ export function TesteDialog({
       // Limpa os campos não utilizados baseado na aba ativa
       const payload = {
         canal: data.canal,
+        nomeEmpresa: userInfo?.name || "Empresa",
         ...(activeTab === "departamentos"
           ? { departamentos: data.departamentos }
           : { usuarioId: data.usuarioId }),
@@ -424,28 +429,36 @@ export function TesteDialog({
                     Campanha{" "}
                     <span className="text-muted-foreground">(opcional)</span>
                   </FormLabel>
-                  <Alert className="mb-4 bg-blue-50 border-blue-200 text-blue-800">
-                    <Info className="h-4 w-4 stroke-blue-800" />
-                    <AlertDescription>
-                      Atribuir um teste a uma campanha significa que ele possui
-                      um objetivo específico, o da campanha.
-                    </AlertDescription>
-                  </Alert>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione uma campanha" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="none">Nenhuma</SelectItem>
-                      {campanhas.map((campanha) => (
-                        <SelectItem key={campanha.id} value={campanha.id}>
-                          {campanha.titulo}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {campanhas.length > 0 && (
+                    <Alert className="mb-4 bg-blue-50 border-blue-200 text-primary">
+                      <Info className="h-4 w-4 stroke-primary" />
+                      <AlertDescription>
+                        Atribuir um teste a uma campanha significa que ele
+                        possui um objetivo específico, o da campanha.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+                  {campanhas.length === 0 ? (
+                    <div className="text-center py-4 text-muted-foreground">
+                      Nenhuma campanha cadastrada.
+                    </div>
+                  ) : (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione uma campanha" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="none">Nenhuma</SelectItem>
+                        {campanhas.map((campanha) => (
+                          <SelectItem key={campanha.id} value={campanha.id}>
+                            {campanha.titulo}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}

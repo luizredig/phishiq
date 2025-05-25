@@ -14,6 +14,7 @@ import Login from "./pages/login";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
 import { Dashboard } from "./pages/dashboard";
+import Teste from "./pages/teste";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/callback" element={<Callback />} />
+      <Route path="/teste/:id" element={<Teste />} />
       <Route path="/" element={<RedirectRoute />} />
 
       {/* Rotas protegidas */}

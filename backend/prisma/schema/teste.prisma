@@ -8,6 +8,8 @@ model Teste {
   reportouPhishing Boolean             @default(false)
   logs             Log[]
   campanhas        CampanhaTeste[]
+  usuario          Usuario?            @relation(fields: [usuarioId], references: [id])
+  usuarioId        String?
 
   ativo         Boolean   @default(true)
   criadoEm      DateTime  @default(now())

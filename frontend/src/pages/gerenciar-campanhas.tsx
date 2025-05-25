@@ -138,7 +138,7 @@ export default function GerenciarCampanhas() {
 
   function getCampanhaStatusBadge(campanha: Campanha) {
     const statusColors = {
-      INICIADA: "bg-blue-100 text-blue-800",
+      INICIADA: "bg-blue-100 text-primary",
       EM_ANDAMENTO: "bg-yellow-100 text-yellow-800",
       FINALIZADA: "bg-green-100 text-green-800",
     };
@@ -183,7 +183,7 @@ export default function GerenciarCampanhas() {
   }
 
   return (
-    <div className="container py-6 space-y-6">
+    <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Gerenciar campanhas</h1>
         <Button onClick={() => setCampanhaDialogOpen(true)}>

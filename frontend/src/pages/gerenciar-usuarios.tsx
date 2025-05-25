@@ -176,7 +176,7 @@ export default function GerenciarUsuarios() {
   }
 
   return (
-    <div className="container py-6 space-y-6">
+    <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Gerenciar usuários</h1>
         <Button onClick={() => setIsNovoUsuarioOpen(true)}>

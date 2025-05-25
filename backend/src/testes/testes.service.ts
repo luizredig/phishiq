@@ -1,19 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import {
-  Teste,
-  CanalTeste,
-  StatusTeste,
-  Usuario,
-  Departamento,
-} from '@prisma/client'
+import { Teste, CanalTeste, StatusTeste } from '@prisma/client'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
-
-interface UsuarioComDepartamentos extends Usuario {
-  departamentos: {
-    departamento: Departamento
-  }[]
-}
 
 @Injectable()
 export class TestesService {
@@ -51,17 +41,95 @@ export class TestesService {
     })
   }
 
-  async create(data: {
+  async create(createTesteDto: {
     canal: CanalTeste
     departamentos?: string[]
     usuarioId?: string
     campanhaId?: string
-  }): Promise<Teste> {
-    // Se tiver usuarioId, buscar informações do usuário
-    let usuario: UsuarioComDepartamentos | null = null
-    if (data.usuarioId) {
-      usuario = await this.prisma.usuario.findUnique({
-        where: { id: data.usuarioId },
+    nomeEmpresa: string
+  }) {
+    const { canal, departamentos, usuarioId, campanhaId, nomeEmpresa } =
+      createTesteDto
+
+    // Se tiver departamentos, cria o teste com os departamentos
+    if (departamentos && departamentos.length > 0) {
+      const teste = await this.prisma.teste.create({
+        data: {
+          canal,
+          status: 'ENVIADO',
+          departamentos: {
+            create: departamentos.map((departamentoId) => ({
+              departamento: {
+                connect: {
+                  id: departamentoId,
+                },
+              },
+            })),
+          },
+          ...(campanhaId && {
+            campanhas: {
+              create: {
+                campanha: {
+                  connect: {
+                    id: campanhaId,
+                  },
+                },
+              },
+            },
+          }),
+        },
+        include: {
+          departamentos: {
+            include: {
+              departamento: {
+                include: {
+                  usuarios: {
+                    where: {
+                      ativo: true,
+                      usuario: {
+                        ativo: true,
+                      },
+                    },
+                    include: {
+                      usuario: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          campanhas: {
+            include: {
+              campanha: true,
+            },
+          },
+        },
+      })
+
+      // Envio por departamento
+      for (const departamento of teste.departamentos) {
+        for (const usuarioDepartamento of departamento.departamento.usuarios) {
+          if (usuarioDepartamento.usuario) {
+            await this.nodemailerService.sendPhishingEmail(
+              usuarioDepartamento.usuario.email,
+              {
+                nomeEmpresa: nomeEmpresa,
+                urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
+                nomeUsuario: `${usuarioDepartamento.usuario.nome} ${usuarioDepartamento.usuario.sobrenome || ''}`,
+                linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+              },
+            )
+          }
+        }
+      }
+
+      return teste
+    }
+
+    // Se tiver usuário, cria o teste com o usuário
+    if (usuarioId) {
+      const usuario = await this.prisma.usuario.findUnique({
+        where: { id: usuarioId },
         include: {
           departamentos: {
             include: {
@@ -74,42 +142,109 @@ export class TestesService {
       if (!usuario) {
         throw new Error('Usuário não encontrado')
       }
-    }
 
-    // Se tiver campanhaId, verificar se a campanha existe
-    if (data.campanhaId) {
-      const campanha = await this.prisma.campanha.findUnique({
-        where: { id: data.campanhaId },
+      const teste = await this.prisma.teste.create({
+        data: {
+          canal,
+          status: 'ENVIADO',
+          usuario: {
+            connect: {
+              id: usuarioId,
+            },
+          },
+          ...(campanhaId && {
+            campanhas: {
+              create: {
+                campanha: {
+                  connect: {
+                    id: campanhaId,
+                  },
+                },
+              },
+            },
+          }),
+        },
+        include: {
+          usuario: true,
+          campanhas: {
+            include: {
+              campanha: true,
+            },
+          },
+        },
       })
 
-      if (!campanha) {
-        throw new Error('Campanha não encontrada')
-      }
+      // Envio individual
+      await this.nodemailerService.sendPhishingEmail(usuario.email, {
+        nomeEmpresa: nomeEmpresa,
+        urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
+        nomeUsuario: `${usuario.nome} ${usuario.sobrenome || ''}`,
+        linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+      })
+
+      return teste
     }
 
-    // Criar o teste no banco
-    const teste = await this.prisma.teste.create({
+    throw new Error('É necessário informar departamentos ou usuário')
+  }
+
+  async update(
+    id: string,
+    updateTesteDto: {
+      canal?: CanalTeste
+      departamentos?: string[]
+      usuarioId?: string
+      campanhaId?: string
+    },
+  ) {
+    const { canal, departamentos, usuarioId, campanhaId } = updateTesteDto
+
+    // Primeiro, remove todas as relações existentes
+    await this.prisma.teste.update({
+      where: { id },
       data: {
-        canal: data.canal,
-        status: 'ENVIADO',
         departamentos: {
-          create: data.departamentos
-            ? data.departamentos.map((departamentoId) => ({
-                departamento: {
-                  connect: { id: departamentoId },
-                },
-              }))
-            : usuario!.departamentos.map((ud) => ({
-                departamento: {
-                  connect: { id: ud.departamento.id },
-                },
-              })),
+          deleteMany: {},
         },
-        ...(data.campanhaId && {
+        usuario: {
+          disconnect: true,
+        },
+        campanhas: {
+          deleteMany: {},
+        },
+      },
+    })
+
+    // Depois, atualiza com as novas relações
+    return this.prisma.teste.update({
+      where: { id },
+      data: {
+        ...(canal && { canal }),
+        ...(departamentos && {
+          departamentos: {
+            create: departamentos.map((departamentoId) => ({
+              departamento: {
+                connect: {
+                  id: departamentoId,
+                },
+              },
+            })),
+          },
+        }),
+        ...(usuarioId && {
+          usuario: {
+            connect: {
+              id: usuarioId,
+            },
+          },
+        }),
+        ...(campanhaId && {
           campanhas: {
             create: {
               campanha: {
-                connect: { id: data.campanhaId },
+                connect: {
+                  id: campanhaId,
+                },
               },
             },
           },
@@ -118,120 +253,10 @@ export class TestesService {
       include: {
         departamentos: {
           include: {
-            departamento: {
-              include: {
-                usuarios: {
-                  include: {
-                    usuario: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        campanhas: {
-          include: {
-            campanha: true,
-          },
-        },
-      },
-    })
-
-    // Enviar emails
-    if (data.usuarioId && usuario) {
-      // Envio individual
-      await this.nodemailerService.sendPhishingEmail(usuario.email, {
-        nomeEmpresa: usuario.departamentos[0]?.departamento.nome || 'Empresa',
-        urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-        nomeUsuario: `${usuario.nome} ${usuario.sobrenome}`,
-        linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
-      })
-    } else {
-      // Envio por departamento
-      for (const departamento of teste.departamentos) {
-        for (const usuarioDepartamento of departamento.departamento.usuarios) {
-          const usuario = usuarioDepartamento.usuario
-
-          await this.nodemailerService.sendPhishingEmail(usuario.email, {
-            nomeEmpresa: departamento.departamento.nome,
-            urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-            nomeUsuario: `${usuario.nome} ${usuario.sobrenome}`,
-            linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
-          })
-        }
-      }
-    }
-
-    return teste
-  }
-
-  async update(
-    id: string,
-    data: {
-      canal?: CanalTeste
-      departamentos?: string[]
-      usuarioId?: string
-      campanhaId?: string
-    },
-  ): Promise<Teste> {
-    const teste = await this.prisma.teste.findUnique({
-      where: { id },
-      include: {
-        departamentos: true,
-        campanhas: true,
-      },
-    })
-
-    if (!teste) {
-      throw new Error('Teste não encontrado')
-    }
-
-    // Se houver novos departamentos, atualiza as relações
-    if (data.departamentos) {
-      // Remove as relações antigas
-      await this.prisma.testeDepartamento.deleteMany({
-        where: { testeId: id },
-      })
-
-      // Cria as novas relações
-      await this.prisma.testeDepartamento.createMany({
-        data: data.departamentos.map((departamentoId) => ({
-          testeId: id,
-          departamentoId,
-        })),
-      })
-    }
-
-    // Se houver nova campanha, atualiza a relação
-    if (data.campanhaId !== undefined) {
-      // Remove as relações antigas
-      await this.prisma.campanhaTeste.deleteMany({
-        where: { testeId: id },
-      })
-
-      // Se tiver uma nova campanha, cria a relação
-      if (data.campanhaId) {
-        await this.prisma.campanhaTeste.create({
-          data: {
-            testeId: id,
-            campanhaId: data.campanhaId,
-          },
-        })
-      }
-    }
-
-    // Atualiza os dados do teste
-    return this.prisma.teste.update({
-      where: { id },
-      data: {
-        canal: data.canal,
-      },
-      include: {
-        departamentos: {
-          include: {
             departamento: true,
           },
         },
+        usuario: true,
         campanhas: {
           include: {
             campanha: true,
