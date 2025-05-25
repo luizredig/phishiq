@@ -15,7 +15,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
-        const admin = checkIsAdmin();
+        const admin = await checkIsAdmin();
         setIsAdmin(admin);
       } catch (error) {
         setIsAdmin(false);

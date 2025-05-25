@@ -110,9 +110,13 @@ export function useAuth() {
     return () => clearInterval(interval);
   }, [getValidToken, fetchUserInfo]);
 
-  const isAdmin = useCallback(() => {
-    return userInfo?.roles?.includes("ADMIN") ?? false;
-  }, [userInfo]);
+  const isAdmin = useCallback(async () => {
+    if (!userInfo) {
+      const data = await fetchUserInfo();
+      return data.roles?.includes("ADMIN") ?? false;
+    }
+    return userInfo.roles?.includes("ADMIN") ?? false;
+  }, [userInfo, fetchUserInfo]);
 
   return { getValidToken, refreshToken, userInfo, isAdmin };
 }

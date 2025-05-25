@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ChartNoAxesCombined,
   Grid2x2Plus,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 import {
   Sidebar,
@@ -29,6 +31,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const pathname = location.pathname;
   const { isAdmin } = useAuth();
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const admin = await isAdmin();
+        setIsUserAdmin(admin);
+      } catch (error) {
+        setIsUserAdmin(false);
+      }
+    };
+
+    checkAdmin();
+  }, [isAdmin]);
 
   const data = {
     navMain: [
@@ -48,19 +64,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Dashboard",
             url: "/dashboard",
             icon: <ChartNoAxesCombined className={"text-primary"} />,
-            show: isAdmin(),
+            show: isUserAdmin,
           },
           {
             title: "Testes",
             url: "/gerenciar-testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
-            show: isAdmin(),
+            show: isUserAdmin,
           },
           {
             title: "Campanhas",
             url: "/gerenciar-campanhas",
             icon: <Megaphone className={"text-primary"} />,
-            show: isAdmin(),
+            show: isUserAdmin,
           },
         ],
       },
@@ -70,13 +86,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Usuários",
             url: "/gerenciar-usuarios",
             icon: <UsersIcon className={"text-primary"} />,
-            show: isAdmin(),
+            show: isUserAdmin,
           },
           {
             title: "Departamentos",
             url: "/gerenciar-departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
-            show: isAdmin(),
+            show: isUserAdmin,
           },
         ],
       },
@@ -105,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {isAdmin() && (
+        {isUserAdmin && (
           <div className="w-full p-2">
             <Link to="/gerenciar-testes">
               <Button className="w-full">
