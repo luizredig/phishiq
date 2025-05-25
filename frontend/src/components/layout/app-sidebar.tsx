@@ -23,10 +23,12 @@ import {
 } from "../../components/ui/sidebar";
 
 import { Button } from "../ui/button";
+import { useAuth } from "../../hooks/use-auth";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const pathname = location.pathname;
+  const { isAdmin } = useAuth();
 
   const data = {
     navMain: [
@@ -46,19 +48,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Dashboard",
             url: "/dashboard",
             icon: <ChartNoAxesCombined className={"text-primary"} />,
-            show: true,
+            show: isAdmin(),
           },
           {
             title: "Testes",
             url: "/gerenciar-testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
-            show: true,
+            show: isAdmin(),
           },
           {
             title: "Campanhas",
             url: "/gerenciar-campanhas",
             icon: <Megaphone className={"text-primary"} />,
-            show: true,
+            show: isAdmin(),
           },
         ],
       },
@@ -68,13 +70,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Usuários",
             url: "/gerenciar-usuarios",
             icon: <UsersIcon className={"text-primary"} />,
-            show: true,
+            show: isAdmin(),
           },
           {
             title: "Departamentos",
             url: "/gerenciar-departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
-            show: true,
+            show: isAdmin(),
           },
         ],
       },
@@ -103,13 +105,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <div className="w-full p-2">
-          <Link to="/gerenciar-testes">
-            <Button className="w-full">
-              <Plus /> Novo teste
-            </Button>
-          </Link>
-        </div>
+        {isAdmin() && (
+          <div className="w-full p-2">
+            <Link to="/gerenciar-testes">
+              <Button className="w-full">
+                <Plus /> Novo teste
+              </Button>
+            </Link>
+          </div>
+        )}
 
         {data.navMain.map((group, index) => (
           <SidebarGroup key={index}>

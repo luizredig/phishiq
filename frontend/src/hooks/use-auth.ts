@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface TokenResponse {
@@ -9,8 +9,15 @@ interface TokenResponse {
   refresh_expires_in: number;
 }
 
+interface UserInfo {
+  name: string;
+  email: string;
+  roles: string[];
+}
+
 export function useAuth() {
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   const refreshToken = useCallback(async () => {
     try {
@@ -66,18 +73,46 @@ export function useAuth() {
     return accessToken;
   }, [refreshToken]);
 
+  const fetchUserInfo = useCallback(async () => {
+    try {
+      const token = await getValidToken();
+      const response = await fetch("http://localhost:1421/keycloak/user-info", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user info");
+      }
+
+      const data = await response.json();
+      setUserInfo(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      throw error;
+    }
+  }, [getValidToken]);
+
   useEffect(() => {
     const checkTokenExpiry = async () => {
       try {
         await getValidToken();
+        await fetchUserInfo();
       } catch (error) {
         // Token validation failed, user will be redirected to login
       }
     };
 
+    checkTokenExpiry();
     const interval = setInterval(checkTokenExpiry, 30000);
     return () => clearInterval(interval);
-  }, [getValidToken]);
+  }, [getValidToken, fetchUserInfo]);
 
-  return { getValidToken, refreshToken };
-} 
+  const isAdmin = useCallback(() => {
+    return userInfo?.roles?.includes("ADMIN") ?? false;
+  }, [userInfo]);
+
+  return { getValidToken, refreshToken, userInfo, isAdmin };
+}

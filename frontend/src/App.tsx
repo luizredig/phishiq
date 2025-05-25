@@ -1,5 +1,6 @@
 import { Outlet, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/protected-route";
+import AdminRoute from "./components/auth/admin-route";
 import RedirectRoute from "./components/auth/redirect-route";
 import AppLayout from "./components/layout/app-layout";
 
@@ -33,15 +34,26 @@ export default function App() {
           </ProtectedRoute>
         }
       >
+        {/* Rotas para todos os usuários autenticados */}
         <Route path="/home" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
+
+        {/* Rotas apenas para administradores */}
         <Route
-          path="/gerenciar-departamentos"
-          element={<GerenciarDepartamentos />}
-        />
-        <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
-        <Route path="/gerenciar-campanhas" element={<GerenciarCampanhas />} />
+          element={
+            <AdminRoute>
+              <Outlet />
+            </AdminRoute>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
+          <Route
+            path="/gerenciar-departamentos"
+            element={<GerenciarDepartamentos />}
+          />
+          <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
+          <Route path="/gerenciar-campanhas" element={<GerenciarCampanhas />} />
+        </Route>
       </Route>
 
       {/* Rota 404 para URLs não encontradas */}

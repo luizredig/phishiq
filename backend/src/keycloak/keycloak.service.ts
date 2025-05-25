@@ -184,6 +184,22 @@ export class KeycloakService {
 
       const data = await response.json()
 
+      // Get user roles
+      await this.init()
+      const user = await this.keycloakAdmin.users.find({
+        realm: 'phishiq',
+        email: data.email,
+        exact: true,
+      })
+
+      if (user.length > 0) {
+        const roles = await this.keycloakAdmin.users.listRealmRoleMappings({
+          id: user[0].id as string,
+          realm: 'phishiq',
+        })
+        data.roles = roles.map((role) => role.name)
+      }
+
       return data
     } catch (error) {
       console.error('Error getting user info:', error)
