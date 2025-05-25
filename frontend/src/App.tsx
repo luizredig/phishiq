@@ -4,6 +4,7 @@ import RedirectRoute from "./components/auth/redirect-route";
 import AppLayout from "./components/layout/app-layout";
 
 import Callback from "./pages/callback";
+import GerenciarCampanhas from "./pages/gerenciar-campanhas";
 import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
 import GerenciarTestes from "./pages/gerenciar-testes";
 import GerenciarUsuarios from "./pages/gerenciar-usuarios";
@@ -38,6 +39,7 @@ export default function App() {
           element={<GerenciarDepartamentos />}
         />
         <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
+        <Route path="/gerenciar-campanhas" element={<GerenciarCampanhas />} />
       </Route>
 
       {/* Rota 404 para URLs não encontradas */}

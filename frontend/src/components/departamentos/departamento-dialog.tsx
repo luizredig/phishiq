@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
-import { Plus, Search, User, X } from "lucide-react";
+import { Search, User, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useApi } from "../../hooks/use-api";
-import { useToast } from "../../hooks/use-toast";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -90,7 +89,6 @@ export function NovoDepartamentoDialog({
   );
   const [buscaUsuario, setBuscaUsuario] = useState("");
   const { post, put, get, delete: deleteRequest, loading } = useApi();
-  const { toast } = useToast();
 
   const form = useForm<DepartamentoFormData>({
     resolver: zodResolver(departamentoFormSchema),
@@ -125,11 +123,7 @@ export function NovoDepartamentoDialog({
         setUsuarios(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os usuários.",
-        variant: "error",
-      });
+      console.error("Error fetching usuarios:", error);
     }
   }
 
@@ -166,12 +160,6 @@ export function NovoDepartamentoDialog({
             )
           ),
         ]);
-
-        toast({
-          title: "Sucesso!",
-          description: "Departamento atualizado com sucesso.",
-          variant: "success",
-        });
       } else {
         const response = await post<Departamento>("/departamentos", {
           nome: data.nome,
@@ -184,23 +172,9 @@ export function NovoDepartamentoDialog({
             )
           );
         }
-
-        toast({
-          title: "Sucesso!",
-          description: "Departamento criado com sucesso.",
-          variant: "success",
-        });
       }
-
-      onOpenChange(false);
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: departamentoParaEditar
-          ? "Não foi possível atualizar o departamento."
-          : "Não foi possível criar o departamento.",
-        variant: "error",
-      });
+      console.error("Error submitting form:", error);
     }
   }
 

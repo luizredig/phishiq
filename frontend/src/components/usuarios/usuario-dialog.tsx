@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Plus, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
-import { useToast } from "../../hooks/use-toast";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
@@ -69,7 +68,6 @@ export function NovoUsuarioDialog({
   onOpenChange,
   usuarioParaEditar,
 }: NovoUsuarioDialogProps) {
-  const { toast } = useToast();
   const { post, put, get, delete: deleteRequest, loading } = useApi();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [departamentosSelecionados, setDepartamentosSelecionados] = useState<
@@ -119,11 +117,7 @@ export function NovoUsuarioDialog({
         setDepartamentos(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os departamentos.",
-        variant: "error",
-      });
+      console.error("Error fetching departamentos:", error);
     }
   }
 
@@ -163,15 +157,11 @@ export function NovoUsuarioDialog({
             ),
           ]);
 
-          toast({
-            title: "Sucesso!",
-            description: "Usuário atualizado com sucesso.",
-          });
           onOpenChange(false);
           form.reset();
         }
       } else {
-        const response = await post("/usuarios", data);
+        const response = await post<{ id: string }>("/usuarios", data);
         if (response && departamentosSelecionados.length > 0) {
           await Promise.all(
             departamentosSelecionados.map((departamentoId) =>
@@ -183,21 +173,11 @@ export function NovoUsuarioDialog({
           );
         }
 
-        toast({
-          title: "Sucesso!",
-          description: "Usuário criado com sucesso.",
-        });
         onOpenChange(false);
         form.reset();
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: usuarioParaEditar
-          ? "Não foi possível atualizar o usuário."
-          : "Não foi possível criar o usuário.",
-        variant: "error",
-      });
+      console.error("Error submitting form:", error);
     }
   }
 

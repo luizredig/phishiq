@@ -32,9 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoUsuarioDialog } from "../components/usuarios/novo-usuario-dialog";
+import { NovoUsuarioDialog } from "../components/usuarios/usuario-dialog";
 import { useApi } from "../hooks/use-api";
-import { useToast } from "../hooks/use-toast";
 
 interface Usuario {
   id: string;
@@ -67,7 +66,7 @@ export default function GerenciarUsuarios() {
   const [includeInactive, setIncludeInactive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const { toast } = useToast();
+
   const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
 
   useEffect(() => {
@@ -84,11 +83,7 @@ export default function GerenciarUsuarios() {
         setUsuarios(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os usuários.",
-        variant: "error",
-      });
+      console.error("Error fetching usuarios:", error);
     } finally {
       setLoading(false);
     }
@@ -104,20 +99,9 @@ export default function GerenciarUsuarios() {
             usuario.id === id ? { ...usuario, ativo } : usuario
           )
         );
-
-        toast({
-          title: "Sucesso!",
-          description: `Usuário ${
-            ativo ? "ativado" : "desativado"
-          } com sucesso.`,
-        });
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível alterar o status do usuário.",
-        variant: "error",
-      });
+      console.error("Error toggling status:", error);
     }
   }
 
@@ -138,18 +122,9 @@ export default function GerenciarUsuarios() {
         setUsuarios((prev) =>
           prev.filter((usuario) => usuario.id !== usuarioParaExcluir)
         );
-
-        toast({
-          title: "Sucesso!",
-          description: "Usuário excluído com sucesso.",
-        });
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível excluir o usuário.",
-        variant: "error",
-      });
+      console.error("Error deleting usuario:", error);
     } finally {
       setUsuarioParaExcluir(null);
     }

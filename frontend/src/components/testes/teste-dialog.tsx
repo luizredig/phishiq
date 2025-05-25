@@ -6,7 +6,6 @@ import { z } from "zod";
 
 import { X } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
-import { useToast } from "../../hooks/use-toast";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -78,7 +77,6 @@ export function NovoTesteDialog({
   onOpenChange,
   testeParaEditar,
 }: NovoTesteDialogProps) {
-  const { toast } = useToast();
   const { post, put, get, loading } = useApi();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -145,11 +143,7 @@ export function NovoTesteDialog({
         setDepartamentos(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os departamentos.",
-        variant: "error",
-      });
+      console.error("Error fetching departamentos:", error);
     }
   }
 
@@ -160,11 +154,7 @@ export function NovoTesteDialog({
         setUsuarios(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os usuários.",
-        variant: "error",
-      });
+      console.error("Error fetching usuarios:", error);
     }
   }
 
@@ -202,32 +192,18 @@ export function NovoTesteDialog({
       if (testeParaEditar) {
         const response = await put(`/testes/${testeParaEditar.id}`, payload);
         if (response) {
-          toast({
-            title: "Sucesso!",
-            description: "Teste atualizado com sucesso.",
-          });
           onOpenChange(false);
           form.reset();
         }
       } else {
         const response = await post("/testes", payload);
         if (response) {
-          toast({
-            title: "Sucesso!",
-            description: "Teste criado com sucesso.",
-          });
           onOpenChange(false);
           form.reset();
         }
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: testeParaEditar
-          ? "Não foi possível atualizar o teste."
-          : "Não foi possível criar o teste.",
-        variant: "error",
-      });
+      console.error("Error submitting form:", error);
     }
   }
 

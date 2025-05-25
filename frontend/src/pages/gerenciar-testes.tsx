@@ -22,9 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoTesteDialog } from "../components/testes/novo-teste-dialog";
+import { NovoTesteDialog } from "../components/testes/teste-dialog";
 import { useApi } from "../hooks/use-api";
-import { useToast } from "../hooks/use-toast";
+
 import {
   Select,
   SelectContent,
@@ -33,6 +33,7 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { CustomDatePicker } from "../components/ui/date-picker";
+import { Switch } from "../components/ui/switch";
 
 interface Teste {
   id: string;
@@ -77,7 +78,7 @@ export default function GerenciarTestes() {
     resultado: "TODOS",
   });
   const itemsPerPage = 5;
-  const { toast } = useToast();
+
   const { get, loading: apiLoading } = useApi();
 
   useEffect(() => {
@@ -94,11 +95,7 @@ export default function GerenciarTestes() {
         setTestes(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os testes.",
-        variant: "error",
-      });
+      console.error("Error fetching testes:", error);
     } finally {
       setLoading(false);
     }
@@ -236,6 +233,17 @@ export default function GerenciarTestes() {
               </Button>
             )}
           </div>
+        </div>
+
+        <div className="flex items-center gap-2 justify-end">
+          <label className="text-sm" htmlFor="mostrar-inativos">
+            Mostrar inativos
+          </label>
+          <Switch
+            id="mostrar-inativos"
+            checked={includeInactive}
+            onCheckedChange={setIncludeInactive}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">

@@ -13,7 +13,7 @@ import { CargoUsuario } from '@prisma/client'
 
 @WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: [process.env.FRONTEND_URL],
   },
 })
 export class UsuariosGateway

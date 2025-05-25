@@ -9,8 +9,6 @@ model Log {
   departamentoId String?
   teste          Teste?        @relation(fields: [testeId], references: [id])
   testeId        String?
-  tipoDeTeste    TipoDeTeste?  @relation(fields: [tipoDeTesteId], references: [id])
-  tipoDeTesteId  String?
 
   ativo         Boolean   @default(true)
   criadoEm      DateTime  @default(now())

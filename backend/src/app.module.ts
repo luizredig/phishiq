@@ -11,18 +11,18 @@ import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { TestesModule } from './testes/testes.module'
 import { UsuariosModule } from './usuarios/usuarios.module'
+import { CampanhasModule } from './campanhas/campanhas.module'
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot(),
     DepartamentosModule,
     KeycloakModule,
     NodemailerModule,
     PrismaModule,
     TestesModule,
     UsuariosModule,
+    CampanhasModule,
   ],
   controllers: [AppController],
   providers: [AppService],

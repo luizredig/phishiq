@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { BadgeCheck, Edit, Plus, Search, Trash, User, X } from "lucide-react";
+import { BadgeCheck, Edit, Plus, Search, User, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
@@ -24,9 +24,8 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { NovoDepartamentoDialog } from "../components/departamentos/novo-departamento-dialog";
+import { NovoDepartamentoDialog } from "../components/departamentos/departamento-dialog";
 import { useApi } from "../hooks/use-api";
-import { useToast } from "../hooks/use-toast";
 
 interface Usuario {
   id: string;
@@ -58,7 +57,7 @@ export default function GerenciarDepartamentos() {
   const [includeInactive, setIncludeInactive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const { toast } = useToast();
+
   const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
 
   useEffect(() => {
@@ -75,11 +74,7 @@ export default function GerenciarDepartamentos() {
         setDepartamentos(response);
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível carregar os departamentos.",
-        variant: "error",
-      });
+      console.error("Error fetching departamentos:", error);
     } finally {
       setLoading(false);
     }
@@ -97,20 +92,9 @@ export default function GerenciarDepartamentos() {
             departamento.id === id ? { ...departamento, ativo } : departamento
           )
         );
-
-        toast({
-          title: "Sucesso!",
-          description: `Departamento ${
-            ativo ? "ativado" : "desativado"
-          } com sucesso.`,
-        });
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível alterar o status do departamento.",
-        variant: "error",
-      });
+      console.error("Error toggling status:", error);
     }
   }
 
@@ -133,18 +117,9 @@ export default function GerenciarDepartamentos() {
             (departamento) => departamento.id !== departamentoParaExcluir
           )
         );
-
-        toast({
-          title: "Sucesso!",
-          description: "Departamento excluído com sucesso.",
-        });
       }
     } catch (error) {
-      toast({
-        title: "Erro!",
-        description: "Não foi possível excluir o departamento.",
-        variant: "error",
-      });
+      console.error("Error deleting departamento:", error);
     } finally {
       setDepartamentoParaExcluir(null);
     }
