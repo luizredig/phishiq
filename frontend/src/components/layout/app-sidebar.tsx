@@ -1,7 +1,7 @@
 import {
   ChartNoAxesCombined,
-  Cpu,
   Grid2x2Plus,
+  HomeIcon,
   Megaphone,
   Plus,
   TestTubeDiagonal,
@@ -30,6 +30,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const data = {
     navMain: [
+      {
+        items: [
+          {
+            title: "Início",
+            url: "/home",
+            icon: <HomeIcon className={"text-primary"} />,
+            show: true,
+          },
+        ],
+      },
       {
         items: [
           {
@@ -68,16 +78,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
         ],
       },
-      {
-        items: [
-          {
-            title: "Logs",
-            url: "/logs",
-            icon: <Cpu className={"text-primary"} />,
-            show: true,
-          },
-        ],
-      },
+      // TODO: Adicionar logs
+      // {
+      //   items: [
+      //     {
+      //       title: "Logs",
+      //       url: "/logs",
+      //       icon: <Cpu className={"text-primary"} />,
+      //       show: true,
+      //     },
+      //   ],
+      // },
     ],
   };
 
@@ -95,9 +106,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="w-full p-2">
           <Link to="/gerenciar-testes">
             <Button className="w-full">
-                <Plus /> Novo teste
-              </Button>
-            </Link>
+              <Plus /> Novo teste
+            </Button>
+          </Link>
         </div>
 
         {data.navMain.map((group, index) => (

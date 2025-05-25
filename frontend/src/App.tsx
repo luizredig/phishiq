@@ -12,6 +12,7 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
+import { Dashboard } from "./pages/dashboard";
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
         }
       >
         <Route path="/home" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
         <Route
           path="/gerenciar-departamentos"

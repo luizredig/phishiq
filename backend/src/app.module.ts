@@ -12,6 +12,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import { TestesModule } from './testes/testes.module'
 import { UsuariosModule } from './usuarios/usuarios.module'
 import { CampanhasModule } from './campanhas/campanhas.module'
+import { DashboardModule } from './dashboard/dashboard.module'
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CampanhasModule } from './campanhas/campanhas.module'
     TestesModule,
     UsuariosModule,
     CampanhasModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
