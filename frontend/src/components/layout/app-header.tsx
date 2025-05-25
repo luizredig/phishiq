@@ -83,7 +83,7 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4">
       <div className="flex items-center">
-        <SidebarTrigger className="mr-2" />
+        <SidebarTrigger className="mr-2 text-primary" />
       </div>
 
       <div className="flex items-center space-x-2">
@@ -95,7 +95,7 @@ export function AppHeader() {
               ) : (
                 <Avatar>
                   <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
-                  <AvatarFallback>
+                  <AvatarFallback className="bg-primary text-primary-foreground font-bold">
                     {userInfo?.name ? (
                       getInitials(userInfo.name)
                     ) : (
@@ -122,14 +122,17 @@ export function AppHeader() {
               </>
             ) : (
               <>
-                <DropdownMenuItem className="flex flex-col items-start">
+                <div className="flex flex-col items-start p-2">
                   <span className="font-semibold">{userInfo?.name || "?"}</span>
                   <span className="text-muted-foreground text-sm">
                     {userInfo?.email || ""}
                   </span>
-                </DropdownMenuItem>
+                </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Sair
                 </DropdownMenuItem>
