@@ -173,6 +173,7 @@ export function DepartamentoDialog({
           );
         }
       }
+      onOpenChange(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }

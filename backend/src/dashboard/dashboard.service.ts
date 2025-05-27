@@ -95,7 +95,29 @@ export class DashboardService {
 
       // Departamentos com mais falhas
       this.prisma.departamento.findMany({
-        where: { ativo: true },
+        where: {
+          ativo: true,
+          usuarios: {
+            some: {
+              usuario: {
+                departamentos: {
+                  some: {
+                    departamento: {
+                      testes: {
+                        some: {
+                          teste: {
+                            ativo: true,
+                            caiuNoTeste: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         select: {
           id: true,
           nome: true,
@@ -143,6 +165,7 @@ export class DashboardService {
           falhas,
         }
       })
+      .filter((usuario) => usuario.falhas > 0)
       .sort((a, b) => b.falhas - a.falhas)
 
     // Processa os dados dos departamentos com mais falhas
