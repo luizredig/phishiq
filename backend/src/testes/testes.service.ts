@@ -21,6 +21,12 @@ export class TestesService {
             departamento: true,
           },
         },
+        campanhas: {
+          include: {
+            campanha: true,
+          },
+        },
+        usuario: true,
       },
       orderBy: {
         criadoEm: 'desc',

@@ -320,23 +320,6 @@ export function TesteDialog({
                     <FormItem>
                       <FormLabel>Departamentos</FormLabel>
                       <div className="space-y-2">
-                        <div className="flex flex-wrap gap-2">
-                          {selectedDepartamentos.map((departamento) => (
-                            <Badge
-                              key={departamento.id}
-                              variant="secondary"
-                              className="flex items-center gap-1"
-                            >
-                              {departamento.nome}
-                              <X
-                                className="h-3 w-3 cursor-pointer"
-                                onClick={() =>
-                                  handleDepartamentoSelect(departamento)
-                                }
-                              />
-                            </Badge>
-                          ))}
-                        </div>
                         {departamentos.length === 0 ? (
                           <div className="text-center py-4 text-muted-foreground">
                             Nenhum departamento com usuários cadastrados
@@ -344,35 +327,28 @@ export function TesteDialog({
                           </div>
                         ) : (
                           <div className="grid grid-cols-2 gap-2">
-                            {departamentos
-                              .filter(
-                                (d) =>
-                                  !selectedDepartamentos.some(
-                                    (selected) => selected.id === d.id
-                                  )
-                              )
-                              .map((departamento) => (
-                                <div
-                                  key={departamento.id}
-                                  className="flex items-center space-x-2"
+                            {departamentos.map((departamento) => (
+                              <div
+                                key={departamento.id}
+                                className="flex items-center space-x-2"
+                              >
+                                <Checkbox
+                                  id={departamento.id}
+                                  checked={selectedDepartamentos.some(
+                                    (d) => d.id === departamento.id
+                                  )}
+                                  onCheckedChange={() =>
+                                    handleDepartamentoSelect(departamento)
+                                  }
+                                />
+                                <label
+                                  htmlFor={departamento.id}
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
-                                  <Checkbox
-                                    id={departamento.id}
-                                    checked={selectedDepartamentos.some(
-                                      (d) => d.id === departamento.id
-                                    )}
-                                    onCheckedChange={() =>
-                                      handleDepartamentoSelect(departamento)
-                                    }
-                                  />
-                                  <label
-                                    htmlFor={departamento.id}
-                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                  >
-                                    {departamento.nome}
-                                  </label>
-                                </div>
-                              ))}
+                                  {departamento.nome}
+                                </label>
+                              </div>
+                            ))}
                           </div>
                         )}
                       </div>

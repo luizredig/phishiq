@@ -49,11 +49,24 @@ interface Teste {
   }[];
   ativo: boolean;
   criadoEm: string;
+  campanhas: {
+    campanha: {
+      id: string;
+      titulo: string;
+    };
+  }[];
+  usuario?: {
+    id: string;
+    nome: string;
+    sobrenome: string;
+    email: string;
+  };
 }
 
 type TipoEnvio = "TODOS" | "INDIVIDUAL" | "DEPARTAMENTO";
 type Status = "TODOS" | "ENVIADO" | "ABERTO" | "CLIQUE" | "SUCESSO" | "FALHA";
 type Resultado = "TODOS" | "CAIU" | "REPORTOU" | "NAO_REPORTOU";
+type Campanha = "TODOS" | "COM_CAMPANHA" | "SEM_CAMPANHA";
 
 interface Filtros {
   tipoEnvio: TipoEnvio;
@@ -61,6 +74,7 @@ interface Filtros {
   dataFim: Date | undefined;
   status: Status;
   resultado: Resultado;
+  campanha: Campanha;
 }
 
 export default function GerenciarTestes() {
@@ -76,6 +90,7 @@ export default function GerenciarTestes() {
     dataFim: undefined,
     status: "TODOS",
     resultado: "TODOS",
+    campanha: "TODOS",
   });
   const itemsPerPage = 5;
 
@@ -167,6 +182,17 @@ export default function GerenciarTestes() {
       }
     }
 
+    // Filtro por campanha
+    if (filtros.campanha !== "TODOS") {
+      const temCampanha = teste.campanhas && teste.campanhas.length > 0;
+      if (filtros.campanha === "COM_CAMPANHA" && !temCampanha) {
+        return false;
+      }
+      if (filtros.campanha === "SEM_CAMPANHA" && temCampanha) {
+        return false;
+      }
+    }
+
     return true;
   });
 
@@ -203,6 +229,7 @@ export default function GerenciarTestes() {
       dataFim: undefined,
       status: "TODOS",
       resultado: "TODOS",
+      campanha: "TODOS",
     });
   }
 
@@ -246,7 +273,7 @@ export default function GerenciarTestes() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Tipo de Envio</label>
             <Select
@@ -329,6 +356,25 @@ export default function GerenciarTestes() {
               </SelectContent>
             </Select>
           </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Campanha</label>
+            <Select
+              value={filtros.campanha}
+              onValueChange={(value: Campanha) =>
+                setFiltros((prev) => ({ ...prev, campanha: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Campanha" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="TODOS">Todos</SelectItem>
+                <SelectItem value="COM_CAMPANHA">Com campanha</SelectItem>
+                <SelectItem value="SEM_CAMPANHA">Sem campanha</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -346,6 +392,7 @@ export default function GerenciarTestes() {
                 <TableHead>Canal</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Resultado</TableHead>
+                <TableHead>Campanha</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -353,7 +400,7 @@ export default function GerenciarTestes() {
               {paginatedTestes.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-4 text-muted-foreground"
                   >
                     Nenhum teste cadastrado.
@@ -417,6 +464,19 @@ export default function GerenciarTestes() {
                           </Badge>
                         )}
                       </div>
+                    </TableCell>
+
+                    <TableCell>
+                      {teste.campanhas && teste.campanhas.length > 0 ? (
+                        <Badge
+                          variant="secondary"
+                          className="bg-purple-100 text-purple-800 border-0"
+                        >
+                          {teste.campanhas[0].campanha.titulo}
+                        </Badge>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

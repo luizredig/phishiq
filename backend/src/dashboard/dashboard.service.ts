@@ -40,7 +40,7 @@ export class DashboardService {
       this.prisma.campanha.count({
         where: {
           ativo: true,
-          status: 'INICIADA',
+          status: 'EM_ANDAMENTO',
         },
       }),
 
@@ -50,7 +50,12 @@ export class DashboardService {
         select: {
           nome: true,
           testes: {
-            where: { teste: { ativo: true } },
+            where: {
+              teste: {
+                ativo: true,
+                caiuNoTeste: true,
+              },
+            },
             select: {
               teste: {
                 select: {
@@ -138,18 +143,16 @@ export class DashboardService {
     ])
 
     // Processa os dados dos departamentos
-    const departamentosProcessados = testesPorDepartamento.map((dept) => {
-      const total = dept.testes.length
-      const sucesso = dept.testes.filter((t) => !t.teste.caiuNoTeste).length
-      const falha = dept.testes.filter((t) => t.teste.caiuNoTeste).length
+    const departamentosProcessados = testesPorDepartamento
+      .map((dept) => {
+        const falhas = dept.testes.length
 
-      return {
-        departamento: dept.nome,
-        total,
-        sucesso,
-        falha,
-      }
-    })
+        return {
+          departamento: dept.nome,
+          falhas,
+        }
+      })
+      .sort((a, b) => b.falhas - a.falhas)
 
     // Processa os dados dos usuários com mais falhas
     const usuariosProcessados = usuariosMaisFalhas

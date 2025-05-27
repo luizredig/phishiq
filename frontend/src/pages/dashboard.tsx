@@ -21,6 +21,11 @@ import {
   ResponsiveContainer,
   Legend,
   Tooltip,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 import {
   AlertCircle,
@@ -41,9 +46,7 @@ interface DashboardStats {
   campanhasAtivas: number;
   testesPorDepartamento: {
     departamento: string;
-    total: number;
-    sucesso: number;
-    falha: number;
+    falhas: number;
   }[];
   usuariosMaisFalhas: {
     id: string;
@@ -58,7 +61,6 @@ interface DashboardStats {
   }[];
 }
 
-const COLORS = ["#22c55e", "#ef4444", "#f59e0b"];
 const SUCCESS_COLORS = ["#22c55e", "#ef4444"]; // Verde para sucesso, Vermelho para falha
 
 export function Dashboard() {
@@ -134,23 +136,21 @@ export function Dashboard() {
     );
   }
 
-  const pieData = stats.testesPorDepartamento.map((dept) => ({
-    name: dept.departamento,
-    value: dept.total,
-    sucesso: dept.sucesso,
-    falha: dept.falha,
-  }));
-
   const overallPieData = [
     {
-      name: "Bem Sucedidos",
+      name: "Sucesso",
       value: stats.testesSucesso,
     },
     {
-      name: "Mal Sucedidos",
+      name: "Falha",
       value: stats.testesFalha,
     },
   ];
+
+  const barData = stats.testesPorDepartamento.map((dept) => ({
+    name: dept.departamento,
+    falhas: dept.falhas,
+  }));
 
   const meterInfo = getMeterInfo();
   const Icon = meterInfo.icon;
@@ -269,40 +269,31 @@ export function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Testes por departamento</CardTitle>
+            <CardTitle>Falhas por departamento</CardTitle>
           </CardHeader>
           <CardContent>
             {stats.testesPorDepartamento.length === 0 ||
-            stats.testesPorDepartamento.every((dept) => dept.total === 0) ? (
+            stats.testesPorDepartamento.every((dept) => dept.falhas === 0) ? (
               <div className="text-center py-4 text-muted-foreground">
-                Nenhum teste realizado por departamento ainda.
+                Nenhuma falha registrada por departamento ainda.
               </div>
             ) : (
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={120}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) =>
-                        `${name} (${(percent * 100).toFixed(0)}%)`
-                      }
-                    >
-                      {pieData.map((_, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
+                  <BarChart data={barData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="name"
+                      angle={-45}
+                      textAnchor="end"
+                      height={70}
+                      interval={0}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis />
                     <Tooltip />
-                    <Legend />
-                  </PieChart>
+                    <Bar dataKey="falhas" fill="#ef4444" />
+                  </BarChart>
                 </ResponsiveContainer>
               </div>
             )}
