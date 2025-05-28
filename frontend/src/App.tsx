@@ -15,6 +15,7 @@ import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Signup from "./pages/signup";
 import { Dashboard } from "./pages/dashboard";
 import Teste from "./pages/teste";
+import Quiz from "./pages/quiz";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
       >
         {/* Rotas para todos os usuários autenticados */}
         <Route path="/home" element={<Home />} />
+        <Route path="/quiz" element={<Quiz />} />
 
         {/* Rotas apenas para administradores */}
         <Route

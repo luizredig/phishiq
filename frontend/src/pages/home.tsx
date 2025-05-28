@@ -7,10 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
-    <div className="p-6 space-y-8 w-full h-full overflow-y-auto">
+    <div className="space-y-8 w-full h-full overflow-y-auto">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">
           Bem-vindo ao <span className="text-primary">PhishIQ</span>
@@ -24,7 +27,7 @@ export default function Home() {
         <Card className="hover:shadow-lg transition-shadow flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Gamepad2 className="h-5 w-5 text-primary" />
+              <Gamepad2 className="h-5 w-5 min-w-5 text-primary" />
               Quiz interativo
             </CardTitle>
             <CardDescription>
@@ -33,8 +36,8 @@ export default function Home() {
           </CardHeader>
           <CardContent className="flex-1" />
           <CardContent>
-            <Button className="w-full" disabled>
-              Em breve
+            <Button className="w-full" onClick={() => navigate("/quiz")}>
+              Iniciar Quiz
             </Button>
           </CardContent>
         </Card>
@@ -42,7 +45,7 @@ export default function Home() {
         <Card className="hover:shadow-lg transition-shadow flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <BrainCircuit className="h-5 w-5 text-primary" />
+              <BrainCircuit className="h-5 w-5 min-w-5 text-primary" />
               Treinamentos e materiais educativos
             </CardTitle>
             <CardDescription>
