@@ -1,4 +1,5 @@
-import { Gamepad2, BrainCircuit } from "lucide-react";
+import { BrainCircuit, Gamepad2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -7,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -46,16 +46,16 @@ export default function Home() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BrainCircuit className="h-5 w-5 min-w-5 text-primary" />
-              Treinamentos e materiais educativos
+              Materiais educativos
             </CardTitle>
             <CardDescription>
-              Materiais educativos sobre segurança.
+              Documentos sobre segurança da informação e phishing.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex-1" />
           <CardContent>
-            <Button className="w-full" disabled>
-              Em breve
+            <Button className="w-full" onClick={() => navigate("/materiais")}>
+              Acessar materiais
             </Button>
           </CardContent>
         </Card>

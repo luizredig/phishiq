@@ -1,21 +1,22 @@
 import { Outlet, Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/auth/protected-route";
 import AdminRoute from "./components/auth/admin-route";
+import ProtectedRoute from "./components/auth/protected-route";
 import RedirectRoute from "./components/auth/redirect-route";
 import AppLayout from "./components/layout/app-layout";
 
 import Callback from "./pages/callback";
+import { Dashboard } from "./pages/dashboard";
 import GerenciarCampanhas from "./pages/gerenciar-campanhas";
 import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
 import GerenciarTestes from "./pages/gerenciar-testes";
 import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 import Home from "./pages/home";
 import Login from "./pages/login";
+import Materiais from "./pages/materiais";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
-import Signup from "./pages/signup";
-import { Dashboard } from "./pages/dashboard";
-import Teste from "./pages/teste";
 import Quiz from "./pages/quiz";
+import Signup from "./pages/signup";
+import Teste from "./pages/teste";
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
         {/* Rotas para todos os usuários autenticados */}
         <Route path="/home" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/materiais" element={<Materiais />} />
 
         {/* Rotas apenas para administradores */}
         <Route
