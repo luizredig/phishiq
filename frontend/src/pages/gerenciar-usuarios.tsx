@@ -209,7 +209,7 @@ export default function GerenciarUsuarios() {
       </div>
 
       {loading || apiLoading ? (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-full w-full">
           <LoadingSpinner />
         </div>
       ) : (

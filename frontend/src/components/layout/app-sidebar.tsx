@@ -123,7 +123,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {isUserAdmin && (
           <div className="w-full p-2">
-            <Link to="/gerenciar-testes">
+            <Link to="/gerenciar-testes?new=true">
               <Button className="w-full">
                 <Plus /> Novo teste
               </Button>

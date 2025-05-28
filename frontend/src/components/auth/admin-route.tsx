@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../layout/loading-spinner";
@@ -27,7 +28,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
   if (isAdmin === null) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center w-full">
         <LoadingSpinner />
       </div>
     );

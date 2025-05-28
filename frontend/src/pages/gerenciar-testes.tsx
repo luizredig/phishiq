@@ -2,6 +2,7 @@
 import { Plus, Search, Mail, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { socket } from "../lib/socket";
+import { useSearchParams } from "react-router-dom";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
@@ -78,6 +79,7 @@ interface Filtros {
 }
 
 export default function GerenciarTestes() {
+  const [searchParams] = useSearchParams();
   const [testes, setTestes] = useState<Teste[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
@@ -99,6 +101,11 @@ export default function GerenciarTestes() {
   useEffect(() => {
     fetchTestes();
 
+    // Check if we should open the dialog
+    if (searchParams.get("new") === "true") {
+      setIsNovoTesteOpen(true);
+    }
+
     // Escuta o evento de atualização do teste
     socket.on("testeAtualizado", (testeAtualizado: Teste) => {
       setTestes((prevTestes) =>
@@ -111,7 +118,7 @@ export default function GerenciarTestes() {
     return () => {
       socket.off("testeAtualizado");
     };
-  }, []);
+  }, [searchParams]);
 
   async function fetchTestes() {
     setLoading(true);
@@ -379,7 +386,7 @@ export default function GerenciarTestes() {
       </div>
 
       {loading || apiLoading ? (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex justify-center items-center h-full w-full">
           <LoadingSpinner />
         </div>
       ) : (
