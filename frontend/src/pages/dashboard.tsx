@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApi } from "../hooks/use-api";
+import { usePDF } from "react-to-pdf";
 import {
   Card,
   CardContent,
@@ -36,8 +37,10 @@ import {
   Frown,
   Laugh,
   Annoyed,
+  Download,
 } from "lucide-react";
 import LoadingSpinner from "../components/layout/loading-spinner";
+import { Button } from "../components/ui/button";
 
 interface DashboardStats {
   totalTestes: number;
@@ -63,79 +66,27 @@ interface DashboardStats {
 
 const SUCCESS_COLORS = ["#22c55e", "#ef4444"]; // Verde para sucesso, Vermelho para falha
 
-export function Dashboard() {
-  const { get, loading } = useApi();
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  async function fetchStats() {
-    try {
-      const response = await get<DashboardStats>("/dashboard/stats");
-      if (response) {
-        setStats(response);
-      }
-    } catch (error) {
-      console.error("Error fetching dashboard stats:", error);
-    }
-  }
-
-  const getMeterInfo = () => {
-    if (!stats) {
-      return {
-        icon: Smile,
-        color: "stroke-gray-500",
-        message: "Você ainda não fez nenhuma simulação.",
-      };
-    }
-
-    const { testesSucesso, testesFalha } = stats;
-    const total = testesSucesso + testesFalha;
-
-    if (total === 0) {
-      return {
-        icon: Smile,
-        color: "stroke-gray-500",
-        message: "Você ainda não fez nenhuma simulação.",
-      };
-    }
-
-    const diferenca = testesSucesso - testesFalha;
-    const percentualDiferenca = Math.abs(diferenca) / total;
-
-    if (percentualDiferenca < 0.2) {
-      return {
-        icon: Annoyed,
-        color: "stroke-yellow-500",
-        message: "Cuidado! Você está quase lá.",
-      };
-    }
-
-    if (diferenca > 0) {
-      return {
-        icon: Laugh,
-        color: "stroke-green-500",
-        message: "Excelente! Continue assim.",
-      };
-    }
-
-    return {
-      icon: Frown,
-      color: "stroke-red-500",
-      message: "Atenção! Você precisa melhorar.",
-    };
-  };
-
-  if (loading || !stats) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <LoadingSpinner />
+function PDFHeader() {
+  return (
+    <div className="flex items-center justify-between mb-6 pb-4 border-b">
+      <div className="flex items-center gap-2">
+        <h1 className="text-primary text-2xl font-bold">PhishIQ</h1>
       </div>
-    );
-  }
+      <div className="text-sm text-muted-foreground">
+        {new Date().toLocaleDateString("pt-BR")}
+      </div>
+    </div>
+  );
+}
 
+function DashboardContent({
+  stats,
+  meterInfo,
+}: {
+  stats: DashboardStats;
+  meterInfo: any;
+}) {
+  const Icon = meterInfo.icon;
   const overallPieData = [
     {
       name: "Sucesso",
@@ -152,13 +103,8 @@ export function Dashboard() {
     falhas: dept.falhas,
   }));
 
-  const meterInfo = getMeterInfo();
-  const Icon = meterInfo.icon;
-
   return (
-    <div className="p-6 space-y-6 w-full">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-
+    <div className="space-y-6">
       <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -367,6 +313,136 @@ export function Dashboard() {
             )}
           </CardContent>
         </Card>
+      </div>
+    </div>
+  );
+}
+
+export function Dashboard() {
+  const { get, loading } = useApi();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [showPdf, setShowPdf] = useState(false);
+  const { toPDF, targetRef } = usePDF({
+    filename: "dashboard-phishiq.pdf",
+    page: {
+      orientation: "l",
+    },
+    method: "save",
+    resolution: 2,
+    canvas: {
+      useCORS: true,
+      logging: true,
+    },
+  });
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  async function fetchStats() {
+    try {
+      const response = await get<DashboardStats>("/dashboard/stats");
+      if (response) {
+        setStats(response);
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard stats:", error);
+    }
+  }
+
+  const getMeterInfo = () => {
+    if (!stats) {
+      return {
+        icon: Smile,
+        color: "stroke-gray-500",
+        message: "Você ainda não fez nenhuma simulação.",
+      };
+    }
+
+    const { testesSucesso, testesFalha } = stats;
+    const total = testesSucesso + testesFalha;
+
+    if (total === 0) {
+      return {
+        icon: Smile,
+        color: "stroke-gray-500",
+        message: "Você ainda não fez nenhuma simulação.",
+      };
+    }
+
+    const diferenca = testesSucesso - testesFalha;
+    const percentualDiferenca = Math.abs(diferenca) / total;
+
+    if (percentualDiferenca < 0.2) {
+      return {
+        icon: Annoyed,
+        color: "stroke-yellow-500",
+        message: "Cuidado! Você está quase lá.",
+      };
+    }
+
+    if (diferenca > 0) {
+      return {
+        icon: Laugh,
+        color: "stroke-green-500",
+        message: "Excelente! Continue assim.",
+      };
+    }
+
+    return {
+      icon: Frown,
+      color: "stroke-red-500",
+      message: "Atenção! Você precisa melhorar.",
+    };
+  };
+
+  if (loading || !stats) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  const meterInfo = getMeterInfo();
+
+  const handleExport = async () => {
+    setShowPdf(true);
+    // Pequeno delay para garantir que o conteúdo esteja visível
+    setTimeout(() => {
+      toPDF();
+      setShowPdf(false);
+    }, 100);
+  };
+
+  return (
+    <div className="space-y-6 w-full">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <Button onClick={handleExport} className="flex items-center gap-2">
+          <Download className="h-4 w-4" />
+          Exportar PDF
+        </Button>
+      </div>
+
+      {/* Screen View */}
+      <DashboardContent stats={stats} meterInfo={meterInfo} />
+
+      {/* PDF View */}
+      <div
+        ref={targetRef}
+        style={{
+          display: showPdf ? "block" : "none",
+          width: "100%",
+          height: "100vh",
+          padding: "20px",
+          boxSizing: "border-box",
+        }}
+      >
+        <PDFHeader />
+        <div className="mt-4">
+          <DashboardContent stats={stats} meterInfo={meterInfo} />
+        </div>
       </div>
     </div>
   );
