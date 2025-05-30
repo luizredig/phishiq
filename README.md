@@ -1,7 +1,7 @@
 ## 📁 Estrutura de Pastas
 
 ├── backend/ → Nest.js <br>
-├── frontend/ → Next.js <br>
+├── frontend/ → Vite <br>
 ├── docker-compose.yml
 
 ---
@@ -31,17 +31,6 @@ Isso irá subir:
 
 - PgAdmin - [http://localhost:8081](http://localhost:8081)
 
-## 🛠️ Configuração do Backend
-
-Crie os databases:
-```bash
-docker exec -it phishiq-postgres psql -U admin -d master -c 'CREATE DATABASE master;'
-```
-
-```bash
-docker exec -it phishiq-postgres psql -U admin -d master -c 'CREATE DATABASE tenant;'
-```
-
 Acesse o container do backend:
 
 ```bash
@@ -57,19 +46,19 @@ npm install
 Gerar prisma
 
 ```bash
-npm run generate:all # all, master ou tenant
+npx prisma generate
 ```
 
 Fazer push para os databases
 
 ```bash
-npm run push:all # all, master ou tenant
+npx prisma db push
 ```
 
 Inicie o servidor em modo desenvolvimento:
 
 ```bash
-npm run start:dev
+npm run dev
 ```
 
 A API estará disponível em: http://localhost:1421
