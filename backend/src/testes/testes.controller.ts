@@ -16,7 +16,6 @@ interface CreateTesteDto {
   canal: 'EMAIL'
   departamentos?: string[]
   usuarioId?: string
-  campanhaId?: string
   nomeEmpresa: string
 }
 
@@ -24,7 +23,6 @@ interface UpdateTesteDto {
   canal?: 'EMAIL'
   departamentos?: string[]
   usuarioId?: string
-  campanhaId?: string
   nomeEmpresa?: string
 }
 

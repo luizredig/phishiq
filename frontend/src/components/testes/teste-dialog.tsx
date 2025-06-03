@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { X, Info } from "lucide-react";
+import { Info, Search, User, X } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
 import { useAuth } from "../../hooks/use-auth";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import {
@@ -26,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -35,6 +35,7 @@ import {
 } from "../ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
 
 interface TesteDialogProps {
   open: boolean;
@@ -42,7 +43,7 @@ interface TesteDialogProps {
   testeParaEditar?: {
     id: string;
     canal: "EMAIL";
-    status: "ENVIADO" | "ABERTO" | "CLIQUE" | "SUCESSO" | "FALHA";
+    status: "ENVIADO" | "FALHA";
     caiuNoTeste: boolean;
     reportouPhishing: boolean;
     departamentos: {
@@ -66,16 +67,10 @@ interface Usuario {
   email: string;
 }
 
-interface Campanha {
-  id: string;
-  titulo: string;
-}
-
 const baseFormSchema = z.object({
   canal: z.enum(["EMAIL"]),
   departamentos: z.array(z.string()).optional(),
   usuarioId: z.string().optional(),
-  campanhaId: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof baseFormSchema>;
@@ -89,12 +84,13 @@ export function TesteDialog({
   const { userInfo } = useAuth();
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [campanhas, setCampanhas] = useState<Campanha[]>([]);
   const [selectedDepartamentos, setSelectedDepartamentos] = useState<
     Departamento[]
   >([]);
   const [activeTab, setActiveTab] = useState("departamentos");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buscaUsuario, setBuscaUsuario] = useState("");
+  const [buscaDepartamento, setBuscaDepartamento] = useState("");
 
   const formSchema = baseFormSchema.refine(
     (data) => {
@@ -120,14 +116,12 @@ export function TesteDialog({
       canal: "EMAIL",
       departamentos: [],
       usuarioId: undefined,
-      campanhaId: undefined,
     },
   });
 
   useEffect(() => {
     fetchDepartamentos();
     fetchUsuarios();
-    fetchCampanhas();
   }, []);
 
   useEffect(() => {
@@ -138,7 +132,6 @@ export function TesteDialog({
           (d) => d.departamento.id
         ),
         usuarioId: undefined,
-        campanhaId: undefined,
       });
       setSelectedDepartamentos(
         testeParaEditar.departamentos.map((d) => d.departamento)
@@ -149,7 +142,6 @@ export function TesteDialog({
         canal: "EMAIL",
         departamentos: [],
         usuarioId: undefined,
-        campanhaId: undefined,
       });
       setSelectedDepartamentos([]);
     }
@@ -189,17 +181,6 @@ export function TesteDialog({
     }
   }
 
-  async function fetchCampanhas() {
-    try {
-      const response = await get<Campanha[]>("/campanhas");
-      if (response) {
-        setCampanhas(response);
-      }
-    } catch (error) {
-      console.error("Error fetching campanhas:", error);
-    }
-  }
-
   function handleDepartamentoSelect(departamento: Departamento) {
     const isSelected = selectedDepartamentos.some(
       (d) => d.id === departamento.id
@@ -221,20 +202,32 @@ export function TesteDialog({
     }
   }
 
+  const usuariosFiltrados = usuarios.filter((usuario) => {
+    if (!buscaUsuario) return true;
+    const termoBusca = buscaUsuario.toLowerCase();
+    return (
+      usuario.nome.toLowerCase().includes(termoBusca) ||
+      usuario.email.toLowerCase().includes(termoBusca)
+    );
+  });
+
+  const departamentosFiltrados = departamentos.filter((departamento) => {
+    if (!buscaDepartamento) return true;
+    const termoBusca = buscaDepartamento.toLowerCase();
+    return departamento.nome.toLowerCase().includes(termoBusca);
+  });
+
   async function onSubmit(data: FormValues) {
     if (isSubmitting) return;
 
     setIsSubmitting(true);
     try {
-      // Limpa os campos não utilizados baseado na aba ativa
       const payload = {
         canal: data.canal,
         nomeEmpresa: userInfo?.name || "Empresa",
         ...(activeTab === "departamentos"
           ? { departamentos: data.departamentos }
           : { usuarioId: data.usuarioId }),
-        ...(data.campanhaId &&
-          data.campanhaId !== "none" && { campanhaId: data.campanhaId }),
       };
 
       if (testeParaEditar) {
@@ -318,7 +311,12 @@ export function TesteDialog({
                   name="departamentos"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Departamentos</FormLabel>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Departamentos</FormLabel>
+                        <span className="text-sm text-muted-foreground">
+                          {selectedDepartamentos.length} selecionado(s)
+                        </span>
+                      </div>
                       <div className="space-y-2">
                         {departamentos.length === 0 ? (
                           <div className="text-center py-4 text-muted-foreground">
@@ -326,30 +324,62 @@ export function TesteDialog({
                             encontrado.
                           </div>
                         ) : (
-                          <div className="grid grid-cols-2 gap-2">
-                            {departamentos.map((departamento) => (
-                              <div
-                                key={departamento.id}
-                                className="flex items-center space-x-2"
-                              >
-                                <Checkbox
-                                  id={departamento.id}
-                                  checked={selectedDepartamentos.some(
-                                    (d) => d.id === departamento.id
-                                  )}
-                                  onCheckedChange={() =>
-                                    handleDepartamentoSelect(departamento)
-                                  }
-                                />
-                                <label
-                                  htmlFor={departamento.id}
-                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                >
-                                  {departamento.nome}
-                                </label>
-                              </div>
-                            ))}
-                          </div>
+                          <>
+                            <div className="relative">
+                              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                              <Input
+                                className="pl-10"
+                                placeholder="Buscar por nome"
+                                value={buscaDepartamento}
+                                onChange={(e) =>
+                                  setBuscaDepartamento(e.target.value)
+                                }
+                              />
+                            </div>
+
+                            <div className="border rounded-md p-2 space-y-2 max-h-40 overflow-y-auto">
+                              {departamentosFiltrados.length === 0 ? (
+                                <p className="text-sm text-muted-foreground text-center py-2">
+                                  Nenhum departamento encontrado.
+                                </p>
+                              ) : (
+                                departamentosFiltrados.map((departamento) => {
+                                  const isSelecionado =
+                                    selectedDepartamentos.some(
+                                      (d) => d.id === departamento.id
+                                    );
+                                  return (
+                                    <div
+                                      key={departamento.id}
+                                      className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
+                                        isSelecionado
+                                          ? "bg-primary/10 hover:bg-primary/20"
+                                          : "hover:bg-muted/50"
+                                      }`}
+                                      onClick={() =>
+                                        handleDepartamentoSelect(departamento)
+                                      }
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <User className="h-4 w-4 text-muted-foreground" />
+                                        <div className="text-sm">
+                                          <p>{departamento.nome}</p>
+                                        </div>
+                                      </div>
+                                      {isSelecionado && (
+                                        <Badge
+                                          variant="secondary"
+                                          className="flex items-center gap-1 bg-red-100 hover:bg-red-200 text-red-600 border-red-200"
+                                        >
+                                          <X className="h-3 w-3" />
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  );
+                                })
+                              )}
+                            </div>
+                          </>
                         )}
                       </div>
                       <FormMessage />
@@ -370,24 +400,49 @@ export function TesteDialog({
                           Nenhum usuário cadastrado.
                         </div>
                       ) : (
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione um usuário" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {usuarios.map((usuario) => (
-                              <SelectItem key={usuario.id} value={usuario.id}>
-                                {usuario.nome} {usuario.sobrenome} (
-                                {usuario.email})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <div className="space-y-2">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              className="pl-10"
+                              placeholder="Buscar por nome ou email"
+                              value={buscaUsuario}
+                              onChange={(e) => setBuscaUsuario(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="border rounded-md p-2 space-y-2 max-h-40 overflow-y-auto">
+                            {usuariosFiltrados.length === 0 ? (
+                              <p className="text-sm text-muted-foreground text-center py-2">
+                                Nenhum usuário encontrado.
+                              </p>
+                            ) : (
+                              usuariosFiltrados.map((usuario) => (
+                                <div
+                                  key={usuario.id}
+                                  className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
+                                    field.value === usuario.id
+                                      ? "bg-primary/10 hover:bg-primary/20"
+                                      : "hover:bg-muted/50"
+                                  }`}
+                                  onClick={() => field.onChange(usuario.id)}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <User className="h-4 w-4 text-muted-foreground" />
+                                    <div className="text-sm">
+                                      <p>
+                                        {usuario.nome} {usuario.sobrenome}
+                                      </p>
+                                      <p className="text-muted-foreground">
+                                        {usuario.email}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
                       )}
                       <FormMessage />
                     </FormItem>
@@ -395,50 +450,6 @@ export function TesteDialog({
                 />
               </TabsContent>
             </Tabs>
-
-            <FormField
-              control={form.control}
-              name="campanhaId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Campanha{" "}
-                    <span className="text-muted-foreground">(opcional)</span>
-                  </FormLabel>
-                  {campanhas.length > 0 && (
-                    <Alert className="mb-4 bg-blue-50 border-blue-200 text-primary">
-                      <Info className="h-4 w-4 stroke-primary" />
-                      <AlertDescription>
-                        Atribuir um teste a uma campanha significa que ele
-                        possui um objetivo específico, o da campanha.
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {campanhas.length === 0 ? (
-                    <div className="text-center py-4 text-muted-foreground">
-                      Nenhuma campanha cadastrada.
-                    </div>
-                  ) : (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione uma campanha" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="none">Nenhuma</SelectItem>
-                        {campanhas.map((campanha) => (
-                          <SelectItem key={campanha.id} value={campanha.id}>
-                            {campanha.titulo}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <DialogFooter>
               <Button

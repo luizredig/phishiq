@@ -35,11 +35,16 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { CustomDatePicker } from "../components/ui/date-picker";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../components/ui/hover-card";
 
 interface Teste {
   id: string;
   canal: "EMAIL";
-  status: "ENVIADO" | "ABERTO" | "CLIQUE" | "SUCESSO" | "FALHA";
+  status: "ENVIADO" | "FALHA";
   caiuNoTeste: boolean;
   reportouPhishing: boolean;
   departamentos: {
@@ -50,12 +55,6 @@ interface Teste {
   }[];
   ativo: boolean;
   criadoEm: string;
-  campanhas: {
-    campanha: {
-      id: string;
-      titulo: string;
-    };
-  }[];
   usuario?: {
     id: string;
     nome: string;
@@ -65,17 +64,13 @@ interface Teste {
 }
 
 type TipoEnvio = "TODOS" | "INDIVIDUAL" | "DEPARTAMENTO";
-type Status = "TODOS" | "ENVIADO" | "ABERTO" | "CLIQUE" | "SUCESSO" | "FALHA";
-type Resultado = "TODOS" | "CAIU" | "REPORTOU" | "NAO_REPORTOU";
-type Campanha = "TODOS" | "COM_CAMPANHA" | "SEM_CAMPANHA";
+type Status = "TODOS" | "ENVIADO" | "FALHA";
+type Resultado = "TODOS" | "CAIU" | "SEM_INTERACOES";
 
 interface Filtros {
   tipoEnvio: TipoEnvio;
-  dataInicio: Date | undefined;
-  dataFim: Date | undefined;
   status: Status;
   resultado: Resultado;
-  campanha: Campanha;
 }
 
 export default function GerenciarTestes() {
@@ -88,11 +83,8 @@ export default function GerenciarTestes() {
   const [currentPage, setCurrentPage] = useState(1);
   const [filtros, setFiltros] = useState<Filtros>({
     tipoEnvio: "TODOS",
-    dataInicio: undefined,
-    dataFim: undefined,
     status: "TODOS",
     resultado: "TODOS",
-    campanha: "TODOS",
   });
   const itemsPerPage = 5;
 
@@ -163,14 +155,6 @@ export default function GerenciarTestes() {
       }
     }
 
-    // Filtro por data
-    if (filtros.dataInicio && filtros.dataFim) {
-      const dataTeste = new Date(teste.criadoEm);
-      if (dataTeste < filtros.dataInicio || dataTeste > filtros.dataFim) {
-        return false;
-      }
-    }
-
     // Filtro por status
     if (filtros.status !== "TODOS" && teste.status !== filtros.status) {
       return false;
@@ -181,21 +165,8 @@ export default function GerenciarTestes() {
       if (filtros.resultado === "CAIU" && !teste.caiuNoTeste) {
         return false;
       }
-      if (filtros.resultado === "REPORTOU" && !teste.reportouPhishing) {
-        return false;
-      }
-      if (filtros.resultado === "NAO_REPORTOU" && teste.reportouPhishing) {
-        return false;
-      }
-    }
 
-    // Filtro por campanha
-    if (filtros.campanha !== "TODOS") {
-      const temCampanha = teste.campanhas && teste.campanhas.length > 0;
-      if (filtros.campanha === "COM_CAMPANHA" && !temCampanha) {
-        return false;
-      }
-      if (filtros.campanha === "SEM_CAMPANHA" && temCampanha) {
+      if (filtros.resultado === "SEM_INTERACOES" && teste.caiuNoTeste) {
         return false;
       }
     }
@@ -212,17 +183,16 @@ export default function GerenciarTestes() {
 
   function getTesteStatusBadge(teste: Teste) {
     const statusColors = {
-      ENVIADO: "bg-blue-100 text-primary",
-      ABERTO: "bg-yellow-100 text-yellow-800",
-      CLIQUE: "bg-orange-100 text-orange-800",
-      SUCESSO: "bg-green-100 text-green-800",
-      FALHA: "bg-red-100 text-red-800",
+      ENVIADO: "bg-green-100 text-green-700",
+      FALHA: "bg-red-100 text-red-700",
     };
 
     return (
       <Badge
         variant="secondary"
-        className={`${statusColors[teste.status]} border-0 w-fit`}
+        className={`${statusColors[teste.status]} border-0 w-fit hover:bg-${
+          statusColors[teste.status]
+        }`}
       >
         {teste.status}
       </Badge>
@@ -232,11 +202,8 @@ export default function GerenciarTestes() {
   function limparFiltros() {
     setFiltros({
       tipoEnvio: "TODOS",
-      dataInicio: undefined,
-      dataFim: undefined,
       status: "TODOS",
       resultado: "TODOS",
-      campanha: "TODOS",
     });
   }
 
@@ -263,8 +230,6 @@ export default function GerenciarTestes() {
           </div>
           <div className="flex items-center gap-2">
             {(filtros.tipoEnvio !== "TODOS" ||
-              filtros.dataInicio ||
-              filtros.dataFim ||
               filtros.status !== "TODOS" ||
               filtros.resultado !== "TODOS") && (
               <Button
@@ -280,7 +245,7 @@ export default function GerenciarTestes() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Tipo de Envio</label>
             <Select
@@ -301,28 +266,6 @@ export default function GerenciarTestes() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Data Inicial</label>
-            <CustomDatePicker
-              date={filtros.dataInicio}
-              setDate={(date) =>
-                setFiltros((prev) => ({ ...prev, dataInicio: date }))
-              }
-              placeholder="Data inicial"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Data Final</label>
-            <CustomDatePicker
-              date={filtros.dataFim}
-              setDate={(date) =>
-                setFiltros((prev) => ({ ...prev, dataFim: date }))
-              }
-              placeholder="Data final"
-            />
-          </div>
-
-          <div className="space-y-2">
             <label className="text-sm font-medium">Status</label>
             <Select
               value={filtros.status}
@@ -336,9 +279,6 @@ export default function GerenciarTestes() {
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
                 <SelectItem value="ENVIADO">Enviado</SelectItem>
-                <SelectItem value="ABERTO">Aberto</SelectItem>
-                <SelectItem value="CLIQUE">Clique</SelectItem>
-                <SelectItem value="SUCESSO">Sucesso</SelectItem>
                 <SelectItem value="FALHA">Falha</SelectItem>
               </SelectContent>
             </Select>
@@ -358,27 +298,7 @@ export default function GerenciarTestes() {
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
                 <SelectItem value="CAIU">Caiu no teste</SelectItem>
-                <SelectItem value="REPORTOU">Reportou</SelectItem>
-                <SelectItem value="NAO_REPORTOU">Não reportou</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Campanha</label>
-            <Select
-              value={filtros.campanha}
-              onValueChange={(value: Campanha) =>
-                setFiltros((prev) => ({ ...prev, campanha: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Campanha" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="TODOS">Todos</SelectItem>
-                <SelectItem value="COM_CAMPANHA">Com campanha</SelectItem>
-                <SelectItem value="SEM_CAMPANHA">Sem campanha</SelectItem>
+                <SelectItem value="SEM_INTERACOES">Sem interações</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -394,12 +314,11 @@ export default function GerenciarTestes() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Tipo de Envio</TableHead>
+                <TableHead>Enviado para</TableHead>
                 <TableHead>Data de Envio</TableHead>
                 <TableHead>Canal</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Resultado</TableHead>
-                <TableHead>Campanha</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -418,20 +337,77 @@ export default function GerenciarTestes() {
                   <TableRow key={teste.id}>
                     <TableCell>
                       {teste.departamentos.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {teste.departamentos.map((d) => (
-                            <Badge key={d.departamento.id} variant="secondary">
-                              {d.departamento.nome}
-                            </Badge>
-                          ))}
-                        </div>
+                        <HoverCard>
+                          <HoverCardTrigger asChild>
+                            <div className="flex items-center gap-1">
+                              <Badge
+                                variant="secondary"
+                                className="hover:none bg-gray-200 text-gray-700 hover:bg-gray-200"
+                              >
+                                {teste.departamentos[0].departamento.nome}
+                              </Badge>
+                              {teste.departamentos.length > 1 && (
+                                <Badge
+                                  variant="secondary"
+                                  className="hover:bg-gray-200 bg-gray-200 text-gray-700"
+                                >
+                                  +{teste.departamentos.length - 1}
+                                </Badge>
+                              )}
+                            </div>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-80">
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Departamentos</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {teste.departamentos.map((d) => (
+                                  <Badge
+                                    key={d.departamento.id}
+                                    variant="secondary"
+                                    className="hover:bg-gray-100 bg-gray-100 text-gray-700"
+                                  >
+                                    {d.departamento.nome}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
                       ) : (
-                        <Badge
-                          variant="outline"
-                          className="bg-orange-100 text-orange-800 border-0"
-                        >
-                          Individual
-                        </Badge>
+                        <HoverCard>
+                          <HoverCardTrigger asChild>
+                            <Badge
+                              variant="outline"
+                              className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-100"
+                            >
+                              {teste.usuario
+                                ? `${teste.usuario.nome} ${teste.usuario.sobrenome}`
+                                : "Usuário não encontrado"}
+                            </Badge>
+                          </HoverCardTrigger>
+                          <HoverCardContent className="w-80">
+                            <div className="space-y-2">
+                              <h4 className="font-medium">Usuário</h4>
+                              {teste.usuario ? (
+                                <div className="space-y-1">
+                                  <p className="text-sm">
+                                    <span className="font-medium">Nome:</span>{" "}
+                                    {teste.usuario.nome}{" "}
+                                    {teste.usuario.sobrenome}
+                                  </p>
+                                  <p className="text-sm">
+                                    <span className="font-medium">Email:</span>{" "}
+                                    {teste.usuario.email}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-sm text-muted-foreground">
+                                  Usuário não encontrado
+                                </p>
+                              )}
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
                       )}
                     </TableCell>
 
@@ -448,7 +424,7 @@ export default function GerenciarTestes() {
                     <TableCell>
                       <Badge
                         variant="secondary"
-                        className="bg-blue-100 text-blue-800 border-0 flex items-center gap-1 w-fit"
+                        className="bg-blue-100 text-blue-800 border-0 flex items-center gap-1 w-fit hover:bg-blue-100"
                       >
                         <Mail className="h-3 w-3" />
                         {teste.canal}
@@ -460,30 +436,21 @@ export default function GerenciarTestes() {
                     <TableCell>
                       <div className="flex flex-col gap-1 w-fit">
                         {teste.caiuNoTeste ? (
-                          <Badge variant="destructive" className="w-fit">
+                          <Badge
+                            variant="destructive"
+                            className="w-fit hover:bg-red-100"
+                          >
                             Caiu no teste
                           </Badge>
                         ) : (
-                          <Badge variant={"default"} className="w-fit">
-                            {teste.reportouPhishing
-                              ? "Reportou"
-                              : "Ainda não reportou"}
+                          <Badge
+                            variant={"default"}
+                            className="w-fit hover:bg-blue-100 bg-blue-100 text-blue-700"
+                          >
+                            Sem interações
                           </Badge>
                         )}
                       </div>
-                    </TableCell>
-
-                    <TableCell>
-                      {teste.campanhas && teste.campanhas.length > 0 ? (
-                        <Badge
-                          variant="secondary"
-                          className="bg-purple-100 text-purple-800 border-0"
-                        >
-                          {teste.campanhas[0].campanha.titulo}
-                        </Badge>
-                      ) : (
-                        <span className="text-muted-foreground">-</span>
-                      )}
                     </TableCell>
                   </TableRow>
                 ))

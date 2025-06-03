@@ -72,12 +72,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             icon: <TestTubeDiagonal className={"text-primary"} />,
             show: isUserAdmin,
           },
-          {
-            title: "Campanhas",
-            url: "/gerenciar-campanhas",
-            icon: <Megaphone className={"text-primary"} />,
-            show: isUserAdmin,
-          },
+          // {
+          //   title: "Campanhas",
+          //   url: "/gerenciar-campanhas",
+          //   icon: <Megaphone className={"text-primary"} />,
+          //   show: isUserAdmin,
+          // },
         ],
       },
       {

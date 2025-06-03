@@ -60,14 +60,12 @@ export default function GerenciarUsuarios() {
   const [usuarioParaEditar, setUsuarioParaEditar] = useState<
     Usuario | undefined
   >(undefined);
-  const [usuarioParaExcluir, setUsuarioParaExcluir] = useState<string | null>(
-    null
-  );
+
   const [includeInactive, setIncludeInactive] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
+  const { get, put, loading: apiLoading } = useApi();
 
   useEffect(() => {
     fetchUsuarios();
@@ -108,26 +106,6 @@ export default function GerenciarUsuarios() {
   function handleEditar(usuario: Usuario) {
     setUsuarioParaEditar(usuario);
     setIsNovoUsuarioOpen(true);
-  }
-
-  async function handleExcluir() {
-    if (!usuarioParaExcluir) return;
-
-    try {
-      const response = await deleteRequest<{ success: boolean }>(
-        `/usuarios/${usuarioParaExcluir}`
-      );
-
-      if (response) {
-        setUsuarios((prev) =>
-          prev.filter((usuario) => usuario.id !== usuarioParaExcluir)
-        );
-      }
-    } catch (error) {
-      console.error("Error deleting usuario:", error);
-    } finally {
-      setUsuarioParaExcluir(null);
-    }
   }
 
   const filteredUsuarios = usuarios.filter((usuario) => {
@@ -181,7 +159,7 @@ export default function GerenciarUsuarios() {
         <h1 className="text-2xl font-bold">Gerenciar usuários</h1>
         <Button onClick={() => setIsNovoUsuarioOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Novo Usuário
+          Novo usuário
         </Button>
       </div>
 
@@ -291,16 +269,6 @@ export default function GerenciarUsuarios() {
                         >
                           <Edit className="h-4 w-4 text-primary" />
                         </Button>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setUsuarioParaExcluir(usuario.id)}
-                          title="Excluir"
-                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
-                        >
-                          <Trash className="h-4 w-4" />
-                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -366,16 +334,6 @@ export default function GerenciarUsuarios() {
           }
         }}
         usuarioParaEditar={usuarioParaEditar}
-      />
-
-      <ConfirmDialog
-        open={!!usuarioParaExcluir}
-        onOpenChange={() => setUsuarioParaExcluir(null)}
-        title="Excluir Usuário"
-        description="Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita."
-        confirmText="Sim, excluir"
-        cancelText="Não, cancelar"
-        onConfirm={handleExcluir}
       />
     </div>
   );

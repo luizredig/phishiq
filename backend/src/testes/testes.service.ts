@@ -21,11 +21,6 @@ export class TestesService {
             departamento: true,
           },
         },
-        campanhas: {
-          include: {
-            campanha: true,
-          },
-        },
         usuario: true,
       },
       orderBy: {
@@ -51,11 +46,9 @@ export class TestesService {
     canal: CanalTeste
     departamentos?: string[]
     usuarioId?: string
-    campanhaId?: string
     nomeEmpresa: string
   }) {
-    const { canal, departamentos, usuarioId, campanhaId, nomeEmpresa } =
-      createTesteDto
+    const { canal, departamentos, usuarioId, nomeEmpresa } = createTesteDto
 
     // Se tiver departamentos, cria o teste com os departamentos
     if (departamentos && departamentos.length > 0) {
@@ -72,17 +65,6 @@ export class TestesService {
               },
             })),
           },
-          ...(campanhaId && {
-            campanhas: {
-              create: {
-                campanha: {
-                  connect: {
-                    id: campanhaId,
-                  },
-                },
-              },
-            },
-          }),
         },
         include: {
           departamentos: {
@@ -104,30 +86,25 @@ export class TestesService {
               },
             },
           },
-          campanhas: {
-            include: {
-              campanha: true,
-            },
-          },
         },
       })
 
       // Envio por departamento
-      for (const departamento of teste.departamentos) {
-        for (const usuarioDepartamento of departamento.departamento.usuarios) {
-          if (usuarioDepartamento.usuario) {
-            await this.nodemailerService.sendPhishingEmail(
-              usuarioDepartamento.usuario.email,
-              {
-                nomeEmpresa: nomeEmpresa,
-                urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-                nomeUsuario: `${usuarioDepartamento.usuario.nome} ${usuarioDepartamento.usuario.sobrenome || ''}`,
-                linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
-              },
-            )
-          }
-        }
-      }
+      // for (const departamento of teste.departamentos) {
+      //   for (const usuarioDepartamento of departamento.departamento.usuarios) {
+      //     if (usuarioDepartamento.usuario) {
+      //       await this.nodemailerService.sendPhishingEmail(
+      //         usuarioDepartamento.usuario.email,
+      //         {
+      //           nomeEmpresa: nomeEmpresa,
+      //           urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
+      //           nomeUsuario: `${usuarioDepartamento.usuario.nome} ${usuarioDepartamento.usuario.sobrenome || ''}`,
+      //           linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+      //         },
+      //       )
+      //     }
+      //   }
+      // }
 
       return teste
     }
@@ -158,35 +135,19 @@ export class TestesService {
               id: usuarioId,
             },
           },
-          ...(campanhaId && {
-            campanhas: {
-              create: {
-                campanha: {
-                  connect: {
-                    id: campanhaId,
-                  },
-                },
-              },
-            },
-          }),
         },
         include: {
           usuario: true,
-          campanhas: {
-            include: {
-              campanha: true,
-            },
-          },
         },
       })
 
       // Envio individual
-      await this.nodemailerService.sendPhishingEmail(usuario.email, {
-        nomeEmpresa: nomeEmpresa,
-        urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-        nomeUsuario: `${usuario.nome} ${usuario.sobrenome || ''}`,
-        linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
-      })
+      // await this.nodemailerService.sendPhishingEmail(usuario.email, {
+      //   nomeEmpresa: nomeEmpresa,
+      //   urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
+      //   nomeUsuario: `${usuario.nome} ${usuario.sobrenome || ''}`,
+      //   linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+      // })
 
       return teste
     }
@@ -200,10 +161,9 @@ export class TestesService {
       canal?: CanalTeste
       departamentos?: string[]
       usuarioId?: string
-      campanhaId?: string
     },
   ) {
-    const { canal, departamentos, usuarioId, campanhaId } = updateTesteDto
+    const { canal, departamentos, usuarioId } = updateTesteDto
 
     // Primeiro, remove todas as relações existentes
     await this.prisma.teste.update({
@@ -214,9 +174,6 @@ export class TestesService {
         },
         usuario: {
           disconnect: true,
-        },
-        campanhas: {
-          deleteMany: {},
         },
       },
     })
@@ -244,17 +201,6 @@ export class TestesService {
             },
           },
         }),
-        ...(campanhaId && {
-          campanhas: {
-            create: {
-              campanha: {
-                connect: {
-                  id: campanhaId,
-                },
-              },
-            },
-          },
-        }),
       },
       include: {
         departamentos: {
@@ -263,11 +209,6 @@ export class TestesService {
           },
         },
         usuario: true,
-        campanhas: {
-          include: {
-            campanha: true,
-          },
-        },
       },
     })
   }

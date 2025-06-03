@@ -29,7 +29,6 @@ import {
   CartesianGrid,
 } from "recharts";
 import {
-  AlertCircle,
   CheckCircle2,
   XCircle,
   Send,
@@ -46,7 +45,6 @@ interface DashboardStats {
   totalTestes: number;
   testesSucesso: number;
   testesFalha: number;
-  campanhasAtivas: number;
   testesPorDepartamento: {
     departamento: string;
     falhas: number;
@@ -81,12 +79,13 @@ function PDFHeader() {
 
 function DashboardContent({
   stats,
-  meterInfo,
-}: {
+}: // meterInfo,
+{
   stats: DashboardStats;
   meterInfo: any;
 }) {
-  const Icon = meterInfo.icon;
+  // const Icon = meterInfo.icon;
+
   const overallPieData = [
     {
       name: "Sucesso",
@@ -105,7 +104,7 @@ function DashboardContent({
 
   return (
     <div className="space-y-6">
-      <Card className="w-full">
+      {/* <Card className="w-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Icon className={`h-8 w-8 ${meterInfo.color}`} />
@@ -119,9 +118,9 @@ function DashboardContent({
             {meterInfo.message}
           </p>
         </CardContent>
-      </Card>
+      </Card> */}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -130,43 +129,38 @@ function DashboardContent({
             <Send className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalTestes}</div>
+            <div className="text-2xl font-bold text-primary">
+              {stats.totalTestes}
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Testes bem sucedidos
+              N° de testes sem falha
             </CardTitle>
             <CheckCircle2 className="h-4 w-4 text-green-500" />
           </CardHeader>
+
           <CardContent>
-            <div className="text-2xl font-bold">{stats.testesSucesso}</div>
+            <div className="text-2xl font-bold text-green-500">
+              {stats.testesSucesso}
+            </div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Testes mal sucedidos
+              N° de testes com falha
             </CardTitle>
             <XCircle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.testesFalha}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Campanhas ativas
-            </CardTitle>
-            <AlertCircle className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.campanhasAtivas}</div>
+            <div className="text-2xl font-bold text-red-500">
+              {stats.testesFalha}
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -182,7 +176,7 @@ function DashboardContent({
                 Nenhum teste realizado ainda.
               </div>
             ) : (
-              <div className="h-[300px]">
+              <div className="h-[350px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -224,7 +218,7 @@ function DashboardContent({
                 Nenhuma falha registrada por departamento ainda.
               </div>
             ) : (
-              <div className="h-[300px]">
+              <div className="h-[350px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={barData}>
                     <CartesianGrid strokeDasharray="3 3" />

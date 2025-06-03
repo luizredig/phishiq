@@ -28,7 +28,7 @@ export class DashboardService {
         },
       }),
 
-      // Testes mal sucedidos (caíram no teste)
+      // Testes com falha (caíram no teste)
       this.prisma.teste.count({
         where: {
           ativo: true,
