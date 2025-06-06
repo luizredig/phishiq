@@ -106,8 +106,8 @@ export class KeycloakService {
 
   async registerUser(
     name: string,
-    sobrenome: string,
     email: string,
+    password: string,
   ): Promise<{ id: string }> {
     try {
       await this.init()
@@ -117,14 +117,14 @@ export class KeycloakService {
         username: email,
         email,
         firstName: name,
-        lastName: sobrenome,
+        lastName: name,
         enabled: true,
         emailVerified: true,
         requiredActions: [],
         credentials: [
           {
             type: 'password',
-            value: '123456',
+            value: password,
             temporary: false,
           },
         ],

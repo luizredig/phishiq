@@ -17,12 +17,12 @@ export class KeycloakController {
   async register(
     @Body() body: { name: string; email: string; password: string },
   ) {
-    await this.keycloakService.registerUser(
+    await this.keycloakService.registerAdminUser(
       body.name,
       body.email,
       body.password,
     )
-    return { message: 'User registered successfully' }
+    return { message: 'Admin user registered successfully' }
   }
 
   @Get('verify-token')
