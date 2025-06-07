@@ -35,7 +35,7 @@ export class NodemailerService {
         process.cwd(),
         'src',
         'templates',
-        'phishing-1.html',
+        'phishing-bonus-especial.html',
       )
       if (fs.existsSync(srcTemplatePath)) {
         this.phishingTemplate = fs.readFileSync(srcTemplatePath, 'utf-8')
@@ -46,7 +46,7 @@ export class NodemailerService {
         process.cwd(),
         'dist',
         'templates',
-        'phishing-1.html',
+        'phishing-bonus-especial.html',
       )
       if (fs.existsSync(distTemplatePath)) {
         this.phishingTemplate = fs.readFileSync(distTemplatePath, 'utf-8')

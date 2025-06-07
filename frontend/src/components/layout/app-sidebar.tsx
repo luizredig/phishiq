@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  ChartNoAxesCombined,
-  Grid2x2Plus,
+  ChartNoAxesCombined, Grid2x2Plus,
   HomeIcon,
-  Megaphone,
+  Mail,
   Plus,
   TestTubeDiagonal,
-  UsersIcon,
+  UsersIcon
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
@@ -70,6 +69,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Testes",
             url: "/gerenciar-testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
+            show: isUserAdmin,
+          },
+          {
+            title: "Templates",
+            url: "/templates",
+            icon: <Mail className={"text-primary"} />,
             show: isUserAdmin,
           },
           // {

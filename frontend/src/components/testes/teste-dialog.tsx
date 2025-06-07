@@ -8,7 +8,6 @@ import { Info, Search, User, X } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
 import { useAuth } from "../../hooks/use-auth";
 import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -299,6 +298,26 @@ export function TesteDialog({
               </TabsList>
 
               <TabsContent value="departamentos">
+                <Alert className="mb-4 bg-muted border-muted-foreground/20">
+                  <Info className="h-4 w-4 stroke-muted-foreground" />
+                  <AlertDescription className="text-muted-foreground">
+                    Atualmente, há apenas uma opção de template de e-mail
+                    disponível e ele será automaticamente selecionado.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="mb-4">
+                  <FormLabel>Template</FormLabel>
+                  <Select disabled defaultValue="bonus">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um template" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bonus">Bônus surpresa</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Alert className="mb-4 bg-yellow-50 border-yellow-200 text-yellow-800">
                   <Info className="h-4 w-4 stroke-yellow-800" />
                   <AlertDescription>
@@ -306,6 +325,7 @@ export function TesteDialog({
                     exibidos.
                   </AlertDescription>
                 </Alert>
+
                 <FormField
                   control={form.control}
                   name="departamentos"
@@ -389,6 +409,26 @@ export function TesteDialog({
               </TabsContent>
 
               <TabsContent value="individual">
+                <Alert className="mb-4 bg-muted border-muted-foreground/20">
+                  <Info className="h-4 w-4 stroke-muted-foreground" />
+                  <AlertDescription className="text-muted-foreground">
+                    Atualmente, há apenas uma opção de template de e-mail
+                    disponível e ele será automaticamente selecionado.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="mb-4">
+                  <FormLabel>Template</FormLabel>
+                  <Select disabled defaultValue="bonus">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecione um template" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bonus">Bônus surpresa</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <FormField
                   control={form.control}
                   name="usuarioId"

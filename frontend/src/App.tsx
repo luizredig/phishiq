@@ -8,6 +8,7 @@ import Callback from "./pages/callback";
 import { Dashboard } from "./pages/dashboard";
 import GerenciarCampanhas from "./pages/gerenciar-campanhas";
 import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
+import GerenciarTemplates from "./pages/templates";
 import GerenciarTestes from "./pages/gerenciar-testes";
 import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 import Home from "./pages/home";
@@ -59,6 +60,7 @@ export default function App() {
           />
           <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
           <Route path="/gerenciar-campanhas" element={<GerenciarCampanhas />} />
+          <Route path="/templates" element={<GerenciarTemplates />} />
         </Route>
       </Route>
 
