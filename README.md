@@ -1,4 +1,4 @@
-## 📁 Estrutura de Pastas
+## 📁 Estrutura do projeto
 
 ├── backend/ → Nest.js <br>
 ├── frontend/ → Vite <br>
@@ -6,14 +6,7 @@
 
 ---
 
-## 🚀 Como rodar o ambiente localmente
-
-Antes de iniciar, certifique-se de ter instalado em sua máquina:
-
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
-
-## 🐳 Subindo os containers (Banco, Keycloak, etc.)
+## 🐳 Subindo os containers
 
 No diretório raiz do projeto, execute:
 
@@ -26,10 +19,6 @@ Isso irá subir:
 - Frontend - [http://localhost:1413](http://localhost:1413)
 
 - Backend - [http://localhost:1421](http://localhost:1421)
-
-- Keycloak - [http://localhost:8080](http://localhost:8080)
-
-- PgAdmin - [http://localhost:8081](http://localhost:8081)
 
 Acesse o container do backend:
 

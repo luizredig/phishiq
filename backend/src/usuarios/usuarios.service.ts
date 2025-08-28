@@ -5,14 +5,10 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { Usuario, CargoUsuario, Departamento } from '@prisma/client'
-import { KeycloakService } from '../keycloak/keycloak.service'
 
 @Injectable()
 export class UsuariosService {
-  constructor(
-    private prisma: PrismaService,
-    private keycloakService: KeycloakService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async findAll(includeInactive = false): Promise<Usuario[]> {
     return this.prisma.usuario.findMany({
@@ -59,39 +55,15 @@ export class UsuariosService {
     })
   }
 
-  async findByKeycloakId(keycloakId: string): Promise<Usuario | null> {
-    return this.prisma.usuario.findUnique({
-      where: { keycloakId },
-      include: {
-        departamentos: {
-          where: { ativo: true },
-          include: {
-            departamento: true,
-          },
-        },
-      },
-    })
-  }
-
   async create(data: {
     nome: string
     sobrenome: string
     email: string
     cargo?: CargoUsuario
-    keycloakId?: string
   }): Promise<Usuario> {
-    const keycloakUser = await this.keycloakService.registerUser(
-      data.nome,
-      data.sobrenome,
-      data.email,
-    )
-
-    const keycloakId = keycloakUser.id
-
     return this.prisma.usuario.create({
       data: {
         ...data,
-        keycloakId,
         ativo: true,
       },
     })
@@ -114,12 +86,6 @@ export class UsuariosService {
       throw new Error('Usuário não encontrado')
     }
 
-    await this.keycloakService.updateUser(usuario.keycloakId, {
-      firstName: data.nome,
-      lastName: data.sobrenome,
-      email: data.email,
-    })
-
     return this.prisma.usuario.update({
       where: { id },
       data,
@@ -141,21 +107,6 @@ export class UsuariosService {
         ativo: false,
         inativadoEm: new Date(),
       },
-      include: {
-        departamentos: {
-          where: { ativo: true },
-          include: {
-            departamento: true,
-          },
-        },
-      },
-    })
-  }
-
-  async updateKeycloakId(id: string, keycloakId: string): Promise<Usuario> {
-    return this.prisma.usuario.update({
-      where: { id },
-      data: { keycloakId },
       include: {
         departamentos: {
           where: { ativo: true },
@@ -212,7 +163,7 @@ export class UsuariosService {
       },
     })
 
-    return usuario?.departamentos.map((ud) => ud.departamento) || []
+    return usuario?.departamentos?.map((ud) => ud.departamento) || []
   }
 
   async updateStatus(id: string, ativo: boolean): Promise<Usuario> {

@@ -144,7 +144,7 @@ export class DashboardService {
 
     // Processa os dados dos departamentos
     const departamentosProcessados = testesPorDepartamento
-      .map((dept) => {
+      ?.map((dept) => {
         const falhas = dept.testes.length
 
         return {
@@ -156,7 +156,7 @@ export class DashboardService {
 
     // Processa os dados dos usuários com mais falhas
     const usuariosProcessados = usuariosMaisFalhas
-      .map((usuario) => {
+      ?.map((usuario) => {
         const falhas = usuario.departamentos.reduce((acc, dept) => {
           return acc + dept.departamento.testes.length
         }, 0)
@@ -168,12 +168,12 @@ export class DashboardService {
           falhas,
         }
       })
-      .filter((usuario) => usuario.falhas > 0)
+      ?.filter((usuario) => usuario.falhas > 0)
       .sort((a, b) => b.falhas - a.falhas)
 
     // Processa os dados dos departamentos com mais falhas
     const departamentosFalhasProcessados = departamentosMaisFalhas
-      .map((dept) => {
+      ?.map((dept) => {
         const falhas = dept.testes.length
 
         return {

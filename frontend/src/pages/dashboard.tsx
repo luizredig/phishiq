@@ -1,6 +1,30 @@
+import {
+  Annoyed,
+  CheckCircle2,
+  Download,
+  Frown,
+  Laugh,
+  Send,
+  Smile,
+  XCircle,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-import { useApi } from "../hooks/use-api";
 import { usePDF } from "react-to-pdf";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import LoadingSpinner from "../components/layout/loading-spinner";
+import { Button } from "../components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,31 +39,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Legend,
-  Tooltip,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-} from "recharts";
-import {
-  CheckCircle2,
-  XCircle,
-  Send,
-  Smile,
-  Frown,
-  Laugh,
-  Annoyed,
-  Download,
-} from "lucide-react";
-import LoadingSpinner from "../components/layout/loading-spinner";
-import { Button } from "../components/ui/button";
+import { useApi } from "../hooks/use-api";
 
 interface DashboardStats {
   totalTestes: number;
@@ -97,7 +97,7 @@ function DashboardContent({
     },
   ];
 
-  const barData = stats.testesPorDepartamento.map((dept) => ({
+  const barData = stats.testesPorDepartamento?.map((dept) => ({
     name: dept.departamento,
     falhas: dept.falhas,
   }));
@@ -191,10 +191,10 @@ function DashboardContent({
                         `${name}: ${(percent * 100).toFixed(0)}%`
                       }
                     >
-                      {overallPieData.map((_, index) => (
+                      {overallPieData?.map((_, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={SUCCESS_COLORS[index % SUCCESS_COLORS.length]}
+                          fill={SUCCESS_COLORS[index % SUCCESS_COLORS?.length]}
                         />
                       ))}
                     </Pie>
@@ -212,8 +212,8 @@ function DashboardContent({
             <CardTitle>Falhas por departamento</CardTitle>
           </CardHeader>
           <CardContent>
-            {stats.testesPorDepartamento.length === 0 ||
-            stats.testesPorDepartamento.every((dept) => dept.falhas === 0) ? (
+            {stats.testesPorDepartamento?.length === 0 ||
+            stats.testesPorDepartamento?.every((dept) => dept.falhas === 0) ? (
               <div className="text-center py-4 text-muted-foreground">
                 Nenhuma falha registrada por departamento ainda.
               </div>
@@ -247,7 +247,7 @@ function DashboardContent({
             <CardTitle>Usuários que mais falharam</CardTitle>
           </CardHeader>
           <CardContent>
-            {stats.usuariosMaisFalhas.length === 0 ? (
+            {stats.usuariosMaisFalhas?.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
                 Nenhum usuário encontrado.
               </div>
@@ -261,7 +261,7 @@ function DashboardContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stats.usuariosMaisFalhas.map((usuario) => (
+                  {stats.usuariosMaisFalhas?.map((usuario) => (
                     <TableRow key={usuario.id}>
                       <TableCell>{usuario.nome}</TableCell>
                       <TableCell>{usuario.email}</TableCell>
@@ -281,7 +281,7 @@ function DashboardContent({
             <CardTitle>Departamentos que mais falharam</CardTitle>
           </CardHeader>
           <CardContent>
-            {stats.departamentosMaisFalhas.length === 0 ? (
+            {stats.departamentosMaisFalhas?.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
                 Nenhum departamento encontrado.
               </div>
@@ -294,7 +294,7 @@ function DashboardContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stats.departamentosMaisFalhas.map((departamento) => (
+                  {stats.departamentosMaisFalhas?.map((departamento) => (
                     <TableRow key={departamento.id}>
                       <TableCell>{departamento.nome}</TableCell>
                       <TableCell className="text-right">

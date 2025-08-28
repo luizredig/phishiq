@@ -10,7 +10,6 @@ services:
       - '1413:1413'
     depends_on:
       - backend
-      - keycloak
     networks:
       - phishiq-network
     stdin_open: true
@@ -26,28 +25,11 @@ services:
     ports:
       - '1421:1421'
     depends_on:
-      - keycloak
       - postgres
     networks:
       - phishiq-network
     stdin_open: true
     tty: true
-
-  keycloak:
-    container_name: phishiq-keycloak
-    image: quay.io/keycloak/keycloak:latest
-    restart: unless-stopped
-    command: start-dev
-    ports:
-      - '8080:8080'
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    volumes:
-      - keycloak-data:/opt/keycloak/data
-    networks:
-      - phishiq-network
-
   postgres:
     container_name: phishiq-postgres
     image: postgres:16
@@ -83,4 +65,3 @@ networks:
 
 volumes:
   postgres-data:
-  keycloak-data:

@@ -57,7 +57,7 @@ export class TestesService {
           canal,
           status: 'ENVIADO',
           departamentos: {
-            create: departamentos.map((departamentoId) => ({
+            create: departamentos?.map((departamentoId) => ({
               departamento: {
                 connect: {
                   id: departamentoId,
@@ -185,7 +185,7 @@ export class TestesService {
         ...(canal && { canal }),
         ...(departamentos && {
           departamentos: {
-            create: departamentos.map((departamentoId) => ({
+            create: departamentos?.map((departamentoId) => ({
               departamento: {
                 connect: {
                   id: departamentoId,

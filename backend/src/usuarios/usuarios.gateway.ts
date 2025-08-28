@@ -46,12 +46,6 @@ export class UsuariosGateway
     return usuario
   }
 
-  @SubscribeMessage('findUsuarioByKeycloakId')
-  async handleFindUsuarioByKeycloakId(client: Socket, keycloakId: string) {
-    const usuario = await this.usuariosService.findByKeycloakId(keycloakId)
-    return usuario
-  }
-
   @SubscribeMessage('createUsuario')
   async handleCreateUsuario(
     client: Socket,
@@ -60,7 +54,6 @@ export class UsuariosGateway
       sobrenome: string
       email: string
       cargo?: CargoUsuario
-      keycloakId?: string
     },
   ) {
     const usuario = await this.usuariosService.create(data)
@@ -83,19 +76,6 @@ export class UsuariosGateway
   ) {
     const usuario = await this.usuariosService.update(payload.id, payload.data)
     this.server.emit('usuarioUpdated', usuario)
-    return usuario
-  }
-
-  @SubscribeMessage('updateUsuarioKeycloakId')
-  async handleUpdateUsuarioKeycloakId(
-    client: Socket,
-    payload: { id: string; keycloakId: string },
-  ) {
-    const usuario = await this.usuariosService.updateKeycloakId(
-      payload.id,
-      payload.keycloakId,
-    )
-    this.server.emit('usuarioKeycloakIdUpdated', usuario)
     return usuario
   }
 

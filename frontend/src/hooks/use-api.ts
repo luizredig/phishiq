@@ -1,11 +1,9 @@
 import { useState, useCallback } from "react";
 import { api } from "../lib/axios";
 
-
 export function useApi() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // const { logout } = useAuth();
 
   const request = useCallback(
     async <T>(

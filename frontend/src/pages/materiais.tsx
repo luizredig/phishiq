@@ -175,7 +175,7 @@ export default function Materiais() {
 
       {/* Visualização em tela */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {materials.map((material) => (
+        {materials?.map((material) => (
           <Card key={material.id} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

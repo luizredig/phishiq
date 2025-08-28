@@ -101,7 +101,7 @@ export default function GerenciarTestes() {
     // Escuta o evento de atualização do teste
     socket.on("testeAtualizado", (testeAtualizado: Teste) => {
       setTestes((prevTestes) =>
-        prevTestes.map((teste) =>
+        prevTestes?.map((teste) =>
           teste.id === testeAtualizado.id ? testeAtualizado : teste
         )
       );
@@ -126,12 +126,12 @@ export default function GerenciarTestes() {
     }
   }
 
-  const filteredTestes = testes.filter((teste) => {
+  const filteredTestes = testes?.filter((teste) => {
     // Filtro de busca por departamento
     if (busca) {
       const termoBusca = busca.toLowerCase();
       if (
-        !teste.departamentos.some((d) =>
+        !teste.departamentos?.some((d) =>
           d.departamento.nome.toLowerCase().includes(termoBusca)
         )
       ) {
@@ -333,7 +333,7 @@ export default function GerenciarTestes() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedTestes.map((teste) => (
+                paginatedTestes?.map((teste) => (
                   <TableRow key={teste.id}>
                     <TableCell>
                       {teste.departamentos.length > 0 ? (
@@ -360,7 +360,7 @@ export default function GerenciarTestes() {
                             <div className="space-y-2">
                               <h4 className="font-medium">Departamentos</h4>
                               <div className="flex flex-wrap gap-1">
-                                {teste.departamentos.map((d) => (
+                                {teste.departamentos?.map((d) => (
                                   <Badge
                                     key={d.departamento.id}
                                     variant="secondary"
@@ -475,7 +475,7 @@ export default function GerenciarTestes() {
                 />
               </PaginationItem>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              {Array.from({ length: totalPages }, (_, i) => i + 1)?.map(
                 (page) => (
                   <PaginationItem key={page}>
                     <PaginationLink

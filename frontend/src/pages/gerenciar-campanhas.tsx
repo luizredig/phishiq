@@ -79,13 +79,13 @@ export default function GerenciarCampanhas() {
 
     socket.on("campanhaUpdated", (campanha: Campanha) => {
       setCampanhas((prev) =>
-        prev.map((c) => (c.id === campanha.id ? campanha : c))
+        prev?.map((c) => (c.id === campanha.id ? campanha : c))
       );
     });
 
     socket.on("campanhaStatusUpdated", (campanha: Campanha) => {
       setCampanhas((prev) =>
-        prev.map((c) => (c.id === campanha.id ? campanha : c))
+        prev?.map((c) => (c.id === campanha.id ? campanha : c))
       );
     });
 
@@ -112,7 +112,7 @@ export default function GerenciarCampanhas() {
     }
   }
 
-  const filteredCampanhas = campanhas.filter((campanha) => {
+  const filteredCampanhas = campanhas?.filter((campanha) => {
     // Filtro de busca por título
     if (busca) {
       const termoBusca = busca.toLowerCase();
@@ -172,7 +172,7 @@ export default function GerenciarCampanhas() {
 
       if (response) {
         setCampanhas((prev) =>
-          prev.map((campanha) =>
+          prev?.map((campanha) =>
             campanha.id === id ? { ...campanha, ativo } : campanha
           )
         );
@@ -280,7 +280,7 @@ export default function GerenciarCampanhas() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedCampanhas.map((campanha) => (
+                paginatedCampanhas?.map((campanha) => (
                   <TableRow key={campanha.id}>
                     <TableCell>{campanha.titulo}</TableCell>
                     <TableCell>{campanha.descricao}</TableCell>
@@ -329,7 +329,7 @@ export default function GerenciarCampanhas() {
                 />
               </PaginationItem>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              {Array.from({ length: totalPages }, (_, i) => i + 1)?.map(
                 (page) => (
                   <PaginationItem key={page}>
                     <PaginationLink

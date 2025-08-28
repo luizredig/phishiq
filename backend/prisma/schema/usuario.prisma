@@ -4,7 +4,6 @@ model Usuario {
   sobrenome  String?
   email      String       @unique
   cargo      CargoUsuario @default(FUNCIONARIO)
-  keycloakId String       @unique
 
   departamentos UsuarioDepartamento[]
   testes        Teste[]

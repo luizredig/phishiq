@@ -96,7 +96,7 @@ export function UsuarioDialog({
           cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados(
-          usuarioParaEditar.departamentos.map((d) => d.departamento.id)
+          usuarioParaEditar.departamentos?.map((d) => d.departamento.id)
         );
       } else {
         form.reset({
@@ -131,26 +131,26 @@ export function UsuarioDialog({
         const response = await put(`/usuarios/${usuarioParaEditar.id}`, data);
         if (response) {
           // Atualiza departamentos do usuário
-          const departamentosAtuais = usuarioParaEditar.departamentos.map(
+          const departamentosAtuais = usuarioParaEditar.departamentos?.map(
             (d) => d.departamento.id
           );
-          const departamentosParaAdicionar = departamentosSelecionados.filter(
+          const departamentosParaAdicionar = departamentosSelecionados?.filter(
             (id) => !departamentosAtuais.includes(id)
           );
-          const departamentosParaRemover = departamentosAtuais.filter(
+          const departamentosParaRemover = departamentosAtuais?.filter(
             (id) => !departamentosSelecionados.includes(id)
           );
 
           await Promise.all([
             // Adiciona novos departamentos
-            ...departamentosParaAdicionar.map((departamentoId) =>
+            ...departamentosParaAdicionar?.map((departamentoId) =>
               post(
                 `/departamentos/${departamentoId}/usuarios/${usuarioParaEditar.id}`,
                 {}
               )
             ),
             // Remove departamentos
-            ...departamentosParaRemover.map((departamentoId) =>
+            ...departamentosParaRemover?.map((departamentoId) =>
               deleteRequest(
                 `/departamentos/${departamentoId}/usuarios/${usuarioParaEditar.id}`
               )
@@ -164,7 +164,7 @@ export function UsuarioDialog({
         const response = await post<{ id: string }>("/usuarios", data);
         if (response && departamentosSelecionados.length > 0) {
           await Promise.all(
-            departamentosSelecionados.map((departamentoId) =>
+            departamentosSelecionados?.map((departamentoId) =>
               post(
                 `/departamentos/${departamentoId}/usuarios/${response.id}`,
                 {}
@@ -181,7 +181,7 @@ export function UsuarioDialog({
     }
   }
 
-  const departamentosFiltrados = departamentos.filter((departamento) => {
+  const departamentosFiltrados = departamentos?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
     return departamento.nome.toLowerCase().includes(termoBusca);
@@ -190,7 +190,7 @@ export function UsuarioDialog({
   function toggleDepartamento(departamentoId: string) {
     setDepartamentosSelecionados((prev) =>
       prev.includes(departamentoId)
-        ? prev.filter((id) => id !== departamentoId)
+        ? prev?.filter((id) => id !== departamentoId)
         : [...prev, departamentoId]
     );
   }
@@ -309,7 +309,7 @@ export function UsuarioDialog({
                     Nenhum departamento encontrado.
                   </p>
                 ) : (
-                  departamentosFiltrados.map((departamento) => {
+                  departamentosFiltrados?.map((departamento) => {
                     const isSelecionado = departamentosSelecionados.includes(
                       departamento.id
                     );

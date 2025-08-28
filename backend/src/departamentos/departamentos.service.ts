@@ -193,7 +193,7 @@ export class DepartamentosService {
       )
     }
 
-    return departamento.usuarios.map((ud) => ud.usuario)
+    return departamento.usuarios?.map((ud) => ud.usuario)
   }
 
   async addUsuario(

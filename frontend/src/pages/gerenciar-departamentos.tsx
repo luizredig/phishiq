@@ -88,7 +88,7 @@ export default function GerenciarDepartamentos() {
 
       if (response) {
         setDepartamentos((prev) =>
-          prev.map((departamento) =>
+          prev?.map((departamento) =>
             departamento.id === id ? { ...departamento, ativo } : departamento
           )
         );
@@ -113,7 +113,7 @@ export default function GerenciarDepartamentos() {
 
       if (response) {
         setDepartamentos((prev) =>
-          prev.filter(
+          prev?.filter(
             (departamento) => departamento.id !== departamentoParaExcluir
           )
         );
@@ -125,12 +125,12 @@ export default function GerenciarDepartamentos() {
     }
   }
 
-  const filteredDepartamentos = departamentos.filter((departamento) => {
+  const filteredDepartamentos = departamentos?.filter((departamento) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
-      departamento.nome.toLowerCase().includes(termoBusca) ||
-      departamento.usuarios.some(
+      departamento?.nome.toLowerCase().includes(termoBusca) ||
+      departamento?.usuarios?.some(
         (u) =>
           u.usuario.nome.toLowerCase().includes(termoBusca) ||
           u.usuario.email.toLowerCase().includes(termoBusca)
@@ -230,7 +230,7 @@ export default function GerenciarDepartamentos() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedDepartamentos.map((departamento) => (
+                paginatedDepartamentos?.map((departamento) => (
                   <TableRow key={departamento.id}>
                     <TableCell className="font-medium">
                       {departamento.nome}
@@ -299,7 +299,7 @@ export default function GerenciarDepartamentos() {
                 />
               </PaginationItem>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              {Array.from({ length: totalPages }, (_, i) => i + 1)?.map(
                 (page) => (
                   <PaginationItem key={page}>
                     <PaginationLink

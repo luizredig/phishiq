@@ -31,11 +31,6 @@ export class UsuariosController {
     return this.usuariosService.findByEmail(email)
   }
 
-  @Get('keycloak/:keycloakId')
-  findByKeycloakId(@Param('keycloakId') keycloakId: string) {
-    return this.usuariosService.findByKeycloakId(keycloakId)
-  }
-
   @Post()
   create(
     @Body()
@@ -44,7 +39,6 @@ export class UsuariosController {
       sobrenome: string
       email: string
       cargo?: CargoUsuario
-      keycloakId?: string
     },
   ) {
     return this.usuariosService.create(createUsuarioDto)
@@ -76,14 +70,6 @@ export class UsuariosController {
     },
   ) {
     return this.usuariosService.update(id, updateUsuarioDto)
-  }
-
-  @Patch(':id/keycloak')
-  updateKeycloakId(
-    @Param('id') id: string,
-    @Body('keycloakId') keycloakId: string,
-  ) {
-    return this.usuariosService.updateKeycloakId(id, keycloakId)
   }
 
   @Delete(':id')

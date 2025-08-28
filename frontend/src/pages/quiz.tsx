@@ -323,7 +323,7 @@ export default function Quiz() {
             onValueChange={(value) => handleAnswer(parseInt(value))}
             className="space-y-4"
           >
-            {questions[currentQuestion].options.map((option, index) => (
+            {questions[currentQuestion].options?.map((option, index) => (
               <div
                 key={index}
                 className={`flex items-center p-4 rounded-lg border-2 transition-colors cursor-pointer ${

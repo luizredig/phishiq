@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  ChartNoAxesCombined, Grid2x2Plus,
+  ChartNoAxesCombined,
+  Grid2x2Plus,
   HomeIcon,
   Mail,
   Plus,
   TestTubeDiagonal,
-  UsersIcon
+  UsersIcon,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
@@ -24,26 +25,10 @@ import {
 } from "../../components/ui/sidebar";
 
 import { Button } from "../ui/button";
-import { useAuth } from "../../hooks/use-auth";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const pathname = location.pathname;
-  const { isAdmin } = useAuth();
-  const [isUserAdmin, setIsUserAdmin] = useState(false);
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const admin = await isAdmin();
-        setIsUserAdmin(admin);
-      } catch (error) {
-        setIsUserAdmin(false);
-      }
-    };
-
-    checkAdmin();
-  }, [isAdmin]);
 
   const data = {
     navMain: [
@@ -63,26 +48,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Dashboard",
             url: "/dashboard",
             icon: <ChartNoAxesCombined className={"text-primary"} />,
-            show: isUserAdmin,
+            show: true,
           },
           {
             title: "Testes",
             url: "/gerenciar-testes",
             icon: <TestTubeDiagonal className={"text-primary"} />,
-            show: isUserAdmin,
+            show: true,
           },
           {
             title: "Templates",
             url: "/templates",
             icon: <Mail className={"text-primary"} />,
-            show: isUserAdmin,
+            show: true,
           },
-          // {
-          //   title: "Campanhas",
-          //   url: "/gerenciar-campanhas",
-          //   icon: <Megaphone className={"text-primary"} />,
-          //   show: isUserAdmin,
-          // },
         ],
       },
       {
@@ -91,13 +70,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             title: "Usuários",
             url: "/gerenciar-usuarios",
             icon: <UsersIcon className={"text-primary"} />,
-            show: isUserAdmin,
+            show: true,
           },
           {
             title: "Departamentos",
             url: "/gerenciar-departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
-            show: isUserAdmin,
+            show: true,
           },
         ],
       },
@@ -118,7 +97,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link to="/dashboard">
+        <Link to="/home">
           <h1 className="text-primary pl-2 text-xl font-bold select-none">
             PhishIQ
           </h1>
@@ -126,7 +105,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {isUserAdmin && (
+        {true && (
           <div className="w-full p-2">
             <Link to="/gerenciar-testes?new=true">
               <Button className="w-full">
@@ -136,13 +115,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </div>
         )}
 
-        {data.navMain.map((group, index) => (
+        {data.navMain?.map((group, index) => (
           <SidebarGroup key={index}>
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items
-                  .filter((item) => item.show)
-                  .map((item) => (
+                  ?.filter((item) => item.show)
+                  ?.map((item) => (
                     <Link to={item.url} key={item.title}>
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild>

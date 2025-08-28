@@ -105,7 +105,7 @@ export function DepartamentoDialog({
           nome: departamentoParaEditar.nome,
         });
         setUsuariosSelecionados(
-          departamentoParaEditar.usuarios.map((u) => u.usuario.id)
+          departamentoParaEditar.usuarios?.map((u) => u.usuario.id)
         );
       } else {
         form.reset({
@@ -135,26 +135,26 @@ export function DepartamentoDialog({
         });
 
         // Atualiza usuários do departamento
-        const usuariosAtuais = departamentoParaEditar.usuarios.map(
+        const usuariosAtuais = departamentoParaEditar.usuarios?.map(
           (u) => u.usuario.id
         );
-        const usuariosParaAdicionar = usuariosSelecionados.filter(
+        const usuariosParaAdicionar = usuariosSelecionados?.filter(
           (id) => !usuariosAtuais.includes(id)
         );
-        const usuariosParaRemover = usuariosAtuais.filter(
+        const usuariosParaRemover = usuariosAtuais?.filter(
           (id) => !usuariosSelecionados.includes(id)
         );
 
         await Promise.all([
           // Adiciona novos usuários
-          ...usuariosParaAdicionar.map((usuarioId) =>
+          ...usuariosParaAdicionar?.map((usuarioId) =>
             post(
               `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`,
               {}
             )
           ),
           // Remove usuários (exclui o registro da tabela de relacionamento)
-          ...usuariosParaRemover.map((usuarioId) =>
+          ...usuariosParaRemover?.map((usuarioId) =>
             deleteRequest(
               `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`
             )
@@ -167,7 +167,7 @@ export function DepartamentoDialog({
 
         if (response && usuariosSelecionados.length > 0) {
           await Promise.all(
-            usuariosSelecionados.map((usuarioId) =>
+            usuariosSelecionados?.map((usuarioId) =>
               post(`/departamentos/${response.id}/usuarios/${usuarioId}`, {})
             )
           );
@@ -179,7 +179,7 @@ export function DepartamentoDialog({
     }
   }
 
-  const usuariosFiltrados = usuarios.filter((usuario) => {
+  const usuariosFiltrados = usuarios?.filter((usuario) => {
     if (!buscaUsuario) return true;
     const termoBusca = buscaUsuario.toLowerCase();
     return (
@@ -191,7 +191,7 @@ export function DepartamentoDialog({
   function toggleUsuario(usuarioId: string) {
     setUsuariosSelecionados((prev) =>
       prev.includes(usuarioId)
-        ? prev.filter((id) => id !== usuarioId)
+        ? prev?.filter((id) => id !== usuarioId)
         : [...prev, usuarioId]
     );
   }
@@ -255,7 +255,7 @@ export function DepartamentoDialog({
                     Nenhum usuário encontrado.
                   </p>
                 ) : (
-                  usuariosFiltrados.map((usuario) => {
+                  usuariosFiltrados?.map((usuario) => {
                     const isSelecionado = usuariosSelecionados.includes(
                       usuario.id
                     );

@@ -41,7 +41,6 @@ interface Usuario {
   sobrenome: string | null;
   email: string;
   cargo: "ADMIN" | "FUNCIONARIO";
-  keycloakId: string;
   ativo: boolean;
   criadoEm: string;
   departamentos: {
@@ -93,7 +92,7 @@ export default function GerenciarUsuarios() {
 
       if (response) {
         setUsuarios((prev) =>
-          prev.map((usuario) =>
+          prev?.map((usuario) =>
             usuario.id === id ? { ...usuario, ativo } : usuario
           )
         );
@@ -108,7 +107,7 @@ export default function GerenciarUsuarios() {
     setIsNovoUsuarioOpen(true);
   }
 
-  const filteredUsuarios = usuarios.filter((usuario) => {
+  const filteredUsuarios = usuarios?.filter((usuario) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
@@ -116,7 +115,7 @@ export default function GerenciarUsuarios() {
       usuario.email.toLowerCase().includes(termoBusca) ||
       (usuario.sobrenome &&
         usuario.sobrenome.toLowerCase().includes(termoBusca)) ||
-      usuario.departamentos.some((d) =>
+      usuario.departamentos?.some((d) =>
         d.departamento.nome.toLowerCase().includes(termoBusca)
       )
     );
@@ -217,7 +216,7 @@ export default function GerenciarUsuarios() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedUsuarios.map((usuario) => (
+                paginatedUsuarios?.map((usuario) => (
                   <TableRow key={usuario.id}>
                     <TableCell className="font-medium">
                       {usuario.nome} {usuario.sobrenome}
@@ -294,7 +293,7 @@ export default function GerenciarUsuarios() {
                 />
               </PaginationItem>
 
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              {Array.from({ length: totalPages }, (_, i) => i + 1)?.map(
                 (page) => (
                   <PaginationItem key={page}>
                     <PaginationLink

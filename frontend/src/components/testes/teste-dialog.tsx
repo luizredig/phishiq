@@ -6,7 +6,8 @@ import { z } from "zod";
 
 import { Info, Search, User, X } from "lucide-react";
 import { useApi } from "../../hooks/use-api";
-import { useAuth } from "../../hooks/use-auth";
+import { Alert, AlertDescription } from "../ui/alert";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -33,8 +34,6 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { Alert, AlertDescription } from "../ui/alert";
-import { Badge } from "../ui/badge";
 
 interface TesteDialogProps {
   open: boolean;
@@ -80,7 +79,7 @@ export function TesteDialog({
   testeParaEditar,
 }: TesteDialogProps) {
   const { post, put, get, loading } = useApi();
-  const { userInfo } = useAuth();
+
   const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [selectedDepartamentos, setSelectedDepartamentos] = useState<
@@ -127,13 +126,13 @@ export function TesteDialog({
     if (testeParaEditar) {
       form.reset({
         canal: testeParaEditar.canal,
-        departamentos: testeParaEditar.departamentos.map(
+        departamentos: testeParaEditar.departamentos?.map(
           (d) => d.departamento.id
         ),
         usuarioId: undefined,
       });
       setSelectedDepartamentos(
-        testeParaEditar.departamentos.map((d) => d.departamento)
+        testeParaEditar.departamentos?.map((d) => d.departamento)
       );
       setActiveTab("departamentos");
     } else {
@@ -181,12 +180,12 @@ export function TesteDialog({
   }
 
   function handleDepartamentoSelect(departamento: Departamento) {
-    const isSelected = selectedDepartamentos.some(
+    const isSelected = selectedDepartamentos?.some(
       (d) => d.id === departamento.id
     );
     if (isSelected) {
       setSelectedDepartamentos((prev) =>
-        prev.filter((d) => d.id !== departamento.id)
+        prev?.filter((d) => d.id !== departamento.id)
       );
       form.setValue(
         "departamentos",
@@ -201,7 +200,7 @@ export function TesteDialog({
     }
   }
 
-  const usuariosFiltrados = usuarios.filter((usuario) => {
+  const usuariosFiltrados = usuarios?.filter((usuario) => {
     if (!buscaUsuario) return true;
     const termoBusca = buscaUsuario.toLowerCase();
     return (
@@ -210,7 +209,7 @@ export function TesteDialog({
     );
   });
 
-  const departamentosFiltrados = departamentos.filter((departamento) => {
+  const departamentosFiltrados = departamentos?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
     return departamento.nome.toLowerCase().includes(termoBusca);
@@ -223,7 +222,7 @@ export function TesteDialog({
     try {
       const payload = {
         canal: data.canal,
-        nomeEmpresa: userInfo?.name || "Empresa",
+        nomeEmpresa: "Empresa",
         ...(activeTab === "departamentos"
           ? { departamentos: data.departamentos }
           : { usuarioId: data.usuarioId }),
@@ -363,9 +362,9 @@ export function TesteDialog({
                                   Nenhum departamento encontrado.
                                 </p>
                               ) : (
-                                departamentosFiltrados.map((departamento) => {
+                                departamentosFiltrados?.map((departamento) => {
                                   const isSelecionado =
-                                    selectedDepartamentos.some(
+                                    selectedDepartamentos?.some(
                                       (d) => d.id === departamento.id
                                     );
                                   return (
@@ -457,7 +456,7 @@ export function TesteDialog({
                                 Nenhum usuário encontrado.
                               </p>
                             ) : (
-                              usuariosFiltrados.map((usuario) => (
+                              usuariosFiltrados?.map((usuario) => (
                                 <div
                                   key={usuario.id}
                                   className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${

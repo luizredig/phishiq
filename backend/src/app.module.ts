@@ -6,7 +6,6 @@ import { AppService } from './app.service'
 
 import { ConfigModule } from '@nestjs/config'
 import { DepartamentosModule } from './departamentos/departamentos.module'
-import { KeycloakModule } from './keycloak/keycloak.module'
 import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { PrismaModule } from './prisma/prisma.module'
 import { TestesModule } from './testes/testes.module'
@@ -18,7 +17,6 @@ import { DashboardModule } from './dashboard/dashboard.module'
   imports: [
     ConfigModule.forRoot(),
     DepartamentosModule,
-    KeycloakModule,
     NodemailerModule,
     PrismaModule,
     TestesModule,
