@@ -9,7 +9,7 @@ import {
   Query,
   Patch,
 } from '@nestjs/common'
-import { StatusTeste } from '@prisma/client'
+import { StatusTeste } from '../../prisma/generated/schema'
 import { TestesService } from './testes.service'
 
 interface CreateTesteDto {

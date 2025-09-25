@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { Departamento, Usuario } from '@prisma/client'
+import { Departamento, Usuario } from '../../prisma/generated/schema'
 
 @Injectable()
 export class DepartamentosService {

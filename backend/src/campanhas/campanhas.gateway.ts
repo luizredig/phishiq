@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { CampanhasService } from './campanhas.service'
-import { StatusCampanha } from '@prisma/client'
+import { StatusCampanha } from '../../prisma/generated/schema'
 
 @WebSocketGateway({
   cors: {

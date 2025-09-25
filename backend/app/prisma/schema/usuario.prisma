@@ -1,0 +1,23 @@
+model Usuario {
+  id         String       @id @default(uuid())
+  nome       String
+  sobrenome  String?
+  email      String       @unique
+  cargo      CargoUsuario @default(FUNCIONARIO)
+
+  departamentos UsuarioDepartamento[]
+  testes        Teste[]
+
+  ativo         Boolean   @default(true)
+  criadoEm      DateTime  @default(now())
+  criadoPor     String?
+  atualizadoEm  DateTime  @updatedAt
+  atualizadoPor String?
+  inativadoEm   DateTime?
+  inativadoPor  String?
+}
+
+enum CargoUsuario {
+  ADMIN
+  FUNCIONARIO
+}

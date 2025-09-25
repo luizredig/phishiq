@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { Teste, CanalTeste, StatusTeste } from '@prisma/client'
+import { Teste, CanalTeste, StatusTeste } from '../../prisma/generated/schema'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 
 @Injectable()

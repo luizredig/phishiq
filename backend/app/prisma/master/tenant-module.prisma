@@ -1,0 +1,15 @@
+model TenantModule {
+  id             String    @id @default(uuid())
+  tenant_id      String
+  module_id      String
+  is_active      Boolean   @default(true)
+  created_by     String
+  created_at     DateTime  @default(now())
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  tenant Tenant @relation(fields: [tenant_id], references: [id])
+  module Module @relation(fields: [module_id], references: [id])
+}

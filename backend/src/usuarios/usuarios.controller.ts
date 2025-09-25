@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common'
 import { UsuariosService } from './usuarios.service'
-import { CargoUsuario } from '@prisma/client'
+import { CargoUsuario } from '../../prisma/generated/schema'
 
 @Controller('usuarios')
 export class UsuariosController {

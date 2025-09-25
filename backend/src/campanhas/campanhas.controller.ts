@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common'
 import { CampanhasService } from './campanhas.service'
-import { StatusCampanha } from '@prisma/client'
+import { StatusCampanha } from '../../prisma/generated/schema'
 
 @Controller('campanhas')
 export class CampanhasController {

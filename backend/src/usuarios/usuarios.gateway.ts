@@ -9,7 +9,7 @@ import {
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
 import { UsuariosService } from './usuarios.service'
-import { CargoUsuario } from '@prisma/client'
+import { CargoUsuario } from '../../prisma/generated/schema'
 
 @WebSocketGateway({
   cors: {

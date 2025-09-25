@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { Usuario, CargoUsuario, Departamento } from '@prisma/client'
+import { Usuario, CargoUsuario, Departamento } from '../../prisma/generated/schema'
 
 @Injectable()
 export class UsuariosService {
