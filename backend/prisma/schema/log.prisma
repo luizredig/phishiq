@@ -1,20 +1,9 @@
 model Log {
-  id        String  @id @default(uuid())
-  tipo      TipoLog
-  descricao String?
+  id        String @id @default(uuid())
+  entity    Entity
+  entity_id String
+  action    Action
 
-  campanha       Campanha?     @relation(fields: [campanhaId], references: [id])
-  campanhaId     String?
-  departamento   Departamento? @relation(fields: [departamentoId], references: [id])
-  departamentoId String?
-  teste          Teste?        @relation(fields: [testeId], references: [id])
-  testeId        String?
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
+  created_at DateTime @default(now())
+  created_by String
 }

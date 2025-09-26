@@ -132,8 +132,8 @@ export default function GerenciarDepartamentos() {
       departamento?.nome.toLowerCase().includes(termoBusca) ||
       departamento?.usuarios?.some(
         (u) =>
-          u.usuario.nome.toLowerCase().includes(termoBusca) ||
-          u.usuario.email.toLowerCase().includes(termoBusca)
+          u.user.nome.toLowerCase().includes(termoBusca) ||
+          u.user.email.toLowerCase().includes(termoBusca)
       )
     );
   });

@@ -10,5 +10,5 @@ model Module {
   inactivated_at DateTime?
   inactivated_by String?
 
-  tenantAppModules TenantModule[]
+  tenant_modules TenantModule[]
 }

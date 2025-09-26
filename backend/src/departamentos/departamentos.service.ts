@@ -13,7 +13,7 @@ export class DepartamentosService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(includeInactive = false): Promise<Departamento[]> {
-    return this.prisma.departamento.findMany({
+    return this.prisma.department.findMany({
       where: {
         ativo: includeInactive ? false : true,
       },
@@ -31,7 +31,7 @@ export class DepartamentosService {
   }
 
   async findActiveWithUsers(): Promise<Departamento[]> {
-    return this.prisma.departamento.findMany({
+    return this.prisma.department.findMany({
       where: {
         ativo: true,
         usuarios: {
@@ -63,7 +63,7 @@ export class DepartamentosService {
   }
 
   async findOne(id: string): Promise<Departamento | null> {
-    const departamento = await this.prisma.departamento.findUnique({
+    const departamento = await this.prisma.department.findUnique({
       where: { id },
       include: {
         usuarios: {
@@ -82,7 +82,7 @@ export class DepartamentosService {
   }
 
   async create(data: { nome: string }): Promise<Departamento> {
-    return this.prisma.departamento.create({
+    return this.prisma.department.create({
       data,
       include: {
         usuarios: {
@@ -97,7 +97,7 @@ export class DepartamentosService {
   async update(id: string, data: { nome?: string }): Promise<Departamento> {
     try {
       // Primeiro verifica se o departamento existe
-      const exists = await this.prisma.departamento.findUnique({
+      const exists = await this.prisma.department.findUnique({
         where: { id },
       })
 
@@ -106,7 +106,7 @@ export class DepartamentosService {
       }
 
       // Se existe, atualiza
-      return await this.prisma.departamento.update({
+      return await this.prisma.department.update({
         where: { id },
         data,
         include: {
@@ -124,7 +124,7 @@ export class DepartamentosService {
   }
 
   async updateStatus(id: string, ativo: boolean): Promise<Departamento> {
-    const exists = await this.prisma.departamento.findUnique({
+    const exists = await this.prisma.department.findUnique({
       where: { id },
     })
 
@@ -132,7 +132,7 @@ export class DepartamentosService {
       throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
     }
 
-    return this.prisma.departamento.update({
+    return this.prisma.department.update({
       where: { id },
       data: {
         ativo,
@@ -150,7 +150,7 @@ export class DepartamentosService {
   }
 
   async remove(id: string): Promise<Departamento> {
-    const exists = await this.prisma.departamento.findUnique({
+    const exists = await this.prisma.department.findUnique({
       where: { id },
     })
 
@@ -158,7 +158,7 @@ export class DepartamentosService {
       throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
     }
 
-    return this.prisma.departamento.update({
+    return this.prisma.department.update({
       where: { id },
       data: {
         ativo: false,
@@ -175,7 +175,7 @@ export class DepartamentosService {
   }
 
   async getUsuarios(departamentoId: string): Promise<Usuario[]> {
-    const departamento = await this.prisma.departamento.findUnique({
+    const departamento = await this.prisma.department.findUnique({
       where: { id: departamentoId },
       include: {
         usuarios: {

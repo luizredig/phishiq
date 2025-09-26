@@ -10,7 +10,7 @@ model Module {
   inactivated_at DateTime?
   inactivated_by String?
 
-  tenantAppModules TenantModule[]
+  tenant_modules TenantModule[]
 }
 
 generator client {
@@ -52,5 +52,5 @@ model Tenant {
   inactivated_at DateTime?
   inactivated_by String?
 
-  tenantModules TenantModule[]
+  tenant_modules TenantModule[]
 }

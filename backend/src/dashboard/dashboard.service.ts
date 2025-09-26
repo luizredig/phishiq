@@ -45,7 +45,7 @@ export class DashboardService {
       }),
 
       // Testes por departamento
-      this.prisma.departamento.findMany({
+      this.prisma.department.findMany({
         where: { ativo: true },
         select: {
           nome: true,
@@ -68,7 +68,7 @@ export class DashboardService {
       }),
 
       // Usuários com mais falhas
-      this.prisma.usuario.findMany({
+      this.prisma.user.findMany({
         where: { ativo: true, cargo: 'FUNCIONARIO' },
         select: {
           id: true,
@@ -99,7 +99,7 @@ export class DashboardService {
       }),
 
       // Departamentos com mais falhas
-      this.prisma.departamento.findMany({
+      this.prisma.department.findMany({
         where: {
           ativo: true,
           usuarios: {
@@ -158,7 +158,7 @@ export class DashboardService {
     const usuariosProcessados = usuariosMaisFalhas
       ?.map((usuario) => {
         const falhas = usuario.departamentos.reduce((acc, dept) => {
-          return acc + dept.departamento.testes.length
+          return acc + dept.department.testes.length
         }, 0)
 
         return {

@@ -1,0 +1,17 @@
+model PhishingDepartment {
+  id            String     @id @default(uuid())
+  phishing_id   String
+  phishing      Phishing   @relation(fields: [phishing_id], references: [id])
+  department_id String
+  department    Department @relation(fields: [department_id], references: [id])
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  @@unique([phishing_id, department_id])
+}

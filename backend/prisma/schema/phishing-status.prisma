@@ -1,0 +1,5 @@
+enum PhishingStatus {
+  SENT
+  CLICKED
+  SEND_FAILED
+}

@@ -4,14 +4,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { Usuario, CargoUsuario, Departamento } from '../../prisma/generated/schema'
+import {
+  Usuario,
+  CargoUsuario,
+  Departamento,
+} from '../../prisma/generated/schema'
 
 @Injectable()
 export class UsuariosService {
   constructor(private prisma: PrismaService) {}
 
   async findAll(includeInactive = false): Promise<Usuario[]> {
-    return this.prisma.usuario.findMany({
+    return this.prisma.user.findMany({
       where: {
         NOT: { cargo: 'ADMIN' },
         ativo: includeInactive ? false : true,
@@ -28,7 +32,7 @@ export class UsuariosService {
   }
 
   async findOne(id: string): Promise<Usuario | null> {
-    return this.prisma.usuario.findUnique({
+    return this.prisma.user.findUnique({
       where: { id },
       include: {
         departamentos: {
@@ -42,7 +46,7 @@ export class UsuariosService {
   }
 
   async findByEmail(email: string): Promise<Usuario | null> {
-    return this.prisma.usuario.findUnique({
+    return this.prisma.user.findUnique({
       where: { email },
       include: {
         departamentos: {
@@ -61,7 +65,7 @@ export class UsuariosService {
     email: string
     cargo?: CargoUsuario
   }): Promise<Usuario> {
-    return this.prisma.usuario.create({
+    return this.prisma.user.create({
       data: {
         ...data,
         ativo: true,
@@ -78,7 +82,7 @@ export class UsuariosService {
       cargo?: CargoUsuario
     },
   ): Promise<Usuario> {
-    const usuario = await this.prisma.usuario.findUnique({
+    const usuario = await this.prisma.user.findUnique({
       where: { id },
     })
 
@@ -86,7 +90,7 @@ export class UsuariosService {
       throw new Error('Usuário não encontrado')
     }
 
-    return this.prisma.usuario.update({
+    return this.prisma.user.update({
       where: { id },
       data,
       include: {
@@ -101,7 +105,7 @@ export class UsuariosService {
   }
 
   async remove(id: string): Promise<Usuario> {
-    return this.prisma.usuario.update({
+    return this.prisma.user.update({
       where: { id },
       data: {
         ativo: false,
@@ -151,7 +155,7 @@ export class UsuariosService {
   }
 
   async getDepartamentos(usuarioId: string): Promise<Departamento[]> {
-    const usuario = await this.prisma.usuario.findUnique({
+    const usuario = await this.prisma.user.findUnique({
       where: { id: usuarioId },
       include: {
         departamentos: {
@@ -167,7 +171,7 @@ export class UsuariosService {
   }
 
   async updateStatus(id: string, ativo: boolean): Promise<Usuario> {
-    return this.prisma.usuario.update({
+    return this.prisma.user.update({
       where: { id },
       data: {
         ativo,

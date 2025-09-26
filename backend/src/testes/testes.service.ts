@@ -91,14 +91,14 @@ export class TestesService {
 
       // Envio por departamento
       // for (const departamento of teste.departamentos) {
-      //   for (const usuarioDepartamento of departamento.departamento.usuarios) {
+      //   for (const usuarioDepartamento of departamento.department.usuarios) {
       //     if (usuarioDepartamento.usuario) {
       //       await this.nodemailerService.sendPhishingEmail(
-      //         usuarioDepartamento.usuario.email,
+      //         usuarioDepartamento.user.email,
       //         {
       //           nomeEmpresa: nomeEmpresa,
       //           urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-      //           nomeUsuario: `${usuarioDepartamento.usuario.nome} ${usuarioDepartamento.usuario.sobrenome || ''}`,
+      //           nomeUsuario: `${usuarioDepartamento.user.nome} ${usuarioDepartamento.user.sobrenome || ''}`,
       //           linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
       //         },
       //       )
@@ -111,7 +111,7 @@ export class TestesService {
 
     // Se tiver usuário, cria o teste com o usuário
     if (usuarioId) {
-      const usuario = await this.prisma.usuario.findUnique({
+      const usuario = await this.prisma.user.findUnique({
         where: { id: usuarioId },
         include: {
           departamentos: {

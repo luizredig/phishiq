@@ -132,7 +132,7 @@ export default function GerenciarTestes() {
       const termoBusca = busca.toLowerCase();
       if (
         !teste.departamentos?.some((d) =>
-          d.departamento.nome.toLowerCase().includes(termoBusca)
+          d.department.nome.toLowerCase().includes(termoBusca)
         )
       ) {
         return false;
@@ -344,7 +344,7 @@ export default function GerenciarTestes() {
                                 variant="secondary"
                                 className="hover:none bg-gray-200 text-gray-700 hover:bg-gray-200"
                               >
-                                {teste.departamentos[0].departamento.nome}
+                                {teste.departamentos[0].department.nome}
                               </Badge>
                               {teste.departamentos.length > 1 && (
                                 <Badge
@@ -362,11 +362,11 @@ export default function GerenciarTestes() {
                               <div className="flex flex-wrap gap-1">
                                 {teste.departamentos?.map((d) => (
                                   <Badge
-                                    key={d.departamento.id}
+                                    key={d.department.id}
                                     variant="secondary"
                                     className="hover:bg-gray-100 bg-gray-100 text-gray-700"
                                   >
-                                    {d.departamento.nome}
+                                    {d.department.nome}
                                   </Badge>
                                 ))}
                               </div>
@@ -381,7 +381,7 @@ export default function GerenciarTestes() {
                               className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-100"
                             >
                               {teste.usuario
-                                ? `${teste.usuario.nome} ${teste.usuario.sobrenome}`
+                                ? `${teste.user.nome} ${teste.user.sobrenome}`
                                 : "Usuário não encontrado"}
                             </Badge>
                           </HoverCardTrigger>
@@ -392,12 +392,11 @@ export default function GerenciarTestes() {
                                 <div className="space-y-1">
                                   <p className="text-sm">
                                     <span className="font-medium">Nome:</span>{" "}
-                                    {teste.usuario.nome}{" "}
-                                    {teste.usuario.sobrenome}
+                                    {teste.user.nome} {teste.user.sobrenome}
                                   </p>
                                   <p className="text-sm">
                                     <span className="font-medium">Email:</span>{" "}
-                                    {teste.usuario.email}
+                                    {teste.user.email}
                                   </p>
                                 </div>
                               ) : (

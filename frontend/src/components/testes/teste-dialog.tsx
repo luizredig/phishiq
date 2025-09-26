@@ -127,7 +127,7 @@ export function TesteDialog({
       form.reset({
         canal: testeParaEditar.canal,
         departamentos: testeParaEditar.departamentos?.map(
-          (d) => d.departamento.id
+          (d) => d.department.id
         ),
         usuarioId: undefined,
       });

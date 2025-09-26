@@ -1,0 +1,9 @@
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  OPEN
+  SEND
+  ERROR
+}

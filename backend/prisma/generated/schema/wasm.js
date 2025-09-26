@@ -117,116 +117,96 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.CampanhaTesteScalarFieldEnum = {
+exports.Prisma.DepartmentScalarFieldEnum = {
   id: 'id',
-  campanhaId: 'campanhaId',
-  testeId: 'testeId',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  name: 'name',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
-exports.Prisma.CampanhaScalarFieldEnum = {
+exports.Prisma.EmailScalarFieldEnum = {
   id: 'id',
-  titulo: 'titulo',
-  descricao: 'descricao',
-  status: 'status',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
-};
-
-exports.Prisma.DepartamentoScalarFieldEnum = {
-  id: 'id',
-  nome: 'nome',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  address: 'address',
+  user_id: 'user_id',
+  type: 'type',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
 exports.Prisma.LogScalarFieldEnum = {
   id: 'id',
-  tipo: 'tipo',
-  descricao: 'descricao',
-  campanhaId: 'campanhaId',
-  departamentoId: 'departamentoId',
-  testeId: 'testeId',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  entity: 'entity',
+  entity_id: 'entity_id',
+  action: 'action',
+  created_at: 'created_at',
+  created_by: 'created_by'
 };
 
-exports.Prisma.TesteDepartamentoScalarFieldEnum = {
+exports.Prisma.PhishingDepartmentScalarFieldEnum = {
   id: 'id',
-  testeId: 'testeId',
-  departamentoId: 'departamentoId',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  phishing_id: 'phishing_id',
+  department_id: 'department_id',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
-exports.Prisma.TesteScalarFieldEnum = {
+exports.Prisma.PhishingScalarFieldEnum = {
   id: 'id',
-  canal: 'canal',
+  clicked: 'clicked',
+  reported: 'reported',
+  channel: 'channel',
   status: 'status',
-  caiuNoTeste: 'caiuNoTeste',
-  reportouPhishing: 'reportouPhishing',
-  usuarioId: 'usuarioId',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  userId: 'userId',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
-exports.Prisma.UsuarioDepartamentoScalarFieldEnum = {
+exports.Prisma.UserDepartmentScalarFieldEnum = {
   id: 'id',
-  usuarioId: 'usuarioId',
-  departamentoId: 'departamentoId',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  user_id: 'user_id',
+  department_id: 'department_id',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
-exports.Prisma.UsuarioScalarFieldEnum = {
+exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  nome: 'nome',
-  sobrenome: 'sobrenome',
-  email: 'email',
-  cargo: 'cargo',
-  ativo: 'ativo',
-  criadoEm: 'criadoEm',
-  criadoPor: 'criadoPor',
-  atualizadoEm: 'atualizadoEm',
-  atualizadoPor: 'atualizadoPor',
-  inativadoEm: 'inativadoEm',
-  inativadoPor: 'inativadoPor'
+  name: 'name',
+  password: 'password',
+  roles: 'roles',
+  tenant_id: 'tenant_id',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by',
+  updated_at: 'updated_at',
+  inactivated_at: 'inactivated_at',
+  inactivated_by: 'inactivated_by'
 };
 
 exports.Prisma.SortOrder = {
@@ -243,45 +223,52 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.StatusCampanha = exports.$Enums.StatusCampanha = {
-  INICIADA: 'INICIADA',
-  EM_ANDAMENTO: 'EM_ANDAMENTO',
-  FINALIZADA: 'FINALIZADA'
+exports.EmailType = exports.$Enums.EmailType = {
+  WORK: 'WORK',
+  PERSONAL: 'PERSONAL'
 };
 
-exports.TipoLog = exports.$Enums.TipoLog = {
-  LOGIN: 'LOGIN',
-  CRIACAO: 'CRIACAO',
-  ATUALIZACAO: 'ATUALIZACAO',
-  DELECAO: 'DELECAO',
-  TESTE_ENVIADO: 'TESTE_ENVIADO',
-  TESTE_CLICADO: 'TESTE_CLICADO',
-  OUTRO: 'OUTRO'
+exports.Entity = exports.$Enums.Entity = {
+  DEPARTMENT: 'DEPARTMENT',
+  EMAIL: 'EMAIL',
+  ENUM: 'ENUM',
+  MODULE: 'MODULE',
+  PHISHING: 'PHISHING',
+  PSEUDONYM: 'PSEUDONYM',
+  TENANT: 'TENANT',
+  TENANT_MODULE: 'TENANT_MODULE',
+  USER: 'USER',
+  USER_DEPARTMENT: 'USER_DEPARTMENT'
 };
 
-exports.CanalTeste = exports.$Enums.CanalTeste = {
+exports.Action = exports.$Enums.Action = {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  OPEN: 'OPEN',
+  SEND: 'SEND',
+  ERROR: 'ERROR'
+};
+
+exports.PhishingChannel = exports.$Enums.PhishingChannel = {
   EMAIL: 'EMAIL'
 };
 
-exports.StatusTeste = exports.$Enums.StatusTeste = {
-  ENVIADO: 'ENVIADO',
-  FALHA: 'FALHA'
-};
-
-exports.CargoUsuario = exports.$Enums.CargoUsuario = {
-  ADMIN: 'ADMIN',
-  FUNCIONARIO: 'FUNCIONARIO'
+exports.PhishingStatus = exports.$Enums.PhishingStatus = {
+  SENT: 'SENT',
+  CLICKED: 'CLICKED',
+  SEND_FAILED: 'SEND_FAILED'
 };
 
 exports.Prisma.ModelName = {
-  CampanhaTeste: 'CampanhaTeste',
-  Campanha: 'Campanha',
-  Departamento: 'Departamento',
+  Department: 'Department',
+  Email: 'Email',
   Log: 'Log',
-  TesteDepartamento: 'TesteDepartamento',
-  Teste: 'Teste',
-  UsuarioDepartamento: 'UsuarioDepartamento',
-  Usuario: 'Usuario'
+  PhishingDepartment: 'PhishingDepartment',
+  Phishing: 'Phishing',
+  UserDepartment: 'UserDepartment',
+  User: 'User'
 };
 
 /**

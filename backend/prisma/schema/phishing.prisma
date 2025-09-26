@@ -1,0 +1,21 @@
+model Phishing {
+  id String @id @default(uuid())
+
+  clicked  Boolean @default(false)
+  reported Boolean @default(false)
+
+  departments PhishingDepartment[]
+  channel     PhishingChannel
+  status      PhishingStatus
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+}

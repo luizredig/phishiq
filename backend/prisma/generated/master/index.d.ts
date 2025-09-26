@@ -1051,11 +1051,11 @@ export namespace Prisma {
    */
 
   export type ModuleCountOutputType = {
-    tenantAppModules: number
+    tenant_modules: number
   }
 
   export type ModuleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenantAppModules?: boolean | ModuleCountOutputTypeCountTenantAppModulesArgs
+    tenant_modules?: boolean | ModuleCountOutputTypeCountTenant_modulesArgs
   }
 
   // Custom InputTypes
@@ -1072,7 +1072,7 @@ export namespace Prisma {
   /**
    * ModuleCountOutputType without action
    */
-  export type ModuleCountOutputTypeCountTenantAppModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ModuleCountOutputTypeCountTenant_modulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantModuleWhereInput
   }
 
@@ -1082,11 +1082,11 @@ export namespace Prisma {
    */
 
   export type TenantCountOutputType = {
-    tenantModules: number
+    tenant_modules: number
   }
 
   export type TenantCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenantModules?: boolean | TenantCountOutputTypeCountTenantModulesArgs
+    tenant_modules?: boolean | TenantCountOutputTypeCountTenant_modulesArgs
   }
 
   // Custom InputTypes
@@ -1103,7 +1103,7 @@ export namespace Prisma {
   /**
    * TenantCountOutputType without action
    */
-  export type TenantCountOutputTypeCountTenantModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type TenantCountOutputTypeCountTenant_modulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TenantModuleWhereInput
   }
 
@@ -1316,7 +1316,7 @@ export namespace Prisma {
     updated_at?: boolean
     inactivated_at?: boolean
     inactivated_by?: boolean
-    tenantAppModules?: boolean | Module$tenantAppModulesArgs<ExtArgs>
+    tenant_modules?: boolean | Module$tenant_modulesArgs<ExtArgs>
     _count?: boolean | ModuleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["module"]>
 
@@ -1361,7 +1361,7 @@ export namespace Prisma {
 
   export type ModuleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "is_active" | "created_by" | "created_at" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["module"]>
   export type ModuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenantAppModules?: boolean | Module$tenantAppModulesArgs<ExtArgs>
+    tenant_modules?: boolean | Module$tenant_modulesArgs<ExtArgs>
     _count?: boolean | ModuleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ModuleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1370,7 +1370,7 @@ export namespace Prisma {
   export type $ModulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Module"
     objects: {
-      tenantAppModules: Prisma.$TenantModulePayload<ExtArgs>[]
+      tenant_modules: Prisma.$TenantModulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1777,7 +1777,7 @@ export namespace Prisma {
    */
   export interface Prisma__ModuleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    tenantAppModules<T extends Module$tenantAppModulesArgs<ExtArgs> = {}>(args?: Subset<T, Module$tenantAppModulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tenant_modules<T extends Module$tenant_modulesArgs<ExtArgs> = {}>(args?: Subset<T, Module$tenant_modulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2205,9 +2205,9 @@ export namespace Prisma {
   }
 
   /**
-   * Module.tenantAppModules
+   * Module.tenant_modules
    */
-  export type Module$tenantAppModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Module$tenant_modulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TenantModule
      */
@@ -3582,7 +3582,7 @@ export namespace Prisma {
     updated_at?: boolean
     inactivated_at?: boolean
     inactivated_by?: boolean
-    tenantModules?: boolean | Tenant$tenantModulesArgs<ExtArgs>
+    tenant_modules?: boolean | Tenant$tenant_modulesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tenant"]>
 
@@ -3627,7 +3627,7 @@ export namespace Prisma {
 
   export type TenantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "is_active" | "created_by" | "created_at" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["tenant"]>
   export type TenantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    tenantModules?: boolean | Tenant$tenantModulesArgs<ExtArgs>
+    tenant_modules?: boolean | Tenant$tenant_modulesArgs<ExtArgs>
     _count?: boolean | TenantCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TenantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3636,7 +3636,7 @@ export namespace Prisma {
   export type $TenantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Tenant"
     objects: {
-      tenantModules: Prisma.$TenantModulePayload<ExtArgs>[]
+      tenant_modules: Prisma.$TenantModulePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4043,7 +4043,7 @@ export namespace Prisma {
    */
   export interface Prisma__TenantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    tenantModules<T extends Tenant$tenantModulesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$tenantModulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    tenant_modules<T extends Tenant$tenant_modulesArgs<ExtArgs> = {}>(args?: Subset<T, Tenant$tenant_modulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TenantModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4471,9 +4471,9 @@ export namespace Prisma {
   }
 
   /**
-   * Tenant.tenantModules
+   * Tenant.tenant_modules
    */
-  export type Tenant$tenantModulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Tenant$tenant_modulesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the TenantModule
      */
@@ -4670,7 +4670,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Module"> | Date | string
     inactivated_at?: DateTimeNullableFilter<"Module"> | Date | string | null
     inactivated_by?: StringNullableFilter<"Module"> | string | null
-    tenantAppModules?: TenantModuleListRelationFilter
+    tenant_modules?: TenantModuleListRelationFilter
   }
 
   export type ModuleOrderByWithRelationInput = {
@@ -4684,7 +4684,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     inactivated_at?: SortOrderInput | SortOrder
     inactivated_by?: SortOrderInput | SortOrder
-    tenantAppModules?: TenantModuleOrderByRelationAggregateInput
+    tenant_modules?: TenantModuleOrderByRelationAggregateInput
   }
 
   export type ModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -4701,7 +4701,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Module"> | Date | string
     inactivated_at?: DateTimeNullableFilter<"Module"> | Date | string | null
     inactivated_by?: StringNullableFilter<"Module"> | string | null
-    tenantAppModules?: TenantModuleListRelationFilter
+    tenant_modules?: TenantModuleListRelationFilter
   }, "id" | "slug">
 
   export type ModuleOrderByWithAggregationInput = {
@@ -4833,7 +4833,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Tenant"> | Date | string
     inactivated_at?: DateTimeNullableFilter<"Tenant"> | Date | string | null
     inactivated_by?: StringNullableFilter<"Tenant"> | string | null
-    tenantModules?: TenantModuleListRelationFilter
+    tenant_modules?: TenantModuleListRelationFilter
   }
 
   export type TenantOrderByWithRelationInput = {
@@ -4847,7 +4847,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     inactivated_at?: SortOrderInput | SortOrder
     inactivated_by?: SortOrderInput | SortOrder
-    tenantModules?: TenantModuleOrderByRelationAggregateInput
+    tenant_modules?: TenantModuleOrderByRelationAggregateInput
   }
 
   export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -4864,7 +4864,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Tenant"> | Date | string
     inactivated_at?: DateTimeNullableFilter<"Tenant"> | Date | string | null
     inactivated_by?: StringNullableFilter<"Tenant"> | string | null
-    tenantModules?: TenantModuleListRelationFilter
+    tenant_modules?: TenantModuleListRelationFilter
   }, "id" | "slug">
 
   export type TenantOrderByWithAggregationInput = {
@@ -4910,7 +4910,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenantAppModules?: TenantModuleCreateNestedManyWithoutModuleInput
+    tenant_modules?: TenantModuleCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUncheckedCreateInput = {
@@ -4924,7 +4924,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenantAppModules?: TenantModuleUncheckedCreateNestedManyWithoutModuleInput
+    tenant_modules?: TenantModuleUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUpdateInput = {
@@ -4938,7 +4938,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenantAppModules?: TenantModuleUpdateManyWithoutModuleNestedInput
+    tenant_modules?: TenantModuleUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleUncheckedUpdateInput = {
@@ -4952,7 +4952,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenantAppModules?: TenantModuleUncheckedUpdateManyWithoutModuleNestedInput
+    tenant_modules?: TenantModuleUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleCreateManyInput = {
@@ -5003,8 +5003,8 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenant: TenantCreateNestedOneWithoutTenantModulesInput
-    module: ModuleCreateNestedOneWithoutTenantAppModulesInput
+    tenant: TenantCreateNestedOneWithoutTenant_modulesInput
+    module: ModuleCreateNestedOneWithoutTenant_modulesInput
   }
 
   export type TenantModuleUncheckedCreateInput = {
@@ -5029,8 +5029,8 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenant?: TenantUpdateOneRequiredWithoutTenantModulesNestedInput
-    module?: ModuleUpdateOneRequiredWithoutTenantAppModulesNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutTenant_modulesNestedInput
+    module?: ModuleUpdateOneRequiredWithoutTenant_modulesNestedInput
   }
 
   export type TenantModuleUncheckedUpdateInput = {
@@ -5094,7 +5094,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenantModules?: TenantModuleCreateNestedManyWithoutTenantInput
+    tenant_modules?: TenantModuleCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUncheckedCreateInput = {
@@ -5108,7 +5108,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenantModules?: TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+    tenant_modules?: TenantModuleUncheckedCreateNestedManyWithoutTenantInput
   }
 
   export type TenantUpdateInput = {
@@ -5122,7 +5122,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenantModules?: TenantModuleUpdateManyWithoutTenantNestedInput
+    tenant_modules?: TenantModuleUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantUncheckedUpdateInput = {
@@ -5136,7 +5136,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenantModules?: TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+    tenant_modules?: TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
   }
 
   export type TenantCreateManyInput = {
@@ -5511,32 +5511,32 @@ export namespace Prisma {
     deleteMany?: TenantModuleScalarWhereInput | TenantModuleScalarWhereInput[]
   }
 
-  export type TenantCreateNestedOneWithoutTenantModulesInput = {
-    create?: XOR<TenantCreateWithoutTenantModulesInput, TenantUncheckedCreateWithoutTenantModulesInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutTenantModulesInput
+  export type TenantCreateNestedOneWithoutTenant_modulesInput = {
+    create?: XOR<TenantCreateWithoutTenant_modulesInput, TenantUncheckedCreateWithoutTenant_modulesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutTenant_modulesInput
     connect?: TenantWhereUniqueInput
   }
 
-  export type ModuleCreateNestedOneWithoutTenantAppModulesInput = {
-    create?: XOR<ModuleCreateWithoutTenantAppModulesInput, ModuleUncheckedCreateWithoutTenantAppModulesInput>
-    connectOrCreate?: ModuleCreateOrConnectWithoutTenantAppModulesInput
+  export type ModuleCreateNestedOneWithoutTenant_modulesInput = {
+    create?: XOR<ModuleCreateWithoutTenant_modulesInput, ModuleUncheckedCreateWithoutTenant_modulesInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutTenant_modulesInput
     connect?: ModuleWhereUniqueInput
   }
 
-  export type TenantUpdateOneRequiredWithoutTenantModulesNestedInput = {
-    create?: XOR<TenantCreateWithoutTenantModulesInput, TenantUncheckedCreateWithoutTenantModulesInput>
-    connectOrCreate?: TenantCreateOrConnectWithoutTenantModulesInput
-    upsert?: TenantUpsertWithoutTenantModulesInput
+  export type TenantUpdateOneRequiredWithoutTenant_modulesNestedInput = {
+    create?: XOR<TenantCreateWithoutTenant_modulesInput, TenantUncheckedCreateWithoutTenant_modulesInput>
+    connectOrCreate?: TenantCreateOrConnectWithoutTenant_modulesInput
+    upsert?: TenantUpsertWithoutTenant_modulesInput
     connect?: TenantWhereUniqueInput
-    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutTenantModulesInput, TenantUpdateWithoutTenantModulesInput>, TenantUncheckedUpdateWithoutTenantModulesInput>
+    update?: XOR<XOR<TenantUpdateToOneWithWhereWithoutTenant_modulesInput, TenantUpdateWithoutTenant_modulesInput>, TenantUncheckedUpdateWithoutTenant_modulesInput>
   }
 
-  export type ModuleUpdateOneRequiredWithoutTenantAppModulesNestedInput = {
-    create?: XOR<ModuleCreateWithoutTenantAppModulesInput, ModuleUncheckedCreateWithoutTenantAppModulesInput>
-    connectOrCreate?: ModuleCreateOrConnectWithoutTenantAppModulesInput
-    upsert?: ModuleUpsertWithoutTenantAppModulesInput
+  export type ModuleUpdateOneRequiredWithoutTenant_modulesNestedInput = {
+    create?: XOR<ModuleCreateWithoutTenant_modulesInput, ModuleUncheckedCreateWithoutTenant_modulesInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutTenant_modulesInput
+    upsert?: ModuleUpsertWithoutTenant_modulesInput
     connect?: ModuleWhereUniqueInput
-    update?: XOR<XOR<ModuleUpdateToOneWithWhereWithoutTenantAppModulesInput, ModuleUpdateWithoutTenantAppModulesInput>, ModuleUncheckedUpdateWithoutTenantAppModulesInput>
+    update?: XOR<XOR<ModuleUpdateToOneWithWhereWithoutTenant_modulesInput, ModuleUpdateWithoutTenant_modulesInput>, ModuleUncheckedUpdateWithoutTenant_modulesInput>
   }
 
   export type TenantModuleCreateNestedManyWithoutTenantInput = {
@@ -5737,7 +5737,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    tenant: TenantCreateNestedOneWithoutTenantModulesInput
+    tenant: TenantCreateNestedOneWithoutTenant_modulesInput
   }
 
   export type TenantModuleUncheckedCreateWithoutModuleInput = {
@@ -5794,7 +5794,7 @@ export namespace Prisma {
     inactivated_by?: StringNullableFilter<"TenantModule"> | string | null
   }
 
-  export type TenantCreateWithoutTenantModulesInput = {
+  export type TenantCreateWithoutTenant_modulesInput = {
     id?: string
     name: string
     slug: string
@@ -5807,7 +5807,7 @@ export namespace Prisma {
     inactivated_by?: string | null
   }
 
-  export type TenantUncheckedCreateWithoutTenantModulesInput = {
+  export type TenantUncheckedCreateWithoutTenant_modulesInput = {
     id?: string
     name: string
     slug: string
@@ -5820,12 +5820,12 @@ export namespace Prisma {
     inactivated_by?: string | null
   }
 
-  export type TenantCreateOrConnectWithoutTenantModulesInput = {
+  export type TenantCreateOrConnectWithoutTenant_modulesInput = {
     where: TenantWhereUniqueInput
-    create: XOR<TenantCreateWithoutTenantModulesInput, TenantUncheckedCreateWithoutTenantModulesInput>
+    create: XOR<TenantCreateWithoutTenant_modulesInput, TenantUncheckedCreateWithoutTenant_modulesInput>
   }
 
-  export type ModuleCreateWithoutTenantAppModulesInput = {
+  export type ModuleCreateWithoutTenant_modulesInput = {
     id?: string
     name: string
     slug: string
@@ -5838,7 +5838,7 @@ export namespace Prisma {
     inactivated_by?: string | null
   }
 
-  export type ModuleUncheckedCreateWithoutTenantAppModulesInput = {
+  export type ModuleUncheckedCreateWithoutTenant_modulesInput = {
     id?: string
     name: string
     slug: string
@@ -5851,23 +5851,23 @@ export namespace Prisma {
     inactivated_by?: string | null
   }
 
-  export type ModuleCreateOrConnectWithoutTenantAppModulesInput = {
+  export type ModuleCreateOrConnectWithoutTenant_modulesInput = {
     where: ModuleWhereUniqueInput
-    create: XOR<ModuleCreateWithoutTenantAppModulesInput, ModuleUncheckedCreateWithoutTenantAppModulesInput>
+    create: XOR<ModuleCreateWithoutTenant_modulesInput, ModuleUncheckedCreateWithoutTenant_modulesInput>
   }
 
-  export type TenantUpsertWithoutTenantModulesInput = {
-    update: XOR<TenantUpdateWithoutTenantModulesInput, TenantUncheckedUpdateWithoutTenantModulesInput>
-    create: XOR<TenantCreateWithoutTenantModulesInput, TenantUncheckedCreateWithoutTenantModulesInput>
+  export type TenantUpsertWithoutTenant_modulesInput = {
+    update: XOR<TenantUpdateWithoutTenant_modulesInput, TenantUncheckedUpdateWithoutTenant_modulesInput>
+    create: XOR<TenantCreateWithoutTenant_modulesInput, TenantUncheckedCreateWithoutTenant_modulesInput>
     where?: TenantWhereInput
   }
 
-  export type TenantUpdateToOneWithWhereWithoutTenantModulesInput = {
+  export type TenantUpdateToOneWithWhereWithoutTenant_modulesInput = {
     where?: TenantWhereInput
-    data: XOR<TenantUpdateWithoutTenantModulesInput, TenantUncheckedUpdateWithoutTenantModulesInput>
+    data: XOR<TenantUpdateWithoutTenant_modulesInput, TenantUncheckedUpdateWithoutTenant_modulesInput>
   }
 
-  export type TenantUpdateWithoutTenantModulesInput = {
+  export type TenantUpdateWithoutTenant_modulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -5880,7 +5880,7 @@ export namespace Prisma {
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TenantUncheckedUpdateWithoutTenantModulesInput = {
+  export type TenantUncheckedUpdateWithoutTenant_modulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -5893,18 +5893,18 @@ export namespace Prisma {
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ModuleUpsertWithoutTenantAppModulesInput = {
-    update: XOR<ModuleUpdateWithoutTenantAppModulesInput, ModuleUncheckedUpdateWithoutTenantAppModulesInput>
-    create: XOR<ModuleCreateWithoutTenantAppModulesInput, ModuleUncheckedCreateWithoutTenantAppModulesInput>
+  export type ModuleUpsertWithoutTenant_modulesInput = {
+    update: XOR<ModuleUpdateWithoutTenant_modulesInput, ModuleUncheckedUpdateWithoutTenant_modulesInput>
+    create: XOR<ModuleCreateWithoutTenant_modulesInput, ModuleUncheckedCreateWithoutTenant_modulesInput>
     where?: ModuleWhereInput
   }
 
-  export type ModuleUpdateToOneWithWhereWithoutTenantAppModulesInput = {
+  export type ModuleUpdateToOneWithWhereWithoutTenant_modulesInput = {
     where?: ModuleWhereInput
-    data: XOR<ModuleUpdateWithoutTenantAppModulesInput, ModuleUncheckedUpdateWithoutTenantAppModulesInput>
+    data: XOR<ModuleUpdateWithoutTenant_modulesInput, ModuleUncheckedUpdateWithoutTenant_modulesInput>
   }
 
-  export type ModuleUpdateWithoutTenantAppModulesInput = {
+  export type ModuleUpdateWithoutTenant_modulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -5917,7 +5917,7 @@ export namespace Prisma {
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ModuleUncheckedUpdateWithoutTenantAppModulesInput = {
+  export type ModuleUncheckedUpdateWithoutTenant_modulesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
@@ -5939,7 +5939,7 @@ export namespace Prisma {
     updated_at?: Date | string
     inactivated_at?: Date | string | null
     inactivated_by?: string | null
-    module: ModuleCreateNestedOneWithoutTenantAppModulesInput
+    module: ModuleCreateNestedOneWithoutTenant_modulesInput
   }
 
   export type TenantModuleUncheckedCreateWithoutTenantInput = {
@@ -6001,7 +6001,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    tenant?: TenantUpdateOneRequiredWithoutTenantModulesNestedInput
+    tenant?: TenantUpdateOneRequiredWithoutTenant_modulesNestedInput
   }
 
   export type TenantModuleUncheckedUpdateWithoutModuleInput = {
@@ -6049,7 +6049,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
-    module?: ModuleUpdateOneRequiredWithoutTenantAppModulesNestedInput
+    module?: ModuleUpdateOneRequiredWithoutTenant_modulesNestedInput
   }
 
   export type TenantModuleUncheckedUpdateWithoutTenantInput = {

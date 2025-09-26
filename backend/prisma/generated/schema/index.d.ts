@@ -14,115 +14,118 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model CampanhaTeste
+ * Model Department
  * 
  */
-export type CampanhaTeste = $Result.DefaultSelection<Prisma.$CampanhaTestePayload>
+export type Department = $Result.DefaultSelection<Prisma.$DepartmentPayload>
 /**
- * Model Campanha
+ * Model Email
  * 
  */
-export type Campanha = $Result.DefaultSelection<Prisma.$CampanhaPayload>
-/**
- * Model Departamento
- * 
- */
-export type Departamento = $Result.DefaultSelection<Prisma.$DepartamentoPayload>
+export type Email = $Result.DefaultSelection<Prisma.$EmailPayload>
 /**
  * Model Log
  * 
  */
 export type Log = $Result.DefaultSelection<Prisma.$LogPayload>
 /**
- * Model TesteDepartamento
+ * Model PhishingDepartment
  * 
  */
-export type TesteDepartamento = $Result.DefaultSelection<Prisma.$TesteDepartamentoPayload>
+export type PhishingDepartment = $Result.DefaultSelection<Prisma.$PhishingDepartmentPayload>
 /**
- * Model Teste
+ * Model Phishing
  * 
  */
-export type Teste = $Result.DefaultSelection<Prisma.$TestePayload>
+export type Phishing = $Result.DefaultSelection<Prisma.$PhishingPayload>
 /**
- * Model UsuarioDepartamento
+ * Model UserDepartment
  * 
  */
-export type UsuarioDepartamento = $Result.DefaultSelection<Prisma.$UsuarioDepartamentoPayload>
+export type UserDepartment = $Result.DefaultSelection<Prisma.$UserDepartmentPayload>
 /**
- * Model Usuario
+ * Model User
  * 
  */
-export type Usuario = $Result.DefaultSelection<Prisma.$UsuarioPayload>
+export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const CanalTeste: {
+  export const Action: {
+  CREATE: 'CREATE',
+  READ: 'READ',
+  UPDATE: 'UPDATE',
+  DELETE: 'DELETE',
+  OPEN: 'OPEN',
+  SEND: 'SEND',
+  ERROR: 'ERROR'
+};
+
+export type Action = (typeof Action)[keyof typeof Action]
+
+
+export const EmailType: {
+  WORK: 'WORK',
+  PERSONAL: 'PERSONAL'
+};
+
+export type EmailType = (typeof EmailType)[keyof typeof EmailType]
+
+
+export const Entity: {
+  DEPARTMENT: 'DEPARTMENT',
+  EMAIL: 'EMAIL',
+  ENUM: 'ENUM',
+  MODULE: 'MODULE',
+  PHISHING: 'PHISHING',
+  PSEUDONYM: 'PSEUDONYM',
+  TENANT: 'TENANT',
+  TENANT_MODULE: 'TENANT_MODULE',
+  USER: 'USER',
+  USER_DEPARTMENT: 'USER_DEPARTMENT'
+};
+
+export type Entity = (typeof Entity)[keyof typeof Entity]
+
+
+export const PhishingChannel: {
   EMAIL: 'EMAIL'
 };
 
-export type CanalTeste = (typeof CanalTeste)[keyof typeof CanalTeste]
+export type PhishingChannel = (typeof PhishingChannel)[keyof typeof PhishingChannel]
 
 
-export const StatusCampanha: {
-  INICIADA: 'INICIADA',
-  EM_ANDAMENTO: 'EM_ANDAMENTO',
-  FINALIZADA: 'FINALIZADA'
+export const PhishingStatus: {
+  SENT: 'SENT',
+  CLICKED: 'CLICKED',
+  SEND_FAILED: 'SEND_FAILED'
 };
 
-export type StatusCampanha = (typeof StatusCampanha)[keyof typeof StatusCampanha]
-
-
-export const StatusTeste: {
-  ENVIADO: 'ENVIADO',
-  FALHA: 'FALHA'
-};
-
-export type StatusTeste = (typeof StatusTeste)[keyof typeof StatusTeste]
-
-
-export const TipoLog: {
-  LOGIN: 'LOGIN',
-  CRIACAO: 'CRIACAO',
-  ATUALIZACAO: 'ATUALIZACAO',
-  DELECAO: 'DELECAO',
-  TESTE_ENVIADO: 'TESTE_ENVIADO',
-  TESTE_CLICADO: 'TESTE_CLICADO',
-  OUTRO: 'OUTRO'
-};
-
-export type TipoLog = (typeof TipoLog)[keyof typeof TipoLog]
-
-
-export const CargoUsuario: {
-  ADMIN: 'ADMIN',
-  FUNCIONARIO: 'FUNCIONARIO'
-};
-
-export type CargoUsuario = (typeof CargoUsuario)[keyof typeof CargoUsuario]
+export type PhishingStatus = (typeof PhishingStatus)[keyof typeof PhishingStatus]
 
 }
 
-export type CanalTeste = $Enums.CanalTeste
+export type Action = $Enums.Action
 
-export const CanalTeste: typeof $Enums.CanalTeste
+export const Action: typeof $Enums.Action
 
-export type StatusCampanha = $Enums.StatusCampanha
+export type EmailType = $Enums.EmailType
 
-export const StatusCampanha: typeof $Enums.StatusCampanha
+export const EmailType: typeof $Enums.EmailType
 
-export type StatusTeste = $Enums.StatusTeste
+export type Entity = $Enums.Entity
 
-export const StatusTeste: typeof $Enums.StatusTeste
+export const Entity: typeof $Enums.Entity
 
-export type TipoLog = $Enums.TipoLog
+export type PhishingChannel = $Enums.PhishingChannel
 
-export const TipoLog: typeof $Enums.TipoLog
+export const PhishingChannel: typeof $Enums.PhishingChannel
 
-export type CargoUsuario = $Enums.CargoUsuario
+export type PhishingStatus = $Enums.PhishingStatus
 
-export const CargoUsuario: typeof $Enums.CargoUsuario
+export const PhishingStatus: typeof $Enums.PhishingStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -131,8 +134,8 @@ export const CargoUsuario: typeof $Enums.CargoUsuario
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more CampanhaTestes
- * const campanhaTestes = await prisma.campanhaTeste.findMany()
+ * // Fetch zero or more Departments
+ * const departments = await prisma.department.findMany()
  * ```
  *
  *
@@ -152,8 +155,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more CampanhaTestes
-   * const campanhaTestes = await prisma.campanhaTeste.findMany()
+   * // Fetch zero or more Departments
+   * const departments = await prisma.department.findMany()
    * ```
    *
    *
@@ -250,34 +253,24 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.campanhaTeste`: Exposes CRUD operations for the **CampanhaTeste** model.
+   * `prisma.department`: Exposes CRUD operations for the **Department** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more CampanhaTestes
-    * const campanhaTestes = await prisma.campanhaTeste.findMany()
+    * // Fetch zero or more Departments
+    * const departments = await prisma.department.findMany()
     * ```
     */
-  get campanhaTeste(): Prisma.CampanhaTesteDelegate<ExtArgs, ClientOptions>;
+  get department(): Prisma.DepartmentDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.campanha`: Exposes CRUD operations for the **Campanha** model.
+   * `prisma.email`: Exposes CRUD operations for the **Email** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Campanhas
-    * const campanhas = await prisma.campanha.findMany()
+    * // Fetch zero or more Emails
+    * const emails = await prisma.email.findMany()
     * ```
     */
-  get campanha(): Prisma.CampanhaDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.departamento`: Exposes CRUD operations for the **Departamento** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Departamentos
-    * const departamentos = await prisma.departamento.findMany()
-    * ```
-    */
-  get departamento(): Prisma.DepartamentoDelegate<ExtArgs, ClientOptions>;
+  get email(): Prisma.EmailDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.log`: Exposes CRUD operations for the **Log** model.
@@ -290,44 +283,44 @@ export class PrismaClient<
   get log(): Prisma.LogDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.testeDepartamento`: Exposes CRUD operations for the **TesteDepartamento** model.
+   * `prisma.phishingDepartment`: Exposes CRUD operations for the **PhishingDepartment** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more TesteDepartamentos
-    * const testeDepartamentos = await prisma.testeDepartamento.findMany()
+    * // Fetch zero or more PhishingDepartments
+    * const phishingDepartments = await prisma.phishingDepartment.findMany()
     * ```
     */
-  get testeDepartamento(): Prisma.TesteDepartamentoDelegate<ExtArgs, ClientOptions>;
+  get phishingDepartment(): Prisma.PhishingDepartmentDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.teste`: Exposes CRUD operations for the **Teste** model.
+   * `prisma.phishing`: Exposes CRUD operations for the **Phishing** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Testes
-    * const testes = await prisma.teste.findMany()
+    * // Fetch zero or more Phishings
+    * const phishings = await prisma.phishing.findMany()
     * ```
     */
-  get teste(): Prisma.TesteDelegate<ExtArgs, ClientOptions>;
+  get phishing(): Prisma.PhishingDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.usuarioDepartamento`: Exposes CRUD operations for the **UsuarioDepartamento** model.
+   * `prisma.userDepartment`: Exposes CRUD operations for the **UserDepartment** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more UsuarioDepartamentos
-    * const usuarioDepartamentos = await prisma.usuarioDepartamento.findMany()
+    * // Fetch zero or more UserDepartments
+    * const userDepartments = await prisma.userDepartment.findMany()
     * ```
     */
-  get usuarioDepartamento(): Prisma.UsuarioDepartamentoDelegate<ExtArgs, ClientOptions>;
+  get userDepartment(): Prisma.UserDepartmentDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.usuario`: Exposes CRUD operations for the **Usuario** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Usuarios
-    * const usuarios = await prisma.usuario.findMany()
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get usuario(): Prisma.UsuarioDelegate<ExtArgs, ClientOptions>;
+  get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -768,14 +761,13 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    CampanhaTeste: 'CampanhaTeste',
-    Campanha: 'Campanha',
-    Departamento: 'Departamento',
+    Department: 'Department',
+    Email: 'Email',
     Log: 'Log',
-    TesteDepartamento: 'TesteDepartamento',
-    Teste: 'Teste',
-    UsuarioDepartamento: 'UsuarioDepartamento',
-    Usuario: 'Usuario'
+    PhishingDepartment: 'PhishingDepartment',
+    Phishing: 'Phishing',
+    UserDepartment: 'UserDepartment',
+    User: 'User'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -794,229 +786,155 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "campanhaTeste" | "campanha" | "departamento" | "log" | "testeDepartamento" | "teste" | "usuarioDepartamento" | "usuario"
+      modelProps: "department" | "email" | "log" | "phishingDepartment" | "phishing" | "userDepartment" | "user"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      CampanhaTeste: {
-        payload: Prisma.$CampanhaTestePayload<ExtArgs>
-        fields: Prisma.CampanhaTesteFieldRefs
+      Department: {
+        payload: Prisma.$DepartmentPayload<ExtArgs>
+        fields: Prisma.DepartmentFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.CampanhaTesteFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload> | null
+            args: Prisma.DepartmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.CampanhaTesteFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           findFirst: {
-            args: Prisma.CampanhaTesteFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload> | null
+            args: Prisma.DepartmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.CampanhaTesteFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           findMany: {
-            args: Prisma.CampanhaTesteFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>[]
+            args: Prisma.DepartmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>[]
           }
           create: {
-            args: Prisma.CampanhaTesteCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           createMany: {
-            args: Prisma.CampanhaTesteCreateManyArgs<ExtArgs>
+            args: Prisma.DepartmentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.CampanhaTesteCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>[]
+            args: Prisma.DepartmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>[]
           }
           delete: {
-            args: Prisma.CampanhaTesteDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           update: {
-            args: Prisma.CampanhaTesteUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           deleteMany: {
-            args: Prisma.CampanhaTesteDeleteManyArgs<ExtArgs>
+            args: Prisma.DepartmentDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.CampanhaTesteUpdateManyArgs<ExtArgs>
+            args: Prisma.DepartmentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.CampanhaTesteUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>[]
+            args: Prisma.DepartmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>[]
           }
           upsert: {
-            args: Prisma.CampanhaTesteUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaTestePayload>
+            args: Prisma.DepartmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DepartmentPayload>
           }
           aggregate: {
-            args: Prisma.CampanhaTesteAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCampanhaTeste>
+            args: Prisma.DepartmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDepartment>
           }
           groupBy: {
-            args: Prisma.CampanhaTesteGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CampanhaTesteGroupByOutputType>[]
+            args: Prisma.DepartmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DepartmentGroupByOutputType>[]
           }
           count: {
-            args: Prisma.CampanhaTesteCountArgs<ExtArgs>
-            result: $Utils.Optional<CampanhaTesteCountAggregateOutputType> | number
+            args: Prisma.DepartmentCountArgs<ExtArgs>
+            result: $Utils.Optional<DepartmentCountAggregateOutputType> | number
           }
         }
       }
-      Campanha: {
-        payload: Prisma.$CampanhaPayload<ExtArgs>
-        fields: Prisma.CampanhaFieldRefs
+      Email: {
+        payload: Prisma.$EmailPayload<ExtArgs>
+        fields: Prisma.EmailFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.CampanhaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload> | null
+            args: Prisma.EmailFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.CampanhaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           findFirst: {
-            args: Prisma.CampanhaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload> | null
+            args: Prisma.EmailFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.CampanhaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           findMany: {
-            args: Prisma.CampanhaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>[]
+            args: Prisma.EmailFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
           }
           create: {
-            args: Prisma.CampanhaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           createMany: {
-            args: Prisma.CampanhaCreateManyArgs<ExtArgs>
+            args: Prisma.EmailCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.CampanhaCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>[]
+            args: Prisma.EmailCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
           }
           delete: {
-            args: Prisma.CampanhaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           update: {
-            args: Prisma.CampanhaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           deleteMany: {
-            args: Prisma.CampanhaDeleteManyArgs<ExtArgs>
+            args: Prisma.EmailDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.CampanhaUpdateManyArgs<ExtArgs>
+            args: Prisma.EmailUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.CampanhaUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>[]
+            args: Prisma.EmailUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>[]
           }
           upsert: {
-            args: Prisma.CampanhaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CampanhaPayload>
+            args: Prisma.EmailUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailPayload>
           }
           aggregate: {
-            args: Prisma.CampanhaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCampanha>
+            args: Prisma.EmailAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmail>
           }
           groupBy: {
-            args: Prisma.CampanhaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CampanhaGroupByOutputType>[]
+            args: Prisma.EmailGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailGroupByOutputType>[]
           }
           count: {
-            args: Prisma.CampanhaCountArgs<ExtArgs>
-            result: $Utils.Optional<CampanhaCountAggregateOutputType> | number
-          }
-        }
-      }
-      Departamento: {
-        payload: Prisma.$DepartamentoPayload<ExtArgs>
-        fields: Prisma.DepartamentoFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.DepartamentoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.DepartamentoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          findFirst: {
-            args: Prisma.DepartamentoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.DepartamentoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          findMany: {
-            args: Prisma.DepartamentoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>[]
-          }
-          create: {
-            args: Prisma.DepartamentoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          createMany: {
-            args: Prisma.DepartamentoCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.DepartamentoCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>[]
-          }
-          delete: {
-            args: Prisma.DepartamentoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          update: {
-            args: Prisma.DepartamentoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          deleteMany: {
-            args: Prisma.DepartamentoDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.DepartamentoUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.DepartamentoUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>[]
-          }
-          upsert: {
-            args: Prisma.DepartamentoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DepartamentoPayload>
-          }
-          aggregate: {
-            args: Prisma.DepartamentoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateDepartamento>
-          }
-          groupBy: {
-            args: Prisma.DepartamentoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<DepartamentoGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.DepartamentoCountArgs<ExtArgs>
-            result: $Utils.Optional<DepartamentoCountAggregateOutputType> | number
+            args: Prisma.EmailCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailCountAggregateOutputType> | number
           }
         }
       }
@@ -1094,299 +1012,299 @@ export namespace Prisma {
           }
         }
       }
-      TesteDepartamento: {
-        payload: Prisma.$TesteDepartamentoPayload<ExtArgs>
-        fields: Prisma.TesteDepartamentoFieldRefs
+      PhishingDepartment: {
+        payload: Prisma.$PhishingDepartmentPayload<ExtArgs>
+        fields: Prisma.PhishingDepartmentFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.TesteDepartamentoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload> | null
+            args: Prisma.PhishingDepartmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.TesteDepartamentoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           findFirst: {
-            args: Prisma.TesteDepartamentoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload> | null
+            args: Prisma.PhishingDepartmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.TesteDepartamentoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           findMany: {
-            args: Prisma.TesteDepartamentoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>[]
+            args: Prisma.PhishingDepartmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>[]
           }
           create: {
-            args: Prisma.TesteDepartamentoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           createMany: {
-            args: Prisma.TesteDepartamentoCreateManyArgs<ExtArgs>
+            args: Prisma.PhishingDepartmentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.TesteDepartamentoCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>[]
+            args: Prisma.PhishingDepartmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>[]
           }
           delete: {
-            args: Prisma.TesteDepartamentoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           update: {
-            args: Prisma.TesteDepartamentoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           deleteMany: {
-            args: Prisma.TesteDepartamentoDeleteManyArgs<ExtArgs>
+            args: Prisma.PhishingDepartmentDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.TesteDepartamentoUpdateManyArgs<ExtArgs>
+            args: Prisma.PhishingDepartmentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.TesteDepartamentoUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>[]
+            args: Prisma.PhishingDepartmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>[]
           }
           upsert: {
-            args: Prisma.TesteDepartamentoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TesteDepartamentoPayload>
+            args: Prisma.PhishingDepartmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingDepartmentPayload>
           }
           aggregate: {
-            args: Prisma.TesteDepartamentoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTesteDepartamento>
+            args: Prisma.PhishingDepartmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePhishingDepartment>
           }
           groupBy: {
-            args: Prisma.TesteDepartamentoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TesteDepartamentoGroupByOutputType>[]
+            args: Prisma.PhishingDepartmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PhishingDepartmentGroupByOutputType>[]
           }
           count: {
-            args: Prisma.TesteDepartamentoCountArgs<ExtArgs>
-            result: $Utils.Optional<TesteDepartamentoCountAggregateOutputType> | number
+            args: Prisma.PhishingDepartmentCountArgs<ExtArgs>
+            result: $Utils.Optional<PhishingDepartmentCountAggregateOutputType> | number
           }
         }
       }
-      Teste: {
-        payload: Prisma.$TestePayload<ExtArgs>
-        fields: Prisma.TesteFieldRefs
+      Phishing: {
+        payload: Prisma.$PhishingPayload<ExtArgs>
+        fields: Prisma.PhishingFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.TesteFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload> | null
+            args: Prisma.PhishingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.TesteFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           findFirst: {
-            args: Prisma.TesteFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload> | null
+            args: Prisma.PhishingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.TesteFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           findMany: {
-            args: Prisma.TesteFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>[]
+            args: Prisma.PhishingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>[]
           }
           create: {
-            args: Prisma.TesteCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           createMany: {
-            args: Prisma.TesteCreateManyArgs<ExtArgs>
+            args: Prisma.PhishingCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.TesteCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>[]
+            args: Prisma.PhishingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>[]
           }
           delete: {
-            args: Prisma.TesteDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           update: {
-            args: Prisma.TesteUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           deleteMany: {
-            args: Prisma.TesteDeleteManyArgs<ExtArgs>
+            args: Prisma.PhishingDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.TesteUpdateManyArgs<ExtArgs>
+            args: Prisma.PhishingUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.TesteUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>[]
+            args: Prisma.PhishingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>[]
           }
           upsert: {
-            args: Prisma.TesteUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$TestePayload>
+            args: Prisma.PhishingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PhishingPayload>
           }
           aggregate: {
-            args: Prisma.TesteAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateTeste>
+            args: Prisma.PhishingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePhishing>
           }
           groupBy: {
-            args: Prisma.TesteGroupByArgs<ExtArgs>
-            result: $Utils.Optional<TesteGroupByOutputType>[]
+            args: Prisma.PhishingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PhishingGroupByOutputType>[]
           }
           count: {
-            args: Prisma.TesteCountArgs<ExtArgs>
-            result: $Utils.Optional<TesteCountAggregateOutputType> | number
+            args: Prisma.PhishingCountArgs<ExtArgs>
+            result: $Utils.Optional<PhishingCountAggregateOutputType> | number
           }
         }
       }
-      UsuarioDepartamento: {
-        payload: Prisma.$UsuarioDepartamentoPayload<ExtArgs>
-        fields: Prisma.UsuarioDepartamentoFieldRefs
+      UserDepartment: {
+        payload: Prisma.$UserDepartmentPayload<ExtArgs>
+        fields: Prisma.UserDepartmentFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.UsuarioDepartamentoFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload> | null
+            args: Prisma.UserDepartmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.UsuarioDepartamentoFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           findFirst: {
-            args: Prisma.UsuarioDepartamentoFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload> | null
+            args: Prisma.UserDepartmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.UsuarioDepartamentoFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           findMany: {
-            args: Prisma.UsuarioDepartamentoFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>[]
+            args: Prisma.UserDepartmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>[]
           }
           create: {
-            args: Prisma.UsuarioDepartamentoCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           createMany: {
-            args: Prisma.UsuarioDepartamentoCreateManyArgs<ExtArgs>
+            args: Prisma.UserDepartmentCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.UsuarioDepartamentoCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>[]
+            args: Prisma.UserDepartmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>[]
           }
           delete: {
-            args: Prisma.UsuarioDepartamentoDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           update: {
-            args: Prisma.UsuarioDepartamentoUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           deleteMany: {
-            args: Prisma.UsuarioDepartamentoDeleteManyArgs<ExtArgs>
+            args: Prisma.UserDepartmentDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.UsuarioDepartamentoUpdateManyArgs<ExtArgs>
+            args: Prisma.UserDepartmentUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.UsuarioDepartamentoUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>[]
+            args: Prisma.UserDepartmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>[]
           }
           upsert: {
-            args: Prisma.UsuarioDepartamentoUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioDepartamentoPayload>
+            args: Prisma.UserDepartmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserDepartmentPayload>
           }
           aggregate: {
-            args: Prisma.UsuarioDepartamentoAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUsuarioDepartamento>
+            args: Prisma.UserDepartmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserDepartment>
           }
           groupBy: {
-            args: Prisma.UsuarioDepartamentoGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UsuarioDepartamentoGroupByOutputType>[]
+            args: Prisma.UserDepartmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserDepartmentGroupByOutputType>[]
           }
           count: {
-            args: Prisma.UsuarioDepartamentoCountArgs<ExtArgs>
-            result: $Utils.Optional<UsuarioDepartamentoCountAggregateOutputType> | number
+            args: Prisma.UserDepartmentCountArgs<ExtArgs>
+            result: $Utils.Optional<UserDepartmentCountAggregateOutputType> | number
           }
         }
       }
-      Usuario: {
-        payload: Prisma.$UsuarioPayload<ExtArgs>
-        fields: Prisma.UsuarioFieldRefs
+      User: {
+        payload: Prisma.$UserPayload<ExtArgs>
+        fields: Prisma.UserFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.UsuarioFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload> | null
+            args: Prisma.UserFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.UsuarioFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findFirst: {
-            args: Prisma.UsuarioFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload> | null
+            args: Prisma.UserFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.UsuarioFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           findMany: {
-            args: Prisma.UsuarioFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>[]
+            args: Prisma.UserFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           create: {
-            args: Prisma.UsuarioCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           createMany: {
-            args: Prisma.UsuarioCreateManyArgs<ExtArgs>
+            args: Prisma.UserCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.UsuarioCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>[]
+            args: Prisma.UserCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           delete: {
-            args: Prisma.UsuarioDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           update: {
-            args: Prisma.UsuarioUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           deleteMany: {
-            args: Prisma.UsuarioDeleteManyArgs<ExtArgs>
+            args: Prisma.UserDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.UsuarioUpdateManyArgs<ExtArgs>
+            args: Prisma.UserUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.UsuarioUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>[]
+            args: Prisma.UserUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
           }
           upsert: {
-            args: Prisma.UsuarioUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$UsuarioPayload>
+            args: Prisma.UserUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
           }
           aggregate: {
-            args: Prisma.UsuarioAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateUsuario>
+            args: Prisma.UserAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUser>
           }
           groupBy: {
-            args: Prisma.UsuarioGroupByArgs<ExtArgs>
-            result: $Utils.Optional<UsuarioGroupByOutputType>[]
+            args: Prisma.UserGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserGroupByOutputType>[]
           }
           count: {
-            args: Prisma.UsuarioCountArgs<ExtArgs>
-            result: $Utils.Optional<UsuarioCountAggregateOutputType> | number
+            args: Prisma.UserCountArgs<ExtArgs>
+            result: $Utils.Optional<UserCountAggregateOutputType> | number
           }
         }
       }
@@ -1474,14 +1392,13 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    campanhaTeste?: CampanhaTesteOmit
-    campanha?: CampanhaOmit
-    departamento?: DepartamentoOmit
+    department?: DepartmentOmit
+    email?: EmailOmit
     log?: LogOmit
-    testeDepartamento?: TesteDepartamentoOmit
-    teste?: TesteOmit
-    usuarioDepartamento?: UsuarioDepartamentoOmit
-    usuario?: UsuarioOmit
+    phishingDepartment?: PhishingDepartmentOmit
+    phishing?: PhishingOmit
+    userDepartment?: UserDepartmentOmit
+    user?: UserOmit
   }
 
   /* Types for Logging */
@@ -1572,180 +1489,122 @@ export namespace Prisma {
 
 
   /**
-   * Count Type CampanhaCountOutputType
+   * Count Type DepartmentCountOutputType
    */
 
-  export type CampanhaCountOutputType = {
-    logs: number
-    testes: number
+  export type DepartmentCountOutputType = {
+    phishings: number
+    users: number
   }
 
-  export type CampanhaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    logs?: boolean | CampanhaCountOutputTypeCountLogsArgs
-    testes?: boolean | CampanhaCountOutputTypeCountTestesArgs
+  export type DepartmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    phishings?: boolean | DepartmentCountOutputTypeCountPhishingsArgs
+    users?: boolean | DepartmentCountOutputTypeCountUsersArgs
   }
 
   // Custom InputTypes
   /**
-   * CampanhaCountOutputType without action
+   * DepartmentCountOutputType without action
    */
-  export type CampanhaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaCountOutputType
+     * Select specific fields to fetch from the DepartmentCountOutputType
      */
-    select?: CampanhaCountOutputTypeSelect<ExtArgs> | null
+    select?: DepartmentCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * CampanhaCountOutputType without action
+   * DepartmentCountOutputType without action
    */
-  export type CampanhaCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LogWhereInput
+  export type DepartmentCountOutputTypeCountPhishingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PhishingDepartmentWhereInput
   }
 
   /**
-   * CampanhaCountOutputType without action
+   * DepartmentCountOutputType without action
    */
-  export type CampanhaCountOutputTypeCountTestesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CampanhaTesteWhereInput
+  export type DepartmentCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserDepartmentWhereInput
   }
 
 
   /**
-   * Count Type DepartamentoCountOutputType
+   * Count Type PhishingCountOutputType
    */
 
-  export type DepartamentoCountOutputType = {
-    testes: number
-    logs: number
-    usuarios: number
+  export type PhishingCountOutputType = {
+    departments: number
   }
 
-  export type DepartamentoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    testes?: boolean | DepartamentoCountOutputTypeCountTestesArgs
-    logs?: boolean | DepartamentoCountOutputTypeCountLogsArgs
-    usuarios?: boolean | DepartamentoCountOutputTypeCountUsuariosArgs
+  export type PhishingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    departments?: boolean | PhishingCountOutputTypeCountDepartmentsArgs
   }
 
   // Custom InputTypes
   /**
-   * DepartamentoCountOutputType without action
+   * PhishingCountOutputType without action
    */
-  export type DepartamentoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the DepartamentoCountOutputType
+     * Select specific fields to fetch from the PhishingCountOutputType
      */
-    select?: DepartamentoCountOutputTypeSelect<ExtArgs> | null
+    select?: PhishingCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * DepartamentoCountOutputType without action
+   * PhishingCountOutputType without action
    */
-  export type DepartamentoCountOutputTypeCountTestesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TesteDepartamentoWhereInput
-  }
-
-  /**
-   * DepartamentoCountOutputType without action
-   */
-  export type DepartamentoCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LogWhereInput
-  }
-
-  /**
-   * DepartamentoCountOutputType without action
-   */
-  export type DepartamentoCountOutputTypeCountUsuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UsuarioDepartamentoWhereInput
+  export type PhishingCountOutputTypeCountDepartmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PhishingDepartmentWhereInput
   }
 
 
   /**
-   * Count Type TesteCountOutputType
+   * Count Type UserCountOutputType
    */
 
-  export type TesteCountOutputType = {
-    departamentos: number
-    logs: number
-    campanhas: number
+  export type UserCountOutputType = {
+    emails: number
+    phishings: number
+    user_departments: number
   }
 
-  export type TesteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    departamentos?: boolean | TesteCountOutputTypeCountDepartamentosArgs
-    logs?: boolean | TesteCountOutputTypeCountLogsArgs
-    campanhas?: boolean | TesteCountOutputTypeCountCampanhasArgs
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    emails?: boolean | UserCountOutputTypeCountEmailsArgs
+    phishings?: boolean | UserCountOutputTypeCountPhishingsArgs
+    user_departments?: boolean | UserCountOutputTypeCountUser_departmentsArgs
   }
 
   // Custom InputTypes
   /**
-   * TesteCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type TesteCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteCountOutputType
+     * Select specific fields to fetch from the UserCountOutputType
      */
-    select?: TesteCountOutputTypeSelect<ExtArgs> | null
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * TesteCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type TesteCountOutputTypeCountDepartamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TesteDepartamentoWhereInput
+  export type UserCountOutputTypeCountEmailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailWhereInput
   }
 
   /**
-   * TesteCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type TesteCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: LogWhereInput
+  export type UserCountOutputTypeCountPhishingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PhishingWhereInput
   }
 
   /**
-   * TesteCountOutputType without action
+   * UserCountOutputType without action
    */
-  export type TesteCountOutputTypeCountCampanhasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CampanhaTesteWhereInput
-  }
-
-
-  /**
-   * Count Type UsuarioCountOutputType
-   */
-
-  export type UsuarioCountOutputType = {
-    departamentos: number
-    testes: number
-  }
-
-  export type UsuarioCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    departamentos?: boolean | UsuarioCountOutputTypeCountDepartamentosArgs
-    testes?: boolean | UsuarioCountOutputTypeCountTestesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * UsuarioCountOutputType without action
-   */
-  export type UsuarioCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UsuarioCountOutputType
-     */
-    select?: UsuarioCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * UsuarioCountOutputType without action
-   */
-  export type UsuarioCountOutputTypeCountDepartamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UsuarioDepartamentoWhereInput
-  }
-
-  /**
-   * UsuarioCountOutputType without action
-   */
-  export type UsuarioCountOutputTypeCountTestesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TesteWhereInput
+  export type UserCountOutputTypeCountUser_departmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserDepartmentWhereInput
   }
 
 
@@ -1754,417 +1613,397 @@ export namespace Prisma {
    */
 
   /**
-   * Model CampanhaTeste
+   * Model Department
    */
 
-  export type AggregateCampanhaTeste = {
-    _count: CampanhaTesteCountAggregateOutputType | null
-    _min: CampanhaTesteMinAggregateOutputType | null
-    _max: CampanhaTesteMaxAggregateOutputType | null
+  export type AggregateDepartment = {
+    _count: DepartmentCountAggregateOutputType | null
+    _min: DepartmentMinAggregateOutputType | null
+    _max: DepartmentMaxAggregateOutputType | null
   }
 
-  export type CampanhaTesteMinAggregateOutputType = {
+  export type DepartmentMinAggregateOutputType = {
     id: string | null
-    campanhaId: string | null
-    testeId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    name: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type CampanhaTesteMaxAggregateOutputType = {
+  export type DepartmentMaxAggregateOutputType = {
     id: string | null
-    campanhaId: string | null
-    testeId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    name: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type CampanhaTesteCountAggregateOutputType = {
+  export type DepartmentCountAggregateOutputType = {
     id: number
-    campanhaId: number
-    testeId: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    name: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type CampanhaTesteMinAggregateInputType = {
+  export type DepartmentMinAggregateInputType = {
     id?: true
-    campanhaId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type CampanhaTesteMaxAggregateInputType = {
+  export type DepartmentMaxAggregateInputType = {
     id?: true
-    campanhaId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type CampanhaTesteCountAggregateInputType = {
+  export type DepartmentCountAggregateInputType = {
     id?: true
-    campanhaId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type CampanhaTesteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which CampanhaTeste to aggregate.
+     * Filter which Department to aggregate.
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of CampanhaTestes to fetch.
+     * Determine the order of Departments to fetch.
      */
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
+    orderBy?: DepartmentOrderByWithRelationInput | DepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: CampanhaTesteWhereUniqueInput
+    cursor?: DepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` CampanhaTestes from the position of the cursor.
+     * Take `±n` Departments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` CampanhaTestes.
+     * Skip the first `n` Departments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned CampanhaTestes
+     * Count returned Departments
     **/
-    _count?: true | CampanhaTesteCountAggregateInputType
+    _count?: true | DepartmentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: CampanhaTesteMinAggregateInputType
+    _min?: DepartmentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: CampanhaTesteMaxAggregateInputType
+    _max?: DepartmentMaxAggregateInputType
   }
 
-  export type GetCampanhaTesteAggregateType<T extends CampanhaTesteAggregateArgs> = {
-        [P in keyof T & keyof AggregateCampanhaTeste]: P extends '_count' | 'count'
+  export type GetDepartmentAggregateType<T extends DepartmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateDepartment]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateCampanhaTeste[P]>
-      : GetScalarType<T[P], AggregateCampanhaTeste[P]>
+        : GetScalarType<T[P], AggregateDepartment[P]>
+      : GetScalarType<T[P], AggregateDepartment[P]>
   }
 
 
 
 
-  export type CampanhaTesteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CampanhaTesteWhereInput
-    orderBy?: CampanhaTesteOrderByWithAggregationInput | CampanhaTesteOrderByWithAggregationInput[]
-    by: CampanhaTesteScalarFieldEnum[] | CampanhaTesteScalarFieldEnum
-    having?: CampanhaTesteScalarWhereWithAggregatesInput
+  export type DepartmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DepartmentWhereInput
+    orderBy?: DepartmentOrderByWithAggregationInput | DepartmentOrderByWithAggregationInput[]
+    by: DepartmentScalarFieldEnum[] | DepartmentScalarFieldEnum
+    having?: DepartmentScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: CampanhaTesteCountAggregateInputType | true
-    _min?: CampanhaTesteMinAggregateInputType
-    _max?: CampanhaTesteMaxAggregateInputType
+    _count?: DepartmentCountAggregateInputType | true
+    _min?: DepartmentMinAggregateInputType
+    _max?: DepartmentMaxAggregateInputType
   }
 
-  export type CampanhaTesteGroupByOutputType = {
+  export type DepartmentGroupByOutputType = {
     id: string
-    campanhaId: string
-    testeId: string
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: CampanhaTesteCountAggregateOutputType | null
-    _min: CampanhaTesteMinAggregateOutputType | null
-    _max: CampanhaTesteMaxAggregateOutputType | null
+    name: string
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: DepartmentCountAggregateOutputType | null
+    _min: DepartmentMinAggregateOutputType | null
+    _max: DepartmentMaxAggregateOutputType | null
   }
 
-  type GetCampanhaTesteGroupByPayload<T extends CampanhaTesteGroupByArgs> = Prisma.PrismaPromise<
+  type GetDepartmentGroupByPayload<T extends DepartmentGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CampanhaTesteGroupByOutputType, T['by']> &
+      PickEnumerable<DepartmentGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof CampanhaTesteGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof DepartmentGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], CampanhaTesteGroupByOutputType[P]>
-            : GetScalarType<T[P], CampanhaTesteGroupByOutputType[P]>
+              : GetScalarType<T[P], DepartmentGroupByOutputType[P]>
+            : GetScalarType<T[P], DepartmentGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type CampanhaTesteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type DepartmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    campanhaId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["campanhaTeste"]>
+    name?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    phishings?: boolean | Department$phishingsArgs<ExtArgs>
+    users?: boolean | Department$usersArgs<ExtArgs>
+    _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["department"]>
 
-  export type CampanhaTesteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type DepartmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    campanhaId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["campanhaTeste"]>
+    name?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+  }, ExtArgs["result"]["department"]>
 
-  export type CampanhaTesteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type DepartmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    campanhaId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["campanhaTeste"]>
+    name?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+  }, ExtArgs["result"]["department"]>
 
-  export type CampanhaTesteSelectScalar = {
+  export type DepartmentSelectScalar = {
     id?: boolean
-    campanhaId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    name?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type CampanhaTesteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campanhaId" | "testeId" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["campanhaTeste"]>
-  export type CampanhaTesteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
+  export type DepartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["department"]>
+  export type DepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    phishings?: boolean | Department$phishingsArgs<ExtArgs>
+    users?: boolean | Department$usersArgs<ExtArgs>
+    _count?: boolean | DepartmentCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type CampanhaTesteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-  }
-  export type CampanhaTesteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | CampanhaDefaultArgs<ExtArgs>
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-  }
+  export type DepartmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type DepartmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $CampanhaTestePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "CampanhaTeste"
+  export type $DepartmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Department"
     objects: {
-      campanha: Prisma.$CampanhaPayload<ExtArgs>
-      teste: Prisma.$TestePayload<ExtArgs>
+      phishings: Prisma.$PhishingDepartmentPayload<ExtArgs>[]
+      users: Prisma.$UserDepartmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      campanhaId: string
-      testeId: string
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["campanhaTeste"]>
+      name: string
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["department"]>
     composites: {}
   }
 
-  type CampanhaTesteGetPayload<S extends boolean | null | undefined | CampanhaTesteDefaultArgs> = $Result.GetResult<Prisma.$CampanhaTestePayload, S>
+  type DepartmentGetPayload<S extends boolean | null | undefined | DepartmentDefaultArgs> = $Result.GetResult<Prisma.$DepartmentPayload, S>
 
-  type CampanhaTesteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CampanhaTesteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CampanhaTesteCountAggregateInputType | true
+  type DepartmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DepartmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DepartmentCountAggregateInputType | true
     }
 
-  export interface CampanhaTesteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CampanhaTeste'], meta: { name: 'CampanhaTeste' } }
+  export interface DepartmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Department'], meta: { name: 'Department' } }
     /**
-     * Find zero or one CampanhaTeste that matches the filter.
-     * @param {CampanhaTesteFindUniqueArgs} args - Arguments to find a CampanhaTeste
+     * Find zero or one Department that matches the filter.
+     * @param {DepartmentFindUniqueArgs} args - Arguments to find a Department
      * @example
-     * // Get one CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.findUnique({
+     * // Get one Department
+     * const department = await prisma.department.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends CampanhaTesteFindUniqueArgs>(args: SelectSubset<T, CampanhaTesteFindUniqueArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends DepartmentFindUniqueArgs>(args: SelectSubset<T, DepartmentFindUniqueArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one CampanhaTeste that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Department that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {CampanhaTesteFindUniqueOrThrowArgs} args - Arguments to find a CampanhaTeste
+     * @param {DepartmentFindUniqueOrThrowArgs} args - Arguments to find a Department
      * @example
-     * // Get one CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.findUniqueOrThrow({
+     * // Get one Department
+     * const department = await prisma.department.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CampanhaTesteFindUniqueOrThrowArgs>(args: SelectSubset<T, CampanhaTesteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends DepartmentFindUniqueOrThrowArgs>(args: SelectSubset<T, DepartmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first CampanhaTeste that matches the filter.
+     * Find the first Department that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteFindFirstArgs} args - Arguments to find a CampanhaTeste
+     * @param {DepartmentFindFirstArgs} args - Arguments to find a Department
      * @example
-     * // Get one CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.findFirst({
+     * // Get one Department
+     * const department = await prisma.department.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends CampanhaTesteFindFirstArgs>(args?: SelectSubset<T, CampanhaTesteFindFirstArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends DepartmentFindFirstArgs>(args?: SelectSubset<T, DepartmentFindFirstArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first CampanhaTeste that matches the filter or
+     * Find the first Department that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteFindFirstOrThrowArgs} args - Arguments to find a CampanhaTeste
+     * @param {DepartmentFindFirstOrThrowArgs} args - Arguments to find a Department
      * @example
-     * // Get one CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.findFirstOrThrow({
+     * // Get one Department
+     * const department = await prisma.department.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends CampanhaTesteFindFirstOrThrowArgs>(args?: SelectSubset<T, CampanhaTesteFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends DepartmentFindFirstOrThrowArgs>(args?: SelectSubset<T, DepartmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more CampanhaTestes that matches the filter.
+     * Find zero or more Departments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {DepartmentFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all CampanhaTestes
-     * const campanhaTestes = await prisma.campanhaTeste.findMany()
+     * // Get all Departments
+     * const departments = await prisma.department.findMany()
      * 
-     * // Get first 10 CampanhaTestes
-     * const campanhaTestes = await prisma.campanhaTeste.findMany({ take: 10 })
+     * // Get first 10 Departments
+     * const departments = await prisma.department.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const campanhaTesteWithIdOnly = await prisma.campanhaTeste.findMany({ select: { id: true } })
+     * const departmentWithIdOnly = await prisma.department.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CampanhaTesteFindManyArgs>(args?: SelectSubset<T, CampanhaTesteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends DepartmentFindManyArgs>(args?: SelectSubset<T, DepartmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a CampanhaTeste.
-     * @param {CampanhaTesteCreateArgs} args - Arguments to create a CampanhaTeste.
+     * Create a Department.
+     * @param {DepartmentCreateArgs} args - Arguments to create a Department.
      * @example
-     * // Create one CampanhaTeste
-     * const CampanhaTeste = await prisma.campanhaTeste.create({
+     * // Create one Department
+     * const Department = await prisma.department.create({
      *   data: {
-     *     // ... data to create a CampanhaTeste
+     *     // ... data to create a Department
      *   }
      * })
      * 
      */
-    create<T extends CampanhaTesteCreateArgs>(args: SelectSubset<T, CampanhaTesteCreateArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends DepartmentCreateArgs>(args: SelectSubset<T, DepartmentCreateArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many CampanhaTestes.
-     * @param {CampanhaTesteCreateManyArgs} args - Arguments to create many CampanhaTestes.
+     * Create many Departments.
+     * @param {DepartmentCreateManyArgs} args - Arguments to create many Departments.
      * @example
-     * // Create many CampanhaTestes
-     * const campanhaTeste = await prisma.campanhaTeste.createMany({
+     * // Create many Departments
+     * const department = await prisma.department.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends CampanhaTesteCreateManyArgs>(args?: SelectSubset<T, CampanhaTesteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends DepartmentCreateManyArgs>(args?: SelectSubset<T, DepartmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many CampanhaTestes and returns the data saved in the database.
-     * @param {CampanhaTesteCreateManyAndReturnArgs} args - Arguments to create many CampanhaTestes.
+     * Create many Departments and returns the data saved in the database.
+     * @param {DepartmentCreateManyAndReturnArgs} args - Arguments to create many Departments.
      * @example
-     * // Create many CampanhaTestes
-     * const campanhaTeste = await prisma.campanhaTeste.createManyAndReturn({
+     * // Create many Departments
+     * const department = await prisma.department.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many CampanhaTestes and only return the `id`
-     * const campanhaTesteWithIdOnly = await prisma.campanhaTeste.createManyAndReturn({
+     * // Create many Departments and only return the `id`
+     * const departmentWithIdOnly = await prisma.department.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -2174,28 +2013,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CampanhaTesteCreateManyAndReturnArgs>(args?: SelectSubset<T, CampanhaTesteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends DepartmentCreateManyAndReturnArgs>(args?: SelectSubset<T, DepartmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a CampanhaTeste.
-     * @param {CampanhaTesteDeleteArgs} args - Arguments to delete one CampanhaTeste.
+     * Delete a Department.
+     * @param {DepartmentDeleteArgs} args - Arguments to delete one Department.
      * @example
-     * // Delete one CampanhaTeste
-     * const CampanhaTeste = await prisma.campanhaTeste.delete({
+     * // Delete one Department
+     * const Department = await prisma.department.delete({
      *   where: {
-     *     // ... filter to delete one CampanhaTeste
+     *     // ... filter to delete one Department
      *   }
      * })
      * 
      */
-    delete<T extends CampanhaTesteDeleteArgs>(args: SelectSubset<T, CampanhaTesteDeleteArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends DepartmentDeleteArgs>(args: SelectSubset<T, DepartmentDeleteArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one CampanhaTeste.
-     * @param {CampanhaTesteUpdateArgs} args - Arguments to update one CampanhaTeste.
+     * Update one Department.
+     * @param {DepartmentUpdateArgs} args - Arguments to update one Department.
      * @example
-     * // Update one CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.update({
+     * // Update one Department
+     * const department = await prisma.department.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2205,30 +2044,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CampanhaTesteUpdateArgs>(args: SelectSubset<T, CampanhaTesteUpdateArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends DepartmentUpdateArgs>(args: SelectSubset<T, DepartmentUpdateArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more CampanhaTestes.
-     * @param {CampanhaTesteDeleteManyArgs} args - Arguments to filter CampanhaTestes to delete.
+     * Delete zero or more Departments.
+     * @param {DepartmentDeleteManyArgs} args - Arguments to filter Departments to delete.
      * @example
-     * // Delete a few CampanhaTestes
-     * const { count } = await prisma.campanhaTeste.deleteMany({
+     * // Delete a few Departments
+     * const { count } = await prisma.department.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends CampanhaTesteDeleteManyArgs>(args?: SelectSubset<T, CampanhaTesteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends DepartmentDeleteManyArgs>(args?: SelectSubset<T, DepartmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more CampanhaTestes.
+     * Update zero or more Departments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {DepartmentUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many CampanhaTestes
-     * const campanhaTeste = await prisma.campanhaTeste.updateMany({
+     * // Update many Departments
+     * const department = await prisma.department.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2238,14 +2077,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends CampanhaTesteUpdateManyArgs>(args: SelectSubset<T, CampanhaTesteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends DepartmentUpdateManyArgs>(args: SelectSubset<T, DepartmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more CampanhaTestes and returns the data updated in the database.
-     * @param {CampanhaTesteUpdateManyAndReturnArgs} args - Arguments to update many CampanhaTestes.
+     * Update zero or more Departments and returns the data updated in the database.
+     * @param {DepartmentUpdateManyAndReturnArgs} args - Arguments to update many Departments.
      * @example
-     * // Update many CampanhaTestes
-     * const campanhaTeste = await prisma.campanhaTeste.updateManyAndReturn({
+     * // Update many Departments
+     * const department = await prisma.department.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2254,8 +2093,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more CampanhaTestes and only return the `id`
-     * const campanhaTesteWithIdOnly = await prisma.campanhaTeste.updateManyAndReturn({
+     * // Update zero or more Departments and only return the `id`
+     * const departmentWithIdOnly = await prisma.department.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -2268,56 +2107,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CampanhaTesteUpdateManyAndReturnArgs>(args: SelectSubset<T, CampanhaTesteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends DepartmentUpdateManyAndReturnArgs>(args: SelectSubset<T, DepartmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one CampanhaTeste.
-     * @param {CampanhaTesteUpsertArgs} args - Arguments to update or create a CampanhaTeste.
+     * Create or update one Department.
+     * @param {DepartmentUpsertArgs} args - Arguments to update or create a Department.
      * @example
-     * // Update or create a CampanhaTeste
-     * const campanhaTeste = await prisma.campanhaTeste.upsert({
+     * // Update or create a Department
+     * const department = await prisma.department.upsert({
      *   create: {
-     *     // ... data to create a CampanhaTeste
+     *     // ... data to create a Department
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the CampanhaTeste we want to update
+     *     // ... the filter for the Department we want to update
      *   }
      * })
      */
-    upsert<T extends CampanhaTesteUpsertArgs>(args: SelectSubset<T, CampanhaTesteUpsertArgs<ExtArgs>>): Prisma__CampanhaTesteClient<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends DepartmentUpsertArgs>(args: SelectSubset<T, DepartmentUpsertArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of CampanhaTestes.
+     * Count the number of Departments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteCountArgs} args - Arguments to filter CampanhaTestes to count.
+     * @param {DepartmentCountArgs} args - Arguments to filter Departments to count.
      * @example
-     * // Count the number of CampanhaTestes
-     * const count = await prisma.campanhaTeste.count({
+     * // Count the number of Departments
+     * const count = await prisma.department.count({
      *   where: {
-     *     // ... the filter for the CampanhaTestes we want to count
+     *     // ... the filter for the Departments we want to count
      *   }
      * })
     **/
-    count<T extends CampanhaTesteCountArgs>(
-      args?: Subset<T, CampanhaTesteCountArgs>,
+    count<T extends DepartmentCountArgs>(
+      args?: Subset<T, DepartmentCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], CampanhaTesteCountAggregateOutputType>
+          : GetScalarType<T['select'], DepartmentCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a CampanhaTeste.
+     * Allows you to perform aggregations operations on a Department.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {DepartmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2337,13 +2176,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends CampanhaTesteAggregateArgs>(args: Subset<T, CampanhaTesteAggregateArgs>): Prisma.PrismaPromise<GetCampanhaTesteAggregateType<T>>
+    aggregate<T extends DepartmentAggregateArgs>(args: Subset<T, DepartmentAggregateArgs>): Prisma.PrismaPromise<GetDepartmentAggregateType<T>>
 
     /**
-     * Group by CampanhaTeste.
+     * Group by Department.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaTesteGroupByArgs} args - Group by arguments.
+     * @param {DepartmentGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2358,14 +2197,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends CampanhaTesteGroupByArgs,
+      T extends DepartmentGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CampanhaTesteGroupByArgs['orderBy'] }
-        : { orderBy?: CampanhaTesteGroupByArgs['orderBy'] },
+        ? { orderBy: DepartmentGroupByArgs['orderBy'] }
+        : { orderBy?: DepartmentGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2414,23 +2253,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, CampanhaTesteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampanhaTesteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, DepartmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDepartmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the CampanhaTeste model
+   * Fields of the Department model
    */
-  readonly fields: CampanhaTesteFieldRefs;
+  readonly fields: DepartmentFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for CampanhaTeste.
+   * The delegate class that acts as a "Promise-like" for Department.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CampanhaTesteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__DepartmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    campanha<T extends CampanhaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CampanhaDefaultArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    teste<T extends TesteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TesteDefaultArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    phishings<T extends Department$phishingsArgs<ExtArgs> = {}>(args?: Subset<T, Department$phishingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users<T extends Department$usersArgs<ExtArgs> = {}>(args?: Subset<T, Department$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2457,849 +2296,889 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the CampanhaTeste model
+   * Fields of the Department model
    */ 
-  interface CampanhaTesteFieldRefs {
-    readonly id: FieldRef<"CampanhaTeste", 'String'>
-    readonly campanhaId: FieldRef<"CampanhaTeste", 'String'>
-    readonly testeId: FieldRef<"CampanhaTeste", 'String'>
-    readonly ativo: FieldRef<"CampanhaTeste", 'Boolean'>
-    readonly criadoEm: FieldRef<"CampanhaTeste", 'DateTime'>
-    readonly criadoPor: FieldRef<"CampanhaTeste", 'String'>
-    readonly atualizadoEm: FieldRef<"CampanhaTeste", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"CampanhaTeste", 'String'>
-    readonly inativadoEm: FieldRef<"CampanhaTeste", 'DateTime'>
-    readonly inativadoPor: FieldRef<"CampanhaTeste", 'String'>
+  interface DepartmentFieldRefs {
+    readonly id: FieldRef<"Department", 'String'>
+    readonly name: FieldRef<"Department", 'String'>
+    readonly is_active: FieldRef<"Department", 'Boolean'>
+    readonly created_at: FieldRef<"Department", 'DateTime'>
+    readonly created_by: FieldRef<"Department", 'String'>
+    readonly updated_by: FieldRef<"Department", 'String'>
+    readonly updated_at: FieldRef<"Department", 'DateTime'>
+    readonly inactivated_at: FieldRef<"Department", 'DateTime'>
+    readonly inactivated_by: FieldRef<"Department", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * CampanhaTeste findUnique
+   * Department findUnique
    */
-  export type CampanhaTesteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which CampanhaTeste to fetch.
+     * Filter, which Department to fetch.
      */
-    where: CampanhaTesteWhereUniqueInput
+    where: DepartmentWhereUniqueInput
   }
 
   /**
-   * CampanhaTeste findUniqueOrThrow
+   * Department findUniqueOrThrow
    */
-  export type CampanhaTesteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which CampanhaTeste to fetch.
+     * Filter, which Department to fetch.
      */
-    where: CampanhaTesteWhereUniqueInput
+    where: DepartmentWhereUniqueInput
   }
 
   /**
-   * CampanhaTeste findFirst
+   * Department findFirst
    */
-  export type CampanhaTesteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which CampanhaTeste to fetch.
+     * Filter, which Department to fetch.
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of CampanhaTestes to fetch.
+     * Determine the order of Departments to fetch.
      */
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
+    orderBy?: DepartmentOrderByWithRelationInput | DepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for CampanhaTestes.
+     * Sets the position for searching for Departments.
      */
-    cursor?: CampanhaTesteWhereUniqueInput
+    cursor?: DepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` CampanhaTestes from the position of the cursor.
+     * Take `±n` Departments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` CampanhaTestes.
+     * Skip the first `n` Departments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of CampanhaTestes.
+     * Filter by unique combinations of Departments.
      */
-    distinct?: CampanhaTesteScalarFieldEnum | CampanhaTesteScalarFieldEnum[]
+    distinct?: DepartmentScalarFieldEnum | DepartmentScalarFieldEnum[]
   }
 
   /**
-   * CampanhaTeste findFirstOrThrow
+   * Department findFirstOrThrow
    */
-  export type CampanhaTesteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which CampanhaTeste to fetch.
+     * Filter, which Department to fetch.
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of CampanhaTestes to fetch.
+     * Determine the order of Departments to fetch.
      */
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
+    orderBy?: DepartmentOrderByWithRelationInput | DepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for CampanhaTestes.
+     * Sets the position for searching for Departments.
      */
-    cursor?: CampanhaTesteWhereUniqueInput
+    cursor?: DepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` CampanhaTestes from the position of the cursor.
+     * Take `±n` Departments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` CampanhaTestes.
+     * Skip the first `n` Departments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of CampanhaTestes.
+     * Filter by unique combinations of Departments.
      */
-    distinct?: CampanhaTesteScalarFieldEnum | CampanhaTesteScalarFieldEnum[]
+    distinct?: DepartmentScalarFieldEnum | DepartmentScalarFieldEnum[]
   }
 
   /**
-   * CampanhaTeste findMany
+   * Department findMany
    */
-  export type CampanhaTesteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which CampanhaTestes to fetch.
+     * Filter, which Departments to fetch.
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of CampanhaTestes to fetch.
+     * Determine the order of Departments to fetch.
      */
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
+    orderBy?: DepartmentOrderByWithRelationInput | DepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing CampanhaTestes.
+     * Sets the position for listing Departments.
      */
-    cursor?: CampanhaTesteWhereUniqueInput
+    cursor?: DepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` CampanhaTestes from the position of the cursor.
+     * Take `±n` Departments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` CampanhaTestes.
+     * Skip the first `n` Departments.
      */
     skip?: number
-    distinct?: CampanhaTesteScalarFieldEnum | CampanhaTesteScalarFieldEnum[]
+    distinct?: DepartmentScalarFieldEnum | DepartmentScalarFieldEnum[]
   }
 
   /**
-   * CampanhaTeste create
+   * Department create
    */
-  export type CampanhaTesteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to create a CampanhaTeste.
+     * The data needed to create a Department.
      */
-    data: XOR<CampanhaTesteCreateInput, CampanhaTesteUncheckedCreateInput>
+    data: XOR<DepartmentCreateInput, DepartmentUncheckedCreateInput>
   }
 
   /**
-   * CampanhaTeste createMany
+   * Department createMany
    */
-  export type CampanhaTesteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many CampanhaTestes.
+     * The data used to create many Departments.
      */
-    data: CampanhaTesteCreateManyInput | CampanhaTesteCreateManyInput[]
+    data: DepartmentCreateManyInput | DepartmentCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * CampanhaTeste createManyAndReturn
+   * Department createManyAndReturn
    */
-  export type CampanhaTesteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelectCreateManyAndReturn<ExtArgs> | null
+    select?: DepartmentSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
-     * The data used to create many CampanhaTestes.
+     * The data used to create many Departments.
      */
-    data: CampanhaTesteCreateManyInput | CampanhaTesteCreateManyInput[]
+    data: DepartmentCreateManyInput | DepartmentCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaTesteIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * CampanhaTeste update
+   * Department update
    */
-  export type CampanhaTesteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to update a CampanhaTeste.
+     * The data needed to update a Department.
      */
-    data: XOR<CampanhaTesteUpdateInput, CampanhaTesteUncheckedUpdateInput>
+    data: XOR<DepartmentUpdateInput, DepartmentUncheckedUpdateInput>
     /**
-     * Choose, which CampanhaTeste to update.
+     * Choose, which Department to update.
      */
-    where: CampanhaTesteWhereUniqueInput
+    where: DepartmentWhereUniqueInput
   }
 
   /**
-   * CampanhaTeste updateMany
+   * Department updateMany
    */
-  export type CampanhaTesteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update CampanhaTestes.
+     * The data used to update Departments.
      */
-    data: XOR<CampanhaTesteUpdateManyMutationInput, CampanhaTesteUncheckedUpdateManyInput>
+    data: XOR<DepartmentUpdateManyMutationInput, DepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which CampanhaTestes to update
+     * Filter which Departments to update
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
-     * Limit how many CampanhaTestes to update.
+     * Limit how many Departments to update.
      */
     limit?: number
   }
 
   /**
-   * CampanhaTeste updateManyAndReturn
+   * Department updateManyAndReturn
    */
-  export type CampanhaTesteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: DepartmentSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
-     * The data used to update CampanhaTestes.
+     * The data used to update Departments.
      */
-    data: XOR<CampanhaTesteUpdateManyMutationInput, CampanhaTesteUncheckedUpdateManyInput>
+    data: XOR<DepartmentUpdateManyMutationInput, DepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which CampanhaTestes to update
+     * Filter which Departments to update
      */
-    where?: CampanhaTesteWhereInput
+    where?: DepartmentWhereInput
     /**
-     * Limit how many CampanhaTestes to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaTesteIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * CampanhaTeste upsert
-   */
-  export type CampanhaTesteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CampanhaTeste
-     */
-    select?: CampanhaTesteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CampanhaTeste
-     */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaTesteInclude<ExtArgs> | null
-    /**
-     * The filter to search for the CampanhaTeste to update in case it exists.
-     */
-    where: CampanhaTesteWhereUniqueInput
-    /**
-     * In case the CampanhaTeste found by the `where` argument doesn't exist, create a new CampanhaTeste with this data.
-     */
-    create: XOR<CampanhaTesteCreateInput, CampanhaTesteUncheckedCreateInput>
-    /**
-     * In case the CampanhaTeste was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<CampanhaTesteUpdateInput, CampanhaTesteUncheckedUpdateInput>
-  }
-
-  /**
-   * CampanhaTeste delete
-   */
-  export type CampanhaTesteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CampanhaTeste
-     */
-    select?: CampanhaTesteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CampanhaTeste
-     */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaTesteInclude<ExtArgs> | null
-    /**
-     * Filter which CampanhaTeste to delete.
-     */
-    where: CampanhaTesteWhereUniqueInput
-  }
-
-  /**
-   * CampanhaTeste deleteMany
-   */
-  export type CampanhaTesteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which CampanhaTestes to delete
-     */
-    where?: CampanhaTesteWhereInput
-    /**
-     * Limit how many CampanhaTestes to delete.
+     * Limit how many Departments to update.
      */
     limit?: number
   }
 
   /**
-   * CampanhaTeste without action
+   * Department upsert
    */
-  export type CampanhaTesteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type DepartmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Department
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: DepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Department
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: DepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
+    include?: DepartmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Department to update in case it exists.
+     */
+    where: DepartmentWhereUniqueInput
+    /**
+     * In case the Department found by the `where` argument doesn't exist, create a new Department with this data.
+     */
+    create: XOR<DepartmentCreateInput, DepartmentUncheckedCreateInput>
+    /**
+     * In case the Department was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DepartmentUpdateInput, DepartmentUncheckedUpdateInput>
+  }
+
+  /**
+   * Department delete
+   */
+  export type DepartmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
+    /**
+     * Filter which Department to delete.
+     */
+    where: DepartmentWhereUniqueInput
+  }
+
+  /**
+   * Department deleteMany
+   */
+  export type DepartmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Departments to delete
+     */
+    where?: DepartmentWhereInput
+    /**
+     * Limit how many Departments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Department.phishings
+   */
+  export type Department$phishingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PhishingDepartment
+     */
+    select?: PhishingDepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PhishingDepartment
+     */
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PhishingDepartmentInclude<ExtArgs> | null
+    where?: PhishingDepartmentWhereInput
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
+    cursor?: PhishingDepartmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PhishingDepartmentScalarFieldEnum | PhishingDepartmentScalarFieldEnum[]
+  }
+
+  /**
+   * Department.users
+   */
+  export type Department$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserDepartment
+     */
+    select?: UserDepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserDepartment
+     */
+    omit?: UserDepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserDepartmentInclude<ExtArgs> | null
+    where?: UserDepartmentWhereInput
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
+    cursor?: UserDepartmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserDepartmentScalarFieldEnum | UserDepartmentScalarFieldEnum[]
+  }
+
+  /**
+   * Department without action
+   */
+  export type DepartmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Department
+     */
+    select?: DepartmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Department
+     */
+    omit?: DepartmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DepartmentInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Campanha
+   * Model Email
    */
 
-  export type AggregateCampanha = {
-    _count: CampanhaCountAggregateOutputType | null
-    _min: CampanhaMinAggregateOutputType | null
-    _max: CampanhaMaxAggregateOutputType | null
+  export type AggregateEmail = {
+    _count: EmailCountAggregateOutputType | null
+    _min: EmailMinAggregateOutputType | null
+    _max: EmailMaxAggregateOutputType | null
   }
 
-  export type CampanhaMinAggregateOutputType = {
+  export type EmailMinAggregateOutputType = {
     id: string | null
-    titulo: string | null
-    descricao: string | null
-    status: $Enums.StatusCampanha | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    address: string | null
+    user_id: string | null
+    type: $Enums.EmailType | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type CampanhaMaxAggregateOutputType = {
+  export type EmailMaxAggregateOutputType = {
     id: string | null
-    titulo: string | null
-    descricao: string | null
-    status: $Enums.StatusCampanha | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    address: string | null
+    user_id: string | null
+    type: $Enums.EmailType | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type CampanhaCountAggregateOutputType = {
+  export type EmailCountAggregateOutputType = {
     id: number
-    titulo: number
-    descricao: number
-    status: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    address: number
+    user_id: number
+    type: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type CampanhaMinAggregateInputType = {
+  export type EmailMinAggregateInputType = {
     id?: true
-    titulo?: true
-    descricao?: true
-    status?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    address?: true
+    user_id?: true
+    type?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type CampanhaMaxAggregateInputType = {
+  export type EmailMaxAggregateInputType = {
     id?: true
-    titulo?: true
-    descricao?: true
-    status?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    address?: true
+    user_id?: true
+    type?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type CampanhaCountAggregateInputType = {
+  export type EmailCountAggregateInputType = {
     id?: true
-    titulo?: true
-    descricao?: true
-    status?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    address?: true
+    user_id?: true
+    type?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type CampanhaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Campanha to aggregate.
+     * Filter which Email to aggregate.
      */
-    where?: CampanhaWhereInput
+    where?: EmailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Campanhas to fetch.
+     * Determine the order of Emails to fetch.
      */
-    orderBy?: CampanhaOrderByWithRelationInput | CampanhaOrderByWithRelationInput[]
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: CampanhaWhereUniqueInput
+    cursor?: EmailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Campanhas from the position of the cursor.
+     * Take `±n` Emails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Campanhas.
+     * Skip the first `n` Emails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Campanhas
+     * Count returned Emails
     **/
-    _count?: true | CampanhaCountAggregateInputType
+    _count?: true | EmailCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: CampanhaMinAggregateInputType
+    _min?: EmailMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: CampanhaMaxAggregateInputType
+    _max?: EmailMaxAggregateInputType
   }
 
-  export type GetCampanhaAggregateType<T extends CampanhaAggregateArgs> = {
-        [P in keyof T & keyof AggregateCampanha]: P extends '_count' | 'count'
+  export type GetEmailAggregateType<T extends EmailAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmail]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateCampanha[P]>
-      : GetScalarType<T[P], AggregateCampanha[P]>
+        : GetScalarType<T[P], AggregateEmail[P]>
+      : GetScalarType<T[P], AggregateEmail[P]>
   }
 
 
 
 
-  export type CampanhaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CampanhaWhereInput
-    orderBy?: CampanhaOrderByWithAggregationInput | CampanhaOrderByWithAggregationInput[]
-    by: CampanhaScalarFieldEnum[] | CampanhaScalarFieldEnum
-    having?: CampanhaScalarWhereWithAggregatesInput
+  export type EmailGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailWhereInput
+    orderBy?: EmailOrderByWithAggregationInput | EmailOrderByWithAggregationInput[]
+    by: EmailScalarFieldEnum[] | EmailScalarFieldEnum
+    having?: EmailScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: CampanhaCountAggregateInputType | true
-    _min?: CampanhaMinAggregateInputType
-    _max?: CampanhaMaxAggregateInputType
+    _count?: EmailCountAggregateInputType | true
+    _min?: EmailMinAggregateInputType
+    _max?: EmailMaxAggregateInputType
   }
 
-  export type CampanhaGroupByOutputType = {
+  export type EmailGroupByOutputType = {
     id: string
-    titulo: string
-    descricao: string | null
-    status: $Enums.StatusCampanha
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: CampanhaCountAggregateOutputType | null
-    _min: CampanhaMinAggregateOutputType | null
-    _max: CampanhaMaxAggregateOutputType | null
+    address: string
+    user_id: string
+    type: $Enums.EmailType
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: EmailCountAggregateOutputType | null
+    _min: EmailMinAggregateOutputType | null
+    _max: EmailMaxAggregateOutputType | null
   }
 
-  type GetCampanhaGroupByPayload<T extends CampanhaGroupByArgs> = Prisma.PrismaPromise<
+  type GetEmailGroupByPayload<T extends EmailGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<CampanhaGroupByOutputType, T['by']> &
+      PickEnumerable<EmailGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof CampanhaGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof EmailGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], CampanhaGroupByOutputType[P]>
-            : GetScalarType<T[P], CampanhaGroupByOutputType[P]>
+              : GetScalarType<T[P], EmailGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type CampanhaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EmailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    titulo?: boolean
-    descricao?: boolean
-    status?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    logs?: boolean | Campanha$logsArgs<ExtArgs>
-    testes?: boolean | Campanha$testesArgs<ExtArgs>
-    _count?: boolean | CampanhaCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["campanha"]>
+    address?: boolean
+    user_id?: boolean
+    type?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
 
-  export type CampanhaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EmailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    titulo?: boolean
-    descricao?: boolean
-    status?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["campanha"]>
+    address?: boolean
+    user_id?: boolean
+    type?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
 
-  export type CampanhaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type EmailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    titulo?: boolean
-    descricao?: boolean
-    status?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["campanha"]>
+    address?: boolean
+    user_id?: boolean
+    type?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["email"]>
 
-  export type CampanhaSelectScalar = {
+  export type EmailSelectScalar = {
     id?: boolean
-    titulo?: boolean
-    descricao?: boolean
-    status?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    address?: boolean
+    user_id?: boolean
+    type?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type CampanhaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "descricao" | "status" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["campanha"]>
-  export type CampanhaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    logs?: boolean | Campanha$logsArgs<ExtArgs>
-    testes?: boolean | Campanha$testesArgs<ExtArgs>
-    _count?: boolean | CampanhaCountOutputTypeDefaultArgs<ExtArgs>
+  export type EmailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "address" | "user_id" | "type" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["email"]>
+  export type EmailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
   }
-  export type CampanhaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type CampanhaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type EmailIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EmailIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
 
-  export type $CampanhaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Campanha"
+  export type $EmailPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Email"
     objects: {
-      logs: Prisma.$LogPayload<ExtArgs>[]
-      testes: Prisma.$CampanhaTestePayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      titulo: string
-      descricao: string | null
-      status: $Enums.StatusCampanha
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["campanha"]>
+      address: string
+      user_id: string
+      type: $Enums.EmailType
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["email"]>
     composites: {}
   }
 
-  type CampanhaGetPayload<S extends boolean | null | undefined | CampanhaDefaultArgs> = $Result.GetResult<Prisma.$CampanhaPayload, S>
+  type EmailGetPayload<S extends boolean | null | undefined | EmailDefaultArgs> = $Result.GetResult<Prisma.$EmailPayload, S>
 
-  type CampanhaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CampanhaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CampanhaCountAggregateInputType | true
+  type EmailCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailCountAggregateInputType | true
     }
 
-  export interface CampanhaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Campanha'], meta: { name: 'Campanha' } }
+  export interface EmailDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Email'], meta: { name: 'Email' } }
     /**
-     * Find zero or one Campanha that matches the filter.
-     * @param {CampanhaFindUniqueArgs} args - Arguments to find a Campanha
+     * Find zero or one Email that matches the filter.
+     * @param {EmailFindUniqueArgs} args - Arguments to find a Email
      * @example
-     * // Get one Campanha
-     * const campanha = await prisma.campanha.findUnique({
+     * // Get one Email
+     * const email = await prisma.email.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends CampanhaFindUniqueArgs>(args: SelectSubset<T, CampanhaFindUniqueArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends EmailFindUniqueArgs>(args: SelectSubset<T, EmailFindUniqueArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Campanha that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Email that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {CampanhaFindUniqueOrThrowArgs} args - Arguments to find a Campanha
+     * @param {EmailFindUniqueOrThrowArgs} args - Arguments to find a Email
      * @example
-     * // Get one Campanha
-     * const campanha = await prisma.campanha.findUniqueOrThrow({
+     * // Get one Email
+     * const email = await prisma.email.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends CampanhaFindUniqueOrThrowArgs>(args: SelectSubset<T, CampanhaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends EmailFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Campanha that matches the filter.
+     * Find the first Email that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaFindFirstArgs} args - Arguments to find a Campanha
+     * @param {EmailFindFirstArgs} args - Arguments to find a Email
      * @example
-     * // Get one Campanha
-     * const campanha = await prisma.campanha.findFirst({
+     * // Get one Email
+     * const email = await prisma.email.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends CampanhaFindFirstArgs>(args?: SelectSubset<T, CampanhaFindFirstArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends EmailFindFirstArgs>(args?: SelectSubset<T, EmailFindFirstArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Campanha that matches the filter or
+     * Find the first Email that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaFindFirstOrThrowArgs} args - Arguments to find a Campanha
+     * @param {EmailFindFirstOrThrowArgs} args - Arguments to find a Email
      * @example
-     * // Get one Campanha
-     * const campanha = await prisma.campanha.findFirstOrThrow({
+     * // Get one Email
+     * const email = await prisma.email.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends CampanhaFindFirstOrThrowArgs>(args?: SelectSubset<T, CampanhaFindFirstOrThrowArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends EmailFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Campanhas that matches the filter.
+     * Find zero or more Emails that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {EmailFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Campanhas
-     * const campanhas = await prisma.campanha.findMany()
+     * // Get all Emails
+     * const emails = await prisma.email.findMany()
      * 
-     * // Get first 10 Campanhas
-     * const campanhas = await prisma.campanha.findMany({ take: 10 })
+     * // Get first 10 Emails
+     * const emails = await prisma.email.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const campanhaWithIdOnly = await prisma.campanha.findMany({ select: { id: true } })
+     * const emailWithIdOnly = await prisma.email.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends CampanhaFindManyArgs>(args?: SelectSubset<T, CampanhaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends EmailFindManyArgs>(args?: SelectSubset<T, EmailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Campanha.
-     * @param {CampanhaCreateArgs} args - Arguments to create a Campanha.
+     * Create a Email.
+     * @param {EmailCreateArgs} args - Arguments to create a Email.
      * @example
-     * // Create one Campanha
-     * const Campanha = await prisma.campanha.create({
+     * // Create one Email
+     * const Email = await prisma.email.create({
      *   data: {
-     *     // ... data to create a Campanha
+     *     // ... data to create a Email
      *   }
      * })
      * 
      */
-    create<T extends CampanhaCreateArgs>(args: SelectSubset<T, CampanhaCreateArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends EmailCreateArgs>(args: SelectSubset<T, EmailCreateArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Campanhas.
-     * @param {CampanhaCreateManyArgs} args - Arguments to create many Campanhas.
+     * Create many Emails.
+     * @param {EmailCreateManyArgs} args - Arguments to create many Emails.
      * @example
-     * // Create many Campanhas
-     * const campanha = await prisma.campanha.createMany({
+     * // Create many Emails
+     * const email = await prisma.email.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends CampanhaCreateManyArgs>(args?: SelectSubset<T, CampanhaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends EmailCreateManyArgs>(args?: SelectSubset<T, EmailCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Campanhas and returns the data saved in the database.
-     * @param {CampanhaCreateManyAndReturnArgs} args - Arguments to create many Campanhas.
+     * Create many Emails and returns the data saved in the database.
+     * @param {EmailCreateManyAndReturnArgs} args - Arguments to create many Emails.
      * @example
-     * // Create many Campanhas
-     * const campanha = await prisma.campanha.createManyAndReturn({
+     * // Create many Emails
+     * const email = await prisma.email.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Campanhas and only return the `id`
-     * const campanhaWithIdOnly = await prisma.campanha.createManyAndReturn({
+     * // Create many Emails and only return the `id`
+     * const emailWithIdOnly = await prisma.email.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -3309,28 +3188,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends CampanhaCreateManyAndReturnArgs>(args?: SelectSubset<T, CampanhaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends EmailCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Campanha.
-     * @param {CampanhaDeleteArgs} args - Arguments to delete one Campanha.
+     * Delete a Email.
+     * @param {EmailDeleteArgs} args - Arguments to delete one Email.
      * @example
-     * // Delete one Campanha
-     * const Campanha = await prisma.campanha.delete({
+     * // Delete one Email
+     * const Email = await prisma.email.delete({
      *   where: {
-     *     // ... filter to delete one Campanha
+     *     // ... filter to delete one Email
      *   }
      * })
      * 
      */
-    delete<T extends CampanhaDeleteArgs>(args: SelectSubset<T, CampanhaDeleteArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends EmailDeleteArgs>(args: SelectSubset<T, EmailDeleteArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Campanha.
-     * @param {CampanhaUpdateArgs} args - Arguments to update one Campanha.
+     * Update one Email.
+     * @param {EmailUpdateArgs} args - Arguments to update one Email.
      * @example
-     * // Update one Campanha
-     * const campanha = await prisma.campanha.update({
+     * // Update one Email
+     * const email = await prisma.email.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3340,30 +3219,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends CampanhaUpdateArgs>(args: SelectSubset<T, CampanhaUpdateArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends EmailUpdateArgs>(args: SelectSubset<T, EmailUpdateArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Campanhas.
-     * @param {CampanhaDeleteManyArgs} args - Arguments to filter Campanhas to delete.
+     * Delete zero or more Emails.
+     * @param {EmailDeleteManyArgs} args - Arguments to filter Emails to delete.
      * @example
-     * // Delete a few Campanhas
-     * const { count } = await prisma.campanha.deleteMany({
+     * // Delete a few Emails
+     * const { count } = await prisma.email.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends CampanhaDeleteManyArgs>(args?: SelectSubset<T, CampanhaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends EmailDeleteManyArgs>(args?: SelectSubset<T, EmailDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Campanhas.
+     * Update zero or more Emails.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {EmailUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Campanhas
-     * const campanha = await prisma.campanha.updateMany({
+     * // Update many Emails
+     * const email = await prisma.email.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3373,14 +3252,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends CampanhaUpdateManyArgs>(args: SelectSubset<T, CampanhaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends EmailUpdateManyArgs>(args: SelectSubset<T, EmailUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Campanhas and returns the data updated in the database.
-     * @param {CampanhaUpdateManyAndReturnArgs} args - Arguments to update many Campanhas.
+     * Update zero or more Emails and returns the data updated in the database.
+     * @param {EmailUpdateManyAndReturnArgs} args - Arguments to update many Emails.
      * @example
-     * // Update many Campanhas
-     * const campanha = await prisma.campanha.updateManyAndReturn({
+     * // Update many Emails
+     * const email = await prisma.email.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3389,8 +3268,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Campanhas and only return the `id`
-     * const campanhaWithIdOnly = await prisma.campanha.updateManyAndReturn({
+     * // Update zero or more Emails and only return the `id`
+     * const emailWithIdOnly = await prisma.email.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -3403,56 +3282,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends CampanhaUpdateManyAndReturnArgs>(args: SelectSubset<T, CampanhaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends EmailUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Campanha.
-     * @param {CampanhaUpsertArgs} args - Arguments to update or create a Campanha.
+     * Create or update one Email.
+     * @param {EmailUpsertArgs} args - Arguments to update or create a Email.
      * @example
-     * // Update or create a Campanha
-     * const campanha = await prisma.campanha.upsert({
+     * // Update or create a Email
+     * const email = await prisma.email.upsert({
      *   create: {
-     *     // ... data to create a Campanha
+     *     // ... data to create a Email
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Campanha we want to update
+     *     // ... the filter for the Email we want to update
      *   }
      * })
      */
-    upsert<T extends CampanhaUpsertArgs>(args: SelectSubset<T, CampanhaUpsertArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends EmailUpsertArgs>(args: SelectSubset<T, EmailUpsertArgs<ExtArgs>>): Prisma__EmailClient<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Campanhas.
+     * Count the number of Emails.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaCountArgs} args - Arguments to filter Campanhas to count.
+     * @param {EmailCountArgs} args - Arguments to filter Emails to count.
      * @example
-     * // Count the number of Campanhas
-     * const count = await prisma.campanha.count({
+     * // Count the number of Emails
+     * const count = await prisma.email.count({
      *   where: {
-     *     // ... the filter for the Campanhas we want to count
+     *     // ... the filter for the Emails we want to count
      *   }
      * })
     **/
-    count<T extends CampanhaCountArgs>(
-      args?: Subset<T, CampanhaCountArgs>,
+    count<T extends EmailCountArgs>(
+      args?: Subset<T, EmailCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], CampanhaCountAggregateOutputType>
+          : GetScalarType<T['select'], EmailCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Campanha.
+     * Allows you to perform aggregations operations on a Email.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {EmailAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3472,13 +3351,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends CampanhaAggregateArgs>(args: Subset<T, CampanhaAggregateArgs>): Prisma.PrismaPromise<GetCampanhaAggregateType<T>>
+    aggregate<T extends EmailAggregateArgs>(args: Subset<T, EmailAggregateArgs>): Prisma.PrismaPromise<GetEmailAggregateType<T>>
 
     /**
-     * Group by Campanha.
+     * Group by Email.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {CampanhaGroupByArgs} args - Group by arguments.
+     * @param {EmailGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3493,14 +3372,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends CampanhaGroupByArgs,
+      T extends EmailGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CampanhaGroupByArgs['orderBy'] }
-        : { orderBy?: CampanhaGroupByArgs['orderBy'] },
+        ? { orderBy: EmailGroupByArgs['orderBy'] }
+        : { orderBy?: EmailGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3549,23 +3428,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, CampanhaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCampanhaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, EmailGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Campanha model
+   * Fields of the Email model
    */
-  readonly fields: CampanhaFieldRefs;
+  readonly fields: EmailFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Campanha.
+   * The delegate class that acts as a "Promise-like" for Email.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__CampanhaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__EmailClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    logs<T extends Campanha$logsArgs<ExtArgs> = {}>(args?: Subset<T, Campanha$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    testes<T extends Campanha$testesArgs<ExtArgs> = {}>(args?: Subset<T, Campanha$testesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3592,1649 +3470,431 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Campanha model
+   * Fields of the Email model
    */ 
-  interface CampanhaFieldRefs {
-    readonly id: FieldRef<"Campanha", 'String'>
-    readonly titulo: FieldRef<"Campanha", 'String'>
-    readonly descricao: FieldRef<"Campanha", 'String'>
-    readonly status: FieldRef<"Campanha", 'StatusCampanha'>
-    readonly ativo: FieldRef<"Campanha", 'Boolean'>
-    readonly criadoEm: FieldRef<"Campanha", 'DateTime'>
-    readonly criadoPor: FieldRef<"Campanha", 'String'>
-    readonly atualizadoEm: FieldRef<"Campanha", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"Campanha", 'String'>
-    readonly inativadoEm: FieldRef<"Campanha", 'DateTime'>
-    readonly inativadoPor: FieldRef<"Campanha", 'String'>
+  interface EmailFieldRefs {
+    readonly id: FieldRef<"Email", 'String'>
+    readonly address: FieldRef<"Email", 'String'>
+    readonly user_id: FieldRef<"Email", 'String'>
+    readonly type: FieldRef<"Email", 'EmailType'>
+    readonly is_active: FieldRef<"Email", 'Boolean'>
+    readonly created_at: FieldRef<"Email", 'DateTime'>
+    readonly created_by: FieldRef<"Email", 'String'>
+    readonly updated_by: FieldRef<"Email", 'String'>
+    readonly updated_at: FieldRef<"Email", 'DateTime'>
+    readonly inactivated_at: FieldRef<"Email", 'DateTime'>
+    readonly inactivated_by: FieldRef<"Email", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * Campanha findUnique
+   * Email findUnique
    */
-  export type CampanhaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * Filter, which Campanha to fetch.
+     * Filter, which Email to fetch.
      */
-    where: CampanhaWhereUniqueInput
+    where: EmailWhereUniqueInput
   }
 
   /**
-   * Campanha findUniqueOrThrow
+   * Email findUniqueOrThrow
    */
-  export type CampanhaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * Filter, which Campanha to fetch.
+     * Filter, which Email to fetch.
      */
-    where: CampanhaWhereUniqueInput
+    where: EmailWhereUniqueInput
   }
 
   /**
-   * Campanha findFirst
+   * Email findFirst
    */
-  export type CampanhaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * Filter, which Campanha to fetch.
+     * Filter, which Email to fetch.
      */
-    where?: CampanhaWhereInput
+    where?: EmailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Campanhas to fetch.
+     * Determine the order of Emails to fetch.
      */
-    orderBy?: CampanhaOrderByWithRelationInput | CampanhaOrderByWithRelationInput[]
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Campanhas.
+     * Sets the position for searching for Emails.
      */
-    cursor?: CampanhaWhereUniqueInput
+    cursor?: EmailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Campanhas from the position of the cursor.
+     * Take `±n` Emails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Campanhas.
+     * Skip the first `n` Emails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Campanhas.
+     * Filter by unique combinations of Emails.
      */
-    distinct?: CampanhaScalarFieldEnum | CampanhaScalarFieldEnum[]
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
   }
 
   /**
-   * Campanha findFirstOrThrow
+   * Email findFirstOrThrow
    */
-  export type CampanhaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * Filter, which Campanha to fetch.
+     * Filter, which Email to fetch.
      */
-    where?: CampanhaWhereInput
+    where?: EmailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Campanhas to fetch.
+     * Determine the order of Emails to fetch.
      */
-    orderBy?: CampanhaOrderByWithRelationInput | CampanhaOrderByWithRelationInput[]
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Campanhas.
+     * Sets the position for searching for Emails.
      */
-    cursor?: CampanhaWhereUniqueInput
+    cursor?: EmailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Campanhas from the position of the cursor.
+     * Take `±n` Emails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Campanhas.
+     * Skip the first `n` Emails.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Campanhas.
+     * Filter by unique combinations of Emails.
      */
-    distinct?: CampanhaScalarFieldEnum | CampanhaScalarFieldEnum[]
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
   }
 
   /**
-   * Campanha findMany
+   * Email findMany
    */
-  export type CampanhaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * Filter, which Campanhas to fetch.
+     * Filter, which Emails to fetch.
      */
-    where?: CampanhaWhereInput
+    where?: EmailWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Campanhas to fetch.
+     * Determine the order of Emails to fetch.
      */
-    orderBy?: CampanhaOrderByWithRelationInput | CampanhaOrderByWithRelationInput[]
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Campanhas.
+     * Sets the position for listing Emails.
      */
-    cursor?: CampanhaWhereUniqueInput
+    cursor?: EmailWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Campanhas from the position of the cursor.
+     * Take `±n` Emails from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Campanhas.
+     * Skip the first `n` Emails.
      */
     skip?: number
-    distinct?: CampanhaScalarFieldEnum | CampanhaScalarFieldEnum[]
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
   }
 
   /**
-   * Campanha create
+   * Email create
    */
-  export type CampanhaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
     /**
-     * The data needed to create a Campanha.
+     * The data needed to create a Email.
      */
-    data: XOR<CampanhaCreateInput, CampanhaUncheckedCreateInput>
+    data: XOR<EmailCreateInput, EmailUncheckedCreateInput>
   }
 
   /**
-   * Campanha createMany
+   * Email createMany
    */
-  export type CampanhaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Campanhas.
+     * The data used to create many Emails.
      */
-    data: CampanhaCreateManyInput | CampanhaCreateManyInput[]
+    data: EmailCreateManyInput | EmailCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Campanha createManyAndReturn
+   * Email createManyAndReturn
    */
-  export type CampanhaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelectCreateManyAndReturn<ExtArgs> | null
+    select?: EmailSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
-     * The data used to create many Campanhas.
+     * The data used to create many Emails.
      */
-    data: CampanhaCreateManyInput | CampanhaCreateManyInput[]
+    data: EmailCreateManyInput | EmailCreateManyInput[]
     skipDuplicates?: boolean
-  }
-
-  /**
-   * Campanha update
-   */
-  export type CampanhaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Campanha
-     */
-    select?: CampanhaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Campanha
-     */
-    omit?: CampanhaOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Campanha.
-     */
-    data: XOR<CampanhaUpdateInput, CampanhaUncheckedUpdateInput>
-    /**
-     * Choose, which Campanha to update.
-     */
-    where: CampanhaWhereUniqueInput
+    include?: EmailIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Campanha updateMany
+   * Email update
    */
-  export type CampanhaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Campanhas.
+     * Select specific fields to fetch from the Email
      */
-    data: XOR<CampanhaUpdateManyMutationInput, CampanhaUncheckedUpdateManyInput>
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Filter which Campanhas to update
+     * Omit specific fields from the Email
      */
-    where?: CampanhaWhereInput
+    omit?: EmailOmit<ExtArgs> | null
     /**
-     * Limit how many Campanhas to update.
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Email.
+     */
+    data: XOR<EmailUpdateInput, EmailUncheckedUpdateInput>
+    /**
+     * Choose, which Email to update.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email updateMany
+   */
+  export type EmailUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Emails.
+     */
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyInput>
+    /**
+     * Filter which Emails to update
+     */
+    where?: EmailWhereInput
+    /**
+     * Limit how many Emails to update.
      */
     limit?: number
   }
 
   /**
-   * Campanha updateManyAndReturn
+   * Email updateManyAndReturn
    */
-  export type CampanhaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: EmailSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
-     * The data used to update Campanhas.
+     * The data used to update Emails.
      */
-    data: XOR<CampanhaUpdateManyMutationInput, CampanhaUncheckedUpdateManyInput>
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyInput>
     /**
-     * Filter which Campanhas to update
+     * Filter which Emails to update
      */
-    where?: CampanhaWhereInput
+    where?: EmailWhereInput
     /**
-     * Limit how many Campanhas to update.
+     * Limit how many Emails to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Email upsert
+   */
+  export type EmailUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Email to update in case it exists.
+     */
+    where: EmailWhereUniqueInput
+    /**
+     * In case the Email found by the `where` argument doesn't exist, create a new Email with this data.
+     */
+    create: XOR<EmailCreateInput, EmailUncheckedCreateInput>
+    /**
+     * In case the Email was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailUpdateInput, EmailUncheckedUpdateInput>
+  }
+
+  /**
+   * Email delete
+   */
+  export type EmailDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Email
+     */
+    select?: EmailSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Email
+     */
+    omit?: EmailOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailInclude<ExtArgs> | null
+    /**
+     * Filter which Email to delete.
+     */
+    where: EmailWhereUniqueInput
+  }
+
+  /**
+   * Email deleteMany
+   */
+  export type EmailDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Emails to delete
+     */
+    where?: EmailWhereInput
+    /**
+     * Limit how many Emails to delete.
      */
     limit?: number
   }
 
   /**
-   * Campanha upsert
+   * Email without action
    */
-  export type CampanhaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type EmailDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Campanha
+     * Select specific fields to fetch from the Email
      */
-    select?: CampanhaSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Campanha
+     * Omit specific fields from the Email
      */
-    omit?: CampanhaOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Campanha to update in case it exists.
-     */
-    where: CampanhaWhereUniqueInput
-    /**
-     * In case the Campanha found by the `where` argument doesn't exist, create a new Campanha with this data.
-     */
-    create: XOR<CampanhaCreateInput, CampanhaUncheckedCreateInput>
-    /**
-     * In case the Campanha was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<CampanhaUpdateInput, CampanhaUncheckedUpdateInput>
-  }
-
-  /**
-   * Campanha delete
-   */
-  export type CampanhaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Campanha
-     */
-    select?: CampanhaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Campanha
-     */
-    omit?: CampanhaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaInclude<ExtArgs> | null
-    /**
-     * Filter which Campanha to delete.
-     */
-    where: CampanhaWhereUniqueInput
-  }
-
-  /**
-   * Campanha deleteMany
-   */
-  export type CampanhaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Campanhas to delete
-     */
-    where?: CampanhaWhereInput
-    /**
-     * Limit how many Campanhas to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Campanha.logs
-   */
-  export type Campanha$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Log
-     */
-    select?: LogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Log
-     */
-    omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    where?: LogWhereInput
-    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
-    cursor?: LogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
-  }
-
-  /**
-   * Campanha.testes
-   */
-  export type Campanha$testesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CampanhaTeste
-     */
-    select?: CampanhaTesteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CampanhaTeste
-     */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaTesteInclude<ExtArgs> | null
-    where?: CampanhaTesteWhereInput
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
-    cursor?: CampanhaTesteWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CampanhaTesteScalarFieldEnum | CampanhaTesteScalarFieldEnum[]
-  }
-
-  /**
-   * Campanha without action
-   */
-  export type CampanhaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Campanha
-     */
-    select?: CampanhaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Campanha
-     */
-    omit?: CampanhaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Departamento
-   */
-
-  export type AggregateDepartamento = {
-    _count: DepartamentoCountAggregateOutputType | null
-    _min: DepartamentoMinAggregateOutputType | null
-    _max: DepartamentoMaxAggregateOutputType | null
-  }
-
-  export type DepartamentoMinAggregateOutputType = {
-    id: string | null
-    nome: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-  }
-
-  export type DepartamentoMaxAggregateOutputType = {
-    id: string | null
-    nome: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-  }
-
-  export type DepartamentoCountAggregateOutputType = {
-    id: number
-    nome: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
-    _all: number
-  }
-
-
-  export type DepartamentoMinAggregateInputType = {
-    id?: true
-    nome?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
-  }
-
-  export type DepartamentoMaxAggregateInputType = {
-    id?: true
-    nome?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
-  }
-
-  export type DepartamentoCountAggregateInputType = {
-    id?: true
-    nome?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
-    _all?: true
-  }
-
-  export type DepartamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Departamento to aggregate.
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Departamentos to fetch.
-     */
-    orderBy?: DepartamentoOrderByWithRelationInput | DepartamentoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: DepartamentoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Departamentos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Departamentos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Departamentos
-    **/
-    _count?: true | DepartamentoCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: DepartamentoMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: DepartamentoMaxAggregateInputType
-  }
-
-  export type GetDepartamentoAggregateType<T extends DepartamentoAggregateArgs> = {
-        [P in keyof T & keyof AggregateDepartamento]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDepartamento[P]>
-      : GetScalarType<T[P], AggregateDepartamento[P]>
-  }
-
-
-
-
-  export type DepartamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: DepartamentoWhereInput
-    orderBy?: DepartamentoOrderByWithAggregationInput | DepartamentoOrderByWithAggregationInput[]
-    by: DepartamentoScalarFieldEnum[] | DepartamentoScalarFieldEnum
-    having?: DepartamentoScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DepartamentoCountAggregateInputType | true
-    _min?: DepartamentoMinAggregateInputType
-    _max?: DepartamentoMaxAggregateInputType
-  }
-
-  export type DepartamentoGroupByOutputType = {
-    id: string
-    nome: string
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: DepartamentoCountAggregateOutputType | null
-    _min: DepartamentoMinAggregateOutputType | null
-    _max: DepartamentoMaxAggregateOutputType | null
-  }
-
-  type GetDepartamentoGroupByPayload<T extends DepartamentoGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<DepartamentoGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof DepartamentoGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DepartamentoGroupByOutputType[P]>
-            : GetScalarType<T[P], DepartamentoGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type DepartamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    testes?: boolean | Departamento$testesArgs<ExtArgs>
-    logs?: boolean | Departamento$logsArgs<ExtArgs>
-    usuarios?: boolean | Departamento$usuariosArgs<ExtArgs>
-    _count?: boolean | DepartamentoCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["departamento"]>
-
-  export type DepartamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["departamento"]>
-
-  export type DepartamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    nome?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["departamento"]>
-
-  export type DepartamentoSelectScalar = {
-    id?: boolean
-    nome?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }
-
-  export type DepartamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["departamento"]>
-  export type DepartamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    testes?: boolean | Departamento$testesArgs<ExtArgs>
-    logs?: boolean | Departamento$logsArgs<ExtArgs>
-    usuarios?: boolean | Departamento$usuariosArgs<ExtArgs>
-    _count?: boolean | DepartamentoCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type DepartamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type DepartamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-
-  export type $DepartamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Departamento"
-    objects: {
-      testes: Prisma.$TesteDepartamentoPayload<ExtArgs>[]
-      logs: Prisma.$LogPayload<ExtArgs>[]
-      usuarios: Prisma.$UsuarioDepartamentoPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      nome: string
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["departamento"]>
-    composites: {}
-  }
-
-  type DepartamentoGetPayload<S extends boolean | null | undefined | DepartamentoDefaultArgs> = $Result.GetResult<Prisma.$DepartamentoPayload, S>
-
-  type DepartamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<DepartamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: DepartamentoCountAggregateInputType | true
-    }
-
-  export interface DepartamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Departamento'], meta: { name: 'Departamento' } }
-    /**
-     * Find zero or one Departamento that matches the filter.
-     * @param {DepartamentoFindUniqueArgs} args - Arguments to find a Departamento
-     * @example
-     * // Get one Departamento
-     * const departamento = await prisma.departamento.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends DepartamentoFindUniqueArgs>(args: SelectSubset<T, DepartamentoFindUniqueArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Departamento that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {DepartamentoFindUniqueOrThrowArgs} args - Arguments to find a Departamento
-     * @example
-     * // Get one Departamento
-     * const departamento = await prisma.departamento.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends DepartamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, DepartamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Departamento that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoFindFirstArgs} args - Arguments to find a Departamento
-     * @example
-     * // Get one Departamento
-     * const departamento = await prisma.departamento.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends DepartamentoFindFirstArgs>(args?: SelectSubset<T, DepartamentoFindFirstArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Departamento that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoFindFirstOrThrowArgs} args - Arguments to find a Departamento
-     * @example
-     * // Get one Departamento
-     * const departamento = await prisma.departamento.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends DepartamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, DepartamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Departamentos that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Departamentos
-     * const departamentos = await prisma.departamento.findMany()
-     * 
-     * // Get first 10 Departamentos
-     * const departamentos = await prisma.departamento.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const departamentoWithIdOnly = await prisma.departamento.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends DepartamentoFindManyArgs>(args?: SelectSubset<T, DepartamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Departamento.
-     * @param {DepartamentoCreateArgs} args - Arguments to create a Departamento.
-     * @example
-     * // Create one Departamento
-     * const Departamento = await prisma.departamento.create({
-     *   data: {
-     *     // ... data to create a Departamento
-     *   }
-     * })
-     * 
-     */
-    create<T extends DepartamentoCreateArgs>(args: SelectSubset<T, DepartamentoCreateArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Departamentos.
-     * @param {DepartamentoCreateManyArgs} args - Arguments to create many Departamentos.
-     * @example
-     * // Create many Departamentos
-     * const departamento = await prisma.departamento.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends DepartamentoCreateManyArgs>(args?: SelectSubset<T, DepartamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Departamentos and returns the data saved in the database.
-     * @param {DepartamentoCreateManyAndReturnArgs} args - Arguments to create many Departamentos.
-     * @example
-     * // Create many Departamentos
-     * const departamento = await prisma.departamento.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Departamentos and only return the `id`
-     * const departamentoWithIdOnly = await prisma.departamento.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends DepartamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, DepartamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Departamento.
-     * @param {DepartamentoDeleteArgs} args - Arguments to delete one Departamento.
-     * @example
-     * // Delete one Departamento
-     * const Departamento = await prisma.departamento.delete({
-     *   where: {
-     *     // ... filter to delete one Departamento
-     *   }
-     * })
-     * 
-     */
-    delete<T extends DepartamentoDeleteArgs>(args: SelectSubset<T, DepartamentoDeleteArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Departamento.
-     * @param {DepartamentoUpdateArgs} args - Arguments to update one Departamento.
-     * @example
-     * // Update one Departamento
-     * const departamento = await prisma.departamento.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends DepartamentoUpdateArgs>(args: SelectSubset<T, DepartamentoUpdateArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Departamentos.
-     * @param {DepartamentoDeleteManyArgs} args - Arguments to filter Departamentos to delete.
-     * @example
-     * // Delete a few Departamentos
-     * const { count } = await prisma.departamento.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends DepartamentoDeleteManyArgs>(args?: SelectSubset<T, DepartamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Departamentos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Departamentos
-     * const departamento = await prisma.departamento.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends DepartamentoUpdateManyArgs>(args: SelectSubset<T, DepartamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Departamentos and returns the data updated in the database.
-     * @param {DepartamentoUpdateManyAndReturnArgs} args - Arguments to update many Departamentos.
-     * @example
-     * // Update many Departamentos
-     * const departamento = await prisma.departamento.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Departamentos and only return the `id`
-     * const departamentoWithIdOnly = await prisma.departamento.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends DepartamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, DepartamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Departamento.
-     * @param {DepartamentoUpsertArgs} args - Arguments to update or create a Departamento.
-     * @example
-     * // Update or create a Departamento
-     * const departamento = await prisma.departamento.upsert({
-     *   create: {
-     *     // ... data to create a Departamento
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Departamento we want to update
-     *   }
-     * })
-     */
-    upsert<T extends DepartamentoUpsertArgs>(args: SelectSubset<T, DepartamentoUpsertArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Departamentos.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoCountArgs} args - Arguments to filter Departamentos to count.
-     * @example
-     * // Count the number of Departamentos
-     * const count = await prisma.departamento.count({
-     *   where: {
-     *     // ... the filter for the Departamentos we want to count
-     *   }
-     * })
-    **/
-    count<T extends DepartamentoCountArgs>(
-      args?: Subset<T, DepartamentoCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], DepartamentoCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Departamento.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends DepartamentoAggregateArgs>(args: Subset<T, DepartamentoAggregateArgs>): Prisma.PrismaPromise<GetDepartamentoAggregateType<T>>
-
-    /**
-     * Group by Departamento.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DepartamentoGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends DepartamentoGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: DepartamentoGroupByArgs['orderBy'] }
-        : { orderBy?: DepartamentoGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, DepartamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDepartamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Departamento model
-   */
-  readonly fields: DepartamentoFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Departamento.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__DepartamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    testes<T extends Departamento$testesArgs<ExtArgs> = {}>(args?: Subset<T, Departamento$testesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    logs<T extends Departamento$logsArgs<ExtArgs> = {}>(args?: Subset<T, Departamento$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    usuarios<T extends Departamento$usuariosArgs<ExtArgs> = {}>(args?: Subset<T, Departamento$usuariosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Departamento model
-   */ 
-  interface DepartamentoFieldRefs {
-    readonly id: FieldRef<"Departamento", 'String'>
-    readonly nome: FieldRef<"Departamento", 'String'>
-    readonly ativo: FieldRef<"Departamento", 'Boolean'>
-    readonly criadoEm: FieldRef<"Departamento", 'DateTime'>
-    readonly criadoPor: FieldRef<"Departamento", 'String'>
-    readonly atualizadoEm: FieldRef<"Departamento", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"Departamento", 'String'>
-    readonly inativadoEm: FieldRef<"Departamento", 'DateTime'>
-    readonly inativadoPor: FieldRef<"Departamento", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Departamento findUnique
-   */
-  export type DepartamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter, which Departamento to fetch.
-     */
-    where: DepartamentoWhereUniqueInput
-  }
-
-  /**
-   * Departamento findUniqueOrThrow
-   */
-  export type DepartamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter, which Departamento to fetch.
-     */
-    where: DepartamentoWhereUniqueInput
-  }
-
-  /**
-   * Departamento findFirst
-   */
-  export type DepartamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter, which Departamento to fetch.
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Departamentos to fetch.
-     */
-    orderBy?: DepartamentoOrderByWithRelationInput | DepartamentoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Departamentos.
-     */
-    cursor?: DepartamentoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Departamentos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Departamentos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Departamentos.
-     */
-    distinct?: DepartamentoScalarFieldEnum | DepartamentoScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento findFirstOrThrow
-   */
-  export type DepartamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter, which Departamento to fetch.
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Departamentos to fetch.
-     */
-    orderBy?: DepartamentoOrderByWithRelationInput | DepartamentoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Departamentos.
-     */
-    cursor?: DepartamentoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Departamentos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Departamentos.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Departamentos.
-     */
-    distinct?: DepartamentoScalarFieldEnum | DepartamentoScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento findMany
-   */
-  export type DepartamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter, which Departamentos to fetch.
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Departamentos to fetch.
-     */
-    orderBy?: DepartamentoOrderByWithRelationInput | DepartamentoOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Departamentos.
-     */
-    cursor?: DepartamentoWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Departamentos from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Departamentos.
-     */
-    skip?: number
-    distinct?: DepartamentoScalarFieldEnum | DepartamentoScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento create
-   */
-  export type DepartamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Departamento.
-     */
-    data: XOR<DepartamentoCreateInput, DepartamentoUncheckedCreateInput>
-  }
-
-  /**
-   * Departamento createMany
-   */
-  export type DepartamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Departamentos.
-     */
-    data: DepartamentoCreateManyInput | DepartamentoCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Departamento createManyAndReturn
-   */
-  export type DepartamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * The data used to create many Departamentos.
-     */
-    data: DepartamentoCreateManyInput | DepartamentoCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Departamento update
-   */
-  export type DepartamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Departamento.
-     */
-    data: XOR<DepartamentoUpdateInput, DepartamentoUncheckedUpdateInput>
-    /**
-     * Choose, which Departamento to update.
-     */
-    where: DepartamentoWhereUniqueInput
-  }
-
-  /**
-   * Departamento updateMany
-   */
-  export type DepartamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Departamentos.
-     */
-    data: XOR<DepartamentoUpdateManyMutationInput, DepartamentoUncheckedUpdateManyInput>
-    /**
-     * Filter which Departamentos to update
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * Limit how many Departamentos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Departamento updateManyAndReturn
-   */
-  export type DepartamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * The data used to update Departamentos.
-     */
-    data: XOR<DepartamentoUpdateManyMutationInput, DepartamentoUncheckedUpdateManyInput>
-    /**
-     * Filter which Departamentos to update
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * Limit how many Departamentos to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Departamento upsert
-   */
-  export type DepartamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Departamento to update in case it exists.
-     */
-    where: DepartamentoWhereUniqueInput
-    /**
-     * In case the Departamento found by the `where` argument doesn't exist, create a new Departamento with this data.
-     */
-    create: XOR<DepartamentoCreateInput, DepartamentoUncheckedCreateInput>
-    /**
-     * In case the Departamento was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<DepartamentoUpdateInput, DepartamentoUncheckedUpdateInput>
-  }
-
-  /**
-   * Departamento delete
-   */
-  export type DepartamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    /**
-     * Filter which Departamento to delete.
-     */
-    where: DepartamentoWhereUniqueInput
-  }
-
-  /**
-   * Departamento deleteMany
-   */
-  export type DepartamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Departamentos to delete
-     */
-    where?: DepartamentoWhereInput
-    /**
-     * Limit how many Departamentos to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Departamento.testes
-   */
-  export type Departamento$testesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the TesteDepartamento
-     */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the TesteDepartamento
-     */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
-    where?: TesteDepartamentoWhereInput
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
-    cursor?: TesteDepartamentoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TesteDepartamentoScalarFieldEnum | TesteDepartamentoScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento.logs
-   */
-  export type Departamento$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Log
-     */
-    select?: LogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Log
-     */
-    omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    where?: LogWhereInput
-    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
-    cursor?: LogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento.usuarios
-   */
-  export type Departamento$usuariosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UsuarioDepartamento
-     */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the UsuarioDepartamento
-     */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
-    where?: UsuarioDepartamentoWhereInput
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
-    cursor?: UsuarioDepartamentoWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UsuarioDepartamentoScalarFieldEnum | UsuarioDepartamentoScalarFieldEnum[]
-  }
-
-  /**
-   * Departamento without action
-   */
-  export type DepartamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
+    include?: EmailInclude<ExtArgs> | null
   }
 
 
@@ -5250,100 +3910,58 @@ export namespace Prisma {
 
   export type LogMinAggregateOutputType = {
     id: string | null
-    tipo: $Enums.TipoLog | null
-    descricao: string | null
-    campanhaId: string | null
-    departamentoId: string | null
-    testeId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    entity: $Enums.Entity | null
+    entity_id: string | null
+    action: $Enums.Action | null
+    created_at: Date | null
+    created_by: string | null
   }
 
   export type LogMaxAggregateOutputType = {
     id: string | null
-    tipo: $Enums.TipoLog | null
-    descricao: string | null
-    campanhaId: string | null
-    departamentoId: string | null
-    testeId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    entity: $Enums.Entity | null
+    entity_id: string | null
+    action: $Enums.Action | null
+    created_at: Date | null
+    created_by: string | null
   }
 
   export type LogCountAggregateOutputType = {
     id: number
-    tipo: number
-    descricao: number
-    campanhaId: number
-    departamentoId: number
-    testeId: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    entity: number
+    entity_id: number
+    action: number
+    created_at: number
+    created_by: number
     _all: number
   }
 
 
   export type LogMinAggregateInputType = {
     id?: true
-    tipo?: true
-    descricao?: true
-    campanhaId?: true
-    departamentoId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    entity?: true
+    entity_id?: true
+    action?: true
+    created_at?: true
+    created_by?: true
   }
 
   export type LogMaxAggregateInputType = {
     id?: true
-    tipo?: true
-    descricao?: true
-    campanhaId?: true
-    departamentoId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    entity?: true
+    entity_id?: true
+    action?: true
+    created_at?: true
+    created_by?: true
   }
 
   export type LogCountAggregateInputType = {
     id?: true
-    tipo?: true
-    descricao?: true
-    campanhaId?: true
-    departamentoId?: true
-    testeId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    entity?: true
+    entity_id?: true
+    action?: true
+    created_at?: true
+    created_by?: true
     _all?: true
   }
 
@@ -5421,18 +4039,11 @@ export namespace Prisma {
 
   export type LogGroupByOutputType = {
     id: string
-    tipo: $Enums.TipoLog
-    descricao: string | null
-    campanhaId: string | null
-    departamentoId: string | null
-    testeId: string | null
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    entity: $Enums.Entity
+    entity_id: string
+    action: $Enums.Action
+    created_at: Date
+    created_by: string
     _count: LogCountAggregateOutputType | null
     _min: LogMinAggregateOutputType | null
     _max: LogMaxAggregateOutputType | null
@@ -5454,115 +4065,52 @@ export namespace Prisma {
 
   export type LogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tipo?: boolean
-    descricao?: boolean
-    campanhaId?: boolean
-    departamentoId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
+    entity?: boolean
+    entity_id?: boolean
+    action?: boolean
+    created_at?: boolean
+    created_by?: boolean
   }, ExtArgs["result"]["log"]>
 
   export type LogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tipo?: boolean
-    descricao?: boolean
-    campanhaId?: boolean
-    departamentoId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
+    entity?: boolean
+    entity_id?: boolean
+    action?: boolean
+    created_at?: boolean
+    created_by?: boolean
   }, ExtArgs["result"]["log"]>
 
   export type LogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    tipo?: boolean
-    descricao?: boolean
-    campanhaId?: boolean
-    departamentoId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
+    entity?: boolean
+    entity_id?: boolean
+    action?: boolean
+    created_at?: boolean
+    created_by?: boolean
   }, ExtArgs["result"]["log"]>
 
   export type LogSelectScalar = {
     id?: boolean
-    tipo?: boolean
-    descricao?: boolean
-    campanhaId?: boolean
-    departamentoId?: boolean
-    testeId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    entity?: boolean
+    entity_id?: boolean
+    action?: boolean
+    created_at?: boolean
+    created_by?: boolean
   }
 
-  export type LogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "tipo" | "descricao" | "campanhaId" | "departamentoId" | "testeId" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["log"]>
-  export type LogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
-  }
-  export type LogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
-  }
-  export type LogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    campanha?: boolean | Log$campanhaArgs<ExtArgs>
-    departamento?: boolean | Log$departamentoArgs<ExtArgs>
-    teste?: boolean | Log$testeArgs<ExtArgs>
-  }
+  export type LogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entity" | "entity_id" | "action" | "created_at" | "created_by", ExtArgs["result"]["log"]>
 
   export type $LogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Log"
-    objects: {
-      campanha: Prisma.$CampanhaPayload<ExtArgs> | null
-      departamento: Prisma.$DepartamentoPayload<ExtArgs> | null
-      teste: Prisma.$TestePayload<ExtArgs> | null
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      tipo: $Enums.TipoLog
-      descricao: string | null
-      campanhaId: string | null
-      departamentoId: string | null
-      testeId: string | null
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
+      entity: $Enums.Entity
+      entity_id: string
+      action: $Enums.Action
+      created_at: Date
+      created_by: string
     }, ExtArgs["result"]["log"]>
     composites: {}
   }
@@ -5957,9 +4505,6 @@ export namespace Prisma {
    */
   export interface Prisma__LogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    campanha<T extends Log$campanhaArgs<ExtArgs> = {}>(args?: Subset<T, Log$campanhaArgs<ExtArgs>>): Prisma__CampanhaClient<$Result.GetResult<Prisma.$CampanhaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    departamento<T extends Log$departamentoArgs<ExtArgs> = {}>(args?: Subset<T, Log$departamentoArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    teste<T extends Log$testeArgs<ExtArgs> = {}>(args?: Subset<T, Log$testeArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5990,18 +4535,11 @@ export namespace Prisma {
    */ 
   interface LogFieldRefs {
     readonly id: FieldRef<"Log", 'String'>
-    readonly tipo: FieldRef<"Log", 'TipoLog'>
-    readonly descricao: FieldRef<"Log", 'String'>
-    readonly campanhaId: FieldRef<"Log", 'String'>
-    readonly departamentoId: FieldRef<"Log", 'String'>
-    readonly testeId: FieldRef<"Log", 'String'>
-    readonly ativo: FieldRef<"Log", 'Boolean'>
-    readonly criadoEm: FieldRef<"Log", 'DateTime'>
-    readonly criadoPor: FieldRef<"Log", 'String'>
-    readonly atualizadoEm: FieldRef<"Log", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"Log", 'String'>
-    readonly inativadoEm: FieldRef<"Log", 'DateTime'>
-    readonly inativadoPor: FieldRef<"Log", 'String'>
+    readonly entity: FieldRef<"Log", 'Entity'>
+    readonly entity_id: FieldRef<"Log", 'String'>
+    readonly action: FieldRef<"Log", 'Action'>
+    readonly created_at: FieldRef<"Log", 'DateTime'>
+    readonly created_by: FieldRef<"Log", 'String'>
   }
     
 
@@ -6018,10 +4556,6 @@ export namespace Prisma {
      * Omit specific fields from the Log
      */
     omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
     /**
      * Filter, which Log to fetch.
      */
@@ -6041,10 +4575,6 @@ export namespace Prisma {
      */
     omit?: LogOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    /**
      * Filter, which Log to fetch.
      */
     where: LogWhereUniqueInput
@@ -6062,10 +4592,6 @@ export namespace Prisma {
      * Omit specific fields from the Log
      */
     omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
     /**
      * Filter, which Log to fetch.
      */
@@ -6115,10 +4641,6 @@ export namespace Prisma {
      */
     omit?: LogOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    /**
      * Filter, which Log to fetch.
      */
     where?: LogWhereInput
@@ -6167,10 +4689,6 @@ export namespace Prisma {
      */
     omit?: LogOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    /**
      * Filter, which Logs to fetch.
      */
     where?: LogWhereInput
@@ -6214,10 +4732,6 @@ export namespace Prisma {
      */
     omit?: LogOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    /**
      * The data needed to create a Log.
      */
     data: XOR<LogCreateInput, LogUncheckedCreateInput>
@@ -6251,10 +4765,6 @@ export namespace Prisma {
      */
     data: LogCreateManyInput | LogCreateManyInput[]
     skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6269,10 +4779,6 @@ export namespace Prisma {
      * Omit specific fields from the Log
      */
     omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
     /**
      * The data needed to update a Log.
      */
@@ -6325,10 +4831,6 @@ export namespace Prisma {
      * Limit how many Logs to update.
      */
     limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6343,10 +4845,6 @@ export namespace Prisma {
      * Omit specific fields from the Log
      */
     omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
     /**
      * The filter to search for the Log to update in case it exists.
      */
@@ -6374,10 +4872,6 @@ export namespace Prisma {
      */
     omit?: LogOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
-    /**
      * Filter which Log to delete.
      */
     where: LogWhereUniqueInput
@@ -6398,63 +4892,6 @@ export namespace Prisma {
   }
 
   /**
-   * Log.campanha
-   */
-  export type Log$campanhaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Campanha
-     */
-    select?: CampanhaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Campanha
-     */
-    omit?: CampanhaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CampanhaInclude<ExtArgs> | null
-    where?: CampanhaWhereInput
-  }
-
-  /**
-   * Log.departamento
-   */
-  export type Log$departamentoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Departamento
-     */
-    select?: DepartamentoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Departamento
-     */
-    omit?: DepartamentoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DepartamentoInclude<ExtArgs> | null
-    where?: DepartamentoWhereInput
-  }
-
-  /**
-   * Log.teste
-   */
-  export type Log$testeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Teste
-     */
-    select?: TesteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Teste
-     */
-    omit?: TesteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TesteInclude<ExtArgs> | null
-    where?: TesteWhereInput
-  }
-
-  /**
    * Log without action
    */
   export type LogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6466,425 +4903,421 @@ export namespace Prisma {
      * Omit specific fields from the Log
      */
     omit?: LogOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: LogInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model TesteDepartamento
+   * Model PhishingDepartment
    */
 
-  export type AggregateTesteDepartamento = {
-    _count: TesteDepartamentoCountAggregateOutputType | null
-    _min: TesteDepartamentoMinAggregateOutputType | null
-    _max: TesteDepartamentoMaxAggregateOutputType | null
+  export type AggregatePhishingDepartment = {
+    _count: PhishingDepartmentCountAggregateOutputType | null
+    _min: PhishingDepartmentMinAggregateOutputType | null
+    _max: PhishingDepartmentMaxAggregateOutputType | null
   }
 
-  export type TesteDepartamentoMinAggregateOutputType = {
+  export type PhishingDepartmentMinAggregateOutputType = {
     id: string | null
-    testeId: string | null
-    departamentoId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    phishing_id: string | null
+    department_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type TesteDepartamentoMaxAggregateOutputType = {
+  export type PhishingDepartmentMaxAggregateOutputType = {
     id: string | null
-    testeId: string | null
-    departamentoId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    phishing_id: string | null
+    department_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type TesteDepartamentoCountAggregateOutputType = {
+  export type PhishingDepartmentCountAggregateOutputType = {
     id: number
-    testeId: number
-    departamentoId: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    phishing_id: number
+    department_id: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type TesteDepartamentoMinAggregateInputType = {
+  export type PhishingDepartmentMinAggregateInputType = {
     id?: true
-    testeId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    phishing_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type TesteDepartamentoMaxAggregateInputType = {
+  export type PhishingDepartmentMaxAggregateInputType = {
     id?: true
-    testeId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    phishing_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type TesteDepartamentoCountAggregateInputType = {
+  export type PhishingDepartmentCountAggregateInputType = {
     id?: true
-    testeId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    phishing_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type TesteDepartamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which TesteDepartamento to aggregate.
+     * Filter which PhishingDepartment to aggregate.
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TesteDepartamentos to fetch.
+     * Determine the order of PhishingDepartments to fetch.
      */
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: TesteDepartamentoWhereUniqueInput
+    cursor?: PhishingDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TesteDepartamentos from the position of the cursor.
+     * Take `±n` PhishingDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TesteDepartamentos.
+     * Skip the first `n` PhishingDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned TesteDepartamentos
+     * Count returned PhishingDepartments
     **/
-    _count?: true | TesteDepartamentoCountAggregateInputType
+    _count?: true | PhishingDepartmentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: TesteDepartamentoMinAggregateInputType
+    _min?: PhishingDepartmentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: TesteDepartamentoMaxAggregateInputType
+    _max?: PhishingDepartmentMaxAggregateInputType
   }
 
-  export type GetTesteDepartamentoAggregateType<T extends TesteDepartamentoAggregateArgs> = {
-        [P in keyof T & keyof AggregateTesteDepartamento]: P extends '_count' | 'count'
+  export type GetPhishingDepartmentAggregateType<T extends PhishingDepartmentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePhishingDepartment]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateTesteDepartamento[P]>
-      : GetScalarType<T[P], AggregateTesteDepartamento[P]>
+        : GetScalarType<T[P], AggregatePhishingDepartment[P]>
+      : GetScalarType<T[P], AggregatePhishingDepartment[P]>
   }
 
 
 
 
-  export type TesteDepartamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TesteDepartamentoWhereInput
-    orderBy?: TesteDepartamentoOrderByWithAggregationInput | TesteDepartamentoOrderByWithAggregationInput[]
-    by: TesteDepartamentoScalarFieldEnum[] | TesteDepartamentoScalarFieldEnum
-    having?: TesteDepartamentoScalarWhereWithAggregatesInput
+  export type PhishingDepartmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PhishingDepartmentWhereInput
+    orderBy?: PhishingDepartmentOrderByWithAggregationInput | PhishingDepartmentOrderByWithAggregationInput[]
+    by: PhishingDepartmentScalarFieldEnum[] | PhishingDepartmentScalarFieldEnum
+    having?: PhishingDepartmentScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: TesteDepartamentoCountAggregateInputType | true
-    _min?: TesteDepartamentoMinAggregateInputType
-    _max?: TesteDepartamentoMaxAggregateInputType
+    _count?: PhishingDepartmentCountAggregateInputType | true
+    _min?: PhishingDepartmentMinAggregateInputType
+    _max?: PhishingDepartmentMaxAggregateInputType
   }
 
-  export type TesteDepartamentoGroupByOutputType = {
+  export type PhishingDepartmentGroupByOutputType = {
     id: string
-    testeId: string
-    departamentoId: string
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: TesteDepartamentoCountAggregateOutputType | null
-    _min: TesteDepartamentoMinAggregateOutputType | null
-    _max: TesteDepartamentoMaxAggregateOutputType | null
+    phishing_id: string
+    department_id: string
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: PhishingDepartmentCountAggregateOutputType | null
+    _min: PhishingDepartmentMinAggregateOutputType | null
+    _max: PhishingDepartmentMaxAggregateOutputType | null
   }
 
-  type GetTesteDepartamentoGroupByPayload<T extends TesteDepartamentoGroupByArgs> = Prisma.PrismaPromise<
+  type GetPhishingDepartmentGroupByPayload<T extends PhishingDepartmentGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<TesteDepartamentoGroupByOutputType, T['by']> &
+      PickEnumerable<PhishingDepartmentGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof TesteDepartamentoGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PhishingDepartmentGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], TesteDepartamentoGroupByOutputType[P]>
-            : GetScalarType<T[P], TesteDepartamentoGroupByOutputType[P]>
+              : GetScalarType<T[P], PhishingDepartmentGroupByOutputType[P]>
+            : GetScalarType<T[P], PhishingDepartmentGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type TesteDepartamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingDepartmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    testeId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["testeDepartamento"]>
+    phishing_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["phishingDepartment"]>
 
-  export type TesteDepartamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingDepartmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    testeId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["testeDepartamento"]>
+    phishing_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["phishingDepartment"]>
 
-  export type TesteDepartamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingDepartmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    testeId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["testeDepartamento"]>
+    phishing_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["phishingDepartment"]>
 
-  export type TesteDepartamentoSelectScalar = {
+  export type PhishingDepartmentSelectScalar = {
     id?: boolean
-    testeId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    phishing_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type TesteDepartamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "testeId" | "departamentoId" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["testeDepartamento"]>
-  export type TesteDepartamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type PhishingDepartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "phishing_id" | "department_id" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["phishingDepartment"]>
+  export type PhishingDepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
-  export type TesteDepartamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type PhishingDepartmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
-  export type TesteDepartamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    teste?: boolean | TesteDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type PhishingDepartmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    phishing?: boolean | PhishingDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
 
-  export type $TesteDepartamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "TesteDepartamento"
+  export type $PhishingDepartmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PhishingDepartment"
     objects: {
-      teste: Prisma.$TestePayload<ExtArgs>
-      departamento: Prisma.$DepartamentoPayload<ExtArgs>
+      phishing: Prisma.$PhishingPayload<ExtArgs>
+      department: Prisma.$DepartmentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      testeId: string
-      departamentoId: string
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["testeDepartamento"]>
+      phishing_id: string
+      department_id: string
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["phishingDepartment"]>
     composites: {}
   }
 
-  type TesteDepartamentoGetPayload<S extends boolean | null | undefined | TesteDepartamentoDefaultArgs> = $Result.GetResult<Prisma.$TesteDepartamentoPayload, S>
+  type PhishingDepartmentGetPayload<S extends boolean | null | undefined | PhishingDepartmentDefaultArgs> = $Result.GetResult<Prisma.$PhishingDepartmentPayload, S>
 
-  type TesteDepartamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<TesteDepartamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: TesteDepartamentoCountAggregateInputType | true
+  type PhishingDepartmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PhishingDepartmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PhishingDepartmentCountAggregateInputType | true
     }
 
-  export interface TesteDepartamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TesteDepartamento'], meta: { name: 'TesteDepartamento' } }
+  export interface PhishingDepartmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PhishingDepartment'], meta: { name: 'PhishingDepartment' } }
     /**
-     * Find zero or one TesteDepartamento that matches the filter.
-     * @param {TesteDepartamentoFindUniqueArgs} args - Arguments to find a TesteDepartamento
+     * Find zero or one PhishingDepartment that matches the filter.
+     * @param {PhishingDepartmentFindUniqueArgs} args - Arguments to find a PhishingDepartment
      * @example
-     * // Get one TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.findUnique({
+     * // Get one PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends TesteDepartamentoFindUniqueArgs>(args: SelectSubset<T, TesteDepartamentoFindUniqueArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends PhishingDepartmentFindUniqueArgs>(args: SelectSubset<T, PhishingDepartmentFindUniqueArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one TesteDepartamento that matches the filter or throw an error with `error.code='P2025'`
+     * Find one PhishingDepartment that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {TesteDepartamentoFindUniqueOrThrowArgs} args - Arguments to find a TesteDepartamento
+     * @param {PhishingDepartmentFindUniqueOrThrowArgs} args - Arguments to find a PhishingDepartment
      * @example
-     * // Get one TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.findUniqueOrThrow({
+     * // Get one PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends TesteDepartamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, TesteDepartamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends PhishingDepartmentFindUniqueOrThrowArgs>(args: SelectSubset<T, PhishingDepartmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first TesteDepartamento that matches the filter.
+     * Find the first PhishingDepartment that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoFindFirstArgs} args - Arguments to find a TesteDepartamento
+     * @param {PhishingDepartmentFindFirstArgs} args - Arguments to find a PhishingDepartment
      * @example
-     * // Get one TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.findFirst({
+     * // Get one PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends TesteDepartamentoFindFirstArgs>(args?: SelectSubset<T, TesteDepartamentoFindFirstArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends PhishingDepartmentFindFirstArgs>(args?: SelectSubset<T, PhishingDepartmentFindFirstArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first TesteDepartamento that matches the filter or
+     * Find the first PhishingDepartment that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoFindFirstOrThrowArgs} args - Arguments to find a TesteDepartamento
+     * @param {PhishingDepartmentFindFirstOrThrowArgs} args - Arguments to find a PhishingDepartment
      * @example
-     * // Get one TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.findFirstOrThrow({
+     * // Get one PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends TesteDepartamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, TesteDepartamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends PhishingDepartmentFindFirstOrThrowArgs>(args?: SelectSubset<T, PhishingDepartmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more TesteDepartamentos that matches the filter.
+     * Find zero or more PhishingDepartments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PhishingDepartmentFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all TesteDepartamentos
-     * const testeDepartamentos = await prisma.testeDepartamento.findMany()
+     * // Get all PhishingDepartments
+     * const phishingDepartments = await prisma.phishingDepartment.findMany()
      * 
-     * // Get first 10 TesteDepartamentos
-     * const testeDepartamentos = await prisma.testeDepartamento.findMany({ take: 10 })
+     * // Get first 10 PhishingDepartments
+     * const phishingDepartments = await prisma.phishingDepartment.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const testeDepartamentoWithIdOnly = await prisma.testeDepartamento.findMany({ select: { id: true } })
+     * const phishingDepartmentWithIdOnly = await prisma.phishingDepartment.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends TesteDepartamentoFindManyArgs>(args?: SelectSubset<T, TesteDepartamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends PhishingDepartmentFindManyArgs>(args?: SelectSubset<T, PhishingDepartmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a TesteDepartamento.
-     * @param {TesteDepartamentoCreateArgs} args - Arguments to create a TesteDepartamento.
+     * Create a PhishingDepartment.
+     * @param {PhishingDepartmentCreateArgs} args - Arguments to create a PhishingDepartment.
      * @example
-     * // Create one TesteDepartamento
-     * const TesteDepartamento = await prisma.testeDepartamento.create({
+     * // Create one PhishingDepartment
+     * const PhishingDepartment = await prisma.phishingDepartment.create({
      *   data: {
-     *     // ... data to create a TesteDepartamento
+     *     // ... data to create a PhishingDepartment
      *   }
      * })
      * 
      */
-    create<T extends TesteDepartamentoCreateArgs>(args: SelectSubset<T, TesteDepartamentoCreateArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends PhishingDepartmentCreateArgs>(args: SelectSubset<T, PhishingDepartmentCreateArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many TesteDepartamentos.
-     * @param {TesteDepartamentoCreateManyArgs} args - Arguments to create many TesteDepartamentos.
+     * Create many PhishingDepartments.
+     * @param {PhishingDepartmentCreateManyArgs} args - Arguments to create many PhishingDepartments.
      * @example
-     * // Create many TesteDepartamentos
-     * const testeDepartamento = await prisma.testeDepartamento.createMany({
+     * // Create many PhishingDepartments
+     * const phishingDepartment = await prisma.phishingDepartment.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends TesteDepartamentoCreateManyArgs>(args?: SelectSubset<T, TesteDepartamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PhishingDepartmentCreateManyArgs>(args?: SelectSubset<T, PhishingDepartmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many TesteDepartamentos and returns the data saved in the database.
-     * @param {TesteDepartamentoCreateManyAndReturnArgs} args - Arguments to create many TesteDepartamentos.
+     * Create many PhishingDepartments and returns the data saved in the database.
+     * @param {PhishingDepartmentCreateManyAndReturnArgs} args - Arguments to create many PhishingDepartments.
      * @example
-     * // Create many TesteDepartamentos
-     * const testeDepartamento = await prisma.testeDepartamento.createManyAndReturn({
+     * // Create many PhishingDepartments
+     * const phishingDepartment = await prisma.phishingDepartment.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many TesteDepartamentos and only return the `id`
-     * const testeDepartamentoWithIdOnly = await prisma.testeDepartamento.createManyAndReturn({
+     * // Create many PhishingDepartments and only return the `id`
+     * const phishingDepartmentWithIdOnly = await prisma.phishingDepartment.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6894,28 +5327,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends TesteDepartamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, TesteDepartamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends PhishingDepartmentCreateManyAndReturnArgs>(args?: SelectSubset<T, PhishingDepartmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a TesteDepartamento.
-     * @param {TesteDepartamentoDeleteArgs} args - Arguments to delete one TesteDepartamento.
+     * Delete a PhishingDepartment.
+     * @param {PhishingDepartmentDeleteArgs} args - Arguments to delete one PhishingDepartment.
      * @example
-     * // Delete one TesteDepartamento
-     * const TesteDepartamento = await prisma.testeDepartamento.delete({
+     * // Delete one PhishingDepartment
+     * const PhishingDepartment = await prisma.phishingDepartment.delete({
      *   where: {
-     *     // ... filter to delete one TesteDepartamento
+     *     // ... filter to delete one PhishingDepartment
      *   }
      * })
      * 
      */
-    delete<T extends TesteDepartamentoDeleteArgs>(args: SelectSubset<T, TesteDepartamentoDeleteArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends PhishingDepartmentDeleteArgs>(args: SelectSubset<T, PhishingDepartmentDeleteArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one TesteDepartamento.
-     * @param {TesteDepartamentoUpdateArgs} args - Arguments to update one TesteDepartamento.
+     * Update one PhishingDepartment.
+     * @param {PhishingDepartmentUpdateArgs} args - Arguments to update one PhishingDepartment.
      * @example
-     * // Update one TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.update({
+     * // Update one PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6925,30 +5358,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends TesteDepartamentoUpdateArgs>(args: SelectSubset<T, TesteDepartamentoUpdateArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends PhishingDepartmentUpdateArgs>(args: SelectSubset<T, PhishingDepartmentUpdateArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more TesteDepartamentos.
-     * @param {TesteDepartamentoDeleteManyArgs} args - Arguments to filter TesteDepartamentos to delete.
+     * Delete zero or more PhishingDepartments.
+     * @param {PhishingDepartmentDeleteManyArgs} args - Arguments to filter PhishingDepartments to delete.
      * @example
-     * // Delete a few TesteDepartamentos
-     * const { count } = await prisma.testeDepartamento.deleteMany({
+     * // Delete a few PhishingDepartments
+     * const { count } = await prisma.phishingDepartment.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends TesteDepartamentoDeleteManyArgs>(args?: SelectSubset<T, TesteDepartamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PhishingDepartmentDeleteManyArgs>(args?: SelectSubset<T, PhishingDepartmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more TesteDepartamentos.
+     * Update zero or more PhishingDepartments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PhishingDepartmentUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many TesteDepartamentos
-     * const testeDepartamento = await prisma.testeDepartamento.updateMany({
+     * // Update many PhishingDepartments
+     * const phishingDepartment = await prisma.phishingDepartment.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6958,14 +5391,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends TesteDepartamentoUpdateManyArgs>(args: SelectSubset<T, TesteDepartamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PhishingDepartmentUpdateManyArgs>(args: SelectSubset<T, PhishingDepartmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more TesteDepartamentos and returns the data updated in the database.
-     * @param {TesteDepartamentoUpdateManyAndReturnArgs} args - Arguments to update many TesteDepartamentos.
+     * Update zero or more PhishingDepartments and returns the data updated in the database.
+     * @param {PhishingDepartmentUpdateManyAndReturnArgs} args - Arguments to update many PhishingDepartments.
      * @example
-     * // Update many TesteDepartamentos
-     * const testeDepartamento = await prisma.testeDepartamento.updateManyAndReturn({
+     * // Update many PhishingDepartments
+     * const phishingDepartment = await prisma.phishingDepartment.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6974,8 +5407,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more TesteDepartamentos and only return the `id`
-     * const testeDepartamentoWithIdOnly = await prisma.testeDepartamento.updateManyAndReturn({
+     * // Update zero or more PhishingDepartments and only return the `id`
+     * const phishingDepartmentWithIdOnly = await prisma.phishingDepartment.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -6988,56 +5421,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends TesteDepartamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, TesteDepartamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends PhishingDepartmentUpdateManyAndReturnArgs>(args: SelectSubset<T, PhishingDepartmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one TesteDepartamento.
-     * @param {TesteDepartamentoUpsertArgs} args - Arguments to update or create a TesteDepartamento.
+     * Create or update one PhishingDepartment.
+     * @param {PhishingDepartmentUpsertArgs} args - Arguments to update or create a PhishingDepartment.
      * @example
-     * // Update or create a TesteDepartamento
-     * const testeDepartamento = await prisma.testeDepartamento.upsert({
+     * // Update or create a PhishingDepartment
+     * const phishingDepartment = await prisma.phishingDepartment.upsert({
      *   create: {
-     *     // ... data to create a TesteDepartamento
+     *     // ... data to create a PhishingDepartment
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the TesteDepartamento we want to update
+     *     // ... the filter for the PhishingDepartment we want to update
      *   }
      * })
      */
-    upsert<T extends TesteDepartamentoUpsertArgs>(args: SelectSubset<T, TesteDepartamentoUpsertArgs<ExtArgs>>): Prisma__TesteDepartamentoClient<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends PhishingDepartmentUpsertArgs>(args: SelectSubset<T, PhishingDepartmentUpsertArgs<ExtArgs>>): Prisma__PhishingDepartmentClient<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of TesteDepartamentos.
+     * Count the number of PhishingDepartments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoCountArgs} args - Arguments to filter TesteDepartamentos to count.
+     * @param {PhishingDepartmentCountArgs} args - Arguments to filter PhishingDepartments to count.
      * @example
-     * // Count the number of TesteDepartamentos
-     * const count = await prisma.testeDepartamento.count({
+     * // Count the number of PhishingDepartments
+     * const count = await prisma.phishingDepartment.count({
      *   where: {
-     *     // ... the filter for the TesteDepartamentos we want to count
+     *     // ... the filter for the PhishingDepartments we want to count
      *   }
      * })
     **/
-    count<T extends TesteDepartamentoCountArgs>(
-      args?: Subset<T, TesteDepartamentoCountArgs>,
+    count<T extends PhishingDepartmentCountArgs>(
+      args?: Subset<T, PhishingDepartmentCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], TesteDepartamentoCountAggregateOutputType>
+          : GetScalarType<T['select'], PhishingDepartmentCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a TesteDepartamento.
+     * Allows you to perform aggregations operations on a PhishingDepartment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PhishingDepartmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -7057,13 +5490,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends TesteDepartamentoAggregateArgs>(args: Subset<T, TesteDepartamentoAggregateArgs>): Prisma.PrismaPromise<GetTesteDepartamentoAggregateType<T>>
+    aggregate<T extends PhishingDepartmentAggregateArgs>(args: Subset<T, PhishingDepartmentAggregateArgs>): Prisma.PrismaPromise<GetPhishingDepartmentAggregateType<T>>
 
     /**
-     * Group by TesteDepartamento.
+     * Group by PhishingDepartment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteDepartamentoGroupByArgs} args - Group by arguments.
+     * @param {PhishingDepartmentGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -7078,14 +5511,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends TesteDepartamentoGroupByArgs,
+      T extends PhishingDepartmentGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TesteDepartamentoGroupByArgs['orderBy'] }
-        : { orderBy?: TesteDepartamentoGroupByArgs['orderBy'] },
+        ? { orderBy: PhishingDepartmentGroupByArgs['orderBy'] }
+        : { orderBy?: PhishingDepartmentGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -7134,23 +5567,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, TesteDepartamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTesteDepartamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PhishingDepartmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPhishingDepartmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the TesteDepartamento model
+   * Fields of the PhishingDepartment model
    */
-  readonly fields: TesteDepartamentoFieldRefs;
+  readonly fields: PhishingDepartmentFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for TesteDepartamento.
+   * The delegate class that acts as a "Promise-like" for PhishingDepartment.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__TesteDepartamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PhishingDepartmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    teste<T extends TesteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TesteDefaultArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    departamento<T extends DepartamentoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartamentoDefaultArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    phishing<T extends PhishingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PhishingDefaultArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    department<T extends DepartmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartmentDefaultArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7177,885 +5610,879 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the TesteDepartamento model
+   * Fields of the PhishingDepartment model
    */ 
-  interface TesteDepartamentoFieldRefs {
-    readonly id: FieldRef<"TesteDepartamento", 'String'>
-    readonly testeId: FieldRef<"TesteDepartamento", 'String'>
-    readonly departamentoId: FieldRef<"TesteDepartamento", 'String'>
-    readonly ativo: FieldRef<"TesteDepartamento", 'Boolean'>
-    readonly criadoEm: FieldRef<"TesteDepartamento", 'DateTime'>
-    readonly criadoPor: FieldRef<"TesteDepartamento", 'String'>
-    readonly atualizadoEm: FieldRef<"TesteDepartamento", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"TesteDepartamento", 'String'>
-    readonly inativadoEm: FieldRef<"TesteDepartamento", 'DateTime'>
-    readonly inativadoPor: FieldRef<"TesteDepartamento", 'String'>
+  interface PhishingDepartmentFieldRefs {
+    readonly id: FieldRef<"PhishingDepartment", 'String'>
+    readonly phishing_id: FieldRef<"PhishingDepartment", 'String'>
+    readonly department_id: FieldRef<"PhishingDepartment", 'String'>
+    readonly is_active: FieldRef<"PhishingDepartment", 'Boolean'>
+    readonly created_at: FieldRef<"PhishingDepartment", 'DateTime'>
+    readonly created_by: FieldRef<"PhishingDepartment", 'String'>
+    readonly updated_by: FieldRef<"PhishingDepartment", 'String'>
+    readonly updated_at: FieldRef<"PhishingDepartment", 'DateTime'>
+    readonly inactivated_at: FieldRef<"PhishingDepartment", 'DateTime'>
+    readonly inactivated_by: FieldRef<"PhishingDepartment", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * TesteDepartamento findUnique
+   * PhishingDepartment findUnique
    */
-  export type TesteDepartamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which TesteDepartamento to fetch.
+     * Filter, which PhishingDepartment to fetch.
      */
-    where: TesteDepartamentoWhereUniqueInput
+    where: PhishingDepartmentWhereUniqueInput
   }
 
   /**
-   * TesteDepartamento findUniqueOrThrow
+   * PhishingDepartment findUniqueOrThrow
    */
-  export type TesteDepartamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which TesteDepartamento to fetch.
+     * Filter, which PhishingDepartment to fetch.
      */
-    where: TesteDepartamentoWhereUniqueInput
+    where: PhishingDepartmentWhereUniqueInput
   }
 
   /**
-   * TesteDepartamento findFirst
+   * PhishingDepartment findFirst
    */
-  export type TesteDepartamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which TesteDepartamento to fetch.
+     * Filter, which PhishingDepartment to fetch.
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TesteDepartamentos to fetch.
+     * Determine the order of PhishingDepartments to fetch.
      */
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for TesteDepartamentos.
+     * Sets the position for searching for PhishingDepartments.
      */
-    cursor?: TesteDepartamentoWhereUniqueInput
+    cursor?: PhishingDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TesteDepartamentos from the position of the cursor.
+     * Take `±n` PhishingDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TesteDepartamentos.
+     * Skip the first `n` PhishingDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of TesteDepartamentos.
+     * Filter by unique combinations of PhishingDepartments.
      */
-    distinct?: TesteDepartamentoScalarFieldEnum | TesteDepartamentoScalarFieldEnum[]
+    distinct?: PhishingDepartmentScalarFieldEnum | PhishingDepartmentScalarFieldEnum[]
   }
 
   /**
-   * TesteDepartamento findFirstOrThrow
+   * PhishingDepartment findFirstOrThrow
    */
-  export type TesteDepartamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which TesteDepartamento to fetch.
+     * Filter, which PhishingDepartment to fetch.
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TesteDepartamentos to fetch.
+     * Determine the order of PhishingDepartments to fetch.
      */
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for TesteDepartamentos.
+     * Sets the position for searching for PhishingDepartments.
      */
-    cursor?: TesteDepartamentoWhereUniqueInput
+    cursor?: PhishingDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TesteDepartamentos from the position of the cursor.
+     * Take `±n` PhishingDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TesteDepartamentos.
+     * Skip the first `n` PhishingDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of TesteDepartamentos.
+     * Filter by unique combinations of PhishingDepartments.
      */
-    distinct?: TesteDepartamentoScalarFieldEnum | TesteDepartamentoScalarFieldEnum[]
+    distinct?: PhishingDepartmentScalarFieldEnum | PhishingDepartmentScalarFieldEnum[]
   }
 
   /**
-   * TesteDepartamento findMany
+   * PhishingDepartment findMany
    */
-  export type TesteDepartamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which TesteDepartamentos to fetch.
+     * Filter, which PhishingDepartments to fetch.
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of TesteDepartamentos to fetch.
+     * Determine the order of PhishingDepartments to fetch.
      */
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing TesteDepartamentos.
+     * Sets the position for listing PhishingDepartments.
      */
-    cursor?: TesteDepartamentoWhereUniqueInput
+    cursor?: PhishingDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` TesteDepartamentos from the position of the cursor.
+     * Take `±n` PhishingDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` TesteDepartamentos.
+     * Skip the first `n` PhishingDepartments.
      */
     skip?: number
-    distinct?: TesteDepartamentoScalarFieldEnum | TesteDepartamentoScalarFieldEnum[]
+    distinct?: PhishingDepartmentScalarFieldEnum | PhishingDepartmentScalarFieldEnum[]
   }
 
   /**
-   * TesteDepartamento create
+   * PhishingDepartment create
    */
-  export type TesteDepartamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to create a TesteDepartamento.
+     * The data needed to create a PhishingDepartment.
      */
-    data: XOR<TesteDepartamentoCreateInput, TesteDepartamentoUncheckedCreateInput>
+    data: XOR<PhishingDepartmentCreateInput, PhishingDepartmentUncheckedCreateInput>
   }
 
   /**
-   * TesteDepartamento createMany
+   * PhishingDepartment createMany
    */
-  export type TesteDepartamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many TesteDepartamentos.
+     * The data used to create many PhishingDepartments.
      */
-    data: TesteDepartamentoCreateManyInput | TesteDepartamentoCreateManyInput[]
+    data: PhishingDepartmentCreateManyInput | PhishingDepartmentCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * TesteDepartamento createManyAndReturn
+   * PhishingDepartment createManyAndReturn
    */
-  export type TesteDepartamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelectCreateManyAndReturn<ExtArgs> | null
+    select?: PhishingDepartmentSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
-     * The data used to create many TesteDepartamentos.
+     * The data used to create many PhishingDepartments.
      */
-    data: TesteDepartamentoCreateManyInput | TesteDepartamentoCreateManyInput[]
+    data: PhishingDepartmentCreateManyInput | PhishingDepartmentCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: PhishingDepartmentIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * TesteDepartamento update
+   * PhishingDepartment update
    */
-  export type TesteDepartamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to update a TesteDepartamento.
+     * The data needed to update a PhishingDepartment.
      */
-    data: XOR<TesteDepartamentoUpdateInput, TesteDepartamentoUncheckedUpdateInput>
+    data: XOR<PhishingDepartmentUpdateInput, PhishingDepartmentUncheckedUpdateInput>
     /**
-     * Choose, which TesteDepartamento to update.
+     * Choose, which PhishingDepartment to update.
      */
-    where: TesteDepartamentoWhereUniqueInput
+    where: PhishingDepartmentWhereUniqueInput
   }
 
   /**
-   * TesteDepartamento updateMany
+   * PhishingDepartment updateMany
    */
-  export type TesteDepartamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update TesteDepartamentos.
+     * The data used to update PhishingDepartments.
      */
-    data: XOR<TesteDepartamentoUpdateManyMutationInput, TesteDepartamentoUncheckedUpdateManyInput>
+    data: XOR<PhishingDepartmentUpdateManyMutationInput, PhishingDepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which TesteDepartamentos to update
+     * Filter which PhishingDepartments to update
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
-     * Limit how many TesteDepartamentos to update.
+     * Limit how many PhishingDepartments to update.
      */
     limit?: number
   }
 
   /**
-   * TesteDepartamento updateManyAndReturn
+   * PhishingDepartment updateManyAndReturn
    */
-  export type TesteDepartamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: PhishingDepartmentSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
-     * The data used to update TesteDepartamentos.
+     * The data used to update PhishingDepartments.
      */
-    data: XOR<TesteDepartamentoUpdateManyMutationInput, TesteDepartamentoUncheckedUpdateManyInput>
+    data: XOR<PhishingDepartmentUpdateManyMutationInput, PhishingDepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which TesteDepartamentos to update
+     * Filter which PhishingDepartments to update
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
-     * Limit how many TesteDepartamentos to update.
+     * Limit how many PhishingDepartments to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: PhishingDepartmentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * TesteDepartamento upsert
+   * PhishingDepartment upsert
    */
-  export type TesteDepartamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * The filter to search for the TesteDepartamento to update in case it exists.
+     * The filter to search for the PhishingDepartment to update in case it exists.
      */
-    where: TesteDepartamentoWhereUniqueInput
+    where: PhishingDepartmentWhereUniqueInput
     /**
-     * In case the TesteDepartamento found by the `where` argument doesn't exist, create a new TesteDepartamento with this data.
+     * In case the PhishingDepartment found by the `where` argument doesn't exist, create a new PhishingDepartment with this data.
      */
-    create: XOR<TesteDepartamentoCreateInput, TesteDepartamentoUncheckedCreateInput>
+    create: XOR<PhishingDepartmentCreateInput, PhishingDepartmentUncheckedCreateInput>
     /**
-     * In case the TesteDepartamento was found with the provided `where` argument, update it with this data.
+     * In case the PhishingDepartment was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<TesteDepartamentoUpdateInput, TesteDepartamentoUncheckedUpdateInput>
+    update: XOR<PhishingDepartmentUpdateInput, PhishingDepartmentUncheckedUpdateInput>
   }
 
   /**
-   * TesteDepartamento delete
+   * PhishingDepartment delete
    */
-  export type TesteDepartamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
     /**
-     * Filter which TesteDepartamento to delete.
+     * Filter which PhishingDepartment to delete.
      */
-    where: TesteDepartamentoWhereUniqueInput
+    where: PhishingDepartmentWhereUniqueInput
   }
 
   /**
-   * TesteDepartamento deleteMany
+   * PhishingDepartment deleteMany
    */
-  export type TesteDepartamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which TesteDepartamentos to delete
+     * Filter which PhishingDepartments to delete
      */
-    where?: TesteDepartamentoWhereInput
+    where?: PhishingDepartmentWhereInput
     /**
-     * Limit how many TesteDepartamentos to delete.
+     * Limit how many PhishingDepartments to delete.
      */
     limit?: number
   }
 
   /**
-   * TesteDepartamento without action
+   * PhishingDepartment without action
    */
-  export type TesteDepartamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDepartmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
+    include?: PhishingDepartmentInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Teste
+   * Model Phishing
    */
 
-  export type AggregateTeste = {
-    _count: TesteCountAggregateOutputType | null
-    _min: TesteMinAggregateOutputType | null
-    _max: TesteMaxAggregateOutputType | null
+  export type AggregatePhishing = {
+    _count: PhishingCountAggregateOutputType | null
+    _min: PhishingMinAggregateOutputType | null
+    _max: PhishingMaxAggregateOutputType | null
   }
 
-  export type TesteMinAggregateOutputType = {
+  export type PhishingMinAggregateOutputType = {
     id: string | null
-    canal: $Enums.CanalTeste | null
-    status: $Enums.StatusTeste | null
-    caiuNoTeste: boolean | null
-    reportouPhishing: boolean | null
-    usuarioId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    clicked: boolean | null
+    reported: boolean | null
+    channel: $Enums.PhishingChannel | null
+    status: $Enums.PhishingStatus | null
+    userId: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type TesteMaxAggregateOutputType = {
+  export type PhishingMaxAggregateOutputType = {
     id: string | null
-    canal: $Enums.CanalTeste | null
-    status: $Enums.StatusTeste | null
-    caiuNoTeste: boolean | null
-    reportouPhishing: boolean | null
-    usuarioId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    clicked: boolean | null
+    reported: boolean | null
+    channel: $Enums.PhishingChannel | null
+    status: $Enums.PhishingStatus | null
+    userId: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type TesteCountAggregateOutputType = {
+  export type PhishingCountAggregateOutputType = {
     id: number
-    canal: number
+    clicked: number
+    reported: number
+    channel: number
     status: number
-    caiuNoTeste: number
-    reportouPhishing: number
-    usuarioId: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    userId: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type TesteMinAggregateInputType = {
+  export type PhishingMinAggregateInputType = {
     id?: true
-    canal?: true
+    clicked?: true
+    reported?: true
+    channel?: true
     status?: true
-    caiuNoTeste?: true
-    reportouPhishing?: true
-    usuarioId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    userId?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type TesteMaxAggregateInputType = {
+  export type PhishingMaxAggregateInputType = {
     id?: true
-    canal?: true
+    clicked?: true
+    reported?: true
+    channel?: true
     status?: true
-    caiuNoTeste?: true
-    reportouPhishing?: true
-    usuarioId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    userId?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type TesteCountAggregateInputType = {
+  export type PhishingCountAggregateInputType = {
     id?: true
-    canal?: true
+    clicked?: true
+    reported?: true
+    channel?: true
     status?: true
-    caiuNoTeste?: true
-    reportouPhishing?: true
-    usuarioId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    userId?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type TesteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Teste to aggregate.
+     * Filter which Phishing to aggregate.
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Testes to fetch.
+     * Determine the order of Phishings to fetch.
      */
-    orderBy?: TesteOrderByWithRelationInput | TesteOrderByWithRelationInput[]
+    orderBy?: PhishingOrderByWithRelationInput | PhishingOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: TesteWhereUniqueInput
+    cursor?: PhishingWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Testes from the position of the cursor.
+     * Take `±n` Phishings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Testes.
+     * Skip the first `n` Phishings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Testes
+     * Count returned Phishings
     **/
-    _count?: true | TesteCountAggregateInputType
+    _count?: true | PhishingCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: TesteMinAggregateInputType
+    _min?: PhishingMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: TesteMaxAggregateInputType
+    _max?: PhishingMaxAggregateInputType
   }
 
-  export type GetTesteAggregateType<T extends TesteAggregateArgs> = {
-        [P in keyof T & keyof AggregateTeste]: P extends '_count' | 'count'
+  export type GetPhishingAggregateType<T extends PhishingAggregateArgs> = {
+        [P in keyof T & keyof AggregatePhishing]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateTeste[P]>
-      : GetScalarType<T[P], AggregateTeste[P]>
+        : GetScalarType<T[P], AggregatePhishing[P]>
+      : GetScalarType<T[P], AggregatePhishing[P]>
   }
 
 
 
 
-  export type TesteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TesteWhereInput
-    orderBy?: TesteOrderByWithAggregationInput | TesteOrderByWithAggregationInput[]
-    by: TesteScalarFieldEnum[] | TesteScalarFieldEnum
-    having?: TesteScalarWhereWithAggregatesInput
+  export type PhishingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PhishingWhereInput
+    orderBy?: PhishingOrderByWithAggregationInput | PhishingOrderByWithAggregationInput[]
+    by: PhishingScalarFieldEnum[] | PhishingScalarFieldEnum
+    having?: PhishingScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: TesteCountAggregateInputType | true
-    _min?: TesteMinAggregateInputType
-    _max?: TesteMaxAggregateInputType
+    _count?: PhishingCountAggregateInputType | true
+    _min?: PhishingMinAggregateInputType
+    _max?: PhishingMaxAggregateInputType
   }
 
-  export type TesteGroupByOutputType = {
+  export type PhishingGroupByOutputType = {
     id: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste: boolean
-    reportouPhishing: boolean
-    usuarioId: string | null
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: TesteCountAggregateOutputType | null
-    _min: TesteMinAggregateOutputType | null
-    _max: TesteMaxAggregateOutputType | null
+    clicked: boolean
+    reported: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    userId: string | null
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: PhishingCountAggregateOutputType | null
+    _min: PhishingMinAggregateOutputType | null
+    _max: PhishingMaxAggregateOutputType | null
   }
 
-  type GetTesteGroupByPayload<T extends TesteGroupByArgs> = Prisma.PrismaPromise<
+  type GetPhishingGroupByPayload<T extends PhishingGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<TesteGroupByOutputType, T['by']> &
+      PickEnumerable<PhishingGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof TesteGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof PhishingGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], TesteGroupByOutputType[P]>
-            : GetScalarType<T[P], TesteGroupByOutputType[P]>
+              : GetScalarType<T[P], PhishingGroupByOutputType[P]>
+            : GetScalarType<T[P], PhishingGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type TesteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    canal?: boolean
+    clicked?: boolean
+    reported?: boolean
+    channel?: boolean
     status?: boolean
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    departamentos?: boolean | Teste$departamentosArgs<ExtArgs>
-    logs?: boolean | Teste$logsArgs<ExtArgs>
-    campanhas?: boolean | Teste$campanhasArgs<ExtArgs>
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
-    _count?: boolean | TesteCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["teste"]>
+    userId?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    departments?: boolean | Phishing$departmentsArgs<ExtArgs>
+    user?: boolean | Phishing$userArgs<ExtArgs>
+    _count?: boolean | PhishingCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["phishing"]>
 
-  export type TesteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    canal?: boolean
+    clicked?: boolean
+    reported?: boolean
+    channel?: boolean
     status?: boolean
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
-  }, ExtArgs["result"]["teste"]>
+    userId?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    user?: boolean | Phishing$userArgs<ExtArgs>
+  }, ExtArgs["result"]["phishing"]>
 
-  export type TesteSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type PhishingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    canal?: boolean
+    clicked?: boolean
+    reported?: boolean
+    channel?: boolean
     status?: boolean
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
-  }, ExtArgs["result"]["teste"]>
+    userId?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    user?: boolean | Phishing$userArgs<ExtArgs>
+  }, ExtArgs["result"]["phishing"]>
 
-  export type TesteSelectScalar = {
+  export type PhishingSelectScalar = {
     id?: boolean
-    canal?: boolean
+    clicked?: boolean
+    reported?: boolean
+    channel?: boolean
     status?: boolean
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    userId?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type TesteOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "canal" | "status" | "caiuNoTeste" | "reportouPhishing" | "usuarioId" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["teste"]>
-  export type TesteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    departamentos?: boolean | Teste$departamentosArgs<ExtArgs>
-    logs?: boolean | Teste$logsArgs<ExtArgs>
-    campanhas?: boolean | Teste$campanhasArgs<ExtArgs>
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
-    _count?: boolean | TesteCountOutputTypeDefaultArgs<ExtArgs>
+  export type PhishingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clicked" | "reported" | "channel" | "status" | "userId" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["phishing"]>
+  export type PhishingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    departments?: boolean | Phishing$departmentsArgs<ExtArgs>
+    user?: boolean | Phishing$userArgs<ExtArgs>
+    _count?: boolean | PhishingCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type TesteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
+  export type PhishingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Phishing$userArgs<ExtArgs>
   }
-  export type TesteIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | Teste$usuarioArgs<ExtArgs>
+  export type PhishingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Phishing$userArgs<ExtArgs>
   }
 
-  export type $TestePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Teste"
+  export type $PhishingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Phishing"
     objects: {
-      departamentos: Prisma.$TesteDepartamentoPayload<ExtArgs>[]
-      logs: Prisma.$LogPayload<ExtArgs>[]
-      campanhas: Prisma.$CampanhaTestePayload<ExtArgs>[]
-      usuario: Prisma.$UsuarioPayload<ExtArgs> | null
+      departments: Prisma.$PhishingDepartmentPayload<ExtArgs>[]
+      user: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      canal: $Enums.CanalTeste
-      status: $Enums.StatusTeste
-      caiuNoTeste: boolean
-      reportouPhishing: boolean
-      usuarioId: string | null
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["teste"]>
+      clicked: boolean
+      reported: boolean
+      channel: $Enums.PhishingChannel
+      status: $Enums.PhishingStatus
+      userId: string | null
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["phishing"]>
     composites: {}
   }
 
-  type TesteGetPayload<S extends boolean | null | undefined | TesteDefaultArgs> = $Result.GetResult<Prisma.$TestePayload, S>
+  type PhishingGetPayload<S extends boolean | null | undefined | PhishingDefaultArgs> = $Result.GetResult<Prisma.$PhishingPayload, S>
 
-  type TesteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<TesteFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: TesteCountAggregateInputType | true
+  type PhishingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PhishingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PhishingCountAggregateInputType | true
     }
 
-  export interface TesteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Teste'], meta: { name: 'Teste' } }
+  export interface PhishingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Phishing'], meta: { name: 'Phishing' } }
     /**
-     * Find zero or one Teste that matches the filter.
-     * @param {TesteFindUniqueArgs} args - Arguments to find a Teste
+     * Find zero or one Phishing that matches the filter.
+     * @param {PhishingFindUniqueArgs} args - Arguments to find a Phishing
      * @example
-     * // Get one Teste
-     * const teste = await prisma.teste.findUnique({
+     * // Get one Phishing
+     * const phishing = await prisma.phishing.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends TesteFindUniqueArgs>(args: SelectSubset<T, TesteFindUniqueArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends PhishingFindUniqueArgs>(args: SelectSubset<T, PhishingFindUniqueArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Teste that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Phishing that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {TesteFindUniqueOrThrowArgs} args - Arguments to find a Teste
+     * @param {PhishingFindUniqueOrThrowArgs} args - Arguments to find a Phishing
      * @example
-     * // Get one Teste
-     * const teste = await prisma.teste.findUniqueOrThrow({
+     * // Get one Phishing
+     * const phishing = await prisma.phishing.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends TesteFindUniqueOrThrowArgs>(args: SelectSubset<T, TesteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends PhishingFindUniqueOrThrowArgs>(args: SelectSubset<T, PhishingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Teste that matches the filter.
+     * Find the first Phishing that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteFindFirstArgs} args - Arguments to find a Teste
+     * @param {PhishingFindFirstArgs} args - Arguments to find a Phishing
      * @example
-     * // Get one Teste
-     * const teste = await prisma.teste.findFirst({
+     * // Get one Phishing
+     * const phishing = await prisma.phishing.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends TesteFindFirstArgs>(args?: SelectSubset<T, TesteFindFirstArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends PhishingFindFirstArgs>(args?: SelectSubset<T, PhishingFindFirstArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Teste that matches the filter or
+     * Find the first Phishing that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteFindFirstOrThrowArgs} args - Arguments to find a Teste
+     * @param {PhishingFindFirstOrThrowArgs} args - Arguments to find a Phishing
      * @example
-     * // Get one Teste
-     * const teste = await prisma.teste.findFirstOrThrow({
+     * // Get one Phishing
+     * const phishing = await prisma.phishing.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends TesteFindFirstOrThrowArgs>(args?: SelectSubset<T, TesteFindFirstOrThrowArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends PhishingFindFirstOrThrowArgs>(args?: SelectSubset<T, PhishingFindFirstOrThrowArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Testes that matches the filter.
+     * Find zero or more Phishings that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {PhishingFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Testes
-     * const testes = await prisma.teste.findMany()
+     * // Get all Phishings
+     * const phishings = await prisma.phishing.findMany()
      * 
-     * // Get first 10 Testes
-     * const testes = await prisma.teste.findMany({ take: 10 })
+     * // Get first 10 Phishings
+     * const phishings = await prisma.phishing.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const testeWithIdOnly = await prisma.teste.findMany({ select: { id: true } })
+     * const phishingWithIdOnly = await prisma.phishing.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends TesteFindManyArgs>(args?: SelectSubset<T, TesteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends PhishingFindManyArgs>(args?: SelectSubset<T, PhishingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Teste.
-     * @param {TesteCreateArgs} args - Arguments to create a Teste.
+     * Create a Phishing.
+     * @param {PhishingCreateArgs} args - Arguments to create a Phishing.
      * @example
-     * // Create one Teste
-     * const Teste = await prisma.teste.create({
+     * // Create one Phishing
+     * const Phishing = await prisma.phishing.create({
      *   data: {
-     *     // ... data to create a Teste
+     *     // ... data to create a Phishing
      *   }
      * })
      * 
      */
-    create<T extends TesteCreateArgs>(args: SelectSubset<T, TesteCreateArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends PhishingCreateArgs>(args: SelectSubset<T, PhishingCreateArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Testes.
-     * @param {TesteCreateManyArgs} args - Arguments to create many Testes.
+     * Create many Phishings.
+     * @param {PhishingCreateManyArgs} args - Arguments to create many Phishings.
      * @example
-     * // Create many Testes
-     * const teste = await prisma.teste.createMany({
+     * // Create many Phishings
+     * const phishing = await prisma.phishing.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends TesteCreateManyArgs>(args?: SelectSubset<T, TesteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends PhishingCreateManyArgs>(args?: SelectSubset<T, PhishingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Testes and returns the data saved in the database.
-     * @param {TesteCreateManyAndReturnArgs} args - Arguments to create many Testes.
+     * Create many Phishings and returns the data saved in the database.
+     * @param {PhishingCreateManyAndReturnArgs} args - Arguments to create many Phishings.
      * @example
-     * // Create many Testes
-     * const teste = await prisma.teste.createManyAndReturn({
+     * // Create many Phishings
+     * const phishing = await prisma.phishing.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Testes and only return the `id`
-     * const testeWithIdOnly = await prisma.teste.createManyAndReturn({
+     * // Create many Phishings and only return the `id`
+     * const phishingWithIdOnly = await prisma.phishing.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -8065,28 +6492,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends TesteCreateManyAndReturnArgs>(args?: SelectSubset<T, TesteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends PhishingCreateManyAndReturnArgs>(args?: SelectSubset<T, PhishingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Teste.
-     * @param {TesteDeleteArgs} args - Arguments to delete one Teste.
+     * Delete a Phishing.
+     * @param {PhishingDeleteArgs} args - Arguments to delete one Phishing.
      * @example
-     * // Delete one Teste
-     * const Teste = await prisma.teste.delete({
+     * // Delete one Phishing
+     * const Phishing = await prisma.phishing.delete({
      *   where: {
-     *     // ... filter to delete one Teste
+     *     // ... filter to delete one Phishing
      *   }
      * })
      * 
      */
-    delete<T extends TesteDeleteArgs>(args: SelectSubset<T, TesteDeleteArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends PhishingDeleteArgs>(args: SelectSubset<T, PhishingDeleteArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Teste.
-     * @param {TesteUpdateArgs} args - Arguments to update one Teste.
+     * Update one Phishing.
+     * @param {PhishingUpdateArgs} args - Arguments to update one Phishing.
      * @example
-     * // Update one Teste
-     * const teste = await prisma.teste.update({
+     * // Update one Phishing
+     * const phishing = await prisma.phishing.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8096,30 +6523,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends TesteUpdateArgs>(args: SelectSubset<T, TesteUpdateArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends PhishingUpdateArgs>(args: SelectSubset<T, PhishingUpdateArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Testes.
-     * @param {TesteDeleteManyArgs} args - Arguments to filter Testes to delete.
+     * Delete zero or more Phishings.
+     * @param {PhishingDeleteManyArgs} args - Arguments to filter Phishings to delete.
      * @example
-     * // Delete a few Testes
-     * const { count } = await prisma.teste.deleteMany({
+     * // Delete a few Phishings
+     * const { count } = await prisma.phishing.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends TesteDeleteManyArgs>(args?: SelectSubset<T, TesteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends PhishingDeleteManyArgs>(args?: SelectSubset<T, PhishingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Testes.
+     * Update zero or more Phishings.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {PhishingUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Testes
-     * const teste = await prisma.teste.updateMany({
+     * // Update many Phishings
+     * const phishing = await prisma.phishing.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8129,14 +6556,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends TesteUpdateManyArgs>(args: SelectSubset<T, TesteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends PhishingUpdateManyArgs>(args: SelectSubset<T, PhishingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Testes and returns the data updated in the database.
-     * @param {TesteUpdateManyAndReturnArgs} args - Arguments to update many Testes.
+     * Update zero or more Phishings and returns the data updated in the database.
+     * @param {PhishingUpdateManyAndReturnArgs} args - Arguments to update many Phishings.
      * @example
-     * // Update many Testes
-     * const teste = await prisma.teste.updateManyAndReturn({
+     * // Update many Phishings
+     * const phishing = await prisma.phishing.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -8145,8 +6572,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Testes and only return the `id`
-     * const testeWithIdOnly = await prisma.teste.updateManyAndReturn({
+     * // Update zero or more Phishings and only return the `id`
+     * const phishingWithIdOnly = await prisma.phishing.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -8159,56 +6586,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends TesteUpdateManyAndReturnArgs>(args: SelectSubset<T, TesteUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends PhishingUpdateManyAndReturnArgs>(args: SelectSubset<T, PhishingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Teste.
-     * @param {TesteUpsertArgs} args - Arguments to update or create a Teste.
+     * Create or update one Phishing.
+     * @param {PhishingUpsertArgs} args - Arguments to update or create a Phishing.
      * @example
-     * // Update or create a Teste
-     * const teste = await prisma.teste.upsert({
+     * // Update or create a Phishing
+     * const phishing = await prisma.phishing.upsert({
      *   create: {
-     *     // ... data to create a Teste
+     *     // ... data to create a Phishing
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Teste we want to update
+     *     // ... the filter for the Phishing we want to update
      *   }
      * })
      */
-    upsert<T extends TesteUpsertArgs>(args: SelectSubset<T, TesteUpsertArgs<ExtArgs>>): Prisma__TesteClient<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends PhishingUpsertArgs>(args: SelectSubset<T, PhishingUpsertArgs<ExtArgs>>): Prisma__PhishingClient<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Testes.
+     * Count the number of Phishings.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteCountArgs} args - Arguments to filter Testes to count.
+     * @param {PhishingCountArgs} args - Arguments to filter Phishings to count.
      * @example
-     * // Count the number of Testes
-     * const count = await prisma.teste.count({
+     * // Count the number of Phishings
+     * const count = await prisma.phishing.count({
      *   where: {
-     *     // ... the filter for the Testes we want to count
+     *     // ... the filter for the Phishings we want to count
      *   }
      * })
     **/
-    count<T extends TesteCountArgs>(
-      args?: Subset<T, TesteCountArgs>,
+    count<T extends PhishingCountArgs>(
+      args?: Subset<T, PhishingCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], TesteCountAggregateOutputType>
+          : GetScalarType<T['select'], PhishingCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Teste.
+     * Allows you to perform aggregations operations on a Phishing.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {PhishingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -8228,13 +6655,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends TesteAggregateArgs>(args: Subset<T, TesteAggregateArgs>): Prisma.PrismaPromise<GetTesteAggregateType<T>>
+    aggregate<T extends PhishingAggregateArgs>(args: Subset<T, PhishingAggregateArgs>): Prisma.PrismaPromise<GetPhishingAggregateType<T>>
 
     /**
-     * Group by Teste.
+     * Group by Phishing.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {TesteGroupByArgs} args - Group by arguments.
+     * @param {PhishingGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -8249,14 +6676,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends TesteGroupByArgs,
+      T extends PhishingGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: TesteGroupByArgs['orderBy'] }
-        : { orderBy?: TesteGroupByArgs['orderBy'] },
+        ? { orderBy: PhishingGroupByArgs['orderBy'] }
+        : { orderBy?: PhishingGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -8305,25 +6732,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, TesteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTesteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, PhishingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPhishingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Teste model
+   * Fields of the Phishing model
    */
-  readonly fields: TesteFieldRefs;
+  readonly fields: PhishingFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Teste.
+   * The delegate class that acts as a "Promise-like" for Phishing.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__TesteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__PhishingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    departamentos<T extends Teste$departamentosArgs<ExtArgs> = {}>(args?: Subset<T, Teste$departamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TesteDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    logs<T extends Teste$logsArgs<ExtArgs> = {}>(args?: Subset<T, Teste$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    campanhas<T extends Teste$campanhasArgs<ExtArgs> = {}>(args?: Subset<T, Teste$campanhasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampanhaTestePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    usuario<T extends Teste$usuarioArgs<ExtArgs> = {}>(args?: Subset<T, Teste$usuarioArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    departments<T extends Phishing$departmentsArgs<ExtArgs> = {}>(args?: Subset<T, Phishing$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user<T extends Phishing$userArgs<ExtArgs> = {}>(args?: Subset<T, Phishing$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8350,939 +6775,891 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Teste model
+   * Fields of the Phishing model
    */ 
-  interface TesteFieldRefs {
-    readonly id: FieldRef<"Teste", 'String'>
-    readonly canal: FieldRef<"Teste", 'CanalTeste'>
-    readonly status: FieldRef<"Teste", 'StatusTeste'>
-    readonly caiuNoTeste: FieldRef<"Teste", 'Boolean'>
-    readonly reportouPhishing: FieldRef<"Teste", 'Boolean'>
-    readonly usuarioId: FieldRef<"Teste", 'String'>
-    readonly ativo: FieldRef<"Teste", 'Boolean'>
-    readonly criadoEm: FieldRef<"Teste", 'DateTime'>
-    readonly criadoPor: FieldRef<"Teste", 'String'>
-    readonly atualizadoEm: FieldRef<"Teste", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"Teste", 'String'>
-    readonly inativadoEm: FieldRef<"Teste", 'DateTime'>
-    readonly inativadoPor: FieldRef<"Teste", 'String'>
+  interface PhishingFieldRefs {
+    readonly id: FieldRef<"Phishing", 'String'>
+    readonly clicked: FieldRef<"Phishing", 'Boolean'>
+    readonly reported: FieldRef<"Phishing", 'Boolean'>
+    readonly channel: FieldRef<"Phishing", 'PhishingChannel'>
+    readonly status: FieldRef<"Phishing", 'PhishingStatus'>
+    readonly userId: FieldRef<"Phishing", 'String'>
+    readonly is_active: FieldRef<"Phishing", 'Boolean'>
+    readonly created_at: FieldRef<"Phishing", 'DateTime'>
+    readonly created_by: FieldRef<"Phishing", 'String'>
+    readonly updated_by: FieldRef<"Phishing", 'String'>
+    readonly updated_at: FieldRef<"Phishing", 'DateTime'>
+    readonly inactivated_at: FieldRef<"Phishing", 'DateTime'>
+    readonly inactivated_by: FieldRef<"Phishing", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * Teste findUnique
+   * Phishing findUnique
    */
-  export type TesteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter, which Teste to fetch.
+     * Filter, which Phishing to fetch.
      */
-    where: TesteWhereUniqueInput
+    where: PhishingWhereUniqueInput
   }
 
   /**
-   * Teste findUniqueOrThrow
+   * Phishing findUniqueOrThrow
    */
-  export type TesteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter, which Teste to fetch.
+     * Filter, which Phishing to fetch.
      */
-    where: TesteWhereUniqueInput
+    where: PhishingWhereUniqueInput
   }
 
   /**
-   * Teste findFirst
+   * Phishing findFirst
    */
-  export type TesteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter, which Teste to fetch.
+     * Filter, which Phishing to fetch.
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Testes to fetch.
+     * Determine the order of Phishings to fetch.
      */
-    orderBy?: TesteOrderByWithRelationInput | TesteOrderByWithRelationInput[]
+    orderBy?: PhishingOrderByWithRelationInput | PhishingOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Testes.
+     * Sets the position for searching for Phishings.
      */
-    cursor?: TesteWhereUniqueInput
+    cursor?: PhishingWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Testes from the position of the cursor.
+     * Take `±n` Phishings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Testes.
+     * Skip the first `n` Phishings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Testes.
+     * Filter by unique combinations of Phishings.
      */
-    distinct?: TesteScalarFieldEnum | TesteScalarFieldEnum[]
+    distinct?: PhishingScalarFieldEnum | PhishingScalarFieldEnum[]
   }
 
   /**
-   * Teste findFirstOrThrow
+   * Phishing findFirstOrThrow
    */
-  export type TesteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter, which Teste to fetch.
+     * Filter, which Phishing to fetch.
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Testes to fetch.
+     * Determine the order of Phishings to fetch.
      */
-    orderBy?: TesteOrderByWithRelationInput | TesteOrderByWithRelationInput[]
+    orderBy?: PhishingOrderByWithRelationInput | PhishingOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Testes.
+     * Sets the position for searching for Phishings.
      */
-    cursor?: TesteWhereUniqueInput
+    cursor?: PhishingWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Testes from the position of the cursor.
+     * Take `±n` Phishings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Testes.
+     * Skip the first `n` Phishings.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Testes.
+     * Filter by unique combinations of Phishings.
      */
-    distinct?: TesteScalarFieldEnum | TesteScalarFieldEnum[]
+    distinct?: PhishingScalarFieldEnum | PhishingScalarFieldEnum[]
   }
 
   /**
-   * Teste findMany
+   * Phishing findMany
    */
-  export type TesteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter, which Testes to fetch.
+     * Filter, which Phishings to fetch.
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Testes to fetch.
+     * Determine the order of Phishings to fetch.
      */
-    orderBy?: TesteOrderByWithRelationInput | TesteOrderByWithRelationInput[]
+    orderBy?: PhishingOrderByWithRelationInput | PhishingOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Testes.
+     * Sets the position for listing Phishings.
      */
-    cursor?: TesteWhereUniqueInput
+    cursor?: PhishingWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Testes from the position of the cursor.
+     * Take `±n` Phishings from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Testes.
+     * Skip the first `n` Phishings.
      */
     skip?: number
-    distinct?: TesteScalarFieldEnum | TesteScalarFieldEnum[]
+    distinct?: PhishingScalarFieldEnum | PhishingScalarFieldEnum[]
   }
 
   /**
-   * Teste create
+   * Phishing create
    */
-  export type TesteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * The data needed to create a Teste.
+     * The data needed to create a Phishing.
      */
-    data: XOR<TesteCreateInput, TesteUncheckedCreateInput>
+    data: XOR<PhishingCreateInput, PhishingUncheckedCreateInput>
   }
 
   /**
-   * Teste createMany
+   * Phishing createMany
    */
-  export type TesteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Testes.
+     * The data used to create many Phishings.
      */
-    data: TesteCreateManyInput | TesteCreateManyInput[]
+    data: PhishingCreateManyInput | PhishingCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Teste createManyAndReturn
+   * Phishing createManyAndReturn
    */
-  export type TesteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelectCreateManyAndReturn<ExtArgs> | null
+    select?: PhishingSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
-     * The data used to create many Testes.
+     * The data used to create many Phishings.
      */
-    data: TesteCreateManyInput | TesteCreateManyInput[]
+    data: PhishingCreateManyInput | PhishingCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: PhishingIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Teste update
+   * Phishing update
    */
-  export type TesteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * The data needed to update a Teste.
+     * The data needed to update a Phishing.
      */
-    data: XOR<TesteUpdateInput, TesteUncheckedUpdateInput>
+    data: XOR<PhishingUpdateInput, PhishingUncheckedUpdateInput>
     /**
-     * Choose, which Teste to update.
+     * Choose, which Phishing to update.
      */
-    where: TesteWhereUniqueInput
+    where: PhishingWhereUniqueInput
   }
 
   /**
-   * Teste updateMany
+   * Phishing updateMany
    */
-  export type TesteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Testes.
+     * The data used to update Phishings.
      */
-    data: XOR<TesteUpdateManyMutationInput, TesteUncheckedUpdateManyInput>
+    data: XOR<PhishingUpdateManyMutationInput, PhishingUncheckedUpdateManyInput>
     /**
-     * Filter which Testes to update
+     * Filter which Phishings to update
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
-     * Limit how many Testes to update.
+     * Limit how many Phishings to update.
      */
     limit?: number
   }
 
   /**
-   * Teste updateManyAndReturn
+   * Phishing updateManyAndReturn
    */
-  export type TesteUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: PhishingSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
-     * The data used to update Testes.
+     * The data used to update Phishings.
      */
-    data: XOR<TesteUpdateManyMutationInput, TesteUncheckedUpdateManyInput>
+    data: XOR<PhishingUpdateManyMutationInput, PhishingUncheckedUpdateManyInput>
     /**
-     * Filter which Testes to update
+     * Filter which Phishings to update
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
-     * Limit how many Testes to update.
+     * Limit how many Phishings to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: PhishingIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * Teste upsert
+   * Phishing upsert
    */
-  export type TesteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * The filter to search for the Teste to update in case it exists.
+     * The filter to search for the Phishing to update in case it exists.
      */
-    where: TesteWhereUniqueInput
+    where: PhishingWhereUniqueInput
     /**
-     * In case the Teste found by the `where` argument doesn't exist, create a new Teste with this data.
+     * In case the Phishing found by the `where` argument doesn't exist, create a new Phishing with this data.
      */
-    create: XOR<TesteCreateInput, TesteUncheckedCreateInput>
+    create: XOR<PhishingCreateInput, PhishingUncheckedCreateInput>
     /**
-     * In case the Teste was found with the provided `where` argument, update it with this data.
+     * In case the Phishing was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<TesteUpdateInput, TesteUncheckedUpdateInput>
+    update: XOR<PhishingUpdateInput, PhishingUncheckedUpdateInput>
   }
 
   /**
-   * Teste delete
+   * Phishing delete
    */
-  export type TesteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
     /**
-     * Filter which Teste to delete.
+     * Filter which Phishing to delete.
      */
-    where: TesteWhereUniqueInput
+    where: PhishingWhereUniqueInput
   }
 
   /**
-   * Teste deleteMany
+   * Phishing deleteMany
    */
-  export type TesteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Testes to delete
+     * Filter which Phishings to delete
      */
-    where?: TesteWhereInput
+    where?: PhishingWhereInput
     /**
-     * Limit how many Testes to delete.
+     * Limit how many Phishings to delete.
      */
     limit?: number
   }
 
   /**
-   * Teste.departamentos
+   * Phishing.departments
    */
-  export type Teste$departamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Phishing$departmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the TesteDepartamento
+     * Select specific fields to fetch from the PhishingDepartment
      */
-    select?: TesteDepartamentoSelect<ExtArgs> | null
+    select?: PhishingDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the TesteDepartamento
+     * Omit specific fields from the PhishingDepartment
      */
-    omit?: TesteDepartamentoOmit<ExtArgs> | null
+    omit?: PhishingDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteDepartamentoInclude<ExtArgs> | null
-    where?: TesteDepartamentoWhereInput
-    orderBy?: TesteDepartamentoOrderByWithRelationInput | TesteDepartamentoOrderByWithRelationInput[]
-    cursor?: TesteDepartamentoWhereUniqueInput
+    include?: PhishingDepartmentInclude<ExtArgs> | null
+    where?: PhishingDepartmentWhereInput
+    orderBy?: PhishingDepartmentOrderByWithRelationInput | PhishingDepartmentOrderByWithRelationInput[]
+    cursor?: PhishingDepartmentWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: TesteDepartamentoScalarFieldEnum | TesteDepartamentoScalarFieldEnum[]
+    distinct?: PhishingDepartmentScalarFieldEnum | PhishingDepartmentScalarFieldEnum[]
   }
 
   /**
-   * Teste.logs
+   * Phishing.user
    */
-  export type Teste$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Phishing$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Log
+     * Select specific fields to fetch from the User
      */
-    select?: LogSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Log
+     * Omit specific fields from the User
      */
-    omit?: LogOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: LogInclude<ExtArgs> | null
-    where?: LogWhereInput
-    orderBy?: LogOrderByWithRelationInput | LogOrderByWithRelationInput[]
-    cursor?: LogWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: LogScalarFieldEnum | LogScalarFieldEnum[]
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
-   * Teste.campanhas
+   * Phishing without action
    */
-  export type Teste$campanhasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type PhishingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the CampanhaTeste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: CampanhaTesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the CampanhaTeste
+     * Omit specific fields from the Phishing
      */
-    omit?: CampanhaTesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: CampanhaTesteInclude<ExtArgs> | null
-    where?: CampanhaTesteWhereInput
-    orderBy?: CampanhaTesteOrderByWithRelationInput | CampanhaTesteOrderByWithRelationInput[]
-    cursor?: CampanhaTesteWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CampanhaTesteScalarFieldEnum | CampanhaTesteScalarFieldEnum[]
-  }
-
-  /**
-   * Teste.usuario
-   */
-  export type Teste$usuarioArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Usuario
-     */
-    select?: UsuarioSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Usuario
-     */
-    omit?: UsuarioOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UsuarioInclude<ExtArgs> | null
-    where?: UsuarioWhereInput
-  }
-
-  /**
-   * Teste without action
-   */
-  export type TesteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Teste
-     */
-    select?: TesteSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Teste
-     */
-    omit?: TesteOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TesteInclude<ExtArgs> | null
+    include?: PhishingInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model UsuarioDepartamento
+   * Model UserDepartment
    */
 
-  export type AggregateUsuarioDepartamento = {
-    _count: UsuarioDepartamentoCountAggregateOutputType | null
-    _min: UsuarioDepartamentoMinAggregateOutputType | null
-    _max: UsuarioDepartamentoMaxAggregateOutputType | null
+  export type AggregateUserDepartment = {
+    _count: UserDepartmentCountAggregateOutputType | null
+    _min: UserDepartmentMinAggregateOutputType | null
+    _max: UserDepartmentMaxAggregateOutputType | null
   }
 
-  export type UsuarioDepartamentoMinAggregateOutputType = {
+  export type UserDepartmentMinAggregateOutputType = {
     id: string | null
-    usuarioId: string | null
-    departamentoId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    user_id: string | null
+    department_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type UsuarioDepartamentoMaxAggregateOutputType = {
+  export type UserDepartmentMaxAggregateOutputType = {
     id: string | null
-    usuarioId: string | null
-    departamentoId: string | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    user_id: string | null
+    department_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type UsuarioDepartamentoCountAggregateOutputType = {
+  export type UserDepartmentCountAggregateOutputType = {
     id: number
-    usuarioId: number
-    departamentoId: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    user_id: number
+    department_id: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type UsuarioDepartamentoMinAggregateInputType = {
+  export type UserDepartmentMinAggregateInputType = {
     id?: true
-    usuarioId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    user_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type UsuarioDepartamentoMaxAggregateInputType = {
+  export type UserDepartmentMaxAggregateInputType = {
     id?: true
-    usuarioId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    user_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type UsuarioDepartamentoCountAggregateInputType = {
+  export type UserDepartmentCountAggregateInputType = {
     id?: true
-    usuarioId?: true
-    departamentoId?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    user_id?: true
+    department_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type UsuarioDepartamentoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which UsuarioDepartamento to aggregate.
+     * Filter which UserDepartment to aggregate.
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UsuarioDepartamentos to fetch.
+     * Determine the order of UserDepartments to fetch.
      */
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: UsuarioDepartamentoWhereUniqueInput
+    cursor?: UserDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UsuarioDepartamentos from the position of the cursor.
+     * Take `±n` UserDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UsuarioDepartamentos.
+     * Skip the first `n` UserDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned UsuarioDepartamentos
+     * Count returned UserDepartments
     **/
-    _count?: true | UsuarioDepartamentoCountAggregateInputType
+    _count?: true | UserDepartmentCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: UsuarioDepartamentoMinAggregateInputType
+    _min?: UserDepartmentMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: UsuarioDepartamentoMaxAggregateInputType
+    _max?: UserDepartmentMaxAggregateInputType
   }
 
-  export type GetUsuarioDepartamentoAggregateType<T extends UsuarioDepartamentoAggregateArgs> = {
-        [P in keyof T & keyof AggregateUsuarioDepartamento]: P extends '_count' | 'count'
+  export type GetUserDepartmentAggregateType<T extends UserDepartmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserDepartment]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateUsuarioDepartamento[P]>
-      : GetScalarType<T[P], AggregateUsuarioDepartamento[P]>
+        : GetScalarType<T[P], AggregateUserDepartment[P]>
+      : GetScalarType<T[P], AggregateUserDepartment[P]>
   }
 
 
 
 
-  export type UsuarioDepartamentoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UsuarioDepartamentoWhereInput
-    orderBy?: UsuarioDepartamentoOrderByWithAggregationInput | UsuarioDepartamentoOrderByWithAggregationInput[]
-    by: UsuarioDepartamentoScalarFieldEnum[] | UsuarioDepartamentoScalarFieldEnum
-    having?: UsuarioDepartamentoScalarWhereWithAggregatesInput
+  export type UserDepartmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserDepartmentWhereInput
+    orderBy?: UserDepartmentOrderByWithAggregationInput | UserDepartmentOrderByWithAggregationInput[]
+    by: UserDepartmentScalarFieldEnum[] | UserDepartmentScalarFieldEnum
+    having?: UserDepartmentScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: UsuarioDepartamentoCountAggregateInputType | true
-    _min?: UsuarioDepartamentoMinAggregateInputType
-    _max?: UsuarioDepartamentoMaxAggregateInputType
+    _count?: UserDepartmentCountAggregateInputType | true
+    _min?: UserDepartmentMinAggregateInputType
+    _max?: UserDepartmentMaxAggregateInputType
   }
 
-  export type UsuarioDepartamentoGroupByOutputType = {
+  export type UserDepartmentGroupByOutputType = {
     id: string
-    usuarioId: string
-    departamentoId: string
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: UsuarioDepartamentoCountAggregateOutputType | null
-    _min: UsuarioDepartamentoMinAggregateOutputType | null
-    _max: UsuarioDepartamentoMaxAggregateOutputType | null
+    user_id: string
+    department_id: string
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: UserDepartmentCountAggregateOutputType | null
+    _min: UserDepartmentMinAggregateOutputType | null
+    _max: UserDepartmentMaxAggregateOutputType | null
   }
 
-  type GetUsuarioDepartamentoGroupByPayload<T extends UsuarioDepartamentoGroupByArgs> = Prisma.PrismaPromise<
+  type GetUserDepartmentGroupByPayload<T extends UserDepartmentGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<UsuarioDepartamentoGroupByOutputType, T['by']> &
+      PickEnumerable<UserDepartmentGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof UsuarioDepartamentoGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UserDepartmentGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], UsuarioDepartamentoGroupByOutputType[P]>
-            : GetScalarType<T[P], UsuarioDepartamentoGroupByOutputType[P]>
+              : GetScalarType<T[P], UserDepartmentGroupByOutputType[P]>
+            : GetScalarType<T[P], UserDepartmentGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type UsuarioDepartamentoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserDepartmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["usuarioDepartamento"]>
+    user_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userDepartment"]>
 
-  export type UsuarioDepartamentoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserDepartmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["usuarioDepartamento"]>
+    user_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userDepartment"]>
 
-  export type UsuarioDepartamentoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserDepartmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    usuarioId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["usuarioDepartamento"]>
+    user_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userDepartment"]>
 
-  export type UsuarioDepartamentoSelectScalar = {
+  export type UserDepartmentSelectScalar = {
     id?: boolean
-    usuarioId?: boolean
-    departamentoId?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    user_id?: boolean
+    department_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type UsuarioDepartamentoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "usuarioId" | "departamentoId" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["usuarioDepartamento"]>
-  export type UsuarioDepartamentoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type UserDepartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "department_id" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["userDepartment"]>
+  export type UserDepartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
-  export type UsuarioDepartamentoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type UserDepartmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
-  export type UsuarioDepartamentoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    usuario?: boolean | UsuarioDefaultArgs<ExtArgs>
-    departamento?: boolean | DepartamentoDefaultArgs<ExtArgs>
+  export type UserDepartmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    usuario?: boolean | UserDefaultArgs<ExtArgs>
+    department?: boolean | DepartmentDefaultArgs<ExtArgs>
   }
 
-  export type $UsuarioDepartamentoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "UsuarioDepartamento"
+  export type $UserDepartmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserDepartment"
     objects: {
-      usuario: Prisma.$UsuarioPayload<ExtArgs>
-      departamento: Prisma.$DepartamentoPayload<ExtArgs>
+      usuario: Prisma.$UserPayload<ExtArgs>
+      department: Prisma.$DepartmentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      usuarioId: string
-      departamentoId: string
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["usuarioDepartamento"]>
+      user_id: string
+      department_id: string
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["userDepartment"]>
     composites: {}
   }
 
-  type UsuarioDepartamentoGetPayload<S extends boolean | null | undefined | UsuarioDepartamentoDefaultArgs> = $Result.GetResult<Prisma.$UsuarioDepartamentoPayload, S>
+  type UserDepartmentGetPayload<S extends boolean | null | undefined | UserDepartmentDefaultArgs> = $Result.GetResult<Prisma.$UserDepartmentPayload, S>
 
-  type UsuarioDepartamentoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UsuarioDepartamentoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: UsuarioDepartamentoCountAggregateInputType | true
+  type UserDepartmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserDepartmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserDepartmentCountAggregateInputType | true
     }
 
-  export interface UsuarioDepartamentoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UsuarioDepartamento'], meta: { name: 'UsuarioDepartamento' } }
+  export interface UserDepartmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserDepartment'], meta: { name: 'UserDepartment' } }
     /**
-     * Find zero or one UsuarioDepartamento that matches the filter.
-     * @param {UsuarioDepartamentoFindUniqueArgs} args - Arguments to find a UsuarioDepartamento
+     * Find zero or one UserDepartment that matches the filter.
+     * @param {UserDepartmentFindUniqueArgs} args - Arguments to find a UserDepartment
      * @example
-     * // Get one UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.findUnique({
+     * // Get one UserDepartment
+     * const userDepartment = await prisma.userDepartment.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends UsuarioDepartamentoFindUniqueArgs>(args: SelectSubset<T, UsuarioDepartamentoFindUniqueArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends UserDepartmentFindUniqueArgs>(args: SelectSubset<T, UserDepartmentFindUniqueArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one UsuarioDepartamento that matches the filter or throw an error with `error.code='P2025'`
+     * Find one UserDepartment that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {UsuarioDepartamentoFindUniqueOrThrowArgs} args - Arguments to find a UsuarioDepartamento
+     * @param {UserDepartmentFindUniqueOrThrowArgs} args - Arguments to find a UserDepartment
      * @example
-     * // Get one UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.findUniqueOrThrow({
+     * // Get one UserDepartment
+     * const userDepartment = await prisma.userDepartment.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UsuarioDepartamentoFindUniqueOrThrowArgs>(args: SelectSubset<T, UsuarioDepartamentoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends UserDepartmentFindUniqueOrThrowArgs>(args: SelectSubset<T, UserDepartmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first UsuarioDepartamento that matches the filter.
+     * Find the first UserDepartment that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoFindFirstArgs} args - Arguments to find a UsuarioDepartamento
+     * @param {UserDepartmentFindFirstArgs} args - Arguments to find a UserDepartment
      * @example
-     * // Get one UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.findFirst({
+     * // Get one UserDepartment
+     * const userDepartment = await prisma.userDepartment.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends UsuarioDepartamentoFindFirstArgs>(args?: SelectSubset<T, UsuarioDepartamentoFindFirstArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends UserDepartmentFindFirstArgs>(args?: SelectSubset<T, UserDepartmentFindFirstArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first UsuarioDepartamento that matches the filter or
+     * Find the first UserDepartment that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoFindFirstOrThrowArgs} args - Arguments to find a UsuarioDepartamento
+     * @param {UserDepartmentFindFirstOrThrowArgs} args - Arguments to find a UserDepartment
      * @example
-     * // Get one UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.findFirstOrThrow({
+     * // Get one UserDepartment
+     * const userDepartment = await prisma.userDepartment.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends UsuarioDepartamentoFindFirstOrThrowArgs>(args?: SelectSubset<T, UsuarioDepartamentoFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends UserDepartmentFindFirstOrThrowArgs>(args?: SelectSubset<T, UserDepartmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more UsuarioDepartamentos that matches the filter.
+     * Find zero or more UserDepartments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {UserDepartmentFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all UsuarioDepartamentos
-     * const usuarioDepartamentos = await prisma.usuarioDepartamento.findMany()
+     * // Get all UserDepartments
+     * const userDepartments = await prisma.userDepartment.findMany()
      * 
-     * // Get first 10 UsuarioDepartamentos
-     * const usuarioDepartamentos = await prisma.usuarioDepartamento.findMany({ take: 10 })
+     * // Get first 10 UserDepartments
+     * const userDepartments = await prisma.userDepartment.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const usuarioDepartamentoWithIdOnly = await prisma.usuarioDepartamento.findMany({ select: { id: true } })
+     * const userDepartmentWithIdOnly = await prisma.userDepartment.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UsuarioDepartamentoFindManyArgs>(args?: SelectSubset<T, UsuarioDepartamentoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends UserDepartmentFindManyArgs>(args?: SelectSubset<T, UserDepartmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a UsuarioDepartamento.
-     * @param {UsuarioDepartamentoCreateArgs} args - Arguments to create a UsuarioDepartamento.
+     * Create a UserDepartment.
+     * @param {UserDepartmentCreateArgs} args - Arguments to create a UserDepartment.
      * @example
-     * // Create one UsuarioDepartamento
-     * const UsuarioDepartamento = await prisma.usuarioDepartamento.create({
+     * // Create one UserDepartment
+     * const UserDepartment = await prisma.userDepartment.create({
      *   data: {
-     *     // ... data to create a UsuarioDepartamento
+     *     // ... data to create a UserDepartment
      *   }
      * })
      * 
      */
-    create<T extends UsuarioDepartamentoCreateArgs>(args: SelectSubset<T, UsuarioDepartamentoCreateArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends UserDepartmentCreateArgs>(args: SelectSubset<T, UserDepartmentCreateArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many UsuarioDepartamentos.
-     * @param {UsuarioDepartamentoCreateManyArgs} args - Arguments to create many UsuarioDepartamentos.
+     * Create many UserDepartments.
+     * @param {UserDepartmentCreateManyArgs} args - Arguments to create many UserDepartments.
      * @example
-     * // Create many UsuarioDepartamentos
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.createMany({
+     * // Create many UserDepartments
+     * const userDepartment = await prisma.userDepartment.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends UsuarioDepartamentoCreateManyArgs>(args?: SelectSubset<T, UsuarioDepartamentoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends UserDepartmentCreateManyArgs>(args?: SelectSubset<T, UserDepartmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many UsuarioDepartamentos and returns the data saved in the database.
-     * @param {UsuarioDepartamentoCreateManyAndReturnArgs} args - Arguments to create many UsuarioDepartamentos.
+     * Create many UserDepartments and returns the data saved in the database.
+     * @param {UserDepartmentCreateManyAndReturnArgs} args - Arguments to create many UserDepartments.
      * @example
-     * // Create many UsuarioDepartamentos
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.createManyAndReturn({
+     * // Create many UserDepartments
+     * const userDepartment = await prisma.userDepartment.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many UsuarioDepartamentos and only return the `id`
-     * const usuarioDepartamentoWithIdOnly = await prisma.usuarioDepartamento.createManyAndReturn({
+     * // Create many UserDepartments and only return the `id`
+     * const userDepartmentWithIdOnly = await prisma.userDepartment.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -9292,28 +7669,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UsuarioDepartamentoCreateManyAndReturnArgs>(args?: SelectSubset<T, UsuarioDepartamentoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends UserDepartmentCreateManyAndReturnArgs>(args?: SelectSubset<T, UserDepartmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a UsuarioDepartamento.
-     * @param {UsuarioDepartamentoDeleteArgs} args - Arguments to delete one UsuarioDepartamento.
+     * Delete a UserDepartment.
+     * @param {UserDepartmentDeleteArgs} args - Arguments to delete one UserDepartment.
      * @example
-     * // Delete one UsuarioDepartamento
-     * const UsuarioDepartamento = await prisma.usuarioDepartamento.delete({
+     * // Delete one UserDepartment
+     * const UserDepartment = await prisma.userDepartment.delete({
      *   where: {
-     *     // ... filter to delete one UsuarioDepartamento
+     *     // ... filter to delete one UserDepartment
      *   }
      * })
      * 
      */
-    delete<T extends UsuarioDepartamentoDeleteArgs>(args: SelectSubset<T, UsuarioDepartamentoDeleteArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends UserDepartmentDeleteArgs>(args: SelectSubset<T, UserDepartmentDeleteArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one UsuarioDepartamento.
-     * @param {UsuarioDepartamentoUpdateArgs} args - Arguments to update one UsuarioDepartamento.
+     * Update one UserDepartment.
+     * @param {UserDepartmentUpdateArgs} args - Arguments to update one UserDepartment.
      * @example
-     * // Update one UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.update({
+     * // Update one UserDepartment
+     * const userDepartment = await prisma.userDepartment.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9323,30 +7700,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UsuarioDepartamentoUpdateArgs>(args: SelectSubset<T, UsuarioDepartamentoUpdateArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends UserDepartmentUpdateArgs>(args: SelectSubset<T, UserDepartmentUpdateArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more UsuarioDepartamentos.
-     * @param {UsuarioDepartamentoDeleteManyArgs} args - Arguments to filter UsuarioDepartamentos to delete.
+     * Delete zero or more UserDepartments.
+     * @param {UserDepartmentDeleteManyArgs} args - Arguments to filter UserDepartments to delete.
      * @example
-     * // Delete a few UsuarioDepartamentos
-     * const { count } = await prisma.usuarioDepartamento.deleteMany({
+     * // Delete a few UserDepartments
+     * const { count } = await prisma.userDepartment.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends UsuarioDepartamentoDeleteManyArgs>(args?: SelectSubset<T, UsuarioDepartamentoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends UserDepartmentDeleteManyArgs>(args?: SelectSubset<T, UserDepartmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more UsuarioDepartamentos.
+     * Update zero or more UserDepartments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {UserDepartmentUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many UsuarioDepartamentos
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.updateMany({
+     * // Update many UserDepartments
+     * const userDepartment = await prisma.userDepartment.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9356,14 +7733,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends UsuarioDepartamentoUpdateManyArgs>(args: SelectSubset<T, UsuarioDepartamentoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends UserDepartmentUpdateManyArgs>(args: SelectSubset<T, UserDepartmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more UsuarioDepartamentos and returns the data updated in the database.
-     * @param {UsuarioDepartamentoUpdateManyAndReturnArgs} args - Arguments to update many UsuarioDepartamentos.
+     * Update zero or more UserDepartments and returns the data updated in the database.
+     * @param {UserDepartmentUpdateManyAndReturnArgs} args - Arguments to update many UserDepartments.
      * @example
-     * // Update many UsuarioDepartamentos
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.updateManyAndReturn({
+     * // Update many UserDepartments
+     * const userDepartment = await prisma.userDepartment.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -9372,8 +7749,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more UsuarioDepartamentos and only return the `id`
-     * const usuarioDepartamentoWithIdOnly = await prisma.usuarioDepartamento.updateManyAndReturn({
+     * // Update zero or more UserDepartments and only return the `id`
+     * const userDepartmentWithIdOnly = await prisma.userDepartment.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -9386,56 +7763,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends UsuarioDepartamentoUpdateManyAndReturnArgs>(args: SelectSubset<T, UsuarioDepartamentoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends UserDepartmentUpdateManyAndReturnArgs>(args: SelectSubset<T, UserDepartmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one UsuarioDepartamento.
-     * @param {UsuarioDepartamentoUpsertArgs} args - Arguments to update or create a UsuarioDepartamento.
+     * Create or update one UserDepartment.
+     * @param {UserDepartmentUpsertArgs} args - Arguments to update or create a UserDepartment.
      * @example
-     * // Update or create a UsuarioDepartamento
-     * const usuarioDepartamento = await prisma.usuarioDepartamento.upsert({
+     * // Update or create a UserDepartment
+     * const userDepartment = await prisma.userDepartment.upsert({
      *   create: {
-     *     // ... data to create a UsuarioDepartamento
+     *     // ... data to create a UserDepartment
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the UsuarioDepartamento we want to update
+     *     // ... the filter for the UserDepartment we want to update
      *   }
      * })
      */
-    upsert<T extends UsuarioDepartamentoUpsertArgs>(args: SelectSubset<T, UsuarioDepartamentoUpsertArgs<ExtArgs>>): Prisma__UsuarioDepartamentoClient<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends UserDepartmentUpsertArgs>(args: SelectSubset<T, UserDepartmentUpsertArgs<ExtArgs>>): Prisma__UserDepartmentClient<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of UsuarioDepartamentos.
+     * Count the number of UserDepartments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoCountArgs} args - Arguments to filter UsuarioDepartamentos to count.
+     * @param {UserDepartmentCountArgs} args - Arguments to filter UserDepartments to count.
      * @example
-     * // Count the number of UsuarioDepartamentos
-     * const count = await prisma.usuarioDepartamento.count({
+     * // Count the number of UserDepartments
+     * const count = await prisma.userDepartment.count({
      *   where: {
-     *     // ... the filter for the UsuarioDepartamentos we want to count
+     *     // ... the filter for the UserDepartments we want to count
      *   }
      * })
     **/
-    count<T extends UsuarioDepartamentoCountArgs>(
-      args?: Subset<T, UsuarioDepartamentoCountArgs>,
+    count<T extends UserDepartmentCountArgs>(
+      args?: Subset<T, UserDepartmentCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], UsuarioDepartamentoCountAggregateOutputType>
+          : GetScalarType<T['select'], UserDepartmentCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a UsuarioDepartamento.
+     * Allows you to perform aggregations operations on a UserDepartment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UserDepartmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -9455,13 +7832,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends UsuarioDepartamentoAggregateArgs>(args: Subset<T, UsuarioDepartamentoAggregateArgs>): Prisma.PrismaPromise<GetUsuarioDepartamentoAggregateType<T>>
+    aggregate<T extends UserDepartmentAggregateArgs>(args: Subset<T, UserDepartmentAggregateArgs>): Prisma.PrismaPromise<GetUserDepartmentAggregateType<T>>
 
     /**
-     * Group by UsuarioDepartamento.
+     * Group by UserDepartment.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioDepartamentoGroupByArgs} args - Group by arguments.
+     * @param {UserDepartmentGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -9476,14 +7853,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends UsuarioDepartamentoGroupByArgs,
+      T extends UserDepartmentGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UsuarioDepartamentoGroupByArgs['orderBy'] }
-        : { orderBy?: UsuarioDepartamentoGroupByArgs['orderBy'] },
+        ? { orderBy: UserDepartmentGroupByArgs['orderBy'] }
+        : { orderBy?: UserDepartmentGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -9532,23 +7909,23 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, UsuarioDepartamentoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsuarioDepartamentoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UserDepartmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserDepartmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the UsuarioDepartamento model
+   * Fields of the UserDepartment model
    */
-  readonly fields: UsuarioDepartamentoFieldRefs;
+  readonly fields: UserDepartmentFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for UsuarioDepartamento.
+   * The delegate class that acts as a "Promise-like" for UserDepartment.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UsuarioDepartamentoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserDepartmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    usuario<T extends UsuarioDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UsuarioDefaultArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    departamento<T extends DepartamentoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartamentoDefaultArgs<ExtArgs>>): Prisma__DepartamentoClient<$Result.GetResult<Prisma.$DepartamentoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    usuario<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    department<T extends DepartmentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DepartmentDefaultArgs<ExtArgs>>): Prisma__DepartmentClient<$Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9575,861 +7952,860 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the UsuarioDepartamento model
+   * Fields of the UserDepartment model
    */ 
-  interface UsuarioDepartamentoFieldRefs {
-    readonly id: FieldRef<"UsuarioDepartamento", 'String'>
-    readonly usuarioId: FieldRef<"UsuarioDepartamento", 'String'>
-    readonly departamentoId: FieldRef<"UsuarioDepartamento", 'String'>
-    readonly ativo: FieldRef<"UsuarioDepartamento", 'Boolean'>
-    readonly criadoEm: FieldRef<"UsuarioDepartamento", 'DateTime'>
-    readonly criadoPor: FieldRef<"UsuarioDepartamento", 'String'>
-    readonly atualizadoEm: FieldRef<"UsuarioDepartamento", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"UsuarioDepartamento", 'String'>
-    readonly inativadoEm: FieldRef<"UsuarioDepartamento", 'DateTime'>
-    readonly inativadoPor: FieldRef<"UsuarioDepartamento", 'String'>
+  interface UserDepartmentFieldRefs {
+    readonly id: FieldRef<"UserDepartment", 'String'>
+    readonly user_id: FieldRef<"UserDepartment", 'String'>
+    readonly department_id: FieldRef<"UserDepartment", 'String'>
+    readonly is_active: FieldRef<"UserDepartment", 'Boolean'>
+    readonly created_at: FieldRef<"UserDepartment", 'DateTime'>
+    readonly created_by: FieldRef<"UserDepartment", 'String'>
+    readonly updated_by: FieldRef<"UserDepartment", 'String'>
+    readonly updated_at: FieldRef<"UserDepartment", 'DateTime'>
+    readonly inactivated_at: FieldRef<"UserDepartment", 'DateTime'>
+    readonly inactivated_by: FieldRef<"UserDepartment", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * UsuarioDepartamento findUnique
+   * UserDepartment findUnique
    */
-  export type UsuarioDepartamentoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which UsuarioDepartamento to fetch.
+     * Filter, which UserDepartment to fetch.
      */
-    where: UsuarioDepartamentoWhereUniqueInput
+    where: UserDepartmentWhereUniqueInput
   }
 
   /**
-   * UsuarioDepartamento findUniqueOrThrow
+   * UserDepartment findUniqueOrThrow
    */
-  export type UsuarioDepartamentoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which UsuarioDepartamento to fetch.
+     * Filter, which UserDepartment to fetch.
      */
-    where: UsuarioDepartamentoWhereUniqueInput
+    where: UserDepartmentWhereUniqueInput
   }
 
   /**
-   * UsuarioDepartamento findFirst
+   * UserDepartment findFirst
    */
-  export type UsuarioDepartamentoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which UsuarioDepartamento to fetch.
+     * Filter, which UserDepartment to fetch.
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UsuarioDepartamentos to fetch.
+     * Determine the order of UserDepartments to fetch.
      */
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for UsuarioDepartamentos.
+     * Sets the position for searching for UserDepartments.
      */
-    cursor?: UsuarioDepartamentoWhereUniqueInput
+    cursor?: UserDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UsuarioDepartamentos from the position of the cursor.
+     * Take `±n` UserDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UsuarioDepartamentos.
+     * Skip the first `n` UserDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of UsuarioDepartamentos.
+     * Filter by unique combinations of UserDepartments.
      */
-    distinct?: UsuarioDepartamentoScalarFieldEnum | UsuarioDepartamentoScalarFieldEnum[]
+    distinct?: UserDepartmentScalarFieldEnum | UserDepartmentScalarFieldEnum[]
   }
 
   /**
-   * UsuarioDepartamento findFirstOrThrow
+   * UserDepartment findFirstOrThrow
    */
-  export type UsuarioDepartamentoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which UsuarioDepartamento to fetch.
+     * Filter, which UserDepartment to fetch.
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UsuarioDepartamentos to fetch.
+     * Determine the order of UserDepartments to fetch.
      */
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for UsuarioDepartamentos.
+     * Sets the position for searching for UserDepartments.
      */
-    cursor?: UsuarioDepartamentoWhereUniqueInput
+    cursor?: UserDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UsuarioDepartamentos from the position of the cursor.
+     * Take `±n` UserDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UsuarioDepartamentos.
+     * Skip the first `n` UserDepartments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of UsuarioDepartamentos.
+     * Filter by unique combinations of UserDepartments.
      */
-    distinct?: UsuarioDepartamentoScalarFieldEnum | UsuarioDepartamentoScalarFieldEnum[]
+    distinct?: UserDepartmentScalarFieldEnum | UserDepartmentScalarFieldEnum[]
   }
 
   /**
-   * UsuarioDepartamento findMany
+   * UserDepartment findMany
    */
-  export type UsuarioDepartamentoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter, which UsuarioDepartamentos to fetch.
+     * Filter, which UserDepartments to fetch.
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of UsuarioDepartamentos to fetch.
+     * Determine the order of UserDepartments to fetch.
      */
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing UsuarioDepartamentos.
+     * Sets the position for listing UserDepartments.
      */
-    cursor?: UsuarioDepartamentoWhereUniqueInput
+    cursor?: UserDepartmentWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` UsuarioDepartamentos from the position of the cursor.
+     * Take `±n` UserDepartments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` UsuarioDepartamentos.
+     * Skip the first `n` UserDepartments.
      */
     skip?: number
-    distinct?: UsuarioDepartamentoScalarFieldEnum | UsuarioDepartamentoScalarFieldEnum[]
+    distinct?: UserDepartmentScalarFieldEnum | UserDepartmentScalarFieldEnum[]
   }
 
   /**
-   * UsuarioDepartamento create
+   * UserDepartment create
    */
-  export type UsuarioDepartamentoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to create a UsuarioDepartamento.
+     * The data needed to create a UserDepartment.
      */
-    data: XOR<UsuarioDepartamentoCreateInput, UsuarioDepartamentoUncheckedCreateInput>
+    data: XOR<UserDepartmentCreateInput, UserDepartmentUncheckedCreateInput>
   }
 
   /**
-   * UsuarioDepartamento createMany
+   * UserDepartment createMany
    */
-  export type UsuarioDepartamentoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many UsuarioDepartamentos.
+     * The data used to create many UserDepartments.
      */
-    data: UsuarioDepartamentoCreateManyInput | UsuarioDepartamentoCreateManyInput[]
+    data: UserDepartmentCreateManyInput | UserDepartmentCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * UsuarioDepartamento createManyAndReturn
+   * UserDepartment createManyAndReturn
    */
-  export type UsuarioDepartamentoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelectCreateManyAndReturn<ExtArgs> | null
+    select?: UserDepartmentSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
-     * The data used to create many UsuarioDepartamentos.
+     * The data used to create many UserDepartments.
      */
-    data: UsuarioDepartamentoCreateManyInput | UsuarioDepartamentoCreateManyInput[]
+    data: UserDepartmentCreateManyInput | UserDepartmentCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: UserDepartmentIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * UsuarioDepartamento update
+   * UserDepartment update
    */
-  export type UsuarioDepartamentoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * The data needed to update a UsuarioDepartamento.
+     * The data needed to update a UserDepartment.
      */
-    data: XOR<UsuarioDepartamentoUpdateInput, UsuarioDepartamentoUncheckedUpdateInput>
+    data: XOR<UserDepartmentUpdateInput, UserDepartmentUncheckedUpdateInput>
     /**
-     * Choose, which UsuarioDepartamento to update.
+     * Choose, which UserDepartment to update.
      */
-    where: UsuarioDepartamentoWhereUniqueInput
+    where: UserDepartmentWhereUniqueInput
   }
 
   /**
-   * UsuarioDepartamento updateMany
+   * UserDepartment updateMany
    */
-  export type UsuarioDepartamentoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update UsuarioDepartamentos.
+     * The data used to update UserDepartments.
      */
-    data: XOR<UsuarioDepartamentoUpdateManyMutationInput, UsuarioDepartamentoUncheckedUpdateManyInput>
+    data: XOR<UserDepartmentUpdateManyMutationInput, UserDepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which UsuarioDepartamentos to update
+     * Filter which UserDepartments to update
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
-     * Limit how many UsuarioDepartamentos to update.
+     * Limit how many UserDepartments to update.
      */
     limit?: number
   }
 
   /**
-   * UsuarioDepartamento updateManyAndReturn
+   * UserDepartment updateManyAndReturn
    */
-  export type UsuarioDepartamentoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: UserDepartmentSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
-     * The data used to update UsuarioDepartamentos.
+     * The data used to update UserDepartments.
      */
-    data: XOR<UsuarioDepartamentoUpdateManyMutationInput, UsuarioDepartamentoUncheckedUpdateManyInput>
+    data: XOR<UserDepartmentUpdateManyMutationInput, UserDepartmentUncheckedUpdateManyInput>
     /**
-     * Filter which UsuarioDepartamentos to update
+     * Filter which UserDepartments to update
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
-     * Limit how many UsuarioDepartamentos to update.
+     * Limit how many UserDepartments to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: UserDepartmentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * UsuarioDepartamento upsert
+   * UserDepartment upsert
    */
-  export type UsuarioDepartamentoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * The filter to search for the UsuarioDepartamento to update in case it exists.
+     * The filter to search for the UserDepartment to update in case it exists.
      */
-    where: UsuarioDepartamentoWhereUniqueInput
+    where: UserDepartmentWhereUniqueInput
     /**
-     * In case the UsuarioDepartamento found by the `where` argument doesn't exist, create a new UsuarioDepartamento with this data.
+     * In case the UserDepartment found by the `where` argument doesn't exist, create a new UserDepartment with this data.
      */
-    create: XOR<UsuarioDepartamentoCreateInput, UsuarioDepartamentoUncheckedCreateInput>
+    create: XOR<UserDepartmentCreateInput, UserDepartmentUncheckedCreateInput>
     /**
-     * In case the UsuarioDepartamento was found with the provided `where` argument, update it with this data.
+     * In case the UserDepartment was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<UsuarioDepartamentoUpdateInput, UsuarioDepartamentoUncheckedUpdateInput>
+    update: XOR<UserDepartmentUpdateInput, UserDepartmentUncheckedUpdateInput>
   }
 
   /**
-   * UsuarioDepartamento delete
+   * UserDepartment delete
    */
-  export type UsuarioDepartamentoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
     /**
-     * Filter which UsuarioDepartamento to delete.
+     * Filter which UserDepartment to delete.
      */
-    where: UsuarioDepartamentoWhereUniqueInput
+    where: UserDepartmentWhereUniqueInput
   }
 
   /**
-   * UsuarioDepartamento deleteMany
+   * UserDepartment deleteMany
    */
-  export type UsuarioDepartamentoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which UsuarioDepartamentos to delete
+     * Filter which UserDepartments to delete
      */
-    where?: UsuarioDepartamentoWhereInput
+    where?: UserDepartmentWhereInput
     /**
-     * Limit how many UsuarioDepartamentos to delete.
+     * Limit how many UserDepartments to delete.
      */
     limit?: number
   }
 
   /**
-   * UsuarioDepartamento without action
+   * UserDepartment without action
    */
-  export type UsuarioDepartamentoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDepartmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model Usuario
+   * Model User
    */
 
-  export type AggregateUsuario = {
-    _count: UsuarioCountAggregateOutputType | null
-    _min: UsuarioMinAggregateOutputType | null
-    _max: UsuarioMaxAggregateOutputType | null
+  export type AggregateUser = {
+    _count: UserCountAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  export type UsuarioMinAggregateOutputType = {
+  export type UserMinAggregateOutputType = {
     id: string | null
-    nome: string | null
-    sobrenome: string | null
-    email: string | null
-    cargo: $Enums.CargoUsuario | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    name: string | null
+    password: string | null
+    tenant_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type UsuarioMaxAggregateOutputType = {
+  export type UserMaxAggregateOutputType = {
     id: string | null
-    nome: string | null
-    sobrenome: string | null
-    email: string | null
-    cargo: $Enums.CargoUsuario | null
-    ativo: boolean | null
-    criadoEm: Date | null
-    criadoPor: string | null
-    atualizadoEm: Date | null
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
+    name: string | null
+    password: string | null
+    tenant_id: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    created_by: string | null
+    updated_by: string | null
+    updated_at: Date | null
+    inactivated_at: Date | null
+    inactivated_by: string | null
   }
 
-  export type UsuarioCountAggregateOutputType = {
+  export type UserCountAggregateOutputType = {
     id: number
-    nome: number
-    sobrenome: number
-    email: number
-    cargo: number
-    ativo: number
-    criadoEm: number
-    criadoPor: number
-    atualizadoEm: number
-    atualizadoPor: number
-    inativadoEm: number
-    inativadoPor: number
+    name: number
+    password: number
+    roles: number
+    tenant_id: number
+    is_active: number
+    created_at: number
+    created_by: number
+    updated_by: number
+    updated_at: number
+    inactivated_at: number
+    inactivated_by: number
     _all: number
   }
 
 
-  export type UsuarioMinAggregateInputType = {
+  export type UserMinAggregateInputType = {
     id?: true
-    nome?: true
-    sobrenome?: true
-    email?: true
-    cargo?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    password?: true
+    tenant_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type UsuarioMaxAggregateInputType = {
+  export type UserMaxAggregateInputType = {
     id?: true
-    nome?: true
-    sobrenome?: true
-    email?: true
-    cargo?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    password?: true
+    tenant_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
   }
 
-  export type UsuarioCountAggregateInputType = {
+  export type UserCountAggregateInputType = {
     id?: true
-    nome?: true
-    sobrenome?: true
-    email?: true
-    cargo?: true
-    ativo?: true
-    criadoEm?: true
-    criadoPor?: true
-    atualizadoEm?: true
-    atualizadoPor?: true
-    inativadoEm?: true
-    inativadoPor?: true
+    name?: true
+    password?: true
+    roles?: true
+    tenant_id?: true
+    is_active?: true
+    created_at?: true
+    created_by?: true
+    updated_by?: true
+    updated_at?: true
+    inactivated_at?: true
+    inactivated_by?: true
     _all?: true
   }
 
-  export type UsuarioAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Usuario to aggregate.
+     * Filter which User to aggregate.
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Usuarios to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: UsuarioWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Usuarios from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Usuarios.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Usuarios
+     * Count returned Users
     **/
-    _count?: true | UsuarioCountAggregateInputType
+    _count?: true | UserCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: UsuarioMinAggregateInputType
+    _min?: UserMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: UsuarioMaxAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type GetUsuarioAggregateType<T extends UsuarioAggregateArgs> = {
-        [P in keyof T & keyof AggregateUsuario]: P extends '_count' | 'count'
+  export type GetUserAggregateType<T extends UserAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateUsuario[P]>
-      : GetScalarType<T[P], AggregateUsuario[P]>
+        : GetScalarType<T[P], AggregateUser[P]>
+      : GetScalarType<T[P], AggregateUser[P]>
   }
 
 
 
 
-  export type UsuarioGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UsuarioWhereInput
-    orderBy?: UsuarioOrderByWithAggregationInput | UsuarioOrderByWithAggregationInput[]
-    by: UsuarioScalarFieldEnum[] | UsuarioScalarFieldEnum
-    having?: UsuarioScalarWhereWithAggregatesInput
+  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
+    by: UserScalarFieldEnum[] | UserScalarFieldEnum
+    having?: UserScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: UsuarioCountAggregateInputType | true
-    _min?: UsuarioMinAggregateInputType
-    _max?: UsuarioMaxAggregateInputType
+    _count?: UserCountAggregateInputType | true
+    _min?: UserMinAggregateInputType
+    _max?: UserMaxAggregateInputType
   }
 
-  export type UsuarioGroupByOutputType = {
+  export type UserGroupByOutputType = {
     id: string
-    nome: string
-    sobrenome: string | null
-    email: string
-    cargo: $Enums.CargoUsuario
-    ativo: boolean
-    criadoEm: Date
-    criadoPor: string | null
-    atualizadoEm: Date
-    atualizadoPor: string | null
-    inativadoEm: Date | null
-    inativadoPor: string | null
-    _count: UsuarioCountAggregateOutputType | null
-    _min: UsuarioMinAggregateOutputType | null
-    _max: UsuarioMaxAggregateOutputType | null
+    name: string
+    password: string | null
+    roles: string[]
+    tenant_id: string
+    is_active: boolean
+    created_at: Date
+    created_by: string
+    updated_by: string
+    updated_at: Date
+    inactivated_at: Date | null
+    inactivated_by: string | null
+    _count: UserCountAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
   }
 
-  type GetUsuarioGroupByPayload<T extends UsuarioGroupByArgs> = Prisma.PrismaPromise<
+  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<UsuarioGroupByOutputType, T['by']> &
+      PickEnumerable<UserGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof UsuarioGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], UsuarioGroupByOutputType[P]>
-            : GetScalarType<T[P], UsuarioGroupByOutputType[P]>
+              : GetScalarType<T[P], UserGroupByOutputType[P]>
+            : GetScalarType<T[P], UserGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type UsuarioSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nome?: boolean
-    sobrenome?: boolean
-    email?: boolean
-    cargo?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-    departamentos?: boolean | Usuario$departamentosArgs<ExtArgs>
-    testes?: boolean | Usuario$testesArgs<ExtArgs>
-    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["usuario"]>
+    name?: boolean
+    password?: boolean
+    roles?: boolean
+    tenant_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+    emails?: boolean | User$emailsArgs<ExtArgs>
+    phishings?: boolean | User$phishingsArgs<ExtArgs>
+    user_departments?: boolean | User$user_departmentsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
 
-  export type UsuarioSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nome?: boolean
-    sobrenome?: boolean
-    email?: boolean
-    cargo?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["usuario"]>
+    name?: boolean
+    password?: boolean
+    roles?: boolean
+    tenant_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+  }, ExtArgs["result"]["user"]>
 
-  export type UsuarioSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    nome?: boolean
-    sobrenome?: boolean
-    email?: boolean
-    cargo?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
-  }, ExtArgs["result"]["usuario"]>
+    name?: boolean
+    password?: boolean
+    roles?: boolean
+    tenant_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
+  }, ExtArgs["result"]["user"]>
 
-  export type UsuarioSelectScalar = {
+  export type UserSelectScalar = {
     id?: boolean
-    nome?: boolean
-    sobrenome?: boolean
-    email?: boolean
-    cargo?: boolean
-    ativo?: boolean
-    criadoEm?: boolean
-    criadoPor?: boolean
-    atualizadoEm?: boolean
-    atualizadoPor?: boolean
-    inativadoEm?: boolean
-    inativadoPor?: boolean
+    name?: boolean
+    password?: boolean
+    roles?: boolean
+    tenant_id?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    created_by?: boolean
+    updated_by?: boolean
+    updated_at?: boolean
+    inactivated_at?: boolean
+    inactivated_by?: boolean
   }
 
-  export type UsuarioOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "sobrenome" | "email" | "cargo" | "ativo" | "criadoEm" | "criadoPor" | "atualizadoEm" | "atualizadoPor" | "inativadoEm" | "inativadoPor", ExtArgs["result"]["usuario"]>
-  export type UsuarioInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    departamentos?: boolean | Usuario$departamentosArgs<ExtArgs>
-    testes?: boolean | Usuario$testesArgs<ExtArgs>
-    _count?: boolean | UsuarioCountOutputTypeDefaultArgs<ExtArgs>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "password" | "roles" | "tenant_id" | "is_active" | "created_at" | "created_by" | "updated_by" | "updated_at" | "inactivated_at" | "inactivated_by", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    emails?: boolean | User$emailsArgs<ExtArgs>
+    phishings?: boolean | User$phishingsArgs<ExtArgs>
+    user_departments?: boolean | User$user_departmentsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type UsuarioIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type UsuarioIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
-  export type $UsuarioPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Usuario"
+  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User"
     objects: {
-      departamentos: Prisma.$UsuarioDepartamentoPayload<ExtArgs>[]
-      testes: Prisma.$TestePayload<ExtArgs>[]
+      emails: Prisma.$EmailPayload<ExtArgs>[]
+      phishings: Prisma.$PhishingPayload<ExtArgs>[]
+      user_departments: Prisma.$UserDepartmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      nome: string
-      sobrenome: string | null
-      email: string
-      cargo: $Enums.CargoUsuario
-      ativo: boolean
-      criadoEm: Date
-      criadoPor: string | null
-      atualizadoEm: Date
-      atualizadoPor: string | null
-      inativadoEm: Date | null
-      inativadoPor: string | null
-    }, ExtArgs["result"]["usuario"]>
+      name: string
+      password: string | null
+      roles: string[]
+      tenant_id: string
+      is_active: boolean
+      created_at: Date
+      created_by: string
+      updated_by: string
+      updated_at: Date
+      inactivated_at: Date | null
+      inactivated_by: string | null
+    }, ExtArgs["result"]["user"]>
     composites: {}
   }
 
-  type UsuarioGetPayload<S extends boolean | null | undefined | UsuarioDefaultArgs> = $Result.GetResult<Prisma.$UsuarioPayload, S>
+  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
 
-  type UsuarioCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<UsuarioFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: UsuarioCountAggregateInputType | true
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserCountAggregateInputType | true
     }
 
-  export interface UsuarioDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Usuario'], meta: { name: 'Usuario' } }
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
     /**
-     * Find zero or one Usuario that matches the filter.
-     * @param {UsuarioFindUniqueArgs} args - Arguments to find a Usuario
+     * Find zero or one User that matches the filter.
+     * @param {UserFindUniqueArgs} args - Arguments to find a User
      * @example
-     * // Get one Usuario
-     * const usuario = await prisma.usuario.findUnique({
+     * // Get one User
+     * const user = await prisma.user.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends UsuarioFindUniqueArgs>(args: SelectSubset<T, UsuarioFindUniqueArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends UserFindUniqueArgs>(args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Usuario that matches the filter or throw an error with `error.code='P2025'`
+     * Find one User that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {UsuarioFindUniqueOrThrowArgs} args - Arguments to find a Usuario
+     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Usuario
-     * const usuario = await prisma.usuario.findUniqueOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends UsuarioFindUniqueOrThrowArgs>(args: SelectSubset<T, UsuarioFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs>(args: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Usuario that matches the filter.
+     * Find the first User that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioFindFirstArgs} args - Arguments to find a Usuario
+     * @param {UserFindFirstArgs} args - Arguments to find a User
      * @example
-     * // Get one Usuario
-     * const usuario = await prisma.usuario.findFirst({
+     * // Get one User
+     * const user = await prisma.user.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends UsuarioFindFirstArgs>(args?: SelectSubset<T, UsuarioFindFirstArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends UserFindFirstArgs>(args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Usuario that matches the filter or
+     * Find the first User that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioFindFirstOrThrowArgs} args - Arguments to find a Usuario
+     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
      * @example
-     * // Get one Usuario
-     * const usuario = await prisma.usuario.findFirstOrThrow({
+     * // Get one User
+     * const user = await prisma.user.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends UsuarioFindFirstOrThrowArgs>(args?: SelectSubset<T, UsuarioFindFirstOrThrowArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs>(args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Usuarios that matches the filter.
+     * Find zero or more Users that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {UserFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Usuarios
-     * const usuarios = await prisma.usuario.findMany()
+     * // Get all Users
+     * const users = await prisma.user.findMany()
      * 
-     * // Get first 10 Usuarios
-     * const usuarios = await prisma.usuario.findMany({ take: 10 })
+     * // Get first 10 Users
+     * const users = await prisma.user.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const usuarioWithIdOnly = await prisma.usuario.findMany({ select: { id: true } })
+     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends UsuarioFindManyArgs>(args?: SelectSubset<T, UsuarioFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends UserFindManyArgs>(args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Usuario.
-     * @param {UsuarioCreateArgs} args - Arguments to create a Usuario.
+     * Create a User.
+     * @param {UserCreateArgs} args - Arguments to create a User.
      * @example
-     * // Create one Usuario
-     * const Usuario = await prisma.usuario.create({
+     * // Create one User
+     * const User = await prisma.user.create({
      *   data: {
-     *     // ... data to create a Usuario
+     *     // ... data to create a User
      *   }
      * })
      * 
      */
-    create<T extends UsuarioCreateArgs>(args: SelectSubset<T, UsuarioCreateArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends UserCreateArgs>(args: SelectSubset<T, UserCreateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Usuarios.
-     * @param {UsuarioCreateManyArgs} args - Arguments to create many Usuarios.
+     * Create many Users.
+     * @param {UserCreateManyArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Usuarios
-     * const usuario = await prisma.usuario.createMany({
+     * // Create many Users
+     * const user = await prisma.user.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends UsuarioCreateManyArgs>(args?: SelectSubset<T, UsuarioCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends UserCreateManyArgs>(args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many Usuarios and returns the data saved in the database.
-     * @param {UsuarioCreateManyAndReturnArgs} args - Arguments to create many Usuarios.
+     * Create many Users and returns the data saved in the database.
+     * @param {UserCreateManyAndReturnArgs} args - Arguments to create many Users.
      * @example
-     * // Create many Usuarios
-     * const usuario = await prisma.usuario.createManyAndReturn({
+     * // Create many Users
+     * const user = await prisma.user.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many Usuarios and only return the `id`
-     * const usuarioWithIdOnly = await prisma.usuario.createManyAndReturn({
+     * // Create many Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -10439,28 +8815,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends UsuarioCreateManyAndReturnArgs>(args?: SelectSubset<T, UsuarioCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends UserCreateManyAndReturnArgs>(args?: SelectSubset<T, UserCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a Usuario.
-     * @param {UsuarioDeleteArgs} args - Arguments to delete one Usuario.
+     * Delete a User.
+     * @param {UserDeleteArgs} args - Arguments to delete one User.
      * @example
-     * // Delete one Usuario
-     * const Usuario = await prisma.usuario.delete({
+     * // Delete one User
+     * const User = await prisma.user.delete({
      *   where: {
-     *     // ... filter to delete one Usuario
+     *     // ... filter to delete one User
      *   }
      * })
      * 
      */
-    delete<T extends UsuarioDeleteArgs>(args: SelectSubset<T, UsuarioDeleteArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends UserDeleteArgs>(args: SelectSubset<T, UserDeleteArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Usuario.
-     * @param {UsuarioUpdateArgs} args - Arguments to update one Usuario.
+     * Update one User.
+     * @param {UserUpdateArgs} args - Arguments to update one User.
      * @example
-     * // Update one Usuario
-     * const usuario = await prisma.usuario.update({
+     * // Update one User
+     * const user = await prisma.user.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10470,30 +8846,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends UsuarioUpdateArgs>(args: SelectSubset<T, UsuarioUpdateArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends UserUpdateArgs>(args: SelectSubset<T, UserUpdateArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Usuarios.
-     * @param {UsuarioDeleteManyArgs} args - Arguments to filter Usuarios to delete.
+     * Delete zero or more Users.
+     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
      * @example
-     * // Delete a few Usuarios
-     * const { count } = await prisma.usuario.deleteMany({
+     * // Delete a few Users
+     * const { count } = await prisma.user.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends UsuarioDeleteManyArgs>(args?: SelectSubset<T, UsuarioDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends UserDeleteManyArgs>(args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Usuarios.
+     * Update zero or more Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Usuarios
-     * const usuario = await prisma.usuario.updateMany({
+     * // Update many Users
+     * const user = await prisma.user.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10503,14 +8879,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends UsuarioUpdateManyArgs>(args: SelectSubset<T, UsuarioUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends UserUpdateManyArgs>(args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Usuarios and returns the data updated in the database.
-     * @param {UsuarioUpdateManyAndReturnArgs} args - Arguments to update many Usuarios.
+     * Update zero or more Users and returns the data updated in the database.
+     * @param {UserUpdateManyAndReturnArgs} args - Arguments to update many Users.
      * @example
-     * // Update many Usuarios
-     * const usuario = await prisma.usuario.updateManyAndReturn({
+     * // Update many Users
+     * const user = await prisma.user.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -10519,8 +8895,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more Usuarios and only return the `id`
-     * const usuarioWithIdOnly = await prisma.usuario.updateManyAndReturn({
+     * // Update zero or more Users and only return the `id`
+     * const userWithIdOnly = await prisma.user.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -10533,56 +8909,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends UsuarioUpdateManyAndReturnArgs>(args: SelectSubset<T, UsuarioUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends UserUpdateManyAndReturnArgs>(args: SelectSubset<T, UserUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one Usuario.
-     * @param {UsuarioUpsertArgs} args - Arguments to update or create a Usuario.
+     * Create or update one User.
+     * @param {UserUpsertArgs} args - Arguments to update or create a User.
      * @example
-     * // Update or create a Usuario
-     * const usuario = await prisma.usuario.upsert({
+     * // Update or create a User
+     * const user = await prisma.user.upsert({
      *   create: {
-     *     // ... data to create a Usuario
+     *     // ... data to create a User
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Usuario we want to update
+     *     // ... the filter for the User we want to update
      *   }
      * })
      */
-    upsert<T extends UsuarioUpsertArgs>(args: SelectSubset<T, UsuarioUpsertArgs<ExtArgs>>): Prisma__UsuarioClient<$Result.GetResult<Prisma.$UsuarioPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends UserUpsertArgs>(args: SelectSubset<T, UserUpsertArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Usuarios.
+     * Count the number of Users.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioCountArgs} args - Arguments to filter Usuarios to count.
+     * @param {UserCountArgs} args - Arguments to filter Users to count.
      * @example
-     * // Count the number of Usuarios
-     * const count = await prisma.usuario.count({
+     * // Count the number of Users
+     * const count = await prisma.user.count({
      *   where: {
-     *     // ... the filter for the Usuarios we want to count
+     *     // ... the filter for the Users we want to count
      *   }
      * })
     **/
-    count<T extends UsuarioCountArgs>(
-      args?: Subset<T, UsuarioCountArgs>,
+    count<T extends UserCountArgs>(
+      args?: Subset<T, UserCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], UsuarioCountAggregateOutputType>
+          : GetScalarType<T['select'], UserCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Usuario.
+     * Allows you to perform aggregations operations on a User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -10602,13 +8978,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends UsuarioAggregateArgs>(args: Subset<T, UsuarioAggregateArgs>): Prisma.PrismaPromise<GetUsuarioAggregateType<T>>
+    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
 
     /**
-     * Group by Usuario.
+     * Group by User.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {UsuarioGroupByArgs} args - Group by arguments.
+     * @param {UserGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -10623,14 +8999,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends UsuarioGroupByArgs,
+      T extends UserGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UsuarioGroupByArgs['orderBy'] }
-        : { orderBy?: UsuarioGroupByArgs['orderBy'] },
+        ? { orderBy: UserGroupByArgs['orderBy'] }
+        : { orderBy?: UserGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -10679,23 +9055,24 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, UsuarioGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUsuarioGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Usuario model
+   * Fields of the User model
    */
-  readonly fields: UsuarioFieldRefs;
+  readonly fields: UserFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Usuario.
+   * The delegate class that acts as a "Promise-like" for User.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__UsuarioClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    departamentos<T extends Usuario$departamentosArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$departamentosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UsuarioDepartamentoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    testes<T extends Usuario$testesArgs<ExtArgs> = {}>(args?: Subset<T, Usuario$testesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TestePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    emails<T extends User$emailsArgs<ExtArgs> = {}>(args?: Subset<T, User$emailsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    phishings<T extends User$phishingsArgs<ExtArgs> = {}>(args?: Subset<T, User$phishingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PhishingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user_departments<T extends User$user_departmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$user_departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserDepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10722,472 +9099,496 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Usuario model
+   * Fields of the User model
    */ 
-  interface UsuarioFieldRefs {
-    readonly id: FieldRef<"Usuario", 'String'>
-    readonly nome: FieldRef<"Usuario", 'String'>
-    readonly sobrenome: FieldRef<"Usuario", 'String'>
-    readonly email: FieldRef<"Usuario", 'String'>
-    readonly cargo: FieldRef<"Usuario", 'CargoUsuario'>
-    readonly ativo: FieldRef<"Usuario", 'Boolean'>
-    readonly criadoEm: FieldRef<"Usuario", 'DateTime'>
-    readonly criadoPor: FieldRef<"Usuario", 'String'>
-    readonly atualizadoEm: FieldRef<"Usuario", 'DateTime'>
-    readonly atualizadoPor: FieldRef<"Usuario", 'String'>
-    readonly inativadoEm: FieldRef<"Usuario", 'DateTime'>
-    readonly inativadoPor: FieldRef<"Usuario", 'String'>
+  interface UserFieldRefs {
+    readonly id: FieldRef<"User", 'String'>
+    readonly name: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
+    readonly roles: FieldRef<"User", 'String[]'>
+    readonly tenant_id: FieldRef<"User", 'String'>
+    readonly is_active: FieldRef<"User", 'Boolean'>
+    readonly created_at: FieldRef<"User", 'DateTime'>
+    readonly created_by: FieldRef<"User", 'String'>
+    readonly updated_by: FieldRef<"User", 'String'>
+    readonly updated_at: FieldRef<"User", 'DateTime'>
+    readonly inactivated_at: FieldRef<"User", 'DateTime'>
+    readonly inactivated_by: FieldRef<"User", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * Usuario findUnique
+   * User findUnique
    */
-  export type UsuarioFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Usuario to fetch.
+     * Filter, which User to fetch.
      */
-    where: UsuarioWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Usuario findUniqueOrThrow
+   * User findUniqueOrThrow
    */
-  export type UsuarioFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Usuario to fetch.
+     * Filter, which User to fetch.
      */
-    where: UsuarioWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Usuario findFirst
+   * User findFirst
    */
-  export type UsuarioFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Usuario to fetch.
+     * Filter, which User to fetch.
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Usuarios to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Usuarios.
+     * Sets the position for searching for Users.
      */
-    cursor?: UsuarioWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Usuarios from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Usuarios.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Usuarios.
+     * Filter by unique combinations of Users.
      */
-    distinct?: UsuarioScalarFieldEnum | UsuarioScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Usuario findFirstOrThrow
+   * User findFirstOrThrow
    */
-  export type UsuarioFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Usuario to fetch.
+     * Filter, which User to fetch.
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Usuarios to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Usuarios.
+     * Sets the position for searching for Users.
      */
-    cursor?: UsuarioWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Usuarios from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Usuarios.
+     * Skip the first `n` Users.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Usuarios.
+     * Filter by unique combinations of Users.
      */
-    distinct?: UsuarioScalarFieldEnum | UsuarioScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Usuario findMany
+   * User findMany
    */
-  export type UsuarioFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter, which Usuarios to fetch.
+     * Filter, which Users to fetch.
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Usuarios to fetch.
+     * Determine the order of Users to fetch.
      */
-    orderBy?: UsuarioOrderByWithRelationInput | UsuarioOrderByWithRelationInput[]
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Usuarios.
+     * Sets the position for listing Users.
      */
-    cursor?: UsuarioWhereUniqueInput
+    cursor?: UserWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Usuarios from the position of the cursor.
+     * Take `±n` Users from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Usuarios.
+     * Skip the first `n` Users.
      */
     skip?: number
-    distinct?: UsuarioScalarFieldEnum | UsuarioScalarFieldEnum[]
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
   }
 
   /**
-   * Usuario create
+   * User create
    */
-  export type UsuarioCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to create a Usuario.
+     * The data needed to create a User.
      */
-    data: XOR<UsuarioCreateInput, UsuarioUncheckedCreateInput>
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
   }
 
   /**
-   * Usuario createMany
+   * User createMany
    */
-  export type UsuarioCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Usuarios.
+     * The data used to create many Users.
      */
-    data: UsuarioCreateManyInput | UsuarioCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Usuario createManyAndReturn
+   * User createManyAndReturn
    */
-  export type UsuarioCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelectCreateManyAndReturn<ExtArgs> | null
+    select?: UserSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to create many Usuarios.
+     * The data used to create many Users.
      */
-    data: UsuarioCreateManyInput | UsuarioCreateManyInput[]
+    data: UserCreateManyInput | UserCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * Usuario update
+   * User update
    */
-  export type UsuarioUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The data needed to update a Usuario.
+     * The data needed to update a User.
      */
-    data: XOR<UsuarioUpdateInput, UsuarioUncheckedUpdateInput>
+    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
     /**
-     * Choose, which Usuario to update.
+     * Choose, which User to update.
      */
-    where: UsuarioWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Usuario updateMany
+   * User updateMany
    */
-  export type UsuarioUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Usuarios.
+     * The data used to update Users.
      */
-    data: XOR<UsuarioUpdateManyMutationInput, UsuarioUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Usuarios to update
+     * Filter which Users to update
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Usuarios to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Usuario updateManyAndReturn
+   * User updateManyAndReturn
    */
-  export type UsuarioUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: UserSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
-     * The data used to update Usuarios.
+     * The data used to update Users.
      */
-    data: XOR<UsuarioUpdateManyMutationInput, UsuarioUncheckedUpdateManyInput>
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
     /**
-     * Filter which Usuarios to update
+     * Filter which Users to update
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Usuarios to update.
+     * Limit how many Users to update.
      */
     limit?: number
   }
 
   /**
-   * Usuario upsert
+   * User upsert
    */
-  export type UsuarioUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * The filter to search for the Usuario to update in case it exists.
+     * The filter to search for the User to update in case it exists.
      */
-    where: UsuarioWhereUniqueInput
+    where: UserWhereUniqueInput
     /**
-     * In case the Usuario found by the `where` argument doesn't exist, create a new Usuario with this data.
+     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
      */
-    create: XOR<UsuarioCreateInput, UsuarioUncheckedCreateInput>
+    create: XOR<UserCreateInput, UserUncheckedCreateInput>
     /**
-     * In case the Usuario was found with the provided `where` argument, update it with this data.
+     * In case the User was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<UsuarioUpdateInput, UsuarioUncheckedUpdateInput>
+    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
   }
 
   /**
-   * Usuario delete
+   * User delete
    */
-  export type UsuarioDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the User
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the User
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserInclude<ExtArgs> | null
     /**
-     * Filter which Usuario to delete.
+     * Filter which User to delete.
      */
-    where: UsuarioWhereUniqueInput
+    where: UserWhereUniqueInput
   }
 
   /**
-   * Usuario deleteMany
+   * User deleteMany
    */
-  export type UsuarioDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Usuarios to delete
+     * Filter which Users to delete
      */
-    where?: UsuarioWhereInput
+    where?: UserWhereInput
     /**
-     * Limit how many Usuarios to delete.
+     * Limit how many Users to delete.
      */
     limit?: number
   }
 
   /**
-   * Usuario.departamentos
+   * User.emails
    */
-  export type Usuario$departamentosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$emailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UsuarioDepartamento
+     * Select specific fields to fetch from the Email
      */
-    select?: UsuarioDepartamentoSelect<ExtArgs> | null
+    select?: EmailSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UsuarioDepartamento
+     * Omit specific fields from the Email
      */
-    omit?: UsuarioDepartamentoOmit<ExtArgs> | null
+    omit?: EmailOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioDepartamentoInclude<ExtArgs> | null
-    where?: UsuarioDepartamentoWhereInput
-    orderBy?: UsuarioDepartamentoOrderByWithRelationInput | UsuarioDepartamentoOrderByWithRelationInput[]
-    cursor?: UsuarioDepartamentoWhereUniqueInput
+    include?: EmailInclude<ExtArgs> | null
+    where?: EmailWhereInput
+    orderBy?: EmailOrderByWithRelationInput | EmailOrderByWithRelationInput[]
+    cursor?: EmailWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: UsuarioDepartamentoScalarFieldEnum | UsuarioDepartamentoScalarFieldEnum[]
+    distinct?: EmailScalarFieldEnum | EmailScalarFieldEnum[]
   }
 
   /**
-   * Usuario.testes
+   * User.phishings
    */
-  export type Usuario$testesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$phishingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Teste
+     * Select specific fields to fetch from the Phishing
      */
-    select?: TesteSelect<ExtArgs> | null
+    select?: PhishingSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Teste
+     * Omit specific fields from the Phishing
      */
-    omit?: TesteOmit<ExtArgs> | null
+    omit?: PhishingOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: TesteInclude<ExtArgs> | null
-    where?: TesteWhereInput
-    orderBy?: TesteOrderByWithRelationInput | TesteOrderByWithRelationInput[]
-    cursor?: TesteWhereUniqueInput
+    include?: PhishingInclude<ExtArgs> | null
+    where?: PhishingWhereInput
+    orderBy?: PhishingOrderByWithRelationInput | PhishingOrderByWithRelationInput[]
+    cursor?: PhishingWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: TesteScalarFieldEnum | TesteScalarFieldEnum[]
+    distinct?: PhishingScalarFieldEnum | PhishingScalarFieldEnum[]
   }
 
   /**
-   * Usuario without action
+   * User.user_departments
    */
-  export type UsuarioDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$user_departmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Usuario
+     * Select specific fields to fetch from the UserDepartment
      */
-    select?: UsuarioSelect<ExtArgs> | null
+    select?: UserDepartmentSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Usuario
+     * Omit specific fields from the UserDepartment
      */
-    omit?: UsuarioOmit<ExtArgs> | null
+    omit?: UserDepartmentOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UsuarioInclude<ExtArgs> | null
+    include?: UserDepartmentInclude<ExtArgs> | null
+    where?: UserDepartmentWhereInput
+    orderBy?: UserDepartmentOrderByWithRelationInput | UserDepartmentOrderByWithRelationInput[]
+    cursor?: UserDepartmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserDepartmentScalarFieldEnum | UserDepartmentScalarFieldEnum[]
+  }
+
+  /**
+   * User without action
+   */
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -11205,140 +9606,117 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const CampanhaTesteScalarFieldEnum: {
+  export const DepartmentScalarFieldEnum: {
     id: 'id',
-    campanhaId: 'campanhaId',
-    testeId: 'testeId',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    name: 'name',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type CampanhaTesteScalarFieldEnum = (typeof CampanhaTesteScalarFieldEnum)[keyof typeof CampanhaTesteScalarFieldEnum]
+  export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
 
 
-  export const CampanhaScalarFieldEnum: {
+  export const EmailScalarFieldEnum: {
     id: 'id',
-    titulo: 'titulo',
-    descricao: 'descricao',
-    status: 'status',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    address: 'address',
+    user_id: 'user_id',
+    type: 'type',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type CampanhaScalarFieldEnum = (typeof CampanhaScalarFieldEnum)[keyof typeof CampanhaScalarFieldEnum]
-
-
-  export const DepartamentoScalarFieldEnum: {
-    id: 'id',
-    nome: 'nome',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
-  };
-
-  export type DepartamentoScalarFieldEnum = (typeof DepartamentoScalarFieldEnum)[keyof typeof DepartamentoScalarFieldEnum]
+  export type EmailScalarFieldEnum = (typeof EmailScalarFieldEnum)[keyof typeof EmailScalarFieldEnum]
 
 
   export const LogScalarFieldEnum: {
     id: 'id',
-    tipo: 'tipo',
-    descricao: 'descricao',
-    campanhaId: 'campanhaId',
-    departamentoId: 'departamentoId',
-    testeId: 'testeId',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    entity: 'entity',
+    entity_id: 'entity_id',
+    action: 'action',
+    created_at: 'created_at',
+    created_by: 'created_by'
   };
 
   export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
 
 
-  export const TesteDepartamentoScalarFieldEnum: {
+  export const PhishingDepartmentScalarFieldEnum: {
     id: 'id',
-    testeId: 'testeId',
-    departamentoId: 'departamentoId',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    phishing_id: 'phishing_id',
+    department_id: 'department_id',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type TesteDepartamentoScalarFieldEnum = (typeof TesteDepartamentoScalarFieldEnum)[keyof typeof TesteDepartamentoScalarFieldEnum]
+  export type PhishingDepartmentScalarFieldEnum = (typeof PhishingDepartmentScalarFieldEnum)[keyof typeof PhishingDepartmentScalarFieldEnum]
 
 
-  export const TesteScalarFieldEnum: {
+  export const PhishingScalarFieldEnum: {
     id: 'id',
-    canal: 'canal',
+    clicked: 'clicked',
+    reported: 'reported',
+    channel: 'channel',
     status: 'status',
-    caiuNoTeste: 'caiuNoTeste',
-    reportouPhishing: 'reportouPhishing',
-    usuarioId: 'usuarioId',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    userId: 'userId',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type TesteScalarFieldEnum = (typeof TesteScalarFieldEnum)[keyof typeof TesteScalarFieldEnum]
+  export type PhishingScalarFieldEnum = (typeof PhishingScalarFieldEnum)[keyof typeof PhishingScalarFieldEnum]
 
 
-  export const UsuarioDepartamentoScalarFieldEnum: {
+  export const UserDepartmentScalarFieldEnum: {
     id: 'id',
-    usuarioId: 'usuarioId',
-    departamentoId: 'departamentoId',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    user_id: 'user_id',
+    department_id: 'department_id',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type UsuarioDepartamentoScalarFieldEnum = (typeof UsuarioDepartamentoScalarFieldEnum)[keyof typeof UsuarioDepartamentoScalarFieldEnum]
+  export type UserDepartmentScalarFieldEnum = (typeof UserDepartmentScalarFieldEnum)[keyof typeof UserDepartmentScalarFieldEnum]
 
 
-  export const UsuarioScalarFieldEnum: {
+  export const UserScalarFieldEnum: {
     id: 'id',
-    nome: 'nome',
-    sobrenome: 'sobrenome',
-    email: 'email',
-    cargo: 'cargo',
-    ativo: 'ativo',
-    criadoEm: 'criadoEm',
-    criadoPor: 'criadoPor',
-    atualizadoEm: 'atualizadoEm',
-    atualizadoPor: 'atualizadoPor',
-    inativadoEm: 'inativadoEm',
-    inativadoPor: 'inativadoPor'
+    name: 'name',
+    password: 'password',
+    roles: 'roles',
+    tenant_id: 'tenant_id',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    created_by: 'created_by',
+    updated_by: 'updated_by',
+    updated_at: 'updated_at',
+    inactivated_at: 'inactivated_at',
+    inactivated_by: 'inactivated_by'
   };
 
-  export type UsuarioScalarFieldEnum = (typeof UsuarioScalarFieldEnum)[keyof typeof UsuarioScalarFieldEnum]
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11406,72 +9784,72 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'StatusCampanha'
+   * Reference to a field of type 'EmailType'
    */
-  export type EnumStatusCampanhaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusCampanha'>
+  export type EnumEmailTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailType'>
     
 
 
   /**
-   * Reference to a field of type 'StatusCampanha[]'
+   * Reference to a field of type 'EmailType[]'
    */
-  export type ListEnumStatusCampanhaFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusCampanha[]'>
+  export type ListEnumEmailTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailType[]'>
     
 
 
   /**
-   * Reference to a field of type 'TipoLog'
+   * Reference to a field of type 'Entity'
    */
-  export type EnumTipoLogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoLog'>
+  export type EnumEntityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Entity'>
     
 
 
   /**
-   * Reference to a field of type 'TipoLog[]'
+   * Reference to a field of type 'Entity[]'
    */
-  export type ListEnumTipoLogFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TipoLog[]'>
+  export type ListEnumEntityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Entity[]'>
     
 
 
   /**
-   * Reference to a field of type 'CanalTeste'
+   * Reference to a field of type 'Action'
    */
-  export type EnumCanalTesteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CanalTeste'>
+  export type EnumActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Action'>
     
 
 
   /**
-   * Reference to a field of type 'CanalTeste[]'
+   * Reference to a field of type 'Action[]'
    */
-  export type ListEnumCanalTesteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CanalTeste[]'>
+  export type ListEnumActionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Action[]'>
     
 
 
   /**
-   * Reference to a field of type 'StatusTeste'
+   * Reference to a field of type 'PhishingChannel'
    */
-  export type EnumStatusTesteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusTeste'>
+  export type EnumPhishingChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PhishingChannel'>
     
 
 
   /**
-   * Reference to a field of type 'StatusTeste[]'
+   * Reference to a field of type 'PhishingChannel[]'
    */
-  export type ListEnumStatusTesteFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatusTeste[]'>
+  export type ListEnumPhishingChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PhishingChannel[]'>
     
 
 
   /**
-   * Reference to a field of type 'CargoUsuario'
+   * Reference to a field of type 'PhishingStatus'
    */
-  export type EnumCargoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CargoUsuario'>
+  export type EnumPhishingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PhishingStatus'>
     
 
 
   /**
-   * Reference to a field of type 'CargoUsuario[]'
+   * Reference to a field of type 'PhishingStatus[]'
    */
-  export type ListEnumCargoUsuarioFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CargoUsuario[]'>
+  export type ListEnumPhishingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PhishingStatus[]'>
     
 
 
@@ -11492,257 +9870,167 @@ export namespace Prisma {
    */
 
 
-  export type CampanhaTesteWhereInput = {
-    AND?: CampanhaTesteWhereInput | CampanhaTesteWhereInput[]
-    OR?: CampanhaTesteWhereInput[]
-    NOT?: CampanhaTesteWhereInput | CampanhaTesteWhereInput[]
-    id?: StringFilter<"CampanhaTeste"> | string
-    campanhaId?: StringFilter<"CampanhaTeste"> | string
-    testeId?: StringFilter<"CampanhaTeste"> | string
-    ativo?: BoolFilter<"CampanhaTeste"> | boolean
-    criadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    criadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    atualizadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"CampanhaTeste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    campanha?: XOR<CampanhaScalarRelationFilter, CampanhaWhereInput>
-    teste?: XOR<TesteScalarRelationFilter, TesteWhereInput>
+  export type DepartmentWhereInput = {
+    AND?: DepartmentWhereInput | DepartmentWhereInput[]
+    OR?: DepartmentWhereInput[]
+    NOT?: DepartmentWhereInput | DepartmentWhereInput[]
+    id?: StringFilter<"Department"> | string
+    name?: StringFilter<"Department"> | string
+    is_active?: BoolFilter<"Department"> | boolean
+    created_at?: DateTimeFilter<"Department"> | Date | string
+    created_by?: StringFilter<"Department"> | string
+    updated_by?: StringFilter<"Department"> | string
+    updated_at?: DateTimeFilter<"Department"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Department"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Department"> | string | null
+    phishings?: PhishingDepartmentListRelationFilter
+    users?: UserDepartmentListRelationFilter
   }
 
-  export type CampanhaTesteOrderByWithRelationInput = {
+  export type DepartmentOrderByWithRelationInput = {
     id?: SortOrder
-    campanhaId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    campanha?: CampanhaOrderByWithRelationInput
-    teste?: TesteOrderByWithRelationInput
+    name?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    phishings?: PhishingDepartmentOrderByRelationAggregateInput
+    users?: UserDepartmentOrderByRelationAggregateInput
   }
 
-  export type CampanhaTesteWhereUniqueInput = Prisma.AtLeast<{
+  export type DepartmentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    campanhaId_testeId?: CampanhaTesteCampanhaIdTesteIdCompoundUniqueInput
-    AND?: CampanhaTesteWhereInput | CampanhaTesteWhereInput[]
-    OR?: CampanhaTesteWhereInput[]
-    NOT?: CampanhaTesteWhereInput | CampanhaTesteWhereInput[]
-    campanhaId?: StringFilter<"CampanhaTeste"> | string
-    testeId?: StringFilter<"CampanhaTeste"> | string
-    ativo?: BoolFilter<"CampanhaTeste"> | boolean
-    criadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    criadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    atualizadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"CampanhaTeste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    campanha?: XOR<CampanhaScalarRelationFilter, CampanhaWhereInput>
-    teste?: XOR<TesteScalarRelationFilter, TesteWhereInput>
-  }, "id" | "campanhaId_testeId">
-
-  export type CampanhaTesteOrderByWithAggregationInput = {
-    id?: SortOrder
-    campanhaId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: CampanhaTesteCountOrderByAggregateInput
-    _max?: CampanhaTesteMaxOrderByAggregateInput
-    _min?: CampanhaTesteMinOrderByAggregateInput
-  }
-
-  export type CampanhaTesteScalarWhereWithAggregatesInput = {
-    AND?: CampanhaTesteScalarWhereWithAggregatesInput | CampanhaTesteScalarWhereWithAggregatesInput[]
-    OR?: CampanhaTesteScalarWhereWithAggregatesInput[]
-    NOT?: CampanhaTesteScalarWhereWithAggregatesInput | CampanhaTesteScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CampanhaTeste"> | string
-    campanhaId?: StringWithAggregatesFilter<"CampanhaTeste"> | string
-    testeId?: StringWithAggregatesFilter<"CampanhaTeste"> | string
-    ativo?: BoolWithAggregatesFilter<"CampanhaTeste"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"CampanhaTeste"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"CampanhaTeste"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"CampanhaTeste"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"CampanhaTeste"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"CampanhaTeste"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"CampanhaTeste"> | string | null
-  }
-
-  export type CampanhaWhereInput = {
-    AND?: CampanhaWhereInput | CampanhaWhereInput[]
-    OR?: CampanhaWhereInput[]
-    NOT?: CampanhaWhereInput | CampanhaWhereInput[]
-    id?: StringFilter<"Campanha"> | string
-    titulo?: StringFilter<"Campanha"> | string
-    descricao?: StringNullableFilter<"Campanha"> | string | null
-    status?: EnumStatusCampanhaFilter<"Campanha"> | $Enums.StatusCampanha
-    ativo?: BoolFilter<"Campanha"> | boolean
-    criadoEm?: DateTimeFilter<"Campanha"> | Date | string
-    criadoPor?: StringNullableFilter<"Campanha"> | string | null
-    atualizadoEm?: DateTimeFilter<"Campanha"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Campanha"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Campanha"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Campanha"> | string | null
-    logs?: LogListRelationFilter
-    testes?: CampanhaTesteListRelationFilter
-  }
-
-  export type CampanhaOrderByWithRelationInput = {
-    id?: SortOrder
-    titulo?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    status?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    logs?: LogOrderByRelationAggregateInput
-    testes?: CampanhaTesteOrderByRelationAggregateInput
-  }
-
-  export type CampanhaWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: CampanhaWhereInput | CampanhaWhereInput[]
-    OR?: CampanhaWhereInput[]
-    NOT?: CampanhaWhereInput | CampanhaWhereInput[]
-    titulo?: StringFilter<"Campanha"> | string
-    descricao?: StringNullableFilter<"Campanha"> | string | null
-    status?: EnumStatusCampanhaFilter<"Campanha"> | $Enums.StatusCampanha
-    ativo?: BoolFilter<"Campanha"> | boolean
-    criadoEm?: DateTimeFilter<"Campanha"> | Date | string
-    criadoPor?: StringNullableFilter<"Campanha"> | string | null
-    atualizadoEm?: DateTimeFilter<"Campanha"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Campanha"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Campanha"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Campanha"> | string | null
-    logs?: LogListRelationFilter
-    testes?: CampanhaTesteListRelationFilter
+    AND?: DepartmentWhereInput | DepartmentWhereInput[]
+    OR?: DepartmentWhereInput[]
+    NOT?: DepartmentWhereInput | DepartmentWhereInput[]
+    name?: StringFilter<"Department"> | string
+    is_active?: BoolFilter<"Department"> | boolean
+    created_at?: DateTimeFilter<"Department"> | Date | string
+    created_by?: StringFilter<"Department"> | string
+    updated_by?: StringFilter<"Department"> | string
+    updated_at?: DateTimeFilter<"Department"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Department"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Department"> | string | null
+    phishings?: PhishingDepartmentListRelationFilter
+    users?: UserDepartmentListRelationFilter
   }, "id">
 
-  export type CampanhaOrderByWithAggregationInput = {
+  export type DepartmentOrderByWithAggregationInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    status?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: CampanhaCountOrderByAggregateInput
-    _max?: CampanhaMaxOrderByAggregateInput
-    _min?: CampanhaMinOrderByAggregateInput
+    name?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: DepartmentCountOrderByAggregateInput
+    _max?: DepartmentMaxOrderByAggregateInput
+    _min?: DepartmentMinOrderByAggregateInput
   }
 
-  export type CampanhaScalarWhereWithAggregatesInput = {
-    AND?: CampanhaScalarWhereWithAggregatesInput | CampanhaScalarWhereWithAggregatesInput[]
-    OR?: CampanhaScalarWhereWithAggregatesInput[]
-    NOT?: CampanhaScalarWhereWithAggregatesInput | CampanhaScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Campanha"> | string
-    titulo?: StringWithAggregatesFilter<"Campanha"> | string
-    descricao?: StringNullableWithAggregatesFilter<"Campanha"> | string | null
-    status?: EnumStatusCampanhaWithAggregatesFilter<"Campanha"> | $Enums.StatusCampanha
-    ativo?: BoolWithAggregatesFilter<"Campanha"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"Campanha"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"Campanha"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"Campanha"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"Campanha"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"Campanha"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"Campanha"> | string | null
+  export type DepartmentScalarWhereWithAggregatesInput = {
+    AND?: DepartmentScalarWhereWithAggregatesInput | DepartmentScalarWhereWithAggregatesInput[]
+    OR?: DepartmentScalarWhereWithAggregatesInput[]
+    NOT?: DepartmentScalarWhereWithAggregatesInput | DepartmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Department"> | string
+    name?: StringWithAggregatesFilter<"Department"> | string
+    is_active?: BoolWithAggregatesFilter<"Department"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"Department"> | Date | string
+    created_by?: StringWithAggregatesFilter<"Department"> | string
+    updated_by?: StringWithAggregatesFilter<"Department"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"Department"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"Department"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"Department"> | string | null
   }
 
-  export type DepartamentoWhereInput = {
-    AND?: DepartamentoWhereInput | DepartamentoWhereInput[]
-    OR?: DepartamentoWhereInput[]
-    NOT?: DepartamentoWhereInput | DepartamentoWhereInput[]
-    id?: StringFilter<"Departamento"> | string
-    nome?: StringFilter<"Departamento"> | string
-    ativo?: BoolFilter<"Departamento"> | boolean
-    criadoEm?: DateTimeFilter<"Departamento"> | Date | string
-    criadoPor?: StringNullableFilter<"Departamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"Departamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Departamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Departamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Departamento"> | string | null
-    testes?: TesteDepartamentoListRelationFilter
-    logs?: LogListRelationFilter
-    usuarios?: UsuarioDepartamentoListRelationFilter
+  export type EmailWhereInput = {
+    AND?: EmailWhereInput | EmailWhereInput[]
+    OR?: EmailWhereInput[]
+    NOT?: EmailWhereInput | EmailWhereInput[]
+    id?: StringFilter<"Email"> | string
+    address?: StringFilter<"Email"> | string
+    user_id?: StringFilter<"Email"> | string
+    type?: EnumEmailTypeFilter<"Email"> | $Enums.EmailType
+    is_active?: BoolFilter<"Email"> | boolean
+    created_at?: DateTimeFilter<"Email"> | Date | string
+    created_by?: StringFilter<"Email"> | string
+    updated_by?: StringFilter<"Email"> | string
+    updated_at?: DateTimeFilter<"Email"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Email"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Email"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
-  export type DepartamentoOrderByWithRelationInput = {
+  export type EmailOrderByWithRelationInput = {
     id?: SortOrder
-    nome?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    testes?: TesteDepartamentoOrderByRelationAggregateInput
-    logs?: LogOrderByRelationAggregateInput
-    usuarios?: UsuarioDepartamentoOrderByRelationAggregateInput
+    address?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
   }
 
-  export type DepartamentoWhereUniqueInput = Prisma.AtLeast<{
+  export type EmailWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: DepartamentoWhereInput | DepartamentoWhereInput[]
-    OR?: DepartamentoWhereInput[]
-    NOT?: DepartamentoWhereInput | DepartamentoWhereInput[]
-    nome?: StringFilter<"Departamento"> | string
-    ativo?: BoolFilter<"Departamento"> | boolean
-    criadoEm?: DateTimeFilter<"Departamento"> | Date | string
-    criadoPor?: StringNullableFilter<"Departamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"Departamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Departamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Departamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Departamento"> | string | null
-    testes?: TesteDepartamentoListRelationFilter
-    logs?: LogListRelationFilter
-    usuarios?: UsuarioDepartamentoListRelationFilter
-  }, "id">
+    address?: string
+    AND?: EmailWhereInput | EmailWhereInput[]
+    OR?: EmailWhereInput[]
+    NOT?: EmailWhereInput | EmailWhereInput[]
+    user_id?: StringFilter<"Email"> | string
+    type?: EnumEmailTypeFilter<"Email"> | $Enums.EmailType
+    is_active?: BoolFilter<"Email"> | boolean
+    created_at?: DateTimeFilter<"Email"> | Date | string
+    created_by?: StringFilter<"Email"> | string
+    updated_by?: StringFilter<"Email"> | string
+    updated_at?: DateTimeFilter<"Email"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Email"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Email"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "address">
 
-  export type DepartamentoOrderByWithAggregationInput = {
+  export type EmailOrderByWithAggregationInput = {
     id?: SortOrder
-    nome?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: DepartamentoCountOrderByAggregateInput
-    _max?: DepartamentoMaxOrderByAggregateInput
-    _min?: DepartamentoMinOrderByAggregateInput
+    address?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: EmailCountOrderByAggregateInput
+    _max?: EmailMaxOrderByAggregateInput
+    _min?: EmailMinOrderByAggregateInput
   }
 
-  export type DepartamentoScalarWhereWithAggregatesInput = {
-    AND?: DepartamentoScalarWhereWithAggregatesInput | DepartamentoScalarWhereWithAggregatesInput[]
-    OR?: DepartamentoScalarWhereWithAggregatesInput[]
-    NOT?: DepartamentoScalarWhereWithAggregatesInput | DepartamentoScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Departamento"> | string
-    nome?: StringWithAggregatesFilter<"Departamento"> | string
-    ativo?: BoolWithAggregatesFilter<"Departamento"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"Departamento"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"Departamento"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"Departamento"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"Departamento"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"Departamento"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"Departamento"> | string | null
+  export type EmailScalarWhereWithAggregatesInput = {
+    AND?: EmailScalarWhereWithAggregatesInput | EmailScalarWhereWithAggregatesInput[]
+    OR?: EmailScalarWhereWithAggregatesInput[]
+    NOT?: EmailScalarWhereWithAggregatesInput | EmailScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Email"> | string
+    address?: StringWithAggregatesFilter<"Email"> | string
+    user_id?: StringWithAggregatesFilter<"Email"> | string
+    type?: EnumEmailTypeWithAggregatesFilter<"Email"> | $Enums.EmailType
+    is_active?: BoolWithAggregatesFilter<"Email"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"Email"> | Date | string
+    created_by?: StringWithAggregatesFilter<"Email"> | string
+    updated_by?: StringWithAggregatesFilter<"Email"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"Email"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"Email"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"Email"> | string | null
   }
 
   export type LogWhereInput = {
@@ -11750,40 +10038,20 @@ export namespace Prisma {
     OR?: LogWhereInput[]
     NOT?: LogWhereInput | LogWhereInput[]
     id?: StringFilter<"Log"> | string
-    tipo?: EnumTipoLogFilter<"Log"> | $Enums.TipoLog
-    descricao?: StringNullableFilter<"Log"> | string | null
-    campanhaId?: StringNullableFilter<"Log"> | string | null
-    departamentoId?: StringNullableFilter<"Log"> | string | null
-    testeId?: StringNullableFilter<"Log"> | string | null
-    ativo?: BoolFilter<"Log"> | boolean
-    criadoEm?: DateTimeFilter<"Log"> | Date | string
-    criadoPor?: StringNullableFilter<"Log"> | string | null
-    atualizadoEm?: DateTimeFilter<"Log"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Log"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Log"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Log"> | string | null
-    campanha?: XOR<CampanhaNullableScalarRelationFilter, CampanhaWhereInput> | null
-    departamento?: XOR<DepartamentoNullableScalarRelationFilter, DepartamentoWhereInput> | null
-    teste?: XOR<TesteNullableScalarRelationFilter, TesteWhereInput> | null
+    entity?: EnumEntityFilter<"Log"> | $Enums.Entity
+    entity_id?: StringFilter<"Log"> | string
+    action?: EnumActionFilter<"Log"> | $Enums.Action
+    created_at?: DateTimeFilter<"Log"> | Date | string
+    created_by?: StringFilter<"Log"> | string
   }
 
   export type LogOrderByWithRelationInput = {
     id?: SortOrder
-    tipo?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    campanhaId?: SortOrderInput | SortOrder
-    departamentoId?: SortOrderInput | SortOrder
-    testeId?: SortOrderInput | SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    campanha?: CampanhaOrderByWithRelationInput
-    departamento?: DepartamentoOrderByWithRelationInput
-    teste?: TesteOrderByWithRelationInput
+    entity?: SortOrder
+    entity_id?: SortOrder
+    action?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
   }
 
   export type LogWhereUniqueInput = Prisma.AtLeast<{
@@ -11791,37 +10059,20 @@ export namespace Prisma {
     AND?: LogWhereInput | LogWhereInput[]
     OR?: LogWhereInput[]
     NOT?: LogWhereInput | LogWhereInput[]
-    tipo?: EnumTipoLogFilter<"Log"> | $Enums.TipoLog
-    descricao?: StringNullableFilter<"Log"> | string | null
-    campanhaId?: StringNullableFilter<"Log"> | string | null
-    departamentoId?: StringNullableFilter<"Log"> | string | null
-    testeId?: StringNullableFilter<"Log"> | string | null
-    ativo?: BoolFilter<"Log"> | boolean
-    criadoEm?: DateTimeFilter<"Log"> | Date | string
-    criadoPor?: StringNullableFilter<"Log"> | string | null
-    atualizadoEm?: DateTimeFilter<"Log"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Log"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Log"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Log"> | string | null
-    campanha?: XOR<CampanhaNullableScalarRelationFilter, CampanhaWhereInput> | null
-    departamento?: XOR<DepartamentoNullableScalarRelationFilter, DepartamentoWhereInput> | null
-    teste?: XOR<TesteNullableScalarRelationFilter, TesteWhereInput> | null
+    entity?: EnumEntityFilter<"Log"> | $Enums.Entity
+    entity_id?: StringFilter<"Log"> | string
+    action?: EnumActionFilter<"Log"> | $Enums.Action
+    created_at?: DateTimeFilter<"Log"> | Date | string
+    created_by?: StringFilter<"Log"> | string
   }, "id">
 
   export type LogOrderByWithAggregationInput = {
     id?: SortOrder
-    tipo?: SortOrder
-    descricao?: SortOrderInput | SortOrder
-    campanhaId?: SortOrderInput | SortOrder
-    departamentoId?: SortOrderInput | SortOrder
-    testeId?: SortOrderInput | SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
+    entity?: SortOrder
+    entity_id?: SortOrder
+    action?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
     _count?: LogCountOrderByAggregateInput
     _max?: LogMaxOrderByAggregateInput
     _min?: LogMinOrderByAggregateInput
@@ -11832,1197 +10083,1035 @@ export namespace Prisma {
     OR?: LogScalarWhereWithAggregatesInput[]
     NOT?: LogScalarWhereWithAggregatesInput | LogScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Log"> | string
-    tipo?: EnumTipoLogWithAggregatesFilter<"Log"> | $Enums.TipoLog
-    descricao?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    campanhaId?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    departamentoId?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    testeId?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    ativo?: BoolWithAggregatesFilter<"Log"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"Log"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"Log"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"Log"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"Log"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"Log"> | string | null
+    entity?: EnumEntityWithAggregatesFilter<"Log"> | $Enums.Entity
+    entity_id?: StringWithAggregatesFilter<"Log"> | string
+    action?: EnumActionWithAggregatesFilter<"Log"> | $Enums.Action
+    created_at?: DateTimeWithAggregatesFilter<"Log"> | Date | string
+    created_by?: StringWithAggregatesFilter<"Log"> | string
   }
 
-  export type TesteDepartamentoWhereInput = {
-    AND?: TesteDepartamentoWhereInput | TesteDepartamentoWhereInput[]
-    OR?: TesteDepartamentoWhereInput[]
-    NOT?: TesteDepartamentoWhereInput | TesteDepartamentoWhereInput[]
-    id?: StringFilter<"TesteDepartamento"> | string
-    testeId?: StringFilter<"TesteDepartamento"> | string
-    departamentoId?: StringFilter<"TesteDepartamento"> | string
-    ativo?: BoolFilter<"TesteDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"TesteDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    teste?: XOR<TesteScalarRelationFilter, TesteWhereInput>
-    departamento?: XOR<DepartamentoScalarRelationFilter, DepartamentoWhereInput>
+  export type PhishingDepartmentWhereInput = {
+    AND?: PhishingDepartmentWhereInput | PhishingDepartmentWhereInput[]
+    OR?: PhishingDepartmentWhereInput[]
+    NOT?: PhishingDepartmentWhereInput | PhishingDepartmentWhereInput[]
+    id?: StringFilter<"PhishingDepartment"> | string
+    phishing_id?: StringFilter<"PhishingDepartment"> | string
+    department_id?: StringFilter<"PhishingDepartment"> | string
+    is_active?: BoolFilter<"PhishingDepartment"> | boolean
+    created_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    created_by?: StringFilter<"PhishingDepartment"> | string
+    updated_by?: StringFilter<"PhishingDepartment"> | string
+    updated_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"PhishingDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"PhishingDepartment"> | string | null
+    phishing?: XOR<PhishingScalarRelationFilter, PhishingWhereInput>
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
   }
 
-  export type TesteDepartamentoOrderByWithRelationInput = {
+  export type PhishingDepartmentOrderByWithRelationInput = {
     id?: SortOrder
-    testeId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    teste?: TesteOrderByWithRelationInput
-    departamento?: DepartamentoOrderByWithRelationInput
+    phishing_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    phishing?: PhishingOrderByWithRelationInput
+    department?: DepartmentOrderByWithRelationInput
   }
 
-  export type TesteDepartamentoWhereUniqueInput = Prisma.AtLeast<{
+  export type PhishingDepartmentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    testeId_departamentoId?: TesteDepartamentoTesteIdDepartamentoIdCompoundUniqueInput
-    AND?: TesteDepartamentoWhereInput | TesteDepartamentoWhereInput[]
-    OR?: TesteDepartamentoWhereInput[]
-    NOT?: TesteDepartamentoWhereInput | TesteDepartamentoWhereInput[]
-    testeId?: StringFilter<"TesteDepartamento"> | string
-    departamentoId?: StringFilter<"TesteDepartamento"> | string
-    ativo?: BoolFilter<"TesteDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"TesteDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    teste?: XOR<TesteScalarRelationFilter, TesteWhereInput>
-    departamento?: XOR<DepartamentoScalarRelationFilter, DepartamentoWhereInput>
-  }, "id" | "testeId_departamentoId">
+    phishing_id_department_id?: PhishingDepartmentPhishing_idDepartment_idCompoundUniqueInput
+    AND?: PhishingDepartmentWhereInput | PhishingDepartmentWhereInput[]
+    OR?: PhishingDepartmentWhereInput[]
+    NOT?: PhishingDepartmentWhereInput | PhishingDepartmentWhereInput[]
+    phishing_id?: StringFilter<"PhishingDepartment"> | string
+    department_id?: StringFilter<"PhishingDepartment"> | string
+    is_active?: BoolFilter<"PhishingDepartment"> | boolean
+    created_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    created_by?: StringFilter<"PhishingDepartment"> | string
+    updated_by?: StringFilter<"PhishingDepartment"> | string
+    updated_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"PhishingDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"PhishingDepartment"> | string | null
+    phishing?: XOR<PhishingScalarRelationFilter, PhishingWhereInput>
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+  }, "id" | "phishing_id_department_id">
 
-  export type TesteDepartamentoOrderByWithAggregationInput = {
+  export type PhishingDepartmentOrderByWithAggregationInput = {
     id?: SortOrder
-    testeId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: TesteDepartamentoCountOrderByAggregateInput
-    _max?: TesteDepartamentoMaxOrderByAggregateInput
-    _min?: TesteDepartamentoMinOrderByAggregateInput
+    phishing_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: PhishingDepartmentCountOrderByAggregateInput
+    _max?: PhishingDepartmentMaxOrderByAggregateInput
+    _min?: PhishingDepartmentMinOrderByAggregateInput
   }
 
-  export type TesteDepartamentoScalarWhereWithAggregatesInput = {
-    AND?: TesteDepartamentoScalarWhereWithAggregatesInput | TesteDepartamentoScalarWhereWithAggregatesInput[]
-    OR?: TesteDepartamentoScalarWhereWithAggregatesInput[]
-    NOT?: TesteDepartamentoScalarWhereWithAggregatesInput | TesteDepartamentoScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"TesteDepartamento"> | string
-    testeId?: StringWithAggregatesFilter<"TesteDepartamento"> | string
-    departamentoId?: StringWithAggregatesFilter<"TesteDepartamento"> | string
-    ativo?: BoolWithAggregatesFilter<"TesteDepartamento"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"TesteDepartamento"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"TesteDepartamento"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"TesteDepartamento"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"TesteDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"TesteDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"TesteDepartamento"> | string | null
+  export type PhishingDepartmentScalarWhereWithAggregatesInput = {
+    AND?: PhishingDepartmentScalarWhereWithAggregatesInput | PhishingDepartmentScalarWhereWithAggregatesInput[]
+    OR?: PhishingDepartmentScalarWhereWithAggregatesInput[]
+    NOT?: PhishingDepartmentScalarWhereWithAggregatesInput | PhishingDepartmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PhishingDepartment"> | string
+    phishing_id?: StringWithAggregatesFilter<"PhishingDepartment"> | string
+    department_id?: StringWithAggregatesFilter<"PhishingDepartment"> | string
+    is_active?: BoolWithAggregatesFilter<"PhishingDepartment"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"PhishingDepartment"> | Date | string
+    created_by?: StringWithAggregatesFilter<"PhishingDepartment"> | string
+    updated_by?: StringWithAggregatesFilter<"PhishingDepartment"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"PhishingDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"PhishingDepartment"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"PhishingDepartment"> | string | null
   }
 
-  export type TesteWhereInput = {
-    AND?: TesteWhereInput | TesteWhereInput[]
-    OR?: TesteWhereInput[]
-    NOT?: TesteWhereInput | TesteWhereInput[]
-    id?: StringFilter<"Teste"> | string
-    canal?: EnumCanalTesteFilter<"Teste"> | $Enums.CanalTeste
-    status?: EnumStatusTesteFilter<"Teste"> | $Enums.StatusTeste
-    caiuNoTeste?: BoolFilter<"Teste"> | boolean
-    reportouPhishing?: BoolFilter<"Teste"> | boolean
-    usuarioId?: StringNullableFilter<"Teste"> | string | null
-    ativo?: BoolFilter<"Teste"> | boolean
-    criadoEm?: DateTimeFilter<"Teste"> | Date | string
-    criadoPor?: StringNullableFilter<"Teste"> | string | null
-    atualizadoEm?: DateTimeFilter<"Teste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Teste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Teste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Teste"> | string | null
-    departamentos?: TesteDepartamentoListRelationFilter
-    logs?: LogListRelationFilter
-    campanhas?: CampanhaTesteListRelationFilter
-    usuario?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+  export type PhishingWhereInput = {
+    AND?: PhishingWhereInput | PhishingWhereInput[]
+    OR?: PhishingWhereInput[]
+    NOT?: PhishingWhereInput | PhishingWhereInput[]
+    id?: StringFilter<"Phishing"> | string
+    clicked?: BoolFilter<"Phishing"> | boolean
+    reported?: BoolFilter<"Phishing"> | boolean
+    channel?: EnumPhishingChannelFilter<"Phishing"> | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFilter<"Phishing"> | $Enums.PhishingStatus
+    userId?: StringNullableFilter<"Phishing"> | string | null
+    is_active?: BoolFilter<"Phishing"> | boolean
+    created_at?: DateTimeFilter<"Phishing"> | Date | string
+    created_by?: StringFilter<"Phishing"> | string
+    updated_by?: StringFilter<"Phishing"> | string
+    updated_at?: DateTimeFilter<"Phishing"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Phishing"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Phishing"> | string | null
+    departments?: PhishingDepartmentListRelationFilter
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
-  export type TesteOrderByWithRelationInput = {
+  export type PhishingOrderByWithRelationInput = {
     id?: SortOrder
-    canal?: SortOrder
+    clicked?: SortOrder
+    reported?: SortOrder
+    channel?: SortOrder
     status?: SortOrder
-    caiuNoTeste?: SortOrder
-    reportouPhishing?: SortOrder
-    usuarioId?: SortOrderInput | SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    departamentos?: TesteDepartamentoOrderByRelationAggregateInput
-    logs?: LogOrderByRelationAggregateInput
-    campanhas?: CampanhaTesteOrderByRelationAggregateInput
-    usuario?: UsuarioOrderByWithRelationInput
+    userId?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    departments?: PhishingDepartmentOrderByRelationAggregateInput
+    user?: UserOrderByWithRelationInput
   }
 
-  export type TesteWhereUniqueInput = Prisma.AtLeast<{
+  export type PhishingWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: TesteWhereInput | TesteWhereInput[]
-    OR?: TesteWhereInput[]
-    NOT?: TesteWhereInput | TesteWhereInput[]
-    canal?: EnumCanalTesteFilter<"Teste"> | $Enums.CanalTeste
-    status?: EnumStatusTesteFilter<"Teste"> | $Enums.StatusTeste
-    caiuNoTeste?: BoolFilter<"Teste"> | boolean
-    reportouPhishing?: BoolFilter<"Teste"> | boolean
-    usuarioId?: StringNullableFilter<"Teste"> | string | null
-    ativo?: BoolFilter<"Teste"> | boolean
-    criadoEm?: DateTimeFilter<"Teste"> | Date | string
-    criadoPor?: StringNullableFilter<"Teste"> | string | null
-    atualizadoEm?: DateTimeFilter<"Teste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Teste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Teste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Teste"> | string | null
-    departamentos?: TesteDepartamentoListRelationFilter
-    logs?: LogListRelationFilter
-    campanhas?: CampanhaTesteListRelationFilter
-    usuario?: XOR<UsuarioNullableScalarRelationFilter, UsuarioWhereInput> | null
+    AND?: PhishingWhereInput | PhishingWhereInput[]
+    OR?: PhishingWhereInput[]
+    NOT?: PhishingWhereInput | PhishingWhereInput[]
+    clicked?: BoolFilter<"Phishing"> | boolean
+    reported?: BoolFilter<"Phishing"> | boolean
+    channel?: EnumPhishingChannelFilter<"Phishing"> | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFilter<"Phishing"> | $Enums.PhishingStatus
+    userId?: StringNullableFilter<"Phishing"> | string | null
+    is_active?: BoolFilter<"Phishing"> | boolean
+    created_at?: DateTimeFilter<"Phishing"> | Date | string
+    created_by?: StringFilter<"Phishing"> | string
+    updated_by?: StringFilter<"Phishing"> | string
+    updated_at?: DateTimeFilter<"Phishing"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Phishing"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Phishing"> | string | null
+    departments?: PhishingDepartmentListRelationFilter
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
-  export type TesteOrderByWithAggregationInput = {
+  export type PhishingOrderByWithAggregationInput = {
     id?: SortOrder
-    canal?: SortOrder
+    clicked?: SortOrder
+    reported?: SortOrder
+    channel?: SortOrder
     status?: SortOrder
-    caiuNoTeste?: SortOrder
-    reportouPhishing?: SortOrder
-    usuarioId?: SortOrderInput | SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: TesteCountOrderByAggregateInput
-    _max?: TesteMaxOrderByAggregateInput
-    _min?: TesteMinOrderByAggregateInput
+    userId?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: PhishingCountOrderByAggregateInput
+    _max?: PhishingMaxOrderByAggregateInput
+    _min?: PhishingMinOrderByAggregateInput
   }
 
-  export type TesteScalarWhereWithAggregatesInput = {
-    AND?: TesteScalarWhereWithAggregatesInput | TesteScalarWhereWithAggregatesInput[]
-    OR?: TesteScalarWhereWithAggregatesInput[]
-    NOT?: TesteScalarWhereWithAggregatesInput | TesteScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Teste"> | string
-    canal?: EnumCanalTesteWithAggregatesFilter<"Teste"> | $Enums.CanalTeste
-    status?: EnumStatusTesteWithAggregatesFilter<"Teste"> | $Enums.StatusTeste
-    caiuNoTeste?: BoolWithAggregatesFilter<"Teste"> | boolean
-    reportouPhishing?: BoolWithAggregatesFilter<"Teste"> | boolean
-    usuarioId?: StringNullableWithAggregatesFilter<"Teste"> | string | null
-    ativo?: BoolWithAggregatesFilter<"Teste"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"Teste"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"Teste"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"Teste"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"Teste"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"Teste"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"Teste"> | string | null
+  export type PhishingScalarWhereWithAggregatesInput = {
+    AND?: PhishingScalarWhereWithAggregatesInput | PhishingScalarWhereWithAggregatesInput[]
+    OR?: PhishingScalarWhereWithAggregatesInput[]
+    NOT?: PhishingScalarWhereWithAggregatesInput | PhishingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Phishing"> | string
+    clicked?: BoolWithAggregatesFilter<"Phishing"> | boolean
+    reported?: BoolWithAggregatesFilter<"Phishing"> | boolean
+    channel?: EnumPhishingChannelWithAggregatesFilter<"Phishing"> | $Enums.PhishingChannel
+    status?: EnumPhishingStatusWithAggregatesFilter<"Phishing"> | $Enums.PhishingStatus
+    userId?: StringNullableWithAggregatesFilter<"Phishing"> | string | null
+    is_active?: BoolWithAggregatesFilter<"Phishing"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"Phishing"> | Date | string
+    created_by?: StringWithAggregatesFilter<"Phishing"> | string
+    updated_by?: StringWithAggregatesFilter<"Phishing"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"Phishing"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"Phishing"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"Phishing"> | string | null
   }
 
-  export type UsuarioDepartamentoWhereInput = {
-    AND?: UsuarioDepartamentoWhereInput | UsuarioDepartamentoWhereInput[]
-    OR?: UsuarioDepartamentoWhereInput[]
-    NOT?: UsuarioDepartamentoWhereInput | UsuarioDepartamentoWhereInput[]
-    id?: StringFilter<"UsuarioDepartamento"> | string
-    usuarioId?: StringFilter<"UsuarioDepartamento"> | string
-    departamentoId?: StringFilter<"UsuarioDepartamento"> | string
-    ativo?: BoolFilter<"UsuarioDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"UsuarioDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-    departamento?: XOR<DepartamentoScalarRelationFilter, DepartamentoWhereInput>
+  export type UserDepartmentWhereInput = {
+    AND?: UserDepartmentWhereInput | UserDepartmentWhereInput[]
+    OR?: UserDepartmentWhereInput[]
+    NOT?: UserDepartmentWhereInput | UserDepartmentWhereInput[]
+    id?: StringFilter<"UserDepartment"> | string
+    user_id?: StringFilter<"UserDepartment"> | string
+    department_id?: StringFilter<"UserDepartment"> | string
+    is_active?: BoolFilter<"UserDepartment"> | boolean
+    created_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    created_by?: StringFilter<"UserDepartment"> | string
+    updated_by?: StringFilter<"UserDepartment"> | string
+    updated_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"UserDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"UserDepartment"> | string | null
+    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
   }
 
-  export type UsuarioDepartamentoOrderByWithRelationInput = {
+  export type UserDepartmentOrderByWithRelationInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    usuario?: UsuarioOrderByWithRelationInput
-    departamento?: DepartamentoOrderByWithRelationInput
+    user_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    usuario?: UserOrderByWithRelationInput
+    department?: DepartmentOrderByWithRelationInput
   }
 
-  export type UsuarioDepartamentoWhereUniqueInput = Prisma.AtLeast<{
+  export type UserDepartmentWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    usuarioId_departamentoId?: UsuarioDepartamentoUsuarioIdDepartamentoIdCompoundUniqueInput
-    AND?: UsuarioDepartamentoWhereInput | UsuarioDepartamentoWhereInput[]
-    OR?: UsuarioDepartamentoWhereInput[]
-    NOT?: UsuarioDepartamentoWhereInput | UsuarioDepartamentoWhereInput[]
-    usuarioId?: StringFilter<"UsuarioDepartamento"> | string
-    departamentoId?: StringFilter<"UsuarioDepartamento"> | string
-    ativo?: BoolFilter<"UsuarioDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"UsuarioDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    usuario?: XOR<UsuarioScalarRelationFilter, UsuarioWhereInput>
-    departamento?: XOR<DepartamentoScalarRelationFilter, DepartamentoWhereInput>
-  }, "id" | "usuarioId_departamentoId">
+    user_id_department_id?: UserDepartmentUser_idDepartment_idCompoundUniqueInput
+    AND?: UserDepartmentWhereInput | UserDepartmentWhereInput[]
+    OR?: UserDepartmentWhereInput[]
+    NOT?: UserDepartmentWhereInput | UserDepartmentWhereInput[]
+    user_id?: StringFilter<"UserDepartment"> | string
+    department_id?: StringFilter<"UserDepartment"> | string
+    is_active?: BoolFilter<"UserDepartment"> | boolean
+    created_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    created_by?: StringFilter<"UserDepartment"> | string
+    updated_by?: StringFilter<"UserDepartment"> | string
+    updated_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"UserDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"UserDepartment"> | string | null
+    usuario?: XOR<UserScalarRelationFilter, UserWhereInput>
+    department?: XOR<DepartmentScalarRelationFilter, DepartmentWhereInput>
+  }, "id" | "user_id_department_id">
 
-  export type UsuarioDepartamentoOrderByWithAggregationInput = {
+  export type UserDepartmentOrderByWithAggregationInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: UsuarioDepartamentoCountOrderByAggregateInput
-    _max?: UsuarioDepartamentoMaxOrderByAggregateInput
-    _min?: UsuarioDepartamentoMinOrderByAggregateInput
+    user_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: UserDepartmentCountOrderByAggregateInput
+    _max?: UserDepartmentMaxOrderByAggregateInput
+    _min?: UserDepartmentMinOrderByAggregateInput
   }
 
-  export type UsuarioDepartamentoScalarWhereWithAggregatesInput = {
-    AND?: UsuarioDepartamentoScalarWhereWithAggregatesInput | UsuarioDepartamentoScalarWhereWithAggregatesInput[]
-    OR?: UsuarioDepartamentoScalarWhereWithAggregatesInput[]
-    NOT?: UsuarioDepartamentoScalarWhereWithAggregatesInput | UsuarioDepartamentoScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UsuarioDepartamento"> | string
-    usuarioId?: StringWithAggregatesFilter<"UsuarioDepartamento"> | string
-    departamentoId?: StringWithAggregatesFilter<"UsuarioDepartamento"> | string
-    ativo?: BoolWithAggregatesFilter<"UsuarioDepartamento"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"UsuarioDepartamento"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"UsuarioDepartamento"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"UsuarioDepartamento"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"UsuarioDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"UsuarioDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"UsuarioDepartamento"> | string | null
+  export type UserDepartmentScalarWhereWithAggregatesInput = {
+    AND?: UserDepartmentScalarWhereWithAggregatesInput | UserDepartmentScalarWhereWithAggregatesInput[]
+    OR?: UserDepartmentScalarWhereWithAggregatesInput[]
+    NOT?: UserDepartmentScalarWhereWithAggregatesInput | UserDepartmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserDepartment"> | string
+    user_id?: StringWithAggregatesFilter<"UserDepartment"> | string
+    department_id?: StringWithAggregatesFilter<"UserDepartment"> | string
+    is_active?: BoolWithAggregatesFilter<"UserDepartment"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"UserDepartment"> | Date | string
+    created_by?: StringWithAggregatesFilter<"UserDepartment"> | string
+    updated_by?: StringWithAggregatesFilter<"UserDepartment"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"UserDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"UserDepartment"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"UserDepartment"> | string | null
   }
 
-  export type UsuarioWhereInput = {
-    AND?: UsuarioWhereInput | UsuarioWhereInput[]
-    OR?: UsuarioWhereInput[]
-    NOT?: UsuarioWhereInput | UsuarioWhereInput[]
-    id?: StringFilter<"Usuario"> | string
-    nome?: StringFilter<"Usuario"> | string
-    sobrenome?: StringNullableFilter<"Usuario"> | string | null
-    email?: StringFilter<"Usuario"> | string
-    cargo?: EnumCargoUsuarioFilter<"Usuario"> | $Enums.CargoUsuario
-    ativo?: BoolFilter<"Usuario"> | boolean
-    criadoEm?: DateTimeFilter<"Usuario"> | Date | string
-    criadoPor?: StringNullableFilter<"Usuario"> | string | null
-    atualizadoEm?: DateTimeFilter<"Usuario"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Usuario"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Usuario"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Usuario"> | string | null
-    departamentos?: UsuarioDepartamentoListRelationFilter
-    testes?: TesteListRelationFilter
+  export type UserWhereInput = {
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    id?: StringFilter<"User"> | string
+    name?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
+    roles?: StringNullableListFilter<"User">
+    tenant_id?: StringFilter<"User"> | string
+    is_active?: BoolFilter<"User"> | boolean
+    created_at?: DateTimeFilter<"User"> | Date | string
+    created_by?: StringFilter<"User"> | string
+    updated_by?: StringFilter<"User"> | string
+    updated_at?: DateTimeFilter<"User"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"User"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"User"> | string | null
+    emails?: EmailListRelationFilter
+    phishings?: PhishingListRelationFilter
+    user_departments?: UserDepartmentListRelationFilter
   }
 
-  export type UsuarioOrderByWithRelationInput = {
+  export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    nome?: SortOrder
-    sobrenome?: SortOrderInput | SortOrder
-    email?: SortOrder
-    cargo?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    departamentos?: UsuarioDepartamentoOrderByRelationAggregateInput
-    testes?: TesteOrderByRelationAggregateInput
+    name?: SortOrder
+    password?: SortOrderInput | SortOrder
+    roles?: SortOrder
+    tenant_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    emails?: EmailOrderByRelationAggregateInput
+    phishings?: PhishingOrderByRelationAggregateInput
+    user_departments?: UserDepartmentOrderByRelationAggregateInput
   }
 
-  export type UsuarioWhereUniqueInput = Prisma.AtLeast<{
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    email?: string
-    AND?: UsuarioWhereInput | UsuarioWhereInput[]
-    OR?: UsuarioWhereInput[]
-    NOT?: UsuarioWhereInput | UsuarioWhereInput[]
-    nome?: StringFilter<"Usuario"> | string
-    sobrenome?: StringNullableFilter<"Usuario"> | string | null
-    cargo?: EnumCargoUsuarioFilter<"Usuario"> | $Enums.CargoUsuario
-    ativo?: BoolFilter<"Usuario"> | boolean
-    criadoEm?: DateTimeFilter<"Usuario"> | Date | string
-    criadoPor?: StringNullableFilter<"Usuario"> | string | null
-    atualizadoEm?: DateTimeFilter<"Usuario"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Usuario"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Usuario"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Usuario"> | string | null
-    departamentos?: UsuarioDepartamentoListRelationFilter
-    testes?: TesteListRelationFilter
-  }, "id" | "email">
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    name?: StringFilter<"User"> | string
+    password?: StringNullableFilter<"User"> | string | null
+    roles?: StringNullableListFilter<"User">
+    tenant_id?: StringFilter<"User"> | string
+    is_active?: BoolFilter<"User"> | boolean
+    created_at?: DateTimeFilter<"User"> | Date | string
+    created_by?: StringFilter<"User"> | string
+    updated_by?: StringFilter<"User"> | string
+    updated_at?: DateTimeFilter<"User"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"User"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"User"> | string | null
+    emails?: EmailListRelationFilter
+    phishings?: PhishingListRelationFilter
+    user_departments?: UserDepartmentListRelationFilter
+  }, "id">
 
-  export type UsuarioOrderByWithAggregationInput = {
+  export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    nome?: SortOrder
-    sobrenome?: SortOrderInput | SortOrder
-    email?: SortOrder
-    cargo?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrderInput | SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrderInput | SortOrder
-    inativadoEm?: SortOrderInput | SortOrder
-    inativadoPor?: SortOrderInput | SortOrder
-    _count?: UsuarioCountOrderByAggregateInput
-    _max?: UsuarioMaxOrderByAggregateInput
-    _min?: UsuarioMinOrderByAggregateInput
+    name?: SortOrder
+    password?: SortOrderInput | SortOrder
+    roles?: SortOrder
+    tenant_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrderInput | SortOrder
+    inactivated_by?: SortOrderInput | SortOrder
+    _count?: UserCountOrderByAggregateInput
+    _max?: UserMaxOrderByAggregateInput
+    _min?: UserMinOrderByAggregateInput
   }
 
-  export type UsuarioScalarWhereWithAggregatesInput = {
-    AND?: UsuarioScalarWhereWithAggregatesInput | UsuarioScalarWhereWithAggregatesInput[]
-    OR?: UsuarioScalarWhereWithAggregatesInput[]
-    NOT?: UsuarioScalarWhereWithAggregatesInput | UsuarioScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Usuario"> | string
-    nome?: StringWithAggregatesFilter<"Usuario"> | string
-    sobrenome?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
-    email?: StringWithAggregatesFilter<"Usuario"> | string
-    cargo?: EnumCargoUsuarioWithAggregatesFilter<"Usuario"> | $Enums.CargoUsuario
-    ativo?: BoolWithAggregatesFilter<"Usuario"> | boolean
-    criadoEm?: DateTimeWithAggregatesFilter<"Usuario"> | Date | string
-    criadoPor?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
-    atualizadoEm?: DateTimeWithAggregatesFilter<"Usuario"> | Date | string
-    atualizadoPor?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
-    inativadoEm?: DateTimeNullableWithAggregatesFilter<"Usuario"> | Date | string | null
-    inativadoPor?: StringNullableWithAggregatesFilter<"Usuario"> | string | null
+  export type UserScalarWhereWithAggregatesInput = {
+    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    OR?: UserScalarWhereWithAggregatesInput[]
+    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"User"> | string
+    name?: StringWithAggregatesFilter<"User"> | string
+    password?: StringNullableWithAggregatesFilter<"User"> | string | null
+    roles?: StringNullableListFilter<"User">
+    tenant_id?: StringWithAggregatesFilter<"User"> | string
+    is_active?: BoolWithAggregatesFilter<"User"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    created_by?: StringWithAggregatesFilter<"User"> | string
+    updated_by?: StringWithAggregatesFilter<"User"> | string
+    updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    inactivated_at?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    inactivated_by?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
-  export type CampanhaTesteCreateInput = {
+  export type DepartmentCreateInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    campanha: CampanhaCreateNestedOneWithoutTestesInput
-    teste: TesteCreateNestedOneWithoutCampanhasInput
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingDepartmentCreateNestedManyWithoutDepartmentInput
+    users?: UserDepartmentCreateNestedManyWithoutDepartmentInput
   }
 
-  export type CampanhaTesteUncheckedCreateInput = {
+  export type DepartmentUncheckedCreateInput = {
     id?: string
-    campanhaId: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingDepartmentUncheckedCreateNestedManyWithoutDepartmentInput
+    users?: UserDepartmentUncheckedCreateNestedManyWithoutDepartmentInput
   }
 
-  export type CampanhaTesteUpdateInput = {
+  export type DepartmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    campanha?: CampanhaUpdateOneRequiredWithoutTestesNestedInput
-    teste?: TesteUpdateOneRequiredWithoutCampanhasNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingDepartmentUpdateManyWithoutDepartmentNestedInput
+    users?: UserDepartmentUpdateManyWithoutDepartmentNestedInput
   }
 
-  export type CampanhaTesteUncheckedUpdateInput = {
+  export type DepartmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    campanhaId?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput
+    users?: UserDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput
   }
 
-  export type CampanhaTesteCreateManyInput = {
+  export type DepartmentCreateManyInput = {
     id?: string
-    campanhaId: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaTesteUpdateManyMutationInput = {
+  export type DepartmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type CampanhaTesteUncheckedUpdateManyInput = {
+  export type DepartmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    campanhaId?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type CampanhaCreateInput = {
+  export type EmailCreateInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogCreateNestedManyWithoutCampanhaInput
-    testes?: CampanhaTesteCreateNestedManyWithoutCampanhaInput
+    address: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    user: UserCreateNestedOneWithoutEmailsInput
   }
 
-  export type CampanhaUncheckedCreateInput = {
+  export type EmailUncheckedCreateInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogUncheckedCreateNestedManyWithoutCampanhaInput
-    testes?: CampanhaTesteUncheckedCreateNestedManyWithoutCampanhaInput
+    address: string
+    user_id: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaUpdateInput = {
+  export type EmailUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUpdateManyWithoutCampanhaNestedInput
-    testes?: CampanhaTesteUpdateManyWithoutCampanhaNestedInput
+    address?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutEmailsNestedInput
   }
 
-  export type CampanhaUncheckedUpdateInput = {
+  export type EmailUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUncheckedUpdateManyWithoutCampanhaNestedInput
-    testes?: CampanhaTesteUncheckedUpdateManyWithoutCampanhaNestedInput
+    address?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type CampanhaCreateManyInput = {
+  export type EmailCreateManyInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    address: string
+    user_id: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaUpdateManyMutationInput = {
+  export type EmailUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type CampanhaUncheckedUpdateManyInput = {
+  export type EmailUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DepartamentoCreateInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoCreateNestedManyWithoutDepartamentoInput
-    logs?: LogCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoUncheckedCreateInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-    logs?: LogUncheckedCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUpdateManyWithoutDepartamentoNestedInput
-    logs?: LogUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type DepartamentoUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-    logs?: LogUncheckedUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type DepartamentoCreateManyInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type DepartamentoUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type DepartamentoUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LogCreateInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    campanha?: CampanhaCreateNestedOneWithoutLogsInput
-    departamento?: DepartamentoCreateNestedOneWithoutLogsInput
-    teste?: TesteCreateNestedOneWithoutLogsInput
+    entity: $Enums.Entity
+    entity_id: string
+    action: $Enums.Action
+    created_at?: Date | string
+    created_by: string
   }
 
   export type LogUncheckedCreateInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    departamentoId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    entity: $Enums.Entity
+    entity_id: string
+    action: $Enums.Action
+    created_at?: Date | string
+    created_by: string
   }
 
   export type LogUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    campanha?: CampanhaUpdateOneWithoutLogsNestedInput
-    departamento?: DepartamentoUpdateOneWithoutLogsNestedInput
-    teste?: TesteUpdateOneWithoutLogsNestedInput
+    entity?: EnumEntityFieldUpdateOperationsInput | $Enums.Entity
+    entity_id?: StringFieldUpdateOperationsInput | string
+    action?: EnumActionFieldUpdateOperationsInput | $Enums.Action
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
   }
 
   export type LogUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    entity?: EnumEntityFieldUpdateOperationsInput | $Enums.Entity
+    entity_id?: StringFieldUpdateOperationsInput | string
+    action?: EnumActionFieldUpdateOperationsInput | $Enums.Action
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
   }
 
   export type LogCreateManyInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    departamentoId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    entity: $Enums.Entity
+    entity_id: string
+    action: $Enums.Action
+    created_at?: Date | string
+    created_by: string
   }
 
   export type LogUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    entity?: EnumEntityFieldUpdateOperationsInput | $Enums.Entity
+    entity_id?: StringFieldUpdateOperationsInput | string
+    action?: EnumActionFieldUpdateOperationsInput | $Enums.Action
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
   }
 
   export type LogUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    entity?: EnumEntityFieldUpdateOperationsInput | $Enums.Entity
+    entity_id?: StringFieldUpdateOperationsInput | string
+    action?: EnumActionFieldUpdateOperationsInput | $Enums.Action
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
   }
 
-  export type TesteDepartamentoCreateInput = {
+  export type PhishingDepartmentCreateInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    teste: TesteCreateNestedOneWithoutDepartamentosInput
-    departamento: DepartamentoCreateNestedOneWithoutTestesInput
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishing: PhishingCreateNestedOneWithoutDepartmentsInput
+    department: DepartmentCreateNestedOneWithoutPhishingsInput
   }
 
-  export type TesteDepartamentoUncheckedCreateInput = {
+  export type PhishingDepartmentUncheckedCreateInput = {
     id?: string
-    testeId: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    phishing_id: string
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type TesteDepartamentoUpdateInput = {
+  export type PhishingDepartmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    teste?: TesteUpdateOneRequiredWithoutDepartamentosNestedInput
-    departamento?: DepartamentoUpdateOneRequiredWithoutTestesNestedInput
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishing?: PhishingUpdateOneRequiredWithoutDepartmentsNestedInput
+    department?: DepartmentUpdateOneRequiredWithoutPhishingsNestedInput
   }
 
-  export type TesteDepartamentoUncheckedUpdateInput = {
+  export type PhishingDepartmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    phishing_id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TesteDepartamentoCreateManyInput = {
+  export type PhishingDepartmentCreateManyInput = {
     id?: string
-    testeId: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    phishing_id: string
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type TesteDepartamentoUpdateManyMutationInput = {
+  export type PhishingDepartmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TesteDepartamentoUncheckedUpdateManyInput = {
+  export type PhishingDepartmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    phishing_id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TesteCreateInput = {
+  export type PhishingCreateInput = {
     id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoCreateNestedManyWithoutTesteInput
-    logs?: LogCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteCreateNestedManyWithoutTesteInput
-    usuario?: UsuarioCreateNestedOneWithoutTestesInput
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    departments?: PhishingDepartmentCreateNestedManyWithoutPhishingInput
+    user?: UserCreateNestedOneWithoutPhishingsInput
   }
 
-  export type TesteUncheckedCreateInput = {
+  export type PhishingUncheckedCreateInput = {
     id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoUncheckedCreateNestedManyWithoutTesteInput
-    logs?: LogUncheckedCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteUncheckedCreateNestedManyWithoutTesteInput
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    userId?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    departments?: PhishingDepartmentUncheckedCreateNestedManyWithoutPhishingInput
   }
 
-  export type TesteUpdateInput = {
+  export type PhishingUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUpdateManyWithoutTesteNestedInput
-    logs?: LogUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUpdateManyWithoutTesteNestedInput
-    usuario?: UsuarioUpdateOneWithoutTestesNestedInput
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    departments?: PhishingDepartmentUpdateManyWithoutPhishingNestedInput
+    user?: UserUpdateOneWithoutPhishingsNestedInput
   }
 
-  export type TesteUncheckedUpdateInput = {
+  export type PhishingUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    usuarioId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUncheckedUpdateManyWithoutTesteNestedInput
-    logs?: LogUncheckedUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUncheckedUpdateManyWithoutTesteNestedInput
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    departments?: PhishingDepartmentUncheckedUpdateManyWithoutPhishingNestedInput
   }
 
-  export type TesteCreateManyInput = {
+  export type PhishingCreateManyInput = {
     id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    userId?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type TesteUpdateManyMutationInput = {
+  export type PhishingUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type TesteUncheckedUpdateManyInput = {
+  export type PhishingUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    usuarioId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioDepartamentoCreateInput = {
+  export type UserDepartmentCreateInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    usuario: UsuarioCreateNestedOneWithoutDepartamentosInput
-    departamento: DepartamentoCreateNestedOneWithoutUsuariosInput
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    usuario: UserCreateNestedOneWithoutUser_departmentsInput
+    department: DepartmentCreateNestedOneWithoutUsersInput
   }
 
-  export type UsuarioDepartamentoUncheckedCreateInput = {
+  export type UserDepartmentUncheckedCreateInput = {
     id?: string
-    usuarioId: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    user_id: string
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type UsuarioDepartamentoUpdateInput = {
+  export type UserDepartmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    usuario?: UsuarioUpdateOneRequiredWithoutDepartamentosNestedInput
-    departamento?: DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    usuario?: UserUpdateOneRequiredWithoutUser_departmentsNestedInput
+    department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
   }
 
-  export type UsuarioDepartamentoUncheckedUpdateInput = {
+  export type UserDepartmentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    usuarioId?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    user_id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioDepartamentoCreateManyInput = {
+  export type UserDepartmentCreateManyInput = {
     id?: string
-    usuarioId: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    user_id: string
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type UsuarioDepartamentoUpdateManyMutationInput = {
+  export type UserDepartmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioDepartamentoUncheckedUpdateManyInput = {
+  export type UserDepartmentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    usuarioId?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    user_id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioCreateInput = {
+  export type UserCreateInput = {
     id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: UsuarioDepartamentoCreateNestedManyWithoutUsuarioInput
-    testes?: TesteCreateNestedManyWithoutUsuarioInput
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailCreateNestedManyWithoutUserInput
+    phishings?: PhishingCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentCreateNestedManyWithoutUsuarioInput
   }
 
-  export type UsuarioUncheckedCreateInput = {
+  export type UserUncheckedCreateInput = {
     id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: UsuarioDepartamentoUncheckedCreateNestedManyWithoutUsuarioInput
-    testes?: TesteUncheckedCreateNestedManyWithoutUsuarioInput
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailUncheckedCreateNestedManyWithoutUserInput
+    phishings?: PhishingUncheckedCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
-  export type UsuarioUpdateInput = {
+  export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: UsuarioDepartamentoUpdateManyWithoutUsuarioNestedInput
-    testes?: TesteUpdateManyWithoutUsuarioNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUpdateManyWithoutUserNestedInput
+    phishings?: PhishingUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUpdateManyWithoutUsuarioNestedInput
   }
 
-  export type UsuarioUncheckedUpdateInput = {
+  export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: UsuarioDepartamentoUncheckedUpdateManyWithoutUsuarioNestedInput
-    testes?: TesteUncheckedUpdateManyWithoutUsuarioNestedInput
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUncheckedUpdateManyWithoutUserNestedInput
+    phishings?: PhishingUncheckedUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUncheckedUpdateManyWithoutUsuarioNestedInput
   }
 
-  export type UsuarioCreateManyInput = {
+  export type UserCreateManyInput = {
     id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type UsuarioUpdateManyMutationInput = {
+  export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioUncheckedUpdateManyInput = {
+  export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -13056,6 +11145,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -13071,25 +11171,16 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  export type PhishingDepartmentListRelationFilter = {
+    every?: PhishingDepartmentWhereInput
+    some?: PhishingDepartmentWhereInput
+    none?: PhishingDepartmentWhereInput
   }
 
-  export type CampanhaScalarRelationFilter = {
-    is?: CampanhaWhereInput
-    isNot?: CampanhaWhereInput
-  }
-
-  export type TesteScalarRelationFilter = {
-    is?: TesteWhereInput
-    isNot?: TesteWhereInput
+  export type UserDepartmentListRelationFilter = {
+    every?: UserDepartmentWhereInput
+    some?: UserDepartmentWhereInput
+    none?: UserDepartmentWhereInput
   }
 
   export type SortOrderInput = {
@@ -13097,48 +11188,48 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type CampanhaTesteCampanhaIdTesteIdCompoundUniqueInput = {
-    campanhaId: string
-    testeId: string
+  export type PhishingDepartmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type CampanhaTesteCountOrderByAggregateInput = {
-    id?: SortOrder
-    campanhaId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+  export type UserDepartmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
-  export type CampanhaTesteMaxOrderByAggregateInput = {
+  export type DepartmentCountOrderByAggregateInput = {
     id?: SortOrder
-    campanhaId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    name?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type CampanhaTesteMinOrderByAggregateInput = {
+  export type DepartmentMaxOrderByAggregateInput = {
     id?: SortOrder
-    campanhaId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    name?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type DepartmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -13181,6 +11272,20 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -13199,502 +11304,413 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  export type EnumEmailTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailType | EnumEmailTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailTypeFilter<$PrismaModel> | $Enums.EmailType
   }
 
-  export type EnumStatusCampanhaFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCampanha | EnumStatusCampanhaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCampanhaFilter<$PrismaModel> | $Enums.StatusCampanha
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
   }
 
-  export type LogListRelationFilter = {
-    every?: LogWhereInput
-    some?: LogWhereInput
-    none?: LogWhereInput
-  }
-
-  export type CampanhaTesteListRelationFilter = {
-    every?: CampanhaTesteWhereInput
-    some?: CampanhaTesteWhereInput
-    none?: CampanhaTesteWhereInput
-  }
-
-  export type LogOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type CampanhaTesteOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type CampanhaCountOrderByAggregateInput = {
+  export type EmailCountOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    descricao?: SortOrder
-    status?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    address?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type CampanhaMaxOrderByAggregateInput = {
+  export type EmailMaxOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    descricao?: SortOrder
-    status?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    address?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type CampanhaMinOrderByAggregateInput = {
+  export type EmailMinOrderByAggregateInput = {
     id?: SortOrder
-    titulo?: SortOrder
-    descricao?: SortOrder
-    status?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    address?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type EnumStatusCampanhaWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCampanha | EnumStatusCampanhaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCampanhaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCampanha
+  export type EnumEmailTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailType | EnumEmailTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmailType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusCampanhaFilter<$PrismaModel>
-    _max?: NestedEnumStatusCampanhaFilter<$PrismaModel>
+    _min?: NestedEnumEmailTypeFilter<$PrismaModel>
+    _max?: NestedEnumEmailTypeFilter<$PrismaModel>
   }
 
-  export type TesteDepartamentoListRelationFilter = {
-    every?: TesteDepartamentoWhereInput
-    some?: TesteDepartamentoWhereInput
-    none?: TesteDepartamentoWhereInput
+  export type EnumEntityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Entity | EnumEntityFieldRefInput<$PrismaModel>
+    in?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    not?: NestedEnumEntityFilter<$PrismaModel> | $Enums.Entity
   }
 
-  export type UsuarioDepartamentoListRelationFilter = {
-    every?: UsuarioDepartamentoWhereInput
-    some?: UsuarioDepartamentoWhereInput
-    none?: UsuarioDepartamentoWhereInput
-  }
-
-  export type TesteDepartamentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UsuarioDepartamentoOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type DepartamentoCountOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type DepartamentoMaxOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type DepartamentoMinOrderByAggregateInput = {
-    id?: SortOrder
-    nome?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type EnumTipoLogFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoLog | EnumTipoLogFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoLogFilter<$PrismaModel> | $Enums.TipoLog
-  }
-
-  export type CampanhaNullableScalarRelationFilter = {
-    is?: CampanhaWhereInput | null
-    isNot?: CampanhaWhereInput | null
-  }
-
-  export type DepartamentoNullableScalarRelationFilter = {
-    is?: DepartamentoWhereInput | null
-    isNot?: DepartamentoWhereInput | null
-  }
-
-  export type TesteNullableScalarRelationFilter = {
-    is?: TesteWhereInput | null
-    isNot?: TesteWhereInput | null
+  export type EnumActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Action | EnumActionFieldRefInput<$PrismaModel>
+    in?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumActionFilter<$PrismaModel> | $Enums.Action
   }
 
   export type LogCountOrderByAggregateInput = {
     id?: SortOrder
-    tipo?: SortOrder
-    descricao?: SortOrder
-    campanhaId?: SortOrder
-    departamentoId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    entity?: SortOrder
+    entity_id?: SortOrder
+    action?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
   }
 
   export type LogMaxOrderByAggregateInput = {
     id?: SortOrder
-    tipo?: SortOrder
-    descricao?: SortOrder
-    campanhaId?: SortOrder
-    departamentoId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    entity?: SortOrder
+    entity_id?: SortOrder
+    action?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
   }
 
   export type LogMinOrderByAggregateInput = {
     id?: SortOrder
-    tipo?: SortOrder
-    descricao?: SortOrder
-    campanhaId?: SortOrder
-    departamentoId?: SortOrder
-    testeId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    entity?: SortOrder
+    entity_id?: SortOrder
+    action?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
   }
 
-  export type EnumTipoLogWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoLog | EnumTipoLogFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoLogWithAggregatesFilter<$PrismaModel> | $Enums.TipoLog
+  export type EnumEntityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Entity | EnumEntityFieldRefInput<$PrismaModel>
+    in?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    not?: NestedEnumEntityWithAggregatesFilter<$PrismaModel> | $Enums.Entity
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoLogFilter<$PrismaModel>
-    _max?: NestedEnumTipoLogFilter<$PrismaModel>
+    _min?: NestedEnumEntityFilter<$PrismaModel>
+    _max?: NestedEnumEntityFilter<$PrismaModel>
   }
 
-  export type DepartamentoScalarRelationFilter = {
-    is?: DepartamentoWhereInput
-    isNot?: DepartamentoWhereInput
-  }
-
-  export type TesteDepartamentoTesteIdDepartamentoIdCompoundUniqueInput = {
-    testeId: string
-    departamentoId: string
-  }
-
-  export type TesteDepartamentoCountOrderByAggregateInput = {
-    id?: SortOrder
-    testeId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type TesteDepartamentoMaxOrderByAggregateInput = {
-    id?: SortOrder
-    testeId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type TesteDepartamentoMinOrderByAggregateInput = {
-    id?: SortOrder
-    testeId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type EnumCanalTesteFilter<$PrismaModel = never> = {
-    equals?: $Enums.CanalTeste | EnumCanalTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumCanalTesteFilter<$PrismaModel> | $Enums.CanalTeste
-  }
-
-  export type EnumStatusTesteFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusTeste | EnumStatusTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusTesteFilter<$PrismaModel> | $Enums.StatusTeste
-  }
-
-  export type UsuarioNullableScalarRelationFilter = {
-    is?: UsuarioWhereInput | null
-    isNot?: UsuarioWhereInput | null
-  }
-
-  export type TesteCountOrderByAggregateInput = {
-    id?: SortOrder
-    canal?: SortOrder
-    status?: SortOrder
-    caiuNoTeste?: SortOrder
-    reportouPhishing?: SortOrder
-    usuarioId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type TesteMaxOrderByAggregateInput = {
-    id?: SortOrder
-    canal?: SortOrder
-    status?: SortOrder
-    caiuNoTeste?: SortOrder
-    reportouPhishing?: SortOrder
-    usuarioId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type TesteMinOrderByAggregateInput = {
-    id?: SortOrder
-    canal?: SortOrder
-    status?: SortOrder
-    caiuNoTeste?: SortOrder
-    reportouPhishing?: SortOrder
-    usuarioId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
-  }
-
-  export type EnumCanalTesteWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CanalTeste | EnumCanalTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumCanalTesteWithAggregatesFilter<$PrismaModel> | $Enums.CanalTeste
+  export type EnumActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Action | EnumActionFieldRefInput<$PrismaModel>
+    in?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumActionWithAggregatesFilter<$PrismaModel> | $Enums.Action
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCanalTesteFilter<$PrismaModel>
-    _max?: NestedEnumCanalTesteFilter<$PrismaModel>
+    _min?: NestedEnumActionFilter<$PrismaModel>
+    _max?: NestedEnumActionFilter<$PrismaModel>
   }
 
-  export type EnumStatusTesteWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusTeste | EnumStatusTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusTesteWithAggregatesFilter<$PrismaModel> | $Enums.StatusTeste
+  export type PhishingScalarRelationFilter = {
+    is?: PhishingWhereInput
+    isNot?: PhishingWhereInput
+  }
+
+  export type DepartmentScalarRelationFilter = {
+    is?: DepartmentWhereInput
+    isNot?: DepartmentWhereInput
+  }
+
+  export type PhishingDepartmentPhishing_idDepartment_idCompoundUniqueInput = {
+    phishing_id: string
+    department_id: string
+  }
+
+  export type PhishingDepartmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    phishing_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type PhishingDepartmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    phishing_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type PhishingDepartmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    phishing_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type EnumPhishingChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingChannel | EnumPhishingChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingChannelFilter<$PrismaModel> | $Enums.PhishingChannel
+  }
+
+  export type EnumPhishingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingStatus | EnumPhishingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingStatusFilter<$PrismaModel> | $Enums.PhishingStatus
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type PhishingCountOrderByAggregateInput = {
+    id?: SortOrder
+    clicked?: SortOrder
+    reported?: SortOrder
+    channel?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type PhishingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    clicked?: SortOrder
+    reported?: SortOrder
+    channel?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type PhishingMinOrderByAggregateInput = {
+    id?: SortOrder
+    clicked?: SortOrder
+    reported?: SortOrder
+    channel?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
+  }
+
+  export type EnumPhishingChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingChannel | EnumPhishingChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingChannelWithAggregatesFilter<$PrismaModel> | $Enums.PhishingChannel
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusTesteFilter<$PrismaModel>
-    _max?: NestedEnumStatusTesteFilter<$PrismaModel>
+    _min?: NestedEnumPhishingChannelFilter<$PrismaModel>
+    _max?: NestedEnumPhishingChannelFilter<$PrismaModel>
   }
 
-  export type UsuarioScalarRelationFilter = {
-    is?: UsuarioWhereInput
-    isNot?: UsuarioWhereInput
+  export type EnumPhishingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingStatus | EnumPhishingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingStatusWithAggregatesFilter<$PrismaModel> | $Enums.PhishingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPhishingStatusFilter<$PrismaModel>
+    _max?: NestedEnumPhishingStatusFilter<$PrismaModel>
   }
 
-  export type UsuarioDepartamentoUsuarioIdDepartamentoIdCompoundUniqueInput = {
-    usuarioId: string
-    departamentoId: string
+  export type UserDepartmentUser_idDepartment_idCompoundUniqueInput = {
+    user_id: string
+    department_id: string
   }
 
-  export type UsuarioDepartamentoCountOrderByAggregateInput = {
+  export type UserDepartmentCountOrderByAggregateInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    user_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type UsuarioDepartamentoMaxOrderByAggregateInput = {
+  export type UserDepartmentMaxOrderByAggregateInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    user_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type UsuarioDepartamentoMinOrderByAggregateInput = {
+  export type UserDepartmentMinOrderByAggregateInput = {
     id?: SortOrder
-    usuarioId?: SortOrder
-    departamentoId?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    user_id?: SortOrder
+    department_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type EnumCargoUsuarioFilter<$PrismaModel = never> = {
-    equals?: $Enums.CargoUsuario | EnumCargoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumCargoUsuarioFilter<$PrismaModel> | $Enums.CargoUsuario
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
-  export type TesteListRelationFilter = {
-    every?: TesteWhereInput
-    some?: TesteWhereInput
-    none?: TesteWhereInput
+  export type EmailListRelationFilter = {
+    every?: EmailWhereInput
+    some?: EmailWhereInput
+    none?: EmailWhereInput
   }
 
-  export type TesteOrderByRelationAggregateInput = {
+  export type PhishingListRelationFilter = {
+    every?: PhishingWhereInput
+    some?: PhishingWhereInput
+    none?: PhishingWhereInput
+  }
+
+  export type EmailOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type UsuarioCountOrderByAggregateInput = {
+  export type PhishingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    nome?: SortOrder
-    sobrenome?: SortOrder
-    email?: SortOrder
-    cargo?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    roles?: SortOrder
+    tenant_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type UsuarioMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    nome?: SortOrder
-    sobrenome?: SortOrder
-    email?: SortOrder
-    cargo?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    tenant_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type UsuarioMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    nome?: SortOrder
-    sobrenome?: SortOrder
-    email?: SortOrder
-    cargo?: SortOrder
-    ativo?: SortOrder
-    criadoEm?: SortOrder
-    criadoPor?: SortOrder
-    atualizadoEm?: SortOrder
-    atualizadoPor?: SortOrder
-    inativadoEm?: SortOrder
-    inativadoPor?: SortOrder
+    name?: SortOrder
+    password?: SortOrder
+    tenant_id?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    created_by?: SortOrder
+    updated_by?: SortOrder
+    updated_at?: SortOrder
+    inactivated_at?: SortOrder
+    inactivated_by?: SortOrder
   }
 
-  export type EnumCargoUsuarioWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CargoUsuario | EnumCargoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumCargoUsuarioWithAggregatesFilter<$PrismaModel> | $Enums.CargoUsuario
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCargoUsuarioFilter<$PrismaModel>
-    _max?: NestedEnumCargoUsuarioFilter<$PrismaModel>
+  export type PhishingDepartmentCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput> | PhishingDepartmentCreateWithoutDepartmentInput[] | PhishingDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutDepartmentInput | PhishingDepartmentCreateOrConnectWithoutDepartmentInput[]
+    createMany?: PhishingDepartmentCreateManyDepartmentInputEnvelope
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
   }
 
-  export type CampanhaCreateNestedOneWithoutTestesInput = {
-    create?: XOR<CampanhaCreateWithoutTestesInput, CampanhaUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: CampanhaCreateOrConnectWithoutTestesInput
-    connect?: CampanhaWhereUniqueInput
+  export type UserDepartmentCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput> | UserDepartmentCreateWithoutDepartmentInput[] | UserDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutDepartmentInput | UserDepartmentCreateOrConnectWithoutDepartmentInput[]
+    createMany?: UserDepartmentCreateManyDepartmentInputEnvelope
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
   }
 
-  export type TesteCreateNestedOneWithoutCampanhasInput = {
-    create?: XOR<TesteCreateWithoutCampanhasInput, TesteUncheckedCreateWithoutCampanhasInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutCampanhasInput
-    connect?: TesteWhereUniqueInput
+  export type PhishingDepartmentUncheckedCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput> | PhishingDepartmentCreateWithoutDepartmentInput[] | PhishingDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutDepartmentInput | PhishingDepartmentCreateOrConnectWithoutDepartmentInput[]
+    createMany?: PhishingDepartmentCreateManyDepartmentInputEnvelope
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+  }
+
+  export type UserDepartmentUncheckedCreateNestedManyWithoutDepartmentInput = {
+    create?: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput> | UserDepartmentCreateWithoutDepartmentInput[] | UserDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutDepartmentInput | UserDepartmentCreateOrConnectWithoutDepartmentInput[]
+    createMany?: UserDepartmentCreateManyDepartmentInputEnvelope
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13709,588 +11725,351 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
 
-  export type CampanhaUpdateOneRequiredWithoutTestesNestedInput = {
-    create?: XOR<CampanhaCreateWithoutTestesInput, CampanhaUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: CampanhaCreateOrConnectWithoutTestesInput
-    upsert?: CampanhaUpsertWithoutTestesInput
-    connect?: CampanhaWhereUniqueInput
-    update?: XOR<XOR<CampanhaUpdateToOneWithWhereWithoutTestesInput, CampanhaUpdateWithoutTestesInput>, CampanhaUncheckedUpdateWithoutTestesInput>
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
-  export type TesteUpdateOneRequiredWithoutCampanhasNestedInput = {
-    create?: XOR<TesteCreateWithoutCampanhasInput, TesteUncheckedCreateWithoutCampanhasInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutCampanhasInput
-    upsert?: TesteUpsertWithoutCampanhasInput
-    connect?: TesteWhereUniqueInput
-    update?: XOR<XOR<TesteUpdateToOneWithWhereWithoutCampanhasInput, TesteUpdateWithoutCampanhasInput>, TesteUncheckedUpdateWithoutCampanhasInput>
+  export type PhishingDepartmentUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput> | PhishingDepartmentCreateWithoutDepartmentInput[] | PhishingDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutDepartmentInput | PhishingDepartmentCreateOrConnectWithoutDepartmentInput[]
+    upsert?: PhishingDepartmentUpsertWithWhereUniqueWithoutDepartmentInput | PhishingDepartmentUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: PhishingDepartmentCreateManyDepartmentInputEnvelope
+    set?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    disconnect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    delete?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    update?: PhishingDepartmentUpdateWithWhereUniqueWithoutDepartmentInput | PhishingDepartmentUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: PhishingDepartmentUpdateManyWithWhereWithoutDepartmentInput | PhishingDepartmentUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
   }
 
-  export type LogCreateNestedManyWithoutCampanhaInput = {
-    create?: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput> | LogCreateWithoutCampanhaInput[] | LogUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutCampanhaInput | LogCreateOrConnectWithoutCampanhaInput[]
-    createMany?: LogCreateManyCampanhaInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
+  export type UserDepartmentUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput> | UserDepartmentCreateWithoutDepartmentInput[] | UserDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutDepartmentInput | UserDepartmentCreateOrConnectWithoutDepartmentInput[]
+    upsert?: UserDepartmentUpsertWithWhereUniqueWithoutDepartmentInput | UserDepartmentUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: UserDepartmentCreateManyDepartmentInputEnvelope
+    set?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    disconnect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    delete?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    update?: UserDepartmentUpdateWithWhereUniqueWithoutDepartmentInput | UserDepartmentUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: UserDepartmentUpdateManyWithWhereWithoutDepartmentInput | UserDepartmentUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
   }
 
-  export type CampanhaTesteCreateNestedManyWithoutCampanhaInput = {
-    create?: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput> | CampanhaTesteCreateWithoutCampanhaInput[] | CampanhaTesteUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutCampanhaInput | CampanhaTesteCreateOrConnectWithoutCampanhaInput[]
-    createMany?: CampanhaTesteCreateManyCampanhaInputEnvelope
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
+  export type PhishingDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput> | PhishingDepartmentCreateWithoutDepartmentInput[] | PhishingDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutDepartmentInput | PhishingDepartmentCreateOrConnectWithoutDepartmentInput[]
+    upsert?: PhishingDepartmentUpsertWithWhereUniqueWithoutDepartmentInput | PhishingDepartmentUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: PhishingDepartmentCreateManyDepartmentInputEnvelope
+    set?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    disconnect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    delete?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    update?: PhishingDepartmentUpdateWithWhereUniqueWithoutDepartmentInput | PhishingDepartmentUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: PhishingDepartmentUpdateManyWithWhereWithoutDepartmentInput | PhishingDepartmentUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
   }
 
-  export type LogUncheckedCreateNestedManyWithoutCampanhaInput = {
-    create?: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput> | LogCreateWithoutCampanhaInput[] | LogUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutCampanhaInput | LogCreateOrConnectWithoutCampanhaInput[]
-    createMany?: LogCreateManyCampanhaInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
+  export type UserDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput = {
+    create?: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput> | UserDepartmentCreateWithoutDepartmentInput[] | UserDepartmentUncheckedCreateWithoutDepartmentInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutDepartmentInput | UserDepartmentCreateOrConnectWithoutDepartmentInput[]
+    upsert?: UserDepartmentUpsertWithWhereUniqueWithoutDepartmentInput | UserDepartmentUpsertWithWhereUniqueWithoutDepartmentInput[]
+    createMany?: UserDepartmentCreateManyDepartmentInputEnvelope
+    set?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    disconnect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    delete?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    update?: UserDepartmentUpdateWithWhereUniqueWithoutDepartmentInput | UserDepartmentUpdateWithWhereUniqueWithoutDepartmentInput[]
+    updateMany?: UserDepartmentUpdateManyWithWhereWithoutDepartmentInput | UserDepartmentUpdateManyWithWhereWithoutDepartmentInput[]
+    deleteMany?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
   }
 
-  export type CampanhaTesteUncheckedCreateNestedManyWithoutCampanhaInput = {
-    create?: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput> | CampanhaTesteCreateWithoutCampanhaInput[] | CampanhaTesteUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutCampanhaInput | CampanhaTesteCreateOrConnectWithoutCampanhaInput[]
-    createMany?: CampanhaTesteCreateManyCampanhaInputEnvelope
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
+  export type UserCreateNestedOneWithoutEmailsInput = {
+    create?: XOR<UserCreateWithoutEmailsInput, UserUncheckedCreateWithoutEmailsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmailsInput
+    connect?: UserWhereUniqueInput
   }
 
-  export type EnumStatusCampanhaFieldUpdateOperationsInput = {
-    set?: $Enums.StatusCampanha
+  export type EnumEmailTypeFieldUpdateOperationsInput = {
+    set?: $Enums.EmailType
   }
 
-  export type LogUpdateManyWithoutCampanhaNestedInput = {
-    create?: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput> | LogCreateWithoutCampanhaInput[] | LogUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutCampanhaInput | LogCreateOrConnectWithoutCampanhaInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutCampanhaInput | LogUpsertWithWhereUniqueWithoutCampanhaInput[]
-    createMany?: LogCreateManyCampanhaInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutCampanhaInput | LogUpdateWithWhereUniqueWithoutCampanhaInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutCampanhaInput | LogUpdateManyWithWhereWithoutCampanhaInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
+  export type UserUpdateOneRequiredWithoutEmailsNestedInput = {
+    create?: XOR<UserCreateWithoutEmailsInput, UserUncheckedCreateWithoutEmailsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmailsInput
+    upsert?: UserUpsertWithoutEmailsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmailsInput, UserUpdateWithoutEmailsInput>, UserUncheckedUpdateWithoutEmailsInput>
   }
 
-  export type CampanhaTesteUpdateManyWithoutCampanhaNestedInput = {
-    create?: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput> | CampanhaTesteCreateWithoutCampanhaInput[] | CampanhaTesteUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutCampanhaInput | CampanhaTesteCreateOrConnectWithoutCampanhaInput[]
-    upsert?: CampanhaTesteUpsertWithWhereUniqueWithoutCampanhaInput | CampanhaTesteUpsertWithWhereUniqueWithoutCampanhaInput[]
-    createMany?: CampanhaTesteCreateManyCampanhaInputEnvelope
-    set?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    disconnect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    delete?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    update?: CampanhaTesteUpdateWithWhereUniqueWithoutCampanhaInput | CampanhaTesteUpdateWithWhereUniqueWithoutCampanhaInput[]
-    updateMany?: CampanhaTesteUpdateManyWithWhereWithoutCampanhaInput | CampanhaTesteUpdateManyWithWhereWithoutCampanhaInput[]
-    deleteMany?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
+  export type EnumEntityFieldUpdateOperationsInput = {
+    set?: $Enums.Entity
   }
 
-  export type LogUncheckedUpdateManyWithoutCampanhaNestedInput = {
-    create?: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput> | LogCreateWithoutCampanhaInput[] | LogUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutCampanhaInput | LogCreateOrConnectWithoutCampanhaInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutCampanhaInput | LogUpsertWithWhereUniqueWithoutCampanhaInput[]
-    createMany?: LogCreateManyCampanhaInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutCampanhaInput | LogUpdateWithWhereUniqueWithoutCampanhaInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutCampanhaInput | LogUpdateManyWithWhereWithoutCampanhaInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
+  export type EnumActionFieldUpdateOperationsInput = {
+    set?: $Enums.Action
   }
 
-  export type CampanhaTesteUncheckedUpdateManyWithoutCampanhaNestedInput = {
-    create?: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput> | CampanhaTesteCreateWithoutCampanhaInput[] | CampanhaTesteUncheckedCreateWithoutCampanhaInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutCampanhaInput | CampanhaTesteCreateOrConnectWithoutCampanhaInput[]
-    upsert?: CampanhaTesteUpsertWithWhereUniqueWithoutCampanhaInput | CampanhaTesteUpsertWithWhereUniqueWithoutCampanhaInput[]
-    createMany?: CampanhaTesteCreateManyCampanhaInputEnvelope
-    set?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    disconnect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    delete?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    update?: CampanhaTesteUpdateWithWhereUniqueWithoutCampanhaInput | CampanhaTesteUpdateWithWhereUniqueWithoutCampanhaInput[]
-    updateMany?: CampanhaTesteUpdateManyWithWhereWithoutCampanhaInput | CampanhaTesteUpdateManyWithWhereWithoutCampanhaInput[]
-    deleteMany?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
+  export type PhishingCreateNestedOneWithoutDepartmentsInput = {
+    create?: XOR<PhishingCreateWithoutDepartmentsInput, PhishingUncheckedCreateWithoutDepartmentsInput>
+    connectOrCreate?: PhishingCreateOrConnectWithoutDepartmentsInput
+    connect?: PhishingWhereUniqueInput
   }
 
-  export type TesteDepartamentoCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput> | TesteDepartamentoCreateWithoutDepartamentoInput[] | TesteDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutDepartamentoInput | TesteDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: TesteDepartamentoCreateManyDepartamentoInputEnvelope
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
+  export type DepartmentCreateNestedOneWithoutPhishingsInput = {
+    create?: XOR<DepartmentCreateWithoutPhishingsInput, DepartmentUncheckedCreateWithoutPhishingsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutPhishingsInput
+    connect?: DepartmentWhereUniqueInput
   }
 
-  export type LogCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput> | LogCreateWithoutDepartamentoInput[] | LogUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutDepartamentoInput | LogCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: LogCreateManyDepartamentoInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
+  export type PhishingUpdateOneRequiredWithoutDepartmentsNestedInput = {
+    create?: XOR<PhishingCreateWithoutDepartmentsInput, PhishingUncheckedCreateWithoutDepartmentsInput>
+    connectOrCreate?: PhishingCreateOrConnectWithoutDepartmentsInput
+    upsert?: PhishingUpsertWithoutDepartmentsInput
+    connect?: PhishingWhereUniqueInput
+    update?: XOR<XOR<PhishingUpdateToOneWithWhereWithoutDepartmentsInput, PhishingUpdateWithoutDepartmentsInput>, PhishingUncheckedUpdateWithoutDepartmentsInput>
   }
 
-  export type UsuarioDepartamentoCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput> | UsuarioDepartamentoCreateWithoutDepartamentoInput[] | UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput | UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: UsuarioDepartamentoCreateManyDepartamentoInputEnvelope
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
+  export type DepartmentUpdateOneRequiredWithoutPhishingsNestedInput = {
+    create?: XOR<DepartmentCreateWithoutPhishingsInput, DepartmentUncheckedCreateWithoutPhishingsInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutPhishingsInput
+    upsert?: DepartmentUpsertWithoutPhishingsInput
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutPhishingsInput, DepartmentUpdateWithoutPhishingsInput>, DepartmentUncheckedUpdateWithoutPhishingsInput>
   }
 
-  export type TesteDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput> | TesteDepartamentoCreateWithoutDepartamentoInput[] | TesteDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutDepartamentoInput | TesteDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: TesteDepartamentoCreateManyDepartamentoInputEnvelope
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
+  export type PhishingDepartmentCreateNestedManyWithoutPhishingInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput> | PhishingDepartmentCreateWithoutPhishingInput[] | PhishingDepartmentUncheckedCreateWithoutPhishingInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutPhishingInput | PhishingDepartmentCreateOrConnectWithoutPhishingInput[]
+    createMany?: PhishingDepartmentCreateManyPhishingInputEnvelope
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
   }
 
-  export type LogUncheckedCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput> | LogCreateWithoutDepartamentoInput[] | LogUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutDepartamentoInput | LogCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: LogCreateManyDepartamentoInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
+  export type UserCreateNestedOneWithoutPhishingsInput = {
+    create?: XOR<UserCreateWithoutPhishingsInput, UserUncheckedCreateWithoutPhishingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPhishingsInput
+    connect?: UserWhereUniqueInput
   }
 
-  export type UsuarioDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput> | UsuarioDepartamentoCreateWithoutDepartamentoInput[] | UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput | UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    createMany?: UsuarioDepartamentoCreateManyDepartamentoInputEnvelope
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
+  export type PhishingDepartmentUncheckedCreateNestedManyWithoutPhishingInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput> | PhishingDepartmentCreateWithoutPhishingInput[] | PhishingDepartmentUncheckedCreateWithoutPhishingInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutPhishingInput | PhishingDepartmentCreateOrConnectWithoutPhishingInput[]
+    createMany?: PhishingDepartmentCreateManyPhishingInputEnvelope
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
   }
 
-  export type TesteDepartamentoUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput> | TesteDepartamentoCreateWithoutDepartamentoInput[] | TesteDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutDepartamentoInput | TesteDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: TesteDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput | TesteDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: TesteDepartamentoCreateManyDepartamentoInputEnvelope
-    set?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    disconnect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    delete?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    update?: TesteDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput | TesteDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: TesteDepartamentoUpdateManyWithWhereWithoutDepartamentoInput | TesteDepartamentoUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
+  export type EnumPhishingChannelFieldUpdateOperationsInput = {
+    set?: $Enums.PhishingChannel
   }
 
-  export type LogUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput> | LogCreateWithoutDepartamentoInput[] | LogUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutDepartamentoInput | LogCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutDepartamentoInput | LogUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: LogCreateManyDepartamentoInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutDepartamentoInput | LogUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutDepartamentoInput | LogUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
+  export type EnumPhishingStatusFieldUpdateOperationsInput = {
+    set?: $Enums.PhishingStatus
   }
 
-  export type UsuarioDepartamentoUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput> | UsuarioDepartamentoCreateWithoutDepartamentoInput[] | UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput | UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: UsuarioDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput | UsuarioDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: UsuarioDepartamentoCreateManyDepartamentoInputEnvelope
-    set?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    disconnect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    delete?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    update?: UsuarioDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput | UsuarioDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: UsuarioDepartamentoUpdateManyWithWhereWithoutDepartamentoInput | UsuarioDepartamentoUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
+  export type PhishingDepartmentUpdateManyWithoutPhishingNestedInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput> | PhishingDepartmentCreateWithoutPhishingInput[] | PhishingDepartmentUncheckedCreateWithoutPhishingInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutPhishingInput | PhishingDepartmentCreateOrConnectWithoutPhishingInput[]
+    upsert?: PhishingDepartmentUpsertWithWhereUniqueWithoutPhishingInput | PhishingDepartmentUpsertWithWhereUniqueWithoutPhishingInput[]
+    createMany?: PhishingDepartmentCreateManyPhishingInputEnvelope
+    set?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    disconnect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    delete?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    update?: PhishingDepartmentUpdateWithWhereUniqueWithoutPhishingInput | PhishingDepartmentUpdateWithWhereUniqueWithoutPhishingInput[]
+    updateMany?: PhishingDepartmentUpdateManyWithWhereWithoutPhishingInput | PhishingDepartmentUpdateManyWithWhereWithoutPhishingInput[]
+    deleteMany?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
   }
 
-  export type TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput> | TesteDepartamentoCreateWithoutDepartamentoInput[] | TesteDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutDepartamentoInput | TesteDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: TesteDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput | TesteDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: TesteDepartamentoCreateManyDepartamentoInputEnvelope
-    set?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    disconnect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    delete?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    update?: TesteDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput | TesteDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: TesteDepartamentoUpdateManyWithWhereWithoutDepartamentoInput | TesteDepartamentoUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
+  export type UserUpdateOneWithoutPhishingsNestedInput = {
+    create?: XOR<UserCreateWithoutPhishingsInput, UserUncheckedCreateWithoutPhishingsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPhishingsInput
+    upsert?: UserUpsertWithoutPhishingsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPhishingsInput, UserUpdateWithoutPhishingsInput>, UserUncheckedUpdateWithoutPhishingsInput>
   }
 
-  export type LogUncheckedUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput> | LogCreateWithoutDepartamentoInput[] | LogUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutDepartamentoInput | LogCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutDepartamentoInput | LogUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: LogCreateManyDepartamentoInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutDepartamentoInput | LogUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutDepartamentoInput | LogUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
+  export type PhishingDepartmentUncheckedUpdateManyWithoutPhishingNestedInput = {
+    create?: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput> | PhishingDepartmentCreateWithoutPhishingInput[] | PhishingDepartmentUncheckedCreateWithoutPhishingInput[]
+    connectOrCreate?: PhishingDepartmentCreateOrConnectWithoutPhishingInput | PhishingDepartmentCreateOrConnectWithoutPhishingInput[]
+    upsert?: PhishingDepartmentUpsertWithWhereUniqueWithoutPhishingInput | PhishingDepartmentUpsertWithWhereUniqueWithoutPhishingInput[]
+    createMany?: PhishingDepartmentCreateManyPhishingInputEnvelope
+    set?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    disconnect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    delete?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    connect?: PhishingDepartmentWhereUniqueInput | PhishingDepartmentWhereUniqueInput[]
+    update?: PhishingDepartmentUpdateWithWhereUniqueWithoutPhishingInput | PhishingDepartmentUpdateWithWhereUniqueWithoutPhishingInput[]
+    updateMany?: PhishingDepartmentUpdateManyWithWhereWithoutPhishingInput | PhishingDepartmentUpdateManyWithWhereWithoutPhishingInput[]
+    deleteMany?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
   }
 
-  export type UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput> | UsuarioDepartamentoCreateWithoutDepartamentoInput[] | UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput | UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput[]
-    upsert?: UsuarioDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput | UsuarioDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput[]
-    createMany?: UsuarioDepartamentoCreateManyDepartamentoInputEnvelope
-    set?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    disconnect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    delete?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    update?: UsuarioDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput | UsuarioDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput[]
-    updateMany?: UsuarioDepartamentoUpdateManyWithWhereWithoutDepartamentoInput | UsuarioDepartamentoUpdateManyWithWhereWithoutDepartamentoInput[]
-    deleteMany?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
+  export type UserCreateNestedOneWithoutUser_departmentsInput = {
+    create?: XOR<UserCreateWithoutUser_departmentsInput, UserUncheckedCreateWithoutUser_departmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUser_departmentsInput
+    connect?: UserWhereUniqueInput
   }
 
-  export type CampanhaCreateNestedOneWithoutLogsInput = {
-    create?: XOR<CampanhaCreateWithoutLogsInput, CampanhaUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: CampanhaCreateOrConnectWithoutLogsInput
-    connect?: CampanhaWhereUniqueInput
+  export type DepartmentCreateNestedOneWithoutUsersInput = {
+    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
+    connect?: DepartmentWhereUniqueInput
   }
 
-  export type DepartamentoCreateNestedOneWithoutLogsInput = {
-    create?: XOR<DepartamentoCreateWithoutLogsInput, DepartamentoUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutLogsInput
-    connect?: DepartamentoWhereUniqueInput
+  export type UserUpdateOneRequiredWithoutUser_departmentsNestedInput = {
+    create?: XOR<UserCreateWithoutUser_departmentsInput, UserUncheckedCreateWithoutUser_departmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutUser_departmentsInput
+    upsert?: UserUpsertWithoutUser_departmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUser_departmentsInput, UserUpdateWithoutUser_departmentsInput>, UserUncheckedUpdateWithoutUser_departmentsInput>
   }
 
-  export type TesteCreateNestedOneWithoutLogsInput = {
-    create?: XOR<TesteCreateWithoutLogsInput, TesteUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutLogsInput
-    connect?: TesteWhereUniqueInput
+  export type DepartmentUpdateOneRequiredWithoutUsersNestedInput = {
+    create?: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    connectOrCreate?: DepartmentCreateOrConnectWithoutUsersInput
+    upsert?: DepartmentUpsertWithoutUsersInput
+    connect?: DepartmentWhereUniqueInput
+    update?: XOR<XOR<DepartmentUpdateToOneWithWhereWithoutUsersInput, DepartmentUpdateWithoutUsersInput>, DepartmentUncheckedUpdateWithoutUsersInput>
   }
 
-  export type EnumTipoLogFieldUpdateOperationsInput = {
-    set?: $Enums.TipoLog
+  export type UserCreaterolesInput = {
+    set: string[]
   }
 
-  export type CampanhaUpdateOneWithoutLogsNestedInput = {
-    create?: XOR<CampanhaCreateWithoutLogsInput, CampanhaUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: CampanhaCreateOrConnectWithoutLogsInput
-    upsert?: CampanhaUpsertWithoutLogsInput
-    disconnect?: CampanhaWhereInput | boolean
-    delete?: CampanhaWhereInput | boolean
-    connect?: CampanhaWhereUniqueInput
-    update?: XOR<XOR<CampanhaUpdateToOneWithWhereWithoutLogsInput, CampanhaUpdateWithoutLogsInput>, CampanhaUncheckedUpdateWithoutLogsInput>
+  export type EmailCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput> | EmailCreateWithoutUserInput[] | EmailUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUserInput | EmailCreateOrConnectWithoutUserInput[]
+    createMany?: EmailCreateManyUserInputEnvelope
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
   }
 
-  export type DepartamentoUpdateOneWithoutLogsNestedInput = {
-    create?: XOR<DepartamentoCreateWithoutLogsInput, DepartamentoUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutLogsInput
-    upsert?: DepartamentoUpsertWithoutLogsInput
-    disconnect?: DepartamentoWhereInput | boolean
-    delete?: DepartamentoWhereInput | boolean
-    connect?: DepartamentoWhereUniqueInput
-    update?: XOR<XOR<DepartamentoUpdateToOneWithWhereWithoutLogsInput, DepartamentoUpdateWithoutLogsInput>, DepartamentoUncheckedUpdateWithoutLogsInput>
+  export type PhishingCreateNestedManyWithoutUserInput = {
+    create?: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput> | PhishingCreateWithoutUserInput[] | PhishingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PhishingCreateOrConnectWithoutUserInput | PhishingCreateOrConnectWithoutUserInput[]
+    createMany?: PhishingCreateManyUserInputEnvelope
+    connect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
   }
 
-  export type TesteUpdateOneWithoutLogsNestedInput = {
-    create?: XOR<TesteCreateWithoutLogsInput, TesteUncheckedCreateWithoutLogsInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutLogsInput
-    upsert?: TesteUpsertWithoutLogsInput
-    disconnect?: TesteWhereInput | boolean
-    delete?: TesteWhereInput | boolean
-    connect?: TesteWhereUniqueInput
-    update?: XOR<XOR<TesteUpdateToOneWithWhereWithoutLogsInput, TesteUpdateWithoutLogsInput>, TesteUncheckedUpdateWithoutLogsInput>
+  export type UserDepartmentCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput> | UserDepartmentCreateWithoutUsuarioInput[] | UserDepartmentUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutUsuarioInput | UserDepartmentCreateOrConnectWithoutUsuarioInput[]
+    createMany?: UserDepartmentCreateManyUsuarioInputEnvelope
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
   }
 
-  export type TesteCreateNestedOneWithoutDepartamentosInput = {
-    create?: XOR<TesteCreateWithoutDepartamentosInput, TesteUncheckedCreateWithoutDepartamentosInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutDepartamentosInput
-    connect?: TesteWhereUniqueInput
+  export type EmailUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput> | EmailCreateWithoutUserInput[] | EmailUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUserInput | EmailCreateOrConnectWithoutUserInput[]
+    createMany?: EmailCreateManyUserInputEnvelope
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
   }
 
-  export type DepartamentoCreateNestedOneWithoutTestesInput = {
-    create?: XOR<DepartamentoCreateWithoutTestesInput, DepartamentoUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutTestesInput
-    connect?: DepartamentoWhereUniqueInput
+  export type PhishingUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput> | PhishingCreateWithoutUserInput[] | PhishingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PhishingCreateOrConnectWithoutUserInput | PhishingCreateOrConnectWithoutUserInput[]
+    createMany?: PhishingCreateManyUserInputEnvelope
+    connect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
   }
 
-  export type TesteUpdateOneRequiredWithoutDepartamentosNestedInput = {
-    create?: XOR<TesteCreateWithoutDepartamentosInput, TesteUncheckedCreateWithoutDepartamentosInput>
-    connectOrCreate?: TesteCreateOrConnectWithoutDepartamentosInput
-    upsert?: TesteUpsertWithoutDepartamentosInput
-    connect?: TesteWhereUniqueInput
-    update?: XOR<XOR<TesteUpdateToOneWithWhereWithoutDepartamentosInput, TesteUpdateWithoutDepartamentosInput>, TesteUncheckedUpdateWithoutDepartamentosInput>
+  export type UserDepartmentUncheckedCreateNestedManyWithoutUsuarioInput = {
+    create?: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput> | UserDepartmentCreateWithoutUsuarioInput[] | UserDepartmentUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutUsuarioInput | UserDepartmentCreateOrConnectWithoutUsuarioInput[]
+    createMany?: UserDepartmentCreateManyUsuarioInputEnvelope
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
   }
 
-  export type DepartamentoUpdateOneRequiredWithoutTestesNestedInput = {
-    create?: XOR<DepartamentoCreateWithoutTestesInput, DepartamentoUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutTestesInput
-    upsert?: DepartamentoUpsertWithoutTestesInput
-    connect?: DepartamentoWhereUniqueInput
-    update?: XOR<XOR<DepartamentoUpdateToOneWithWhereWithoutTestesInput, DepartamentoUpdateWithoutTestesInput>, DepartamentoUncheckedUpdateWithoutTestesInput>
+  export type UserUpdaterolesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
-  export type TesteDepartamentoCreateNestedManyWithoutTesteInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput> | TesteDepartamentoCreateWithoutTesteInput[] | TesteDepartamentoUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutTesteInput | TesteDepartamentoCreateOrConnectWithoutTesteInput[]
-    createMany?: TesteDepartamentoCreateManyTesteInputEnvelope
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
+  export type EmailUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput> | EmailCreateWithoutUserInput[] | EmailUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUserInput | EmailCreateOrConnectWithoutUserInput[]
+    upsert?: EmailUpsertWithWhereUniqueWithoutUserInput | EmailUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmailCreateManyUserInputEnvelope
+    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    update?: EmailUpdateWithWhereUniqueWithoutUserInput | EmailUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmailUpdateManyWithWhereWithoutUserInput | EmailUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
   }
 
-  export type LogCreateNestedManyWithoutTesteInput = {
-    create?: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput> | LogCreateWithoutTesteInput[] | LogUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutTesteInput | LogCreateOrConnectWithoutTesteInput[]
-    createMany?: LogCreateManyTesteInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
+  export type PhishingUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput> | PhishingCreateWithoutUserInput[] | PhishingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PhishingCreateOrConnectWithoutUserInput | PhishingCreateOrConnectWithoutUserInput[]
+    upsert?: PhishingUpsertWithWhereUniqueWithoutUserInput | PhishingUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PhishingCreateManyUserInputEnvelope
+    set?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    disconnect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    delete?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    connect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    update?: PhishingUpdateWithWhereUniqueWithoutUserInput | PhishingUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PhishingUpdateManyWithWhereWithoutUserInput | PhishingUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PhishingScalarWhereInput | PhishingScalarWhereInput[]
   }
 
-  export type CampanhaTesteCreateNestedManyWithoutTesteInput = {
-    create?: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput> | CampanhaTesteCreateWithoutTesteInput[] | CampanhaTesteUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutTesteInput | CampanhaTesteCreateOrConnectWithoutTesteInput[]
-    createMany?: CampanhaTesteCreateManyTesteInputEnvelope
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
+  export type UserDepartmentUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput> | UserDepartmentCreateWithoutUsuarioInput[] | UserDepartmentUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutUsuarioInput | UserDepartmentCreateOrConnectWithoutUsuarioInput[]
+    upsert?: UserDepartmentUpsertWithWhereUniqueWithoutUsuarioInput | UserDepartmentUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: UserDepartmentCreateManyUsuarioInputEnvelope
+    set?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    disconnect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    delete?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    update?: UserDepartmentUpdateWithWhereUniqueWithoutUsuarioInput | UserDepartmentUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: UserDepartmentUpdateManyWithWhereWithoutUsuarioInput | UserDepartmentUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
   }
 
-  export type UsuarioCreateNestedOneWithoutTestesInput = {
-    create?: XOR<UsuarioCreateWithoutTestesInput, UsuarioUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTestesInput
-    connect?: UsuarioWhereUniqueInput
+  export type EmailUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput> | EmailCreateWithoutUserInput[] | EmailUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailCreateOrConnectWithoutUserInput | EmailCreateOrConnectWithoutUserInput[]
+    upsert?: EmailUpsertWithWhereUniqueWithoutUserInput | EmailUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmailCreateManyUserInputEnvelope
+    set?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    disconnect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    delete?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    connect?: EmailWhereUniqueInput | EmailWhereUniqueInput[]
+    update?: EmailUpdateWithWhereUniqueWithoutUserInput | EmailUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmailUpdateManyWithWhereWithoutUserInput | EmailUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmailScalarWhereInput | EmailScalarWhereInput[]
   }
 
-  export type TesteDepartamentoUncheckedCreateNestedManyWithoutTesteInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput> | TesteDepartamentoCreateWithoutTesteInput[] | TesteDepartamentoUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutTesteInput | TesteDepartamentoCreateOrConnectWithoutTesteInput[]
-    createMany?: TesteDepartamentoCreateManyTesteInputEnvelope
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
+  export type PhishingUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput> | PhishingCreateWithoutUserInput[] | PhishingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PhishingCreateOrConnectWithoutUserInput | PhishingCreateOrConnectWithoutUserInput[]
+    upsert?: PhishingUpsertWithWhereUniqueWithoutUserInput | PhishingUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PhishingCreateManyUserInputEnvelope
+    set?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    disconnect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    delete?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    connect?: PhishingWhereUniqueInput | PhishingWhereUniqueInput[]
+    update?: PhishingUpdateWithWhereUniqueWithoutUserInput | PhishingUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PhishingUpdateManyWithWhereWithoutUserInput | PhishingUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PhishingScalarWhereInput | PhishingScalarWhereInput[]
   }
 
-  export type LogUncheckedCreateNestedManyWithoutTesteInput = {
-    create?: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput> | LogCreateWithoutTesteInput[] | LogUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutTesteInput | LogCreateOrConnectWithoutTesteInput[]
-    createMany?: LogCreateManyTesteInputEnvelope
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-  }
-
-  export type CampanhaTesteUncheckedCreateNestedManyWithoutTesteInput = {
-    create?: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput> | CampanhaTesteCreateWithoutTesteInput[] | CampanhaTesteUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutTesteInput | CampanhaTesteCreateOrConnectWithoutTesteInput[]
-    createMany?: CampanhaTesteCreateManyTesteInputEnvelope
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-  }
-
-  export type EnumCanalTesteFieldUpdateOperationsInput = {
-    set?: $Enums.CanalTeste
-  }
-
-  export type EnumStatusTesteFieldUpdateOperationsInput = {
-    set?: $Enums.StatusTeste
-  }
-
-  export type TesteDepartamentoUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput> | TesteDepartamentoCreateWithoutTesteInput[] | TesteDepartamentoUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutTesteInput | TesteDepartamentoCreateOrConnectWithoutTesteInput[]
-    upsert?: TesteDepartamentoUpsertWithWhereUniqueWithoutTesteInput | TesteDepartamentoUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: TesteDepartamentoCreateManyTesteInputEnvelope
-    set?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    disconnect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    delete?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    update?: TesteDepartamentoUpdateWithWhereUniqueWithoutTesteInput | TesteDepartamentoUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: TesteDepartamentoUpdateManyWithWhereWithoutTesteInput | TesteDepartamentoUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
-  }
-
-  export type LogUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput> | LogCreateWithoutTesteInput[] | LogUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutTesteInput | LogCreateOrConnectWithoutTesteInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutTesteInput | LogUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: LogCreateManyTesteInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutTesteInput | LogUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutTesteInput | LogUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
-  }
-
-  export type CampanhaTesteUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput> | CampanhaTesteCreateWithoutTesteInput[] | CampanhaTesteUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutTesteInput | CampanhaTesteCreateOrConnectWithoutTesteInput[]
-    upsert?: CampanhaTesteUpsertWithWhereUniqueWithoutTesteInput | CampanhaTesteUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: CampanhaTesteCreateManyTesteInputEnvelope
-    set?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    disconnect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    delete?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    update?: CampanhaTesteUpdateWithWhereUniqueWithoutTesteInput | CampanhaTesteUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: CampanhaTesteUpdateManyWithWhereWithoutTesteInput | CampanhaTesteUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
-  }
-
-  export type UsuarioUpdateOneWithoutTestesNestedInput = {
-    create?: XOR<UsuarioCreateWithoutTestesInput, UsuarioUncheckedCreateWithoutTestesInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutTestesInput
-    upsert?: UsuarioUpsertWithoutTestesInput
-    disconnect?: UsuarioWhereInput | boolean
-    delete?: UsuarioWhereInput | boolean
-    connect?: UsuarioWhereUniqueInput
-    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutTestesInput, UsuarioUpdateWithoutTestesInput>, UsuarioUncheckedUpdateWithoutTestesInput>
-  }
-
-  export type TesteDepartamentoUncheckedUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput> | TesteDepartamentoCreateWithoutTesteInput[] | TesteDepartamentoUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: TesteDepartamentoCreateOrConnectWithoutTesteInput | TesteDepartamentoCreateOrConnectWithoutTesteInput[]
-    upsert?: TesteDepartamentoUpsertWithWhereUniqueWithoutTesteInput | TesteDepartamentoUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: TesteDepartamentoCreateManyTesteInputEnvelope
-    set?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    disconnect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    delete?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    connect?: TesteDepartamentoWhereUniqueInput | TesteDepartamentoWhereUniqueInput[]
-    update?: TesteDepartamentoUpdateWithWhereUniqueWithoutTesteInput | TesteDepartamentoUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: TesteDepartamentoUpdateManyWithWhereWithoutTesteInput | TesteDepartamentoUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
-  }
-
-  export type LogUncheckedUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput> | LogCreateWithoutTesteInput[] | LogUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: LogCreateOrConnectWithoutTesteInput | LogCreateOrConnectWithoutTesteInput[]
-    upsert?: LogUpsertWithWhereUniqueWithoutTesteInput | LogUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: LogCreateManyTesteInputEnvelope
-    set?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    disconnect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    delete?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    connect?: LogWhereUniqueInput | LogWhereUniqueInput[]
-    update?: LogUpdateWithWhereUniqueWithoutTesteInput | LogUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: LogUpdateManyWithWhereWithoutTesteInput | LogUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: LogScalarWhereInput | LogScalarWhereInput[]
-  }
-
-  export type CampanhaTesteUncheckedUpdateManyWithoutTesteNestedInput = {
-    create?: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput> | CampanhaTesteCreateWithoutTesteInput[] | CampanhaTesteUncheckedCreateWithoutTesteInput[]
-    connectOrCreate?: CampanhaTesteCreateOrConnectWithoutTesteInput | CampanhaTesteCreateOrConnectWithoutTesteInput[]
-    upsert?: CampanhaTesteUpsertWithWhereUniqueWithoutTesteInput | CampanhaTesteUpsertWithWhereUniqueWithoutTesteInput[]
-    createMany?: CampanhaTesteCreateManyTesteInputEnvelope
-    set?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    disconnect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    delete?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    connect?: CampanhaTesteWhereUniqueInput | CampanhaTesteWhereUniqueInput[]
-    update?: CampanhaTesteUpdateWithWhereUniqueWithoutTesteInput | CampanhaTesteUpdateWithWhereUniqueWithoutTesteInput[]
-    updateMany?: CampanhaTesteUpdateManyWithWhereWithoutTesteInput | CampanhaTesteUpdateManyWithWhereWithoutTesteInput[]
-    deleteMany?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
-  }
-
-  export type UsuarioCreateNestedOneWithoutDepartamentosInput = {
-    create?: XOR<UsuarioCreateWithoutDepartamentosInput, UsuarioUncheckedCreateWithoutDepartamentosInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutDepartamentosInput
-    connect?: UsuarioWhereUniqueInput
-  }
-
-  export type DepartamentoCreateNestedOneWithoutUsuariosInput = {
-    create?: XOR<DepartamentoCreateWithoutUsuariosInput, DepartamentoUncheckedCreateWithoutUsuariosInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutUsuariosInput
-    connect?: DepartamentoWhereUniqueInput
-  }
-
-  export type UsuarioUpdateOneRequiredWithoutDepartamentosNestedInput = {
-    create?: XOR<UsuarioCreateWithoutDepartamentosInput, UsuarioUncheckedCreateWithoutDepartamentosInput>
-    connectOrCreate?: UsuarioCreateOrConnectWithoutDepartamentosInput
-    upsert?: UsuarioUpsertWithoutDepartamentosInput
-    connect?: UsuarioWhereUniqueInput
-    update?: XOR<XOR<UsuarioUpdateToOneWithWhereWithoutDepartamentosInput, UsuarioUpdateWithoutDepartamentosInput>, UsuarioUncheckedUpdateWithoutDepartamentosInput>
-  }
-
-  export type DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput = {
-    create?: XOR<DepartamentoCreateWithoutUsuariosInput, DepartamentoUncheckedCreateWithoutUsuariosInput>
-    connectOrCreate?: DepartamentoCreateOrConnectWithoutUsuariosInput
-    upsert?: DepartamentoUpsertWithoutUsuariosInput
-    connect?: DepartamentoWhereUniqueInput
-    update?: XOR<XOR<DepartamentoUpdateToOneWithWhereWithoutUsuariosInput, DepartamentoUpdateWithoutUsuariosInput>, DepartamentoUncheckedUpdateWithoutUsuariosInput>
-  }
-
-  export type UsuarioDepartamentoCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput> | UsuarioDepartamentoCreateWithoutUsuarioInput[] | UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput | UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput[]
-    createMany?: UsuarioDepartamentoCreateManyUsuarioInputEnvelope
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-  }
-
-  export type TesteCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput> | TesteCreateWithoutUsuarioInput[] | TesteUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: TesteCreateOrConnectWithoutUsuarioInput | TesteCreateOrConnectWithoutUsuarioInput[]
-    createMany?: TesteCreateManyUsuarioInputEnvelope
-    connect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-  }
-
-  export type UsuarioDepartamentoUncheckedCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput> | UsuarioDepartamentoCreateWithoutUsuarioInput[] | UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput | UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput[]
-    createMany?: UsuarioDepartamentoCreateManyUsuarioInputEnvelope
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-  }
-
-  export type TesteUncheckedCreateNestedManyWithoutUsuarioInput = {
-    create?: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput> | TesteCreateWithoutUsuarioInput[] | TesteUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: TesteCreateOrConnectWithoutUsuarioInput | TesteCreateOrConnectWithoutUsuarioInput[]
-    createMany?: TesteCreateManyUsuarioInputEnvelope
-    connect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-  }
-
-  export type EnumCargoUsuarioFieldUpdateOperationsInput = {
-    set?: $Enums.CargoUsuario
-  }
-
-  export type UsuarioDepartamentoUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput> | UsuarioDepartamentoCreateWithoutUsuarioInput[] | UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput | UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput[]
-    upsert?: UsuarioDepartamentoUpsertWithWhereUniqueWithoutUsuarioInput | UsuarioDepartamentoUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: UsuarioDepartamentoCreateManyUsuarioInputEnvelope
-    set?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    disconnect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    delete?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    update?: UsuarioDepartamentoUpdateWithWhereUniqueWithoutUsuarioInput | UsuarioDepartamentoUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: UsuarioDepartamentoUpdateManyWithWhereWithoutUsuarioInput | UsuarioDepartamentoUpdateManyWithWhereWithoutUsuarioInput[]
-    deleteMany?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
-  }
-
-  export type TesteUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput> | TesteCreateWithoutUsuarioInput[] | TesteUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: TesteCreateOrConnectWithoutUsuarioInput | TesteCreateOrConnectWithoutUsuarioInput[]
-    upsert?: TesteUpsertWithWhereUniqueWithoutUsuarioInput | TesteUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: TesteCreateManyUsuarioInputEnvelope
-    set?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    disconnect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    delete?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    connect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    update?: TesteUpdateWithWhereUniqueWithoutUsuarioInput | TesteUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: TesteUpdateManyWithWhereWithoutUsuarioInput | TesteUpdateManyWithWhereWithoutUsuarioInput[]
-    deleteMany?: TesteScalarWhereInput | TesteScalarWhereInput[]
-  }
-
-  export type UsuarioDepartamentoUncheckedUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput> | UsuarioDepartamentoCreateWithoutUsuarioInput[] | UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput | UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput[]
-    upsert?: UsuarioDepartamentoUpsertWithWhereUniqueWithoutUsuarioInput | UsuarioDepartamentoUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: UsuarioDepartamentoCreateManyUsuarioInputEnvelope
-    set?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    disconnect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    delete?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    connect?: UsuarioDepartamentoWhereUniqueInput | UsuarioDepartamentoWhereUniqueInput[]
-    update?: UsuarioDepartamentoUpdateWithWhereUniqueWithoutUsuarioInput | UsuarioDepartamentoUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: UsuarioDepartamentoUpdateManyWithWhereWithoutUsuarioInput | UsuarioDepartamentoUpdateManyWithWhereWithoutUsuarioInput[]
-    deleteMany?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
-  }
-
-  export type TesteUncheckedUpdateManyWithoutUsuarioNestedInput = {
-    create?: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput> | TesteCreateWithoutUsuarioInput[] | TesteUncheckedCreateWithoutUsuarioInput[]
-    connectOrCreate?: TesteCreateOrConnectWithoutUsuarioInput | TesteCreateOrConnectWithoutUsuarioInput[]
-    upsert?: TesteUpsertWithWhereUniqueWithoutUsuarioInput | TesteUpsertWithWhereUniqueWithoutUsuarioInput[]
-    createMany?: TesteCreateManyUsuarioInputEnvelope
-    set?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    disconnect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    delete?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    connect?: TesteWhereUniqueInput | TesteWhereUniqueInput[]
-    update?: TesteUpdateWithWhereUniqueWithoutUsuarioInput | TesteUpdateWithWhereUniqueWithoutUsuarioInput[]
-    updateMany?: TesteUpdateManyWithWhereWithoutUsuarioInput | TesteUpdateManyWithWhereWithoutUsuarioInput[]
-    deleteMany?: TesteScalarWhereInput | TesteScalarWhereInput[]
+  export type UserDepartmentUncheckedUpdateManyWithoutUsuarioNestedInput = {
+    create?: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput> | UserDepartmentCreateWithoutUsuarioInput[] | UserDepartmentUncheckedCreateWithoutUsuarioInput[]
+    connectOrCreate?: UserDepartmentCreateOrConnectWithoutUsuarioInput | UserDepartmentCreateOrConnectWithoutUsuarioInput[]
+    upsert?: UserDepartmentUpsertWithWhereUniqueWithoutUsuarioInput | UserDepartmentUpsertWithWhereUniqueWithoutUsuarioInput[]
+    createMany?: UserDepartmentCreateManyUsuarioInputEnvelope
+    set?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    disconnect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    delete?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    connect?: UserDepartmentWhereUniqueInput | UserDepartmentWhereUniqueInput[]
+    update?: UserDepartmentUpdateWithWhereUniqueWithoutUsuarioInput | UserDepartmentUpdateWithWhereUniqueWithoutUsuarioInput[]
+    updateMany?: UserDepartmentUpdateManyWithWhereWithoutUsuarioInput | UserDepartmentUpdateManyWithWhereWithoutUsuarioInput[]
+    deleteMany?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -14323,6 +12102,17 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -14335,17 +12125,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -14398,6 +12177,31 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -14415,2056 +12219,1241 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  export type NestedEnumEmailTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailType | EnumEmailTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailTypeFilter<$PrismaModel> | $Enums.EmailType
   }
 
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStatusCampanhaFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCampanha | EnumStatusCampanhaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCampanhaFilter<$PrismaModel> | $Enums.StatusCampanha
-  }
-
-  export type NestedEnumStatusCampanhaWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusCampanha | EnumStatusCampanhaFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusCampanha[] | ListEnumStatusCampanhaFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusCampanhaWithAggregatesFilter<$PrismaModel> | $Enums.StatusCampanha
+  export type NestedEnumEmailTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EmailType | EnumEmailTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EmailType[] | ListEnumEmailTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumEmailTypeWithAggregatesFilter<$PrismaModel> | $Enums.EmailType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusCampanhaFilter<$PrismaModel>
-    _max?: NestedEnumStatusCampanhaFilter<$PrismaModel>
+    _min?: NestedEnumEmailTypeFilter<$PrismaModel>
+    _max?: NestedEnumEmailTypeFilter<$PrismaModel>
   }
 
-  export type NestedEnumTipoLogFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoLog | EnumTipoLogFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoLogFilter<$PrismaModel> | $Enums.TipoLog
+  export type NestedEnumEntityFilter<$PrismaModel = never> = {
+    equals?: $Enums.Entity | EnumEntityFieldRefInput<$PrismaModel>
+    in?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    not?: NestedEnumEntityFilter<$PrismaModel> | $Enums.Entity
   }
 
-  export type NestedEnumTipoLogWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TipoLog | EnumTipoLogFieldRefInput<$PrismaModel>
-    in?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TipoLog[] | ListEnumTipoLogFieldRefInput<$PrismaModel>
-    not?: NestedEnumTipoLogWithAggregatesFilter<$PrismaModel> | $Enums.TipoLog
+  export type NestedEnumActionFilter<$PrismaModel = never> = {
+    equals?: $Enums.Action | EnumActionFieldRefInput<$PrismaModel>
+    in?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumActionFilter<$PrismaModel> | $Enums.Action
+  }
+
+  export type NestedEnumEntityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Entity | EnumEntityFieldRefInput<$PrismaModel>
+    in?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Entity[] | ListEnumEntityFieldRefInput<$PrismaModel>
+    not?: NestedEnumEntityWithAggregatesFilter<$PrismaModel> | $Enums.Entity
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTipoLogFilter<$PrismaModel>
-    _max?: NestedEnumTipoLogFilter<$PrismaModel>
+    _min?: NestedEnumEntityFilter<$PrismaModel>
+    _max?: NestedEnumEntityFilter<$PrismaModel>
   }
 
-  export type NestedEnumCanalTesteFilter<$PrismaModel = never> = {
-    equals?: $Enums.CanalTeste | EnumCanalTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumCanalTesteFilter<$PrismaModel> | $Enums.CanalTeste
-  }
-
-  export type NestedEnumStatusTesteFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusTeste | EnumStatusTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusTesteFilter<$PrismaModel> | $Enums.StatusTeste
-  }
-
-  export type NestedEnumCanalTesteWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CanalTeste | EnumCanalTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CanalTeste[] | ListEnumCanalTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumCanalTesteWithAggregatesFilter<$PrismaModel> | $Enums.CanalTeste
+  export type NestedEnumActionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Action | EnumActionFieldRefInput<$PrismaModel>
+    in?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Action[] | ListEnumActionFieldRefInput<$PrismaModel>
+    not?: NestedEnumActionWithAggregatesFilter<$PrismaModel> | $Enums.Action
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCanalTesteFilter<$PrismaModel>
-    _max?: NestedEnumCanalTesteFilter<$PrismaModel>
+    _min?: NestedEnumActionFilter<$PrismaModel>
+    _max?: NestedEnumActionFilter<$PrismaModel>
   }
 
-  export type NestedEnumStatusTesteWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StatusTeste | EnumStatusTesteFieldRefInput<$PrismaModel>
-    in?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StatusTeste[] | ListEnumStatusTesteFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusTesteWithAggregatesFilter<$PrismaModel> | $Enums.StatusTeste
+  export type NestedEnumPhishingChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingChannel | EnumPhishingChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingChannelFilter<$PrismaModel> | $Enums.PhishingChannel
+  }
+
+  export type NestedEnumPhishingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingStatus | EnumPhishingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingStatusFilter<$PrismaModel> | $Enums.PhishingStatus
+  }
+
+  export type NestedEnumPhishingChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingChannel | EnumPhishingChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingChannel[] | ListEnumPhishingChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingChannelWithAggregatesFilter<$PrismaModel> | $Enums.PhishingChannel
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusTesteFilter<$PrismaModel>
-    _max?: NestedEnumStatusTesteFilter<$PrismaModel>
+    _min?: NestedEnumPhishingChannelFilter<$PrismaModel>
+    _max?: NestedEnumPhishingChannelFilter<$PrismaModel>
   }
 
-  export type NestedEnumCargoUsuarioFilter<$PrismaModel = never> = {
-    equals?: $Enums.CargoUsuario | EnumCargoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumCargoUsuarioFilter<$PrismaModel> | $Enums.CargoUsuario
-  }
-
-  export type NestedEnumCargoUsuarioWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CargoUsuario | EnumCargoUsuarioFieldRefInput<$PrismaModel>
-    in?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CargoUsuario[] | ListEnumCargoUsuarioFieldRefInput<$PrismaModel>
-    not?: NestedEnumCargoUsuarioWithAggregatesFilter<$PrismaModel> | $Enums.CargoUsuario
+  export type NestedEnumPhishingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PhishingStatus | EnumPhishingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PhishingStatus[] | ListEnumPhishingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPhishingStatusWithAggregatesFilter<$PrismaModel> | $Enums.PhishingStatus
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCargoUsuarioFilter<$PrismaModel>
-    _max?: NestedEnumCargoUsuarioFilter<$PrismaModel>
+    _min?: NestedEnumPhishingStatusFilter<$PrismaModel>
+    _max?: NestedEnumPhishingStatusFilter<$PrismaModel>
   }
 
-  export type CampanhaCreateWithoutTestesInput = {
+  export type PhishingDepartmentCreateWithoutDepartmentInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogCreateNestedManyWithoutCampanhaInput
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishing: PhishingCreateNestedOneWithoutDepartmentsInput
   }
 
-  export type CampanhaUncheckedCreateWithoutTestesInput = {
+  export type PhishingDepartmentUncheckedCreateWithoutDepartmentInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogUncheckedCreateNestedManyWithoutCampanhaInput
+    phishing_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaCreateOrConnectWithoutTestesInput = {
-    where: CampanhaWhereUniqueInput
-    create: XOR<CampanhaCreateWithoutTestesInput, CampanhaUncheckedCreateWithoutTestesInput>
+  export type PhishingDepartmentCreateOrConnectWithoutDepartmentInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    create: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput>
   }
 
-  export type TesteCreateWithoutCampanhasInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoCreateNestedManyWithoutTesteInput
-    logs?: LogCreateNestedManyWithoutTesteInput
-    usuario?: UsuarioCreateNestedOneWithoutTestesInput
-  }
-
-  export type TesteUncheckedCreateWithoutCampanhasInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoUncheckedCreateNestedManyWithoutTesteInput
-    logs?: LogUncheckedCreateNestedManyWithoutTesteInput
-  }
-
-  export type TesteCreateOrConnectWithoutCampanhasInput = {
-    where: TesteWhereUniqueInput
-    create: XOR<TesteCreateWithoutCampanhasInput, TesteUncheckedCreateWithoutCampanhasInput>
-  }
-
-  export type CampanhaUpsertWithoutTestesInput = {
-    update: XOR<CampanhaUpdateWithoutTestesInput, CampanhaUncheckedUpdateWithoutTestesInput>
-    create: XOR<CampanhaCreateWithoutTestesInput, CampanhaUncheckedCreateWithoutTestesInput>
-    where?: CampanhaWhereInput
-  }
-
-  export type CampanhaUpdateToOneWithWhereWithoutTestesInput = {
-    where?: CampanhaWhereInput
-    data: XOR<CampanhaUpdateWithoutTestesInput, CampanhaUncheckedUpdateWithoutTestesInput>
-  }
-
-  export type CampanhaUpdateWithoutTestesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUpdateManyWithoutCampanhaNestedInput
-  }
-
-  export type CampanhaUncheckedUpdateWithoutTestesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUncheckedUpdateManyWithoutCampanhaNestedInput
-  }
-
-  export type TesteUpsertWithoutCampanhasInput = {
-    update: XOR<TesteUpdateWithoutCampanhasInput, TesteUncheckedUpdateWithoutCampanhasInput>
-    create: XOR<TesteCreateWithoutCampanhasInput, TesteUncheckedCreateWithoutCampanhasInput>
-    where?: TesteWhereInput
-  }
-
-  export type TesteUpdateToOneWithWhereWithoutCampanhasInput = {
-    where?: TesteWhereInput
-    data: XOR<TesteUpdateWithoutCampanhasInput, TesteUncheckedUpdateWithoutCampanhasInput>
-  }
-
-  export type TesteUpdateWithoutCampanhasInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUpdateManyWithoutTesteNestedInput
-    logs?: LogUpdateManyWithoutTesteNestedInput
-    usuario?: UsuarioUpdateOneWithoutTestesNestedInput
-  }
-
-  export type TesteUncheckedUpdateWithoutCampanhasInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    usuarioId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUncheckedUpdateManyWithoutTesteNestedInput
-    logs?: LogUncheckedUpdateManyWithoutTesteNestedInput
-  }
-
-  export type LogCreateWithoutCampanhaInput = {
-    id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamento?: DepartamentoCreateNestedOneWithoutLogsInput
-    teste?: TesteCreateNestedOneWithoutLogsInput
-  }
-
-  export type LogUncheckedCreateWithoutCampanhaInput = {
-    id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    departamentoId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type LogCreateOrConnectWithoutCampanhaInput = {
-    where: LogWhereUniqueInput
-    create: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput>
-  }
-
-  export type LogCreateManyCampanhaInputEnvelope = {
-    data: LogCreateManyCampanhaInput | LogCreateManyCampanhaInput[]
+  export type PhishingDepartmentCreateManyDepartmentInputEnvelope = {
+    data: PhishingDepartmentCreateManyDepartmentInput | PhishingDepartmentCreateManyDepartmentInput[]
     skipDuplicates?: boolean
   }
 
-  export type CampanhaTesteCreateWithoutCampanhaInput = {
+  export type UserDepartmentCreateWithoutDepartmentInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    teste: TesteCreateNestedOneWithoutCampanhasInput
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    usuario: UserCreateNestedOneWithoutUser_departmentsInput
   }
 
-  export type CampanhaTesteUncheckedCreateWithoutCampanhaInput = {
+  export type UserDepartmentUncheckedCreateWithoutDepartmentInput = {
     id?: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    user_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaTesteCreateOrConnectWithoutCampanhaInput = {
-    where: CampanhaTesteWhereUniqueInput
-    create: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput>
+  export type UserDepartmentCreateOrConnectWithoutDepartmentInput = {
+    where: UserDepartmentWhereUniqueInput
+    create: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput>
   }
 
-  export type CampanhaTesteCreateManyCampanhaInputEnvelope = {
-    data: CampanhaTesteCreateManyCampanhaInput | CampanhaTesteCreateManyCampanhaInput[]
+  export type UserDepartmentCreateManyDepartmentInputEnvelope = {
+    data: UserDepartmentCreateManyDepartmentInput | UserDepartmentCreateManyDepartmentInput[]
     skipDuplicates?: boolean
   }
 
-  export type LogUpsertWithWhereUniqueWithoutCampanhaInput = {
-    where: LogWhereUniqueInput
-    update: XOR<LogUpdateWithoutCampanhaInput, LogUncheckedUpdateWithoutCampanhaInput>
-    create: XOR<LogCreateWithoutCampanhaInput, LogUncheckedCreateWithoutCampanhaInput>
+  export type PhishingDepartmentUpsertWithWhereUniqueWithoutDepartmentInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    update: XOR<PhishingDepartmentUpdateWithoutDepartmentInput, PhishingDepartmentUncheckedUpdateWithoutDepartmentInput>
+    create: XOR<PhishingDepartmentCreateWithoutDepartmentInput, PhishingDepartmentUncheckedCreateWithoutDepartmentInput>
   }
 
-  export type LogUpdateWithWhereUniqueWithoutCampanhaInput = {
-    where: LogWhereUniqueInput
-    data: XOR<LogUpdateWithoutCampanhaInput, LogUncheckedUpdateWithoutCampanhaInput>
+  export type PhishingDepartmentUpdateWithWhereUniqueWithoutDepartmentInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    data: XOR<PhishingDepartmentUpdateWithoutDepartmentInput, PhishingDepartmentUncheckedUpdateWithoutDepartmentInput>
   }
 
-  export type LogUpdateManyWithWhereWithoutCampanhaInput = {
-    where: LogScalarWhereInput
-    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyWithoutCampanhaInput>
+  export type PhishingDepartmentUpdateManyWithWhereWithoutDepartmentInput = {
+    where: PhishingDepartmentScalarWhereInput
+    data: XOR<PhishingDepartmentUpdateManyMutationInput, PhishingDepartmentUncheckedUpdateManyWithoutDepartmentInput>
   }
 
-  export type LogScalarWhereInput = {
-    AND?: LogScalarWhereInput | LogScalarWhereInput[]
-    OR?: LogScalarWhereInput[]
-    NOT?: LogScalarWhereInput | LogScalarWhereInput[]
-    id?: StringFilter<"Log"> | string
-    tipo?: EnumTipoLogFilter<"Log"> | $Enums.TipoLog
-    descricao?: StringNullableFilter<"Log"> | string | null
-    campanhaId?: StringNullableFilter<"Log"> | string | null
-    departamentoId?: StringNullableFilter<"Log"> | string | null
-    testeId?: StringNullableFilter<"Log"> | string | null
-    ativo?: BoolFilter<"Log"> | boolean
-    criadoEm?: DateTimeFilter<"Log"> | Date | string
-    criadoPor?: StringNullableFilter<"Log"> | string | null
-    atualizadoEm?: DateTimeFilter<"Log"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Log"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Log"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Log"> | string | null
+  export type PhishingDepartmentScalarWhereInput = {
+    AND?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
+    OR?: PhishingDepartmentScalarWhereInput[]
+    NOT?: PhishingDepartmentScalarWhereInput | PhishingDepartmentScalarWhereInput[]
+    id?: StringFilter<"PhishingDepartment"> | string
+    phishing_id?: StringFilter<"PhishingDepartment"> | string
+    department_id?: StringFilter<"PhishingDepartment"> | string
+    is_active?: BoolFilter<"PhishingDepartment"> | boolean
+    created_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    created_by?: StringFilter<"PhishingDepartment"> | string
+    updated_by?: StringFilter<"PhishingDepartment"> | string
+    updated_at?: DateTimeFilter<"PhishingDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"PhishingDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"PhishingDepartment"> | string | null
   }
 
-  export type CampanhaTesteUpsertWithWhereUniqueWithoutCampanhaInput = {
-    where: CampanhaTesteWhereUniqueInput
-    update: XOR<CampanhaTesteUpdateWithoutCampanhaInput, CampanhaTesteUncheckedUpdateWithoutCampanhaInput>
-    create: XOR<CampanhaTesteCreateWithoutCampanhaInput, CampanhaTesteUncheckedCreateWithoutCampanhaInput>
+  export type UserDepartmentUpsertWithWhereUniqueWithoutDepartmentInput = {
+    where: UserDepartmentWhereUniqueInput
+    update: XOR<UserDepartmentUpdateWithoutDepartmentInput, UserDepartmentUncheckedUpdateWithoutDepartmentInput>
+    create: XOR<UserDepartmentCreateWithoutDepartmentInput, UserDepartmentUncheckedCreateWithoutDepartmentInput>
   }
 
-  export type CampanhaTesteUpdateWithWhereUniqueWithoutCampanhaInput = {
-    where: CampanhaTesteWhereUniqueInput
-    data: XOR<CampanhaTesteUpdateWithoutCampanhaInput, CampanhaTesteUncheckedUpdateWithoutCampanhaInput>
+  export type UserDepartmentUpdateWithWhereUniqueWithoutDepartmentInput = {
+    where: UserDepartmentWhereUniqueInput
+    data: XOR<UserDepartmentUpdateWithoutDepartmentInput, UserDepartmentUncheckedUpdateWithoutDepartmentInput>
   }
 
-  export type CampanhaTesteUpdateManyWithWhereWithoutCampanhaInput = {
-    where: CampanhaTesteScalarWhereInput
-    data: XOR<CampanhaTesteUpdateManyMutationInput, CampanhaTesteUncheckedUpdateManyWithoutCampanhaInput>
+  export type UserDepartmentUpdateManyWithWhereWithoutDepartmentInput = {
+    where: UserDepartmentScalarWhereInput
+    data: XOR<UserDepartmentUpdateManyMutationInput, UserDepartmentUncheckedUpdateManyWithoutDepartmentInput>
   }
 
-  export type CampanhaTesteScalarWhereInput = {
-    AND?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
-    OR?: CampanhaTesteScalarWhereInput[]
-    NOT?: CampanhaTesteScalarWhereInput | CampanhaTesteScalarWhereInput[]
-    id?: StringFilter<"CampanhaTeste"> | string
-    campanhaId?: StringFilter<"CampanhaTeste"> | string
-    testeId?: StringFilter<"CampanhaTeste"> | string
-    ativo?: BoolFilter<"CampanhaTeste"> | boolean
-    criadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    criadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    atualizadoEm?: DateTimeFilter<"CampanhaTeste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"CampanhaTeste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"CampanhaTeste"> | string | null
+  export type UserDepartmentScalarWhereInput = {
+    AND?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
+    OR?: UserDepartmentScalarWhereInput[]
+    NOT?: UserDepartmentScalarWhereInput | UserDepartmentScalarWhereInput[]
+    id?: StringFilter<"UserDepartment"> | string
+    user_id?: StringFilter<"UserDepartment"> | string
+    department_id?: StringFilter<"UserDepartment"> | string
+    is_active?: BoolFilter<"UserDepartment"> | boolean
+    created_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    created_by?: StringFilter<"UserDepartment"> | string
+    updated_by?: StringFilter<"UserDepartment"> | string
+    updated_at?: DateTimeFilter<"UserDepartment"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"UserDepartment"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"UserDepartment"> | string | null
   }
 
-  export type TesteDepartamentoCreateWithoutDepartamentoInput = {
+  export type UserCreateWithoutEmailsInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    teste: TesteCreateNestedOneWithoutDepartamentosInput
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentCreateNestedManyWithoutUsuarioInput
   }
 
-  export type TesteDepartamentoUncheckedCreateWithoutDepartamentoInput = {
+  export type UserUncheckedCreateWithoutEmailsInput = {
     id?: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingUncheckedCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
-  export type TesteDepartamentoCreateOrConnectWithoutDepartamentoInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    create: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput>
+  export type UserCreateOrConnectWithoutEmailsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEmailsInput, UserUncheckedCreateWithoutEmailsInput>
   }
 
-  export type TesteDepartamentoCreateManyDepartamentoInputEnvelope = {
-    data: TesteDepartamentoCreateManyDepartamentoInput | TesteDepartamentoCreateManyDepartamentoInput[]
+  export type UserUpsertWithoutEmailsInput = {
+    update: XOR<UserUpdateWithoutEmailsInput, UserUncheckedUpdateWithoutEmailsInput>
+    create: XOR<UserCreateWithoutEmailsInput, UserUncheckedCreateWithoutEmailsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEmailsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEmailsInput, UserUncheckedUpdateWithoutEmailsInput>
+  }
+
+  export type UserUpdateWithoutEmailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEmailsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingUncheckedUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type PhishingCreateWithoutDepartmentsInput = {
+    id?: string
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    user?: UserCreateNestedOneWithoutPhishingsInput
+  }
+
+  export type PhishingUncheckedCreateWithoutDepartmentsInput = {
+    id?: string
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    userId?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+  }
+
+  export type PhishingCreateOrConnectWithoutDepartmentsInput = {
+    where: PhishingWhereUniqueInput
+    create: XOR<PhishingCreateWithoutDepartmentsInput, PhishingUncheckedCreateWithoutDepartmentsInput>
+  }
+
+  export type DepartmentCreateWithoutPhishingsInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    users?: UserDepartmentCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentUncheckedCreateWithoutPhishingsInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    users?: UserDepartmentUncheckedCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentCreateOrConnectWithoutPhishingsInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutPhishingsInput, DepartmentUncheckedCreateWithoutPhishingsInput>
+  }
+
+  export type PhishingUpsertWithoutDepartmentsInput = {
+    update: XOR<PhishingUpdateWithoutDepartmentsInput, PhishingUncheckedUpdateWithoutDepartmentsInput>
+    create: XOR<PhishingCreateWithoutDepartmentsInput, PhishingUncheckedCreateWithoutDepartmentsInput>
+    where?: PhishingWhereInput
+  }
+
+  export type PhishingUpdateToOneWithWhereWithoutDepartmentsInput = {
+    where?: PhishingWhereInput
+    data: XOR<PhishingUpdateWithoutDepartmentsInput, PhishingUncheckedUpdateWithoutDepartmentsInput>
+  }
+
+  export type PhishingUpdateWithoutDepartmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneWithoutPhishingsNestedInput
+  }
+
+  export type PhishingUncheckedUpdateWithoutDepartmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type DepartmentUpsertWithoutPhishingsInput = {
+    update: XOR<DepartmentUpdateWithoutPhishingsInput, DepartmentUncheckedUpdateWithoutPhishingsInput>
+    create: XOR<DepartmentCreateWithoutPhishingsInput, DepartmentUncheckedCreateWithoutPhishingsInput>
+    where?: DepartmentWhereInput
+  }
+
+  export type DepartmentUpdateToOneWithWhereWithoutPhishingsInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutPhishingsInput, DepartmentUncheckedUpdateWithoutPhishingsInput>
+  }
+
+  export type DepartmentUpdateWithoutPhishingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: UserDepartmentUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type DepartmentUncheckedUpdateWithoutPhishingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    users?: UserDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type PhishingDepartmentCreateWithoutPhishingInput = {
+    id?: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    department: DepartmentCreateNestedOneWithoutPhishingsInput
+  }
+
+  export type PhishingDepartmentUncheckedCreateWithoutPhishingInput = {
+    id?: string
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+  }
+
+  export type PhishingDepartmentCreateOrConnectWithoutPhishingInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    create: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput>
+  }
+
+  export type PhishingDepartmentCreateManyPhishingInputEnvelope = {
+    data: PhishingDepartmentCreateManyPhishingInput | PhishingDepartmentCreateManyPhishingInput[]
     skipDuplicates?: boolean
   }
 
-  export type LogCreateWithoutDepartamentoInput = {
+  export type UserCreateWithoutPhishingsInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    campanha?: CampanhaCreateNestedOneWithoutLogsInput
-    teste?: TesteCreateNestedOneWithoutLogsInput
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentCreateNestedManyWithoutUsuarioInput
   }
 
-  export type LogUncheckedCreateWithoutDepartamentoInput = {
+  export type UserUncheckedCreateWithoutPhishingsInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailUncheckedCreateNestedManyWithoutUserInput
+    user_departments?: UserDepartmentUncheckedCreateNestedManyWithoutUsuarioInput
   }
 
-  export type LogCreateOrConnectWithoutDepartamentoInput = {
-    where: LogWhereUniqueInput
-    create: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput>
+  export type UserCreateOrConnectWithoutPhishingsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPhishingsInput, UserUncheckedCreateWithoutPhishingsInput>
   }
 
-  export type LogCreateManyDepartamentoInputEnvelope = {
-    data: LogCreateManyDepartamentoInput | LogCreateManyDepartamentoInput[]
+  export type PhishingDepartmentUpsertWithWhereUniqueWithoutPhishingInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    update: XOR<PhishingDepartmentUpdateWithoutPhishingInput, PhishingDepartmentUncheckedUpdateWithoutPhishingInput>
+    create: XOR<PhishingDepartmentCreateWithoutPhishingInput, PhishingDepartmentUncheckedCreateWithoutPhishingInput>
+  }
+
+  export type PhishingDepartmentUpdateWithWhereUniqueWithoutPhishingInput = {
+    where: PhishingDepartmentWhereUniqueInput
+    data: XOR<PhishingDepartmentUpdateWithoutPhishingInput, PhishingDepartmentUncheckedUpdateWithoutPhishingInput>
+  }
+
+  export type PhishingDepartmentUpdateManyWithWhereWithoutPhishingInput = {
+    where: PhishingDepartmentScalarWhereInput
+    data: XOR<PhishingDepartmentUpdateManyMutationInput, PhishingDepartmentUncheckedUpdateManyWithoutPhishingInput>
+  }
+
+  export type UserUpsertWithoutPhishingsInput = {
+    update: XOR<UserUpdateWithoutPhishingsInput, UserUncheckedUpdateWithoutPhishingsInput>
+    create: XOR<UserCreateWithoutPhishingsInput, UserUncheckedCreateWithoutPhishingsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPhishingsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPhishingsInput, UserUncheckedUpdateWithoutPhishingsInput>
+  }
+
+  export type UserUpdateWithoutPhishingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPhishingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUncheckedUpdateManyWithoutUserNestedInput
+    user_departments?: UserDepartmentUncheckedUpdateManyWithoutUsuarioNestedInput
+  }
+
+  export type UserCreateWithoutUser_departmentsInput = {
+    id?: string
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailCreateNestedManyWithoutUserInput
+    phishings?: PhishingCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutUser_departmentsInput = {
+    id?: string
+    name: string
+    password?: string | null
+    roles?: UserCreaterolesInput | string[]
+    tenant_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    emails?: EmailUncheckedCreateNestedManyWithoutUserInput
+    phishings?: PhishingUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutUser_departmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutUser_departmentsInput, UserUncheckedCreateWithoutUser_departmentsInput>
+  }
+
+  export type DepartmentCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingDepartmentCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentUncheckedCreateWithoutUsersInput = {
+    id?: string
+    name: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    phishings?: PhishingDepartmentUncheckedCreateNestedManyWithoutDepartmentInput
+  }
+
+  export type DepartmentCreateOrConnectWithoutUsersInput = {
+    where: DepartmentWhereUniqueInput
+    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+  }
+
+  export type UserUpsertWithoutUser_departmentsInput = {
+    update: XOR<UserUpdateWithoutUser_departmentsInput, UserUncheckedUpdateWithoutUser_departmentsInput>
+    create: XOR<UserCreateWithoutUser_departmentsInput, UserUncheckedCreateWithoutUser_departmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutUser_departmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutUser_departmentsInput, UserUncheckedUpdateWithoutUser_departmentsInput>
+  }
+
+  export type UserUpdateWithoutUser_departmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUpdateManyWithoutUserNestedInput
+    phishings?: PhishingUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutUser_departmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    roles?: UserUpdaterolesInput | string[]
+    tenant_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    emails?: EmailUncheckedUpdateManyWithoutUserNestedInput
+    phishings?: PhishingUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type DepartmentUpsertWithoutUsersInput = {
+    update: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
+    create: XOR<DepartmentCreateWithoutUsersInput, DepartmentUncheckedCreateWithoutUsersInput>
+    where?: DepartmentWhereInput
+  }
+
+  export type DepartmentUpdateToOneWithWhereWithoutUsersInput = {
+    where?: DepartmentWhereInput
+    data: XOR<DepartmentUpdateWithoutUsersInput, DepartmentUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type DepartmentUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingDepartmentUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type DepartmentUncheckedUpdateWithoutUsersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishings?: PhishingDepartmentUncheckedUpdateManyWithoutDepartmentNestedInput
+  }
+
+  export type EmailCreateWithoutUserInput = {
+    id?: string
+    address: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+  }
+
+  export type EmailUncheckedCreateWithoutUserInput = {
+    id?: string
+    address: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+  }
+
+  export type EmailCreateOrConnectWithoutUserInput = {
+    where: EmailWhereUniqueInput
+    create: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmailCreateManyUserInputEnvelope = {
+    data: EmailCreateManyUserInput | EmailCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
-  export type UsuarioDepartamentoCreateWithoutDepartamentoInput = {
+  export type PhishingCreateWithoutUserInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    usuario: UsuarioCreateNestedOneWithoutDepartamentosInput
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    departments?: PhishingDepartmentCreateNestedManyWithoutPhishingInput
   }
 
-  export type UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput = {
+  export type PhishingUncheckedCreateWithoutUserInput = {
     id?: string
-    usuarioId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    departments?: PhishingDepartmentUncheckedCreateNestedManyWithoutPhishingInput
   }
 
-  export type UsuarioDepartamentoCreateOrConnectWithoutDepartamentoInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    create: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput>
+  export type PhishingCreateOrConnectWithoutUserInput = {
+    where: PhishingWhereUniqueInput
+    create: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput>
   }
 
-  export type UsuarioDepartamentoCreateManyDepartamentoInputEnvelope = {
-    data: UsuarioDepartamentoCreateManyDepartamentoInput | UsuarioDepartamentoCreateManyDepartamentoInput[]
+  export type PhishingCreateManyUserInputEnvelope = {
+    data: PhishingCreateManyUserInput | PhishingCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
-  export type TesteDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    update: XOR<TesteDepartamentoUpdateWithoutDepartamentoInput, TesteDepartamentoUncheckedUpdateWithoutDepartamentoInput>
-    create: XOR<TesteDepartamentoCreateWithoutDepartamentoInput, TesteDepartamentoUncheckedCreateWithoutDepartamentoInput>
-  }
-
-  export type TesteDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    data: XOR<TesteDepartamentoUpdateWithoutDepartamentoInput, TesteDepartamentoUncheckedUpdateWithoutDepartamentoInput>
-  }
-
-  export type TesteDepartamentoUpdateManyWithWhereWithoutDepartamentoInput = {
-    where: TesteDepartamentoScalarWhereInput
-    data: XOR<TesteDepartamentoUpdateManyMutationInput, TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoInput>
-  }
-
-  export type TesteDepartamentoScalarWhereInput = {
-    AND?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
-    OR?: TesteDepartamentoScalarWhereInput[]
-    NOT?: TesteDepartamentoScalarWhereInput | TesteDepartamentoScalarWhereInput[]
-    id?: StringFilter<"TesteDepartamento"> | string
-    testeId?: StringFilter<"TesteDepartamento"> | string
-    departamentoId?: StringFilter<"TesteDepartamento"> | string
-    ativo?: BoolFilter<"TesteDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"TesteDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"TesteDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"TesteDepartamento"> | string | null
-  }
-
-  export type LogUpsertWithWhereUniqueWithoutDepartamentoInput = {
-    where: LogWhereUniqueInput
-    update: XOR<LogUpdateWithoutDepartamentoInput, LogUncheckedUpdateWithoutDepartamentoInput>
-    create: XOR<LogCreateWithoutDepartamentoInput, LogUncheckedCreateWithoutDepartamentoInput>
-  }
-
-  export type LogUpdateWithWhereUniqueWithoutDepartamentoInput = {
-    where: LogWhereUniqueInput
-    data: XOR<LogUpdateWithoutDepartamentoInput, LogUncheckedUpdateWithoutDepartamentoInput>
-  }
-
-  export type LogUpdateManyWithWhereWithoutDepartamentoInput = {
-    where: LogScalarWhereInput
-    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyWithoutDepartamentoInput>
-  }
-
-  export type UsuarioDepartamentoUpsertWithWhereUniqueWithoutDepartamentoInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    update: XOR<UsuarioDepartamentoUpdateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedUpdateWithoutDepartamentoInput>
-    create: XOR<UsuarioDepartamentoCreateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedCreateWithoutDepartamentoInput>
-  }
-
-  export type UsuarioDepartamentoUpdateWithWhereUniqueWithoutDepartamentoInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    data: XOR<UsuarioDepartamentoUpdateWithoutDepartamentoInput, UsuarioDepartamentoUncheckedUpdateWithoutDepartamentoInput>
-  }
-
-  export type UsuarioDepartamentoUpdateManyWithWhereWithoutDepartamentoInput = {
-    where: UsuarioDepartamentoScalarWhereInput
-    data: XOR<UsuarioDepartamentoUpdateManyMutationInput, UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoInput>
-  }
-
-  export type UsuarioDepartamentoScalarWhereInput = {
-    AND?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
-    OR?: UsuarioDepartamentoScalarWhereInput[]
-    NOT?: UsuarioDepartamentoScalarWhereInput | UsuarioDepartamentoScalarWhereInput[]
-    id?: StringFilter<"UsuarioDepartamento"> | string
-    usuarioId?: StringFilter<"UsuarioDepartamento"> | string
-    departamentoId?: StringFilter<"UsuarioDepartamento"> | string
-    ativo?: BoolFilter<"UsuarioDepartamento"> | boolean
-    criadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    criadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    atualizadoEm?: DateTimeFilter<"UsuarioDepartamento"> | Date | string
-    atualizadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"UsuarioDepartamento"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"UsuarioDepartamento"> | string | null
-  }
-
-  export type CampanhaCreateWithoutLogsInput = {
+  export type UserDepartmentCreateWithoutUsuarioInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: CampanhaTesteCreateNestedManyWithoutCampanhaInput
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
+    department: DepartmentCreateNestedOneWithoutUsersInput
   }
 
-  export type CampanhaUncheckedCreateWithoutLogsInput = {
+  export type UserDepartmentUncheckedCreateWithoutUsuarioInput = {
     id?: string
-    titulo: string
-    descricao?: string | null
-    status: $Enums.StatusCampanha
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: CampanhaTesteUncheckedCreateNestedManyWithoutCampanhaInput
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaCreateOrConnectWithoutLogsInput = {
-    where: CampanhaWhereUniqueInput
-    create: XOR<CampanhaCreateWithoutLogsInput, CampanhaUncheckedCreateWithoutLogsInput>
+  export type UserDepartmentCreateOrConnectWithoutUsuarioInput = {
+    where: UserDepartmentWhereUniqueInput
+    create: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput>
   }
 
-  export type DepartamentoCreateWithoutLogsInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoUncheckedCreateWithoutLogsInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoCreateOrConnectWithoutLogsInput = {
-    where: DepartamentoWhereUniqueInput
-    create: XOR<DepartamentoCreateWithoutLogsInput, DepartamentoUncheckedCreateWithoutLogsInput>
-  }
-
-  export type TesteCreateWithoutLogsInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteCreateNestedManyWithoutTesteInput
-    usuario?: UsuarioCreateNestedOneWithoutTestesInput
-  }
-
-  export type TesteUncheckedCreateWithoutLogsInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoUncheckedCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteUncheckedCreateNestedManyWithoutTesteInput
-  }
-
-  export type TesteCreateOrConnectWithoutLogsInput = {
-    where: TesteWhereUniqueInput
-    create: XOR<TesteCreateWithoutLogsInput, TesteUncheckedCreateWithoutLogsInput>
-  }
-
-  export type CampanhaUpsertWithoutLogsInput = {
-    update: XOR<CampanhaUpdateWithoutLogsInput, CampanhaUncheckedUpdateWithoutLogsInput>
-    create: XOR<CampanhaCreateWithoutLogsInput, CampanhaUncheckedCreateWithoutLogsInput>
-    where?: CampanhaWhereInput
-  }
-
-  export type CampanhaUpdateToOneWithWhereWithoutLogsInput = {
-    where?: CampanhaWhereInput
-    data: XOR<CampanhaUpdateWithoutLogsInput, CampanhaUncheckedUpdateWithoutLogsInput>
-  }
-
-  export type CampanhaUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: CampanhaTesteUpdateManyWithoutCampanhaNestedInput
-  }
-
-  export type CampanhaUncheckedUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    titulo?: StringFieldUpdateOperationsInput | string
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumStatusCampanhaFieldUpdateOperationsInput | $Enums.StatusCampanha
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: CampanhaTesteUncheckedUpdateManyWithoutCampanhaNestedInput
-  }
-
-  export type DepartamentoUpsertWithoutLogsInput = {
-    update: XOR<DepartamentoUpdateWithoutLogsInput, DepartamentoUncheckedUpdateWithoutLogsInput>
-    create: XOR<DepartamentoCreateWithoutLogsInput, DepartamentoUncheckedCreateWithoutLogsInput>
-    where?: DepartamentoWhereInput
-  }
-
-  export type DepartamentoUpdateToOneWithWhereWithoutLogsInput = {
-    where?: DepartamentoWhereInput
-    data: XOR<DepartamentoUpdateWithoutLogsInput, DepartamentoUncheckedUpdateWithoutLogsInput>
-  }
-
-  export type DepartamentoUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type DepartamentoUncheckedUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type TesteUpsertWithoutLogsInput = {
-    update: XOR<TesteUpdateWithoutLogsInput, TesteUncheckedUpdateWithoutLogsInput>
-    create: XOR<TesteCreateWithoutLogsInput, TesteUncheckedCreateWithoutLogsInput>
-    where?: TesteWhereInput
-  }
-
-  export type TesteUpdateToOneWithWhereWithoutLogsInput = {
-    where?: TesteWhereInput
-    data: XOR<TesteUpdateWithoutLogsInput, TesteUncheckedUpdateWithoutLogsInput>
-  }
-
-  export type TesteUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUpdateManyWithoutTesteNestedInput
-    usuario?: UsuarioUpdateOneWithoutTestesNestedInput
-  }
-
-  export type TesteUncheckedUpdateWithoutLogsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    usuarioId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUncheckedUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUncheckedUpdateManyWithoutTesteNestedInput
-  }
-
-  export type TesteCreateWithoutDepartamentosInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteCreateNestedManyWithoutTesteInput
-    usuario?: UsuarioCreateNestedOneWithoutTestesInput
-  }
-
-  export type TesteUncheckedCreateWithoutDepartamentosInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    usuarioId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogUncheckedCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteUncheckedCreateNestedManyWithoutTesteInput
-  }
-
-  export type TesteCreateOrConnectWithoutDepartamentosInput = {
-    where: TesteWhereUniqueInput
-    create: XOR<TesteCreateWithoutDepartamentosInput, TesteUncheckedCreateWithoutDepartamentosInput>
-  }
-
-  export type DepartamentoCreateWithoutTestesInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoUncheckedCreateWithoutTestesInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    logs?: LogUncheckedCreateNestedManyWithoutDepartamentoInput
-    usuarios?: UsuarioDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoCreateOrConnectWithoutTestesInput = {
-    where: DepartamentoWhereUniqueInput
-    create: XOR<DepartamentoCreateWithoutTestesInput, DepartamentoUncheckedCreateWithoutTestesInput>
-  }
-
-  export type TesteUpsertWithoutDepartamentosInput = {
-    update: XOR<TesteUpdateWithoutDepartamentosInput, TesteUncheckedUpdateWithoutDepartamentosInput>
-    create: XOR<TesteCreateWithoutDepartamentosInput, TesteUncheckedCreateWithoutDepartamentosInput>
-    where?: TesteWhereInput
-  }
-
-  export type TesteUpdateToOneWithWhereWithoutDepartamentosInput = {
-    where?: TesteWhereInput
-    data: XOR<TesteUpdateWithoutDepartamentosInput, TesteUncheckedUpdateWithoutDepartamentosInput>
-  }
-
-  export type TesteUpdateWithoutDepartamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUpdateManyWithoutTesteNestedInput
-    usuario?: UsuarioUpdateOneWithoutTestesNestedInput
-  }
-
-  export type TesteUncheckedUpdateWithoutDepartamentosInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    usuarioId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUncheckedUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUncheckedUpdateManyWithoutTesteNestedInput
-  }
-
-  export type DepartamentoUpsertWithoutTestesInput = {
-    update: XOR<DepartamentoUpdateWithoutTestesInput, DepartamentoUncheckedUpdateWithoutTestesInput>
-    create: XOR<DepartamentoCreateWithoutTestesInput, DepartamentoUncheckedCreateWithoutTestesInput>
-    where?: DepartamentoWhereInput
-  }
-
-  export type DepartamentoUpdateToOneWithWhereWithoutTestesInput = {
-    where?: DepartamentoWhereInput
-    data: XOR<DepartamentoUpdateWithoutTestesInput, DepartamentoUncheckedUpdateWithoutTestesInput>
-  }
-
-  export type DepartamentoUpdateWithoutTestesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type DepartamentoUncheckedUpdateWithoutTestesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    logs?: LogUncheckedUpdateManyWithoutDepartamentoNestedInput
-    usuarios?: UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-  }
-
-  export type TesteDepartamentoCreateWithoutTesteInput = {
-    id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamento: DepartamentoCreateNestedOneWithoutTestesInput
-  }
-
-  export type TesteDepartamentoUncheckedCreateWithoutTesteInput = {
-    id?: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type TesteDepartamentoCreateOrConnectWithoutTesteInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    create: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput>
-  }
-
-  export type TesteDepartamentoCreateManyTesteInputEnvelope = {
-    data: TesteDepartamentoCreateManyTesteInput | TesteDepartamentoCreateManyTesteInput[]
+  export type UserDepartmentCreateManyUsuarioInputEnvelope = {
+    data: UserDepartmentCreateManyUsuarioInput | UserDepartmentCreateManyUsuarioInput[]
     skipDuplicates?: boolean
   }
 
-  export type LogCreateWithoutTesteInput = {
+  export type EmailUpsertWithWhereUniqueWithoutUserInput = {
+    where: EmailWhereUniqueInput
+    update: XOR<EmailUpdateWithoutUserInput, EmailUncheckedUpdateWithoutUserInput>
+    create: XOR<EmailCreateWithoutUserInput, EmailUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmailUpdateWithWhereUniqueWithoutUserInput = {
+    where: EmailWhereUniqueInput
+    data: XOR<EmailUpdateWithoutUserInput, EmailUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmailUpdateManyWithWhereWithoutUserInput = {
+    where: EmailScalarWhereInput
+    data: XOR<EmailUpdateManyMutationInput, EmailUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EmailScalarWhereInput = {
+    AND?: EmailScalarWhereInput | EmailScalarWhereInput[]
+    OR?: EmailScalarWhereInput[]
+    NOT?: EmailScalarWhereInput | EmailScalarWhereInput[]
+    id?: StringFilter<"Email"> | string
+    address?: StringFilter<"Email"> | string
+    user_id?: StringFilter<"Email"> | string
+    type?: EnumEmailTypeFilter<"Email"> | $Enums.EmailType
+    is_active?: BoolFilter<"Email"> | boolean
+    created_at?: DateTimeFilter<"Email"> | Date | string
+    created_by?: StringFilter<"Email"> | string
+    updated_by?: StringFilter<"Email"> | string
+    updated_at?: DateTimeFilter<"Email"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Email"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Email"> | string | null
+  }
+
+  export type PhishingUpsertWithWhereUniqueWithoutUserInput = {
+    where: PhishingWhereUniqueInput
+    update: XOR<PhishingUpdateWithoutUserInput, PhishingUncheckedUpdateWithoutUserInput>
+    create: XOR<PhishingCreateWithoutUserInput, PhishingUncheckedCreateWithoutUserInput>
+  }
+
+  export type PhishingUpdateWithWhereUniqueWithoutUserInput = {
+    where: PhishingWhereUniqueInput
+    data: XOR<PhishingUpdateWithoutUserInput, PhishingUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PhishingUpdateManyWithWhereWithoutUserInput = {
+    where: PhishingScalarWhereInput
+    data: XOR<PhishingUpdateManyMutationInput, PhishingUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PhishingScalarWhereInput = {
+    AND?: PhishingScalarWhereInput | PhishingScalarWhereInput[]
+    OR?: PhishingScalarWhereInput[]
+    NOT?: PhishingScalarWhereInput | PhishingScalarWhereInput[]
+    id?: StringFilter<"Phishing"> | string
+    clicked?: BoolFilter<"Phishing"> | boolean
+    reported?: BoolFilter<"Phishing"> | boolean
+    channel?: EnumPhishingChannelFilter<"Phishing"> | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFilter<"Phishing"> | $Enums.PhishingStatus
+    userId?: StringNullableFilter<"Phishing"> | string | null
+    is_active?: BoolFilter<"Phishing"> | boolean
+    created_at?: DateTimeFilter<"Phishing"> | Date | string
+    created_by?: StringFilter<"Phishing"> | string
+    updated_by?: StringFilter<"Phishing"> | string
+    updated_at?: DateTimeFilter<"Phishing"> | Date | string
+    inactivated_at?: DateTimeNullableFilter<"Phishing"> | Date | string | null
+    inactivated_by?: StringNullableFilter<"Phishing"> | string | null
+  }
+
+  export type UserDepartmentUpsertWithWhereUniqueWithoutUsuarioInput = {
+    where: UserDepartmentWhereUniqueInput
+    update: XOR<UserDepartmentUpdateWithoutUsuarioInput, UserDepartmentUncheckedUpdateWithoutUsuarioInput>
+    create: XOR<UserDepartmentCreateWithoutUsuarioInput, UserDepartmentUncheckedCreateWithoutUsuarioInput>
+  }
+
+  export type UserDepartmentUpdateWithWhereUniqueWithoutUsuarioInput = {
+    where: UserDepartmentWhereUniqueInput
+    data: XOR<UserDepartmentUpdateWithoutUsuarioInput, UserDepartmentUncheckedUpdateWithoutUsuarioInput>
+  }
+
+  export type UserDepartmentUpdateManyWithWhereWithoutUsuarioInput = {
+    where: UserDepartmentScalarWhereInput
+    data: XOR<UserDepartmentUpdateManyMutationInput, UserDepartmentUncheckedUpdateManyWithoutUsuarioInput>
+  }
+
+  export type PhishingDepartmentCreateManyDepartmentInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    campanha?: CampanhaCreateNestedOneWithoutLogsInput
-    departamento?: DepartamentoCreateNestedOneWithoutLogsInput
+    phishing_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type LogUncheckedCreateWithoutTesteInput = {
+  export type UserDepartmentCreateManyDepartmentInput = {
     id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    departamentoId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    user_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type LogCreateOrConnectWithoutTesteInput = {
-    where: LogWhereUniqueInput
-    create: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput>
+  export type PhishingDepartmentUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    phishing?: PhishingUpdateOneRequiredWithoutDepartmentsNestedInput
   }
 
-  export type LogCreateManyTesteInputEnvelope = {
-    data: LogCreateManyTesteInput | LogCreateManyTesteInput[]
-    skipDuplicates?: boolean
+  export type PhishingDepartmentUncheckedUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phishing_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type CampanhaTesteCreateWithoutTesteInput = {
+  export type PhishingDepartmentUncheckedUpdateManyWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phishing_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserDepartmentUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    usuario?: UserUpdateOneRequiredWithoutUser_departmentsNestedInput
+  }
+
+  export type UserDepartmentUncheckedUpdateWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserDepartmentUncheckedUpdateManyWithoutDepartmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PhishingDepartmentCreateManyPhishingInput = {
     id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    campanha: CampanhaCreateNestedOneWithoutTestesInput
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaTesteUncheckedCreateWithoutTesteInput = {
+  export type PhishingDepartmentUpdateWithoutPhishingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: DepartmentUpdateOneRequiredWithoutPhishingsNestedInput
+  }
+
+  export type PhishingDepartmentUncheckedUpdateWithoutPhishingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PhishingDepartmentUncheckedUpdateManyWithoutPhishingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type EmailCreateManyUserInput = {
     id?: string
-    campanhaId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
+    address: string
+    type: $Enums.EmailType
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type CampanhaTesteCreateOrConnectWithoutTesteInput = {
-    where: CampanhaTesteWhereUniqueInput
-    create: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput>
-  }
-
-  export type CampanhaTesteCreateManyTesteInputEnvelope = {
-    data: CampanhaTesteCreateManyTesteInput | CampanhaTesteCreateManyTesteInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UsuarioCreateWithoutTestesInput = {
+  export type PhishingCreateManyUserInput = {
     id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: UsuarioDepartamentoCreateNestedManyWithoutUsuarioInput
+    clicked?: boolean
+    reported?: boolean
+    channel: $Enums.PhishingChannel
+    status: $Enums.PhishingStatus
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type UsuarioUncheckedCreateWithoutTestesInput = {
+  export type UserDepartmentCreateManyUsuarioInput = {
     id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: UsuarioDepartamentoUncheckedCreateNestedManyWithoutUsuarioInput
+    department_id: string
+    is_active?: boolean
+    created_at?: Date | string
+    created_by: string
+    updated_by: string
+    updated_at?: Date | string
+    inactivated_at?: Date | string | null
+    inactivated_by?: string | null
   }
 
-  export type UsuarioCreateOrConnectWithoutTestesInput = {
-    where: UsuarioWhereUniqueInput
-    create: XOR<UsuarioCreateWithoutTestesInput, UsuarioUncheckedCreateWithoutTestesInput>
-  }
-
-  export type TesteDepartamentoUpsertWithWhereUniqueWithoutTesteInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    update: XOR<TesteDepartamentoUpdateWithoutTesteInput, TesteDepartamentoUncheckedUpdateWithoutTesteInput>
-    create: XOR<TesteDepartamentoCreateWithoutTesteInput, TesteDepartamentoUncheckedCreateWithoutTesteInput>
-  }
-
-  export type TesteDepartamentoUpdateWithWhereUniqueWithoutTesteInput = {
-    where: TesteDepartamentoWhereUniqueInput
-    data: XOR<TesteDepartamentoUpdateWithoutTesteInput, TesteDepartamentoUncheckedUpdateWithoutTesteInput>
-  }
-
-  export type TesteDepartamentoUpdateManyWithWhereWithoutTesteInput = {
-    where: TesteDepartamentoScalarWhereInput
-    data: XOR<TesteDepartamentoUpdateManyMutationInput, TesteDepartamentoUncheckedUpdateManyWithoutTesteInput>
-  }
-
-  export type LogUpsertWithWhereUniqueWithoutTesteInput = {
-    where: LogWhereUniqueInput
-    update: XOR<LogUpdateWithoutTesteInput, LogUncheckedUpdateWithoutTesteInput>
-    create: XOR<LogCreateWithoutTesteInput, LogUncheckedCreateWithoutTesteInput>
-  }
-
-  export type LogUpdateWithWhereUniqueWithoutTesteInput = {
-    where: LogWhereUniqueInput
-    data: XOR<LogUpdateWithoutTesteInput, LogUncheckedUpdateWithoutTesteInput>
-  }
-
-  export type LogUpdateManyWithWhereWithoutTesteInput = {
-    where: LogScalarWhereInput
-    data: XOR<LogUpdateManyMutationInput, LogUncheckedUpdateManyWithoutTesteInput>
-  }
-
-  export type CampanhaTesteUpsertWithWhereUniqueWithoutTesteInput = {
-    where: CampanhaTesteWhereUniqueInput
-    update: XOR<CampanhaTesteUpdateWithoutTesteInput, CampanhaTesteUncheckedUpdateWithoutTesteInput>
-    create: XOR<CampanhaTesteCreateWithoutTesteInput, CampanhaTesteUncheckedCreateWithoutTesteInput>
-  }
-
-  export type CampanhaTesteUpdateWithWhereUniqueWithoutTesteInput = {
-    where: CampanhaTesteWhereUniqueInput
-    data: XOR<CampanhaTesteUpdateWithoutTesteInput, CampanhaTesteUncheckedUpdateWithoutTesteInput>
-  }
-
-  export type CampanhaTesteUpdateManyWithWhereWithoutTesteInput = {
-    where: CampanhaTesteScalarWhereInput
-    data: XOR<CampanhaTesteUpdateManyMutationInput, CampanhaTesteUncheckedUpdateManyWithoutTesteInput>
-  }
-
-  export type UsuarioUpsertWithoutTestesInput = {
-    update: XOR<UsuarioUpdateWithoutTestesInput, UsuarioUncheckedUpdateWithoutTestesInput>
-    create: XOR<UsuarioCreateWithoutTestesInput, UsuarioUncheckedCreateWithoutTestesInput>
-    where?: UsuarioWhereInput
-  }
-
-  export type UsuarioUpdateToOneWithWhereWithoutTestesInput = {
-    where?: UsuarioWhereInput
-    data: XOR<UsuarioUpdateWithoutTestesInput, UsuarioUncheckedUpdateWithoutTestesInput>
-  }
-
-  export type UsuarioUpdateWithoutTestesInput = {
+  export type EmailUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: UsuarioDepartamentoUpdateManyWithoutUsuarioNestedInput
+    address?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioUncheckedUpdateWithoutTestesInput = {
+  export type EmailUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: UsuarioDepartamentoUncheckedUpdateManyWithoutUsuarioNestedInput
+    address?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioCreateWithoutDepartamentosInput = {
-    id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteCreateNestedManyWithoutUsuarioInput
-  }
-
-  export type UsuarioUncheckedCreateWithoutDepartamentosInput = {
-    id?: string
-    nome: string
-    sobrenome?: string | null
-    email: string
-    cargo?: $Enums.CargoUsuario
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteUncheckedCreateNestedManyWithoutUsuarioInput
-  }
-
-  export type UsuarioCreateOrConnectWithoutDepartamentosInput = {
-    where: UsuarioWhereUniqueInput
-    create: XOR<UsuarioCreateWithoutDepartamentosInput, UsuarioUncheckedCreateWithoutDepartamentosInput>
-  }
-
-  export type DepartamentoCreateWithoutUsuariosInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoCreateNestedManyWithoutDepartamentoInput
-    logs?: LogCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoUncheckedCreateWithoutUsuariosInput = {
-    id?: string
-    nome: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    testes?: TesteDepartamentoUncheckedCreateNestedManyWithoutDepartamentoInput
-    logs?: LogUncheckedCreateNestedManyWithoutDepartamentoInput
-  }
-
-  export type DepartamentoCreateOrConnectWithoutUsuariosInput = {
-    where: DepartamentoWhereUniqueInput
-    create: XOR<DepartamentoCreateWithoutUsuariosInput, DepartamentoUncheckedCreateWithoutUsuariosInput>
-  }
-
-  export type UsuarioUpsertWithoutDepartamentosInput = {
-    update: XOR<UsuarioUpdateWithoutDepartamentosInput, UsuarioUncheckedUpdateWithoutDepartamentosInput>
-    create: XOR<UsuarioCreateWithoutDepartamentosInput, UsuarioUncheckedCreateWithoutDepartamentosInput>
-    where?: UsuarioWhereInput
-  }
-
-  export type UsuarioUpdateToOneWithWhereWithoutDepartamentosInput = {
-    where?: UsuarioWhereInput
-    data: XOR<UsuarioUpdateWithoutDepartamentosInput, UsuarioUncheckedUpdateWithoutDepartamentosInput>
-  }
-
-  export type UsuarioUpdateWithoutDepartamentosInput = {
+  export type EmailUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteUpdateManyWithoutUsuarioNestedInput
+    address?: StringFieldUpdateOperationsInput | string
+    type?: EnumEmailTypeFieldUpdateOperationsInput | $Enums.EmailType
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioUncheckedUpdateWithoutDepartamentosInput = {
+  export type PhishingUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    sobrenome?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: StringFieldUpdateOperationsInput | string
-    cargo?: EnumCargoUsuarioFieldUpdateOperationsInput | $Enums.CargoUsuario
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteUncheckedUpdateManyWithoutUsuarioNestedInput
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    departments?: PhishingDepartmentUpdateManyWithoutPhishingNestedInput
   }
 
-  export type DepartamentoUpsertWithoutUsuariosInput = {
-    update: XOR<DepartamentoUpdateWithoutUsuariosInput, DepartamentoUncheckedUpdateWithoutUsuariosInput>
-    create: XOR<DepartamentoCreateWithoutUsuariosInput, DepartamentoUncheckedCreateWithoutUsuariosInput>
-    where?: DepartamentoWhereInput
-  }
-
-  export type DepartamentoUpdateToOneWithWhereWithoutUsuariosInput = {
-    where?: DepartamentoWhereInput
-    data: XOR<DepartamentoUpdateWithoutUsuariosInput, DepartamentoUncheckedUpdateWithoutUsuariosInput>
-  }
-
-  export type DepartamentoUpdateWithoutUsuariosInput = {
+  export type PhishingUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUpdateManyWithoutDepartamentoNestedInput
-    logs?: LogUpdateManyWithoutDepartamentoNestedInput
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    departments?: PhishingDepartmentUncheckedUpdateManyWithoutPhishingNestedInput
   }
 
-  export type DepartamentoUncheckedUpdateWithoutUsuariosInput = {
+  export type PhishingUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    nome?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    testes?: TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoNestedInput
-    logs?: LogUncheckedUpdateManyWithoutDepartamentoNestedInput
+    clicked?: BoolFieldUpdateOperationsInput | boolean
+    reported?: BoolFieldUpdateOperationsInput | boolean
+    channel?: EnumPhishingChannelFieldUpdateOperationsInput | $Enums.PhishingChannel
+    status?: EnumPhishingStatusFieldUpdateOperationsInput | $Enums.PhishingStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type UsuarioDepartamentoCreateWithoutUsuarioInput = {
-    id?: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamento: DepartamentoCreateNestedOneWithoutUsuariosInput
-  }
-
-  export type UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput = {
-    id?: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type UsuarioDepartamentoCreateOrConnectWithoutUsuarioInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    create: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput>
-  }
-
-  export type UsuarioDepartamentoCreateManyUsuarioInputEnvelope = {
-    data: UsuarioDepartamentoCreateManyUsuarioInput | UsuarioDepartamentoCreateManyUsuarioInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type TesteCreateWithoutUsuarioInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoCreateNestedManyWithoutTesteInput
-    logs?: LogCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteCreateNestedManyWithoutTesteInput
-  }
-
-  export type TesteUncheckedCreateWithoutUsuarioInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-    departamentos?: TesteDepartamentoUncheckedCreateNestedManyWithoutTesteInput
-    logs?: LogUncheckedCreateNestedManyWithoutTesteInput
-    campanhas?: CampanhaTesteUncheckedCreateNestedManyWithoutTesteInput
-  }
-
-  export type TesteCreateOrConnectWithoutUsuarioInput = {
-    where: TesteWhereUniqueInput
-    create: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput>
-  }
-
-  export type TesteCreateManyUsuarioInputEnvelope = {
-    data: TesteCreateManyUsuarioInput | TesteCreateManyUsuarioInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UsuarioDepartamentoUpsertWithWhereUniqueWithoutUsuarioInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    update: XOR<UsuarioDepartamentoUpdateWithoutUsuarioInput, UsuarioDepartamentoUncheckedUpdateWithoutUsuarioInput>
-    create: XOR<UsuarioDepartamentoCreateWithoutUsuarioInput, UsuarioDepartamentoUncheckedCreateWithoutUsuarioInput>
-  }
-
-  export type UsuarioDepartamentoUpdateWithWhereUniqueWithoutUsuarioInput = {
-    where: UsuarioDepartamentoWhereUniqueInput
-    data: XOR<UsuarioDepartamentoUpdateWithoutUsuarioInput, UsuarioDepartamentoUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type UsuarioDepartamentoUpdateManyWithWhereWithoutUsuarioInput = {
-    where: UsuarioDepartamentoScalarWhereInput
-    data: XOR<UsuarioDepartamentoUpdateManyMutationInput, UsuarioDepartamentoUncheckedUpdateManyWithoutUsuarioInput>
-  }
-
-  export type TesteUpsertWithWhereUniqueWithoutUsuarioInput = {
-    where: TesteWhereUniqueInput
-    update: XOR<TesteUpdateWithoutUsuarioInput, TesteUncheckedUpdateWithoutUsuarioInput>
-    create: XOR<TesteCreateWithoutUsuarioInput, TesteUncheckedCreateWithoutUsuarioInput>
-  }
-
-  export type TesteUpdateWithWhereUniqueWithoutUsuarioInput = {
-    where: TesteWhereUniqueInput
-    data: XOR<TesteUpdateWithoutUsuarioInput, TesteUncheckedUpdateWithoutUsuarioInput>
-  }
-
-  export type TesteUpdateManyWithWhereWithoutUsuarioInput = {
-    where: TesteScalarWhereInput
-    data: XOR<TesteUpdateManyMutationInput, TesteUncheckedUpdateManyWithoutUsuarioInput>
-  }
-
-  export type TesteScalarWhereInput = {
-    AND?: TesteScalarWhereInput | TesteScalarWhereInput[]
-    OR?: TesteScalarWhereInput[]
-    NOT?: TesteScalarWhereInput | TesteScalarWhereInput[]
-    id?: StringFilter<"Teste"> | string
-    canal?: EnumCanalTesteFilter<"Teste"> | $Enums.CanalTeste
-    status?: EnumStatusTesteFilter<"Teste"> | $Enums.StatusTeste
-    caiuNoTeste?: BoolFilter<"Teste"> | boolean
-    reportouPhishing?: BoolFilter<"Teste"> | boolean
-    usuarioId?: StringNullableFilter<"Teste"> | string | null
-    ativo?: BoolFilter<"Teste"> | boolean
-    criadoEm?: DateTimeFilter<"Teste"> | Date | string
-    criadoPor?: StringNullableFilter<"Teste"> | string | null
-    atualizadoEm?: DateTimeFilter<"Teste"> | Date | string
-    atualizadoPor?: StringNullableFilter<"Teste"> | string | null
-    inativadoEm?: DateTimeNullableFilter<"Teste"> | Date | string | null
-    inativadoPor?: StringNullableFilter<"Teste"> | string | null
-  }
-
-  export type LogCreateManyCampanhaInput = {
-    id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    departamentoId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type CampanhaTesteCreateManyCampanhaInput = {
-    id?: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type LogUpdateWithoutCampanhaInput = {
+  export type UserDepartmentUpdateWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamento?: DepartamentoUpdateOneWithoutLogsNestedInput
-    teste?: TesteUpdateOneWithoutLogsNestedInput
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: DepartmentUpdateOneRequiredWithoutUsersNestedInput
   }
 
-  export type LogUncheckedUpdateWithoutCampanhaInput = {
+  export type UserDepartmentUncheckedUpdateWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type LogUncheckedUpdateManyWithoutCampanhaInput = {
+  export type UserDepartmentUncheckedUpdateManyWithoutUsuarioInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type CampanhaTesteUpdateWithoutCampanhaInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    teste?: TesteUpdateOneRequiredWithoutCampanhasNestedInput
-  }
-
-  export type CampanhaTesteUncheckedUpdateWithoutCampanhaInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type CampanhaTesteUncheckedUpdateManyWithoutCampanhaInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TesteDepartamentoCreateManyDepartamentoInput = {
-    id?: string
-    testeId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type LogCreateManyDepartamentoInput = {
-    id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    testeId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type UsuarioDepartamentoCreateManyDepartamentoInput = {
-    id?: string
-    usuarioId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type TesteDepartamentoUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    teste?: TesteUpdateOneRequiredWithoutDepartamentosNestedInput
-  }
-
-  export type TesteDepartamentoUncheckedUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TesteDepartamentoUncheckedUpdateManyWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    testeId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LogUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    campanha?: CampanhaUpdateOneWithoutLogsNestedInput
-    teste?: TesteUpdateOneWithoutLogsNestedInput
-  }
-
-  export type LogUncheckedUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LogUncheckedUpdateManyWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    testeId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type UsuarioDepartamentoUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    usuario?: UsuarioUpdateOneRequiredWithoutDepartamentosNestedInput
-  }
-
-  export type UsuarioDepartamentoUncheckedUpdateWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    usuarioId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type UsuarioDepartamentoUncheckedUpdateManyWithoutDepartamentoInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    usuarioId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TesteDepartamentoCreateManyTesteInput = {
-    id?: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type LogCreateManyTesteInput = {
-    id?: string
-    tipo: $Enums.TipoLog
-    descricao?: string | null
-    campanhaId?: string | null
-    departamentoId?: string | null
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type CampanhaTesteCreateManyTesteInput = {
-    id?: string
-    campanhaId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type TesteDepartamentoUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamento?: DepartamentoUpdateOneRequiredWithoutTestesNestedInput
-  }
-
-  export type TesteDepartamentoUncheckedUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TesteDepartamentoUncheckedUpdateManyWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LogUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    campanha?: CampanhaUpdateOneWithoutLogsNestedInput
-    departamento?: DepartamentoUpdateOneWithoutLogsNestedInput
-  }
-
-  export type LogUncheckedUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type LogUncheckedUpdateManyWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    tipo?: EnumTipoLogFieldUpdateOperationsInput | $Enums.TipoLog
-    descricao?: NullableStringFieldUpdateOperationsInput | string | null
-    campanhaId?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentoId?: NullableStringFieldUpdateOperationsInput | string | null
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type CampanhaTesteUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    campanha?: CampanhaUpdateOneRequiredWithoutTestesNestedInput
-  }
-
-  export type CampanhaTesteUncheckedUpdateWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    campanhaId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type CampanhaTesteUncheckedUpdateManyWithoutTesteInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    campanhaId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type UsuarioDepartamentoCreateManyUsuarioInput = {
-    id?: string
-    departamentoId: string
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type TesteCreateManyUsuarioInput = {
-    id?: string
-    canal: $Enums.CanalTeste
-    status: $Enums.StatusTeste
-    caiuNoTeste?: boolean
-    reportouPhishing?: boolean
-    ativo?: boolean
-    criadoEm?: Date | string
-    criadoPor?: string | null
-    atualizadoEm?: Date | string
-    atualizadoPor?: string | null
-    inativadoEm?: Date | string | null
-    inativadoPor?: string | null
-  }
-
-  export type UsuarioDepartamentoUpdateWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamento?: DepartamentoUpdateOneRequiredWithoutUsuariosNestedInput
-  }
-
-  export type UsuarioDepartamentoUncheckedUpdateWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type UsuarioDepartamentoUncheckedUpdateManyWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    departamentoId?: StringFieldUpdateOperationsInput | string
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type TesteUpdateWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUpdateManyWithoutTesteNestedInput
-    logs?: LogUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUpdateManyWithoutTesteNestedInput
-  }
-
-  export type TesteUncheckedUpdateWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    departamentos?: TesteDepartamentoUncheckedUpdateManyWithoutTesteNestedInput
-    logs?: LogUncheckedUpdateManyWithoutTesteNestedInput
-    campanhas?: CampanhaTesteUncheckedUpdateManyWithoutTesteNestedInput
-  }
-
-  export type TesteUncheckedUpdateManyWithoutUsuarioInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    canal?: EnumCanalTesteFieldUpdateOperationsInput | $Enums.CanalTeste
-    status?: EnumStatusTesteFieldUpdateOperationsInput | $Enums.StatusTeste
-    caiuNoTeste?: BoolFieldUpdateOperationsInput | boolean
-    reportouPhishing?: BoolFieldUpdateOperationsInput | boolean
-    ativo?: BoolFieldUpdateOperationsInput | boolean
-    criadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    criadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    atualizadoEm?: DateTimeFieldUpdateOperationsInput | Date | string
-    atualizadoPor?: NullableStringFieldUpdateOperationsInput | string | null
-    inativadoEm?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    inativadoPor?: NullableStringFieldUpdateOperationsInput | string | null
+    department_id?: StringFieldUpdateOperationsInput | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by?: StringFieldUpdateOperationsInput | string
+    updated_by?: StringFieldUpdateOperationsInput | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    inactivated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    inactivated_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
 

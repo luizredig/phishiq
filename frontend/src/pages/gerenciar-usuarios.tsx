@@ -116,7 +116,7 @@ export default function GerenciarUsuarios() {
       (usuario.sobrenome &&
         usuario.sobrenome.toLowerCase().includes(termoBusca)) ||
       usuario.departamentos?.some((d) =>
-        d.departamento.nome.toLowerCase().includes(termoBusca)
+        d.department.nome.toLowerCase().includes(termoBusca)
       )
     );
   });

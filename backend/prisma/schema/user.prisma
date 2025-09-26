@@ -1,0 +1,18 @@
+model User {
+  id               String           @id @default(uuid())
+  name             String
+  emails           Email[]
+  password         String?
+  roles            String[]
+  tenant_id        String
+  phishings        Phishing[]
+  user_departments UserDepartment[]
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+}

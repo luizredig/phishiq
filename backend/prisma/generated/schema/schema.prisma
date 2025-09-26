@@ -1,77 +1,120 @@
-model CampanhaTeste {
-  id         String   @id @default(uuid())
-  campanhaId String
-  campanha   Campanha @relation(fields: [campanhaId], references: [id])
-  testeId    String
-  teste      Teste    @relation(fields: [testeId], references: [id])
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
-
-  @@unique([campanhaId, testeId])
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  OPEN
+  SEND
+  ERROR
 }
 
-model Campanha {
-  id        String          @id @default(uuid())
-  titulo    String
-  descricao String?
-  status    StatusCampanha
-  logs      Log[]
-  testes    CampanhaTeste[]
+model Department {
+  id        String               @id @default(uuid())
+  name      String
+  phishings PhishingDepartment[]
+  users     UserDepartment[]
 
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
 }
 
-enum CanalTeste {
+enum EmailType {
+  WORK
+  PERSONAL
+}
+
+model Email {
+  id      String    @id @default(uuid())
+  address String    @unique
+  user_id String
+  user    User      @relation(fields: [user_id], references: [id])
+  type    EmailType
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+}
+
+enum Entity {
+  DEPARTMENT
   EMAIL
-}
-
-model Departamento {
-  id       String                @id @default(uuid())
-  nome     String
-  testes   TesteDepartamento[]
-  logs     Log[]
-  usuarios UsuarioDepartamento[]
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
+  ENUM
+  MODULE
+  PHISHING
+  PSEUDONYM
+  TENANT
+  TENANT_MODULE
+  USER
+  USER_DEPARTMENT
 }
 
 model Log {
-  id        String  @id @default(uuid())
-  tipo      TipoLog
-  descricao String?
+  id        String @id @default(uuid())
+  entity    Entity
+  entity_id String
+  action    Action
 
-  campanha       Campanha?     @relation(fields: [campanhaId], references: [id])
-  campanhaId     String?
-  departamento   Departamento? @relation(fields: [departamentoId], references: [id])
-  departamentoId String?
-  teste          Teste?        @relation(fields: [testeId], references: [id])
-  testeId        String?
+  created_at DateTime @default(now())
+  created_by String
+}
 
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
+enum PhishingChannel {
+  EMAIL
+}
+
+model PhishingDepartment {
+  id            String     @id @default(uuid())
+  phishing_id   String
+  phishing      Phishing   @relation(fields: [phishing_id], references: [id])
+  department_id String
+  department    Department @relation(fields: [department_id], references: [id])
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  @@unique([phishing_id, department_id])
+}
+
+enum PhishingStatus {
+  SENT
+  CLICKED
+  SEND_FAILED
+}
+
+model Phishing {
+  id String @id @default(uuid())
+
+  clicked  Boolean @default(false)
+  reported Boolean @default(false)
+
+  departments PhishingDepartment[]
+  channel     PhishingChannel
+  status      PhishingStatus
+
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
 }
 
 generator client {
@@ -85,105 +128,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum StatusCampanha {
-  INICIADA
-  EM_ANDAMENTO
-  FINALIZADA
+model UserDepartment {
+  id            String     @id @default(uuid())
+  user_id       String
+  department_id String
+  usuario       User       @relation(fields: [user_id], references: [id])
+  department    Department @relation(fields: [department_id], references: [id])
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  @@unique([user_id, department_id])
 }
 
-enum StatusTeste {
-  ENVIADO
-  FALHA
-}
+model User {
+  id               String           @id @default(uuid())
+  name             String
+  emails           Email[]
+  password         String?
+  roles            String[]
+  tenant_id        String
+  phishings        Phishing[]
+  user_departments UserDepartment[]
 
-model TesteDepartamento {
-  id             String       @id @default(uuid())
-  testeId        String
-  teste          Teste        @relation(fields: [testeId], references: [id])
-  departamentoId String
-  departamento   Departamento @relation(fields: [departamentoId], references: [id])
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
-
-  @@unique([testeId, departamentoId])
-}
-
-model Teste {
-  id String @id @default(uuid())
-
-  departamentos    TesteDepartamento[]
-  canal            CanalTeste
-  status           StatusTeste
-  caiuNoTeste      Boolean             @default(false)
-  reportouPhishing Boolean             @default(false)
-  logs             Log[]
-  campanhas        CampanhaTeste[]
-  usuario          Usuario?            @relation(fields: [usuarioId], references: [id])
-  usuarioId        String?
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
-}
-
-enum TipoLog {
-  LOGIN
-  CRIACAO
-  ATUALIZACAO
-  DELECAO
-  TESTE_ENVIADO
-  TESTE_CLICADO
-  OUTRO
-}
-
-model UsuarioDepartamento {
-  id             String       @id @default(uuid())
-  usuarioId      String
-  departamentoId String
-  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
-  departamento   Departamento @relation(fields: [departamentoId], references: [id])
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
-
-  @@unique([usuarioId, departamentoId])
-}
-
-model Usuario {
-  id        String       @id @default(uuid())
-  nome      String
-  sobrenome String?
-  email     String       @unique
-  cargo     CargoUsuario @default(FUNCIONARIO)
-
-  departamentos UsuarioDepartamento[]
-  testes        Teste[]
-
-  ativo         Boolean   @default(true)
-  criadoEm      DateTime  @default(now())
-  criadoPor     String?
-  atualizadoEm  DateTime  @updatedAt
-  atualizadoPor String?
-  inativadoEm   DateTime?
-  inativadoPor  String?
-}
-
-enum CargoUsuario {
-  ADMIN
-  FUNCIONARIO
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
 }

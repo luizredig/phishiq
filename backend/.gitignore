@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/app
 /node_modules
 /build
 
@@ -38,6 +39,7 @@ lerna-debug.log*
 # dotenv environment variable files
 .env
 .env.*
+!.env.example
 
 # temp directory
 .temp

@@ -96,7 +96,7 @@ export function UsuarioDialog({
           cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados(
-          usuarioParaEditar.departamentos?.map((d) => d.departamento.id)
+          usuarioParaEditar.departamentos?.map((d) => d.department.id)
         );
       } else {
         form.reset({
@@ -132,7 +132,7 @@ export function UsuarioDialog({
         if (response) {
           // Atualiza departamentos do usuário
           const departamentosAtuais = usuarioParaEditar.departamentos?.map(
-            (d) => d.departamento.id
+            (d) => d.department.id
           );
           const departamentosParaAdicionar = departamentosSelecionados?.filter(
             (id) => !departamentosAtuais.includes(id)

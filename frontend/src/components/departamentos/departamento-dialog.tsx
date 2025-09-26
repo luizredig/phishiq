@@ -105,7 +105,7 @@ export function DepartamentoDialog({
           nome: departamentoParaEditar.nome,
         });
         setUsuariosSelecionados(
-          departamentoParaEditar.usuarios?.map((u) => u.usuario.id)
+          departamentoParaEditar.usuarios?.map((u) => u.user.id)
         );
       } else {
         form.reset({
@@ -136,7 +136,7 @@ export function DepartamentoDialog({
 
         // Atualiza usuários do departamento
         const usuariosAtuais = departamentoParaEditar.usuarios?.map(
-          (u) => u.usuario.id
+          (u) => u.user.id
         );
         const usuariosParaAdicionar = usuariosSelecionados?.filter(
           (id) => !usuariosAtuais.includes(id)
