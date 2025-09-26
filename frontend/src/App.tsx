@@ -3,7 +3,7 @@ import AppLayout from "./components/layout/app-layout";
 
 import { Dashboard } from "./pages/dashboard";
 import GerenciarCampanhas from "./pages/gerenciar-campanhas";
-import GerenciarDepartamentos from "./pages/gerenciar-departamentos";
+import GerenciarDepartamentos from "./pages/gerenciar-departments";
 import GerenciarTestes from "./pages/gerenciar-testes";
 import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 import Home from "./pages/home";
@@ -34,7 +34,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
         <Route
-          path="/gerenciar-departamentos"
+          path="/gerenciar-departments"
           element={<GerenciarDepartamentos />}
         />
         <Route path="/gerenciar-testes" element={<GerenciarTestes />} />

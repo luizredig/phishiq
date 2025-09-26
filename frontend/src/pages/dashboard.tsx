@@ -55,7 +55,7 @@ interface DashboardStats {
     email: string;
     falhas: number;
   }[];
-  departamentosMaisFalhas: {
+  departmentsMaisFalhas: {
     id: string;
     nome: string;
     falhas: number;
@@ -281,7 +281,7 @@ function DashboardContent({
             <CardTitle>Departamentos que mais falharam</CardTitle>
           </CardHeader>
           <CardContent>
-            {stats.departamentosMaisFalhas?.length === 0 ? (
+            {stats.departmentsMaisFalhas?.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
                 Nenhum departamento encontrado.
               </div>
@@ -294,7 +294,7 @@ function DashboardContent({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {stats.departamentosMaisFalhas?.map((departamento) => (
+                  {stats.departmentsMaisFalhas?.map((departamento) => (
                     <TableRow key={departamento.id}>
                       <TableCell>{departamento.nome}</TableCell>
                       <TableCell className="text-right">

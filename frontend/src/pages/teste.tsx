@@ -9,26 +9,23 @@ export default function Teste() {
   useEffect(() => {
     if (!id || isProcessed) return;
 
-    // Emite o evento quando a página é carregada
-    socket.emit("testeCaiu", id, (response: any) => {
+    socket.emit("phishing_clicked", id, (response: any) => {
       if (response) {
         setIsProcessed(true);
       }
     });
 
-    // Escuta o evento de atualização do teste
-    socket.on("testeAtualizado", (testeAtualizado: any) => {
+    socket.on("phishing_updated", (testeAtualizado: any) => {
       if (testeAtualizado.id === id) {
         setIsProcessed(true);
       }
     });
 
     return () => {
-      socket.off("testeCaiu");
-      socket.off("testeAtualizado");
+      socket.off("phishing_clicked");
+      socket.off("phishing_updated");
     };
   }, [id, isProcessed]);
 
-  // Retorna uma página em branco
   return null;
 }

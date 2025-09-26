@@ -47,7 +47,7 @@ interface Teste {
   status: "ENVIADO" | "FALHA";
   caiuNoTeste: boolean;
   reportouPhishing: boolean;
-  departamentos: {
+  departments: {
     departamento: {
       id: string;
       nome: string;
@@ -131,7 +131,7 @@ export default function GerenciarTestes() {
     if (busca) {
       const termoBusca = busca.toLowerCase();
       if (
-        !teste.departamentos?.some((d) =>
+        !teste.departments?.some((d) =>
           d.department.nome.toLowerCase().includes(termoBusca)
         )
       ) {
@@ -141,15 +141,12 @@ export default function GerenciarTestes() {
 
     // Filtro por tipo de envio
     if (filtros.tipoEnvio !== "TODOS") {
-      if (
-        filtros.tipoEnvio === "INDIVIDUAL" &&
-        teste.departamentos.length > 0
-      ) {
+      if (filtros.tipoEnvio === "INDIVIDUAL" && teste.departments.length > 0) {
         return false;
       }
       if (
         filtros.tipoEnvio === "DEPARTAMENTO" &&
-        teste.departamentos.length === 0
+        teste.departments.length === 0
       ) {
         return false;
       }
@@ -336,7 +333,7 @@ export default function GerenciarTestes() {
                 paginatedTestes?.map((teste) => (
                   <TableRow key={teste.id}>
                     <TableCell>
-                      {teste.departamentos.length > 0 ? (
+                      {teste.departments.length > 0 ? (
                         <HoverCard>
                           <HoverCardTrigger asChild>
                             <div className="flex items-center gap-1">
@@ -344,14 +341,14 @@ export default function GerenciarTestes() {
                                 variant="secondary"
                                 className="hover:none bg-gray-200 text-gray-700 hover:bg-gray-200"
                               >
-                                {teste.departamentos[0].department.nome}
+                                {teste.departments[0].department.nome}
                               </Badge>
-                              {teste.departamentos.length > 1 && (
+                              {teste.departments.length > 1 && (
                                 <Badge
                                   variant="secondary"
                                   className="hover:bg-gray-200 bg-gray-200 text-gray-700"
                                 >
-                                  +{teste.departamentos.length - 1}
+                                  +{teste.departments.length - 1}
                                 </Badge>
                               )}
                             </div>
@@ -360,7 +357,7 @@ export default function GerenciarTestes() {
                             <div className="space-y-2">
                               <h4 className="font-medium">Departamentos</h4>
                               <div className="flex flex-wrap gap-1">
-                                {teste.departamentos?.map((d) => (
+                                {teste.departments?.map((d) => (
                                   <Badge
                                     key={d.department.id}
                                     variant="secondary"

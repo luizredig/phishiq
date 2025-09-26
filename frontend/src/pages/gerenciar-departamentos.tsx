@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { DepartamentoDialog } from "../components/departamentos/departamento-dialog";
+import { DepartamentoDialog } from "../components/departments/departamento-dialog";
 import { useApi } from "../hooks/use-api";
 
 interface Usuario {
@@ -44,7 +44,7 @@ interface Departamento {
 }
 
 export default function GerenciarDepartamentos() {
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
+  const [departments, setDepartamentos] = useState<Departamento[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoDepartamentoOpen, setIsNovoDepartamentoOpen] = useState(false);
@@ -68,13 +68,13 @@ export default function GerenciarDepartamentos() {
     setLoading(true);
     try {
       const response = await get<Departamento[]>(
-        `/departamentos?includeInactive=${includeInactive}`
+        `/departments?includeInactive=${includeInactive}`
       );
       if (response) {
         setDepartamentos(response);
       }
     } catch (error) {
-      console.error("Error fetching departamentos:", error);
+      console.error("Error fetching departments:", error);
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export default function GerenciarDepartamentos() {
 
   async function handleToggleStatus(id: string, ativo: boolean) {
     try {
-      const response = await put<Departamento>(`/departamentos/${id}/status`, {
+      const response = await put<Departamento>(`/departments/${id}/status`, {
         ativo,
       });
 
@@ -108,7 +108,7 @@ export default function GerenciarDepartamentos() {
 
     try {
       const response = await deleteRequest<{ success: boolean }>(
-        `/departamentos/${departamentoParaExcluir}`
+        `/departments/${departamentoParaExcluir}`
       );
 
       if (response) {
@@ -125,7 +125,7 @@ export default function GerenciarDepartamentos() {
     }
   }
 
-  const filteredDepartamentos = departamentos?.filter((departamento) => {
+  const filteredDepartamentos = departments?.filter((departamento) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
@@ -172,7 +172,7 @@ export default function GerenciarDepartamentos() {
   return (
     <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gerenciar departamentos</h1>
+        <h1 className="text-2xl font-bold">Gerenciar departments</h1>
         <Button onClick={() => setIsNovoDepartamentoOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Novo departamento

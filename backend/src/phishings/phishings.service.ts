@@ -1,22 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { Teste, CanalTeste, StatusTeste } from '../../prisma/generated/schema'
+import { Inject, Injectable } from '@nestjs/common'
+
+import {
+  Phishing,
+  PhishingChannel,
+  PhishingStatus,
+} from '../../prisma/generated/schema'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
-export class TestesService {
+export class PhishingsService {
   constructor(
-    private prisma: PrismaService,
+    @Inject('TENANT_PRISMA') private readonly prisma: PrismaClient,
     private nodemailerService: NodemailerService,
   ) {}
 
-  async findAll(includeInactive = false): Promise<Teste[]> {
+  async findAll(includeInactive = false): Promise<Phishing[]> {
     return this.prisma.teste.findMany({
       where: includeInactive ? { ativo: false } : { ativo: true },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -29,11 +34,11 @@ export class TestesService {
     })
   }
 
-  async findOne(id: string): Promise<Teste | null> {
+  async findOne(id: string): Promise<Phishing | null> {
     return this.prisma.teste.findUnique({
       where: { id },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -43,21 +48,21 @@ export class TestesService {
   }
 
   async create(createTesteDto: {
-    canal: CanalTeste
-    departamentos?: string[]
+    canal: PhishingChannel
+    departments?: string[]
     usuarioId?: string
     nomeEmpresa: string
   }) {
-    const { canal, departamentos, usuarioId, nomeEmpresa } = createTesteDto
+    const { canal, departments, usuarioId, nomeEmpresa } = createTesteDto
 
-    // Se tiver departamentos, cria o teste com os departamentos
-    if (departamentos && departamentos.length > 0) {
-      const teste = await this.prisma.teste.create({
+    // Se tiver departments, cria o teste com os departments
+    if (departments && departments.length > 0) {
+      const teste = await this.prisma.phishing.create({
         data: {
           canal,
           status: 'ENVIADO',
-          departamentos: {
-            create: departamentos?.map((departamentoId) => ({
+          departments: {
+            create: departments?.map((departamentoId) => ({
               departamento: {
                 connect: {
                   id: departamentoId,
@@ -67,7 +72,7 @@ export class TestesService {
           },
         },
         include: {
-          departamentos: {
+          departments: {
             include: {
               departamento: {
                 include: {
@@ -90,7 +95,7 @@ export class TestesService {
       })
 
       // Envio por departamento
-      // for (const departamento of teste.departamentos) {
+      // for (const departamento of teste.departments) {
       //   for (const usuarioDepartamento of departamento.department.usuarios) {
       //     if (usuarioDepartamento.usuario) {
       //       await this.nodemailerService.sendPhishingEmail(
@@ -114,7 +119,7 @@ export class TestesService {
       const usuario = await this.prisma.user.findUnique({
         where: { id: usuarioId },
         include: {
-          departamentos: {
+          departments: {
             include: {
               departamento: true,
             },
@@ -152,24 +157,24 @@ export class TestesService {
       return teste
     }
 
-    throw new Error('É necessário informar departamentos ou usuário')
+    throw new Error('É necessário informar departments ou usuário')
   }
 
   async update(
     id: string,
     updateTesteDto: {
-      canal?: CanalTeste
-      departamentos?: string[]
+      canal?: PhishingChannel
+      departments?: string[]
       usuarioId?: string
     },
   ) {
-    const { canal, departamentos, usuarioId } = updateTesteDto
+    const { canal, departments, usuarioId } = updateTesteDto
 
     // Primeiro, remove todas as relações existentes
-    await this.prisma.teste.update({
+    await this.prisma.phishing.update({
       where: { id },
       data: {
-        departamentos: {
+        departments: {
           deleteMany: {},
         },
         usuario: {
@@ -179,13 +184,13 @@ export class TestesService {
     })
 
     // Depois, atualiza com as novas relações
-    return this.prisma.teste.update({
+    return this.prisma.phishing.update({
       where: { id },
       data: {
         ...(canal && { canal }),
-        ...(departamentos && {
-          departamentos: {
-            create: departamentos?.map((departamentoId) => ({
+        ...(departments && {
+          departments: {
+            create: departments?.map((departamentoId) => ({
               departamento: {
                 connect: {
                   id: departamentoId,
@@ -203,7 +208,7 @@ export class TestesService {
         }),
       },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -213,15 +218,15 @@ export class TestesService {
     })
   }
 
-  async remove(id: string): Promise<Teste> {
-    return this.prisma.teste.update({
+  async remove(id: string): Promise<Phishing> {
+    return this.prisma.phishing.update({
       where: { id },
       data: {
         ativo: false,
         inativadoEm: new Date(),
       },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -230,8 +235,8 @@ export class TestesService {
     })
   }
 
-  async updateStatus(id: string, ativo: boolean): Promise<Teste> {
-    return this.prisma.teste.update({
+  async updateStatus(id: string, ativo: boolean): Promise<Phishing> {
+    return this.prisma.phishing.update({
       where: { id },
       data: {
         ativo,
@@ -239,7 +244,7 @@ export class TestesService {
         inativadoPor: ativo ? null : 'system',
       },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -254,15 +259,15 @@ export class TestesService {
       caiuNoTeste: boolean
       reportouPhishing: boolean
     },
-  ): Promise<Teste> {
-    return this.prisma.teste.update({
+  ): Promise<Phishing> {
+    return this.prisma.phishing.update({
       where: { id },
       data: {
         caiuNoTeste: data.caiuNoTeste,
         reportouPhishing: data.reportouPhishing,
       },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },
@@ -271,14 +276,17 @@ export class TestesService {
     })
   }
 
-  async updateStatusTeste(id: string, status: StatusTeste): Promise<Teste> {
-    return this.prisma.teste.update({
+  async updateStatusTeste(
+    id: string,
+    status: PhishingStatus,
+  ): Promise<Phishing> {
+    return this.prisma.phishing.update({
       where: { id },
       data: {
         status,
       },
       include: {
-        departamentos: {
+        departments: {
           include: {
             departamento: true,
           },

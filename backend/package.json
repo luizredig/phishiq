@@ -8,7 +8,7 @@
   "scripts": {
     "app:prepare": "mkdir -p app/dist && cp package.json app/package.json && cp tsconfig.json app/tsconfig.json && cp -r prisma app/prisma",
     "build:prod": "sh -c 'TENANT=${npm_config_tenant}; if [ -z \"$TENANT\" ]; then echo \"Erro: parâmetro --tenant é obrigatório (ex.: --tenant=porto-itapoa)\"; exit 1; fi; dotenv -e .env.$TENANT -- sh -c \"npm run prisma:deploy && npm run generate && npm run build && npm run app:prepare\"'",
-    "dev": "dotenv -e .env.development -- sh -c \"npm run app:prepare && npm run generate && npm run generate:master&& npm run start:watch\"",
+    "dev": "dotenv -e .env.development -- sh -c \"npm run app:prepare && npm run generate && npm run generate:master && npm run start:watch\"",
     "format": "prisma format --schema=prisma/schema",
     "format:master": "prisma format --schema=prisma/master",
     "generate": "prisma generate --schema=prisma/schema",

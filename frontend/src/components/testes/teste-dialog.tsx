@@ -44,7 +44,7 @@ interface TesteDialogProps {
     status: "ENVIADO" | "FALHA";
     caiuNoTeste: boolean;
     reportouPhishing: boolean;
-    departamentos: {
+    departments: {
       departamento: {
         id: string;
         nome: string;
@@ -67,7 +67,7 @@ interface Usuario {
 
 const baseFormSchema = z.object({
   canal: z.enum(["EMAIL"]),
-  departamentos: z.array(z.string()).optional(),
+  departments: z.array(z.string()).optional(),
   usuarioId: z.string().optional(),
 });
 
@@ -80,31 +80,31 @@ export function TesteDialog({
 }: TesteDialogProps) {
   const { post, put, get, loading } = useApi();
 
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
+  const [departments, setDepartamentos] = useState<Departamento[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [selectedDepartamentos, setSelectedDepartamentos] = useState<
     Departamento[]
   >([]);
-  const [activeTab, setActiveTab] = useState("departamentos");
+  const [activeTab, setActiveTab] = useState("departments");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buscaUsuario, setBuscaUsuario] = useState("");
   const [buscaDepartamento, setBuscaDepartamento] = useState("");
 
   const formSchema = baseFormSchema.refine(
     (data) => {
-      // Se estiver na aba de departamentos, precisa ter pelo menos um departamento
-      if (activeTab === "departamentos") {
-        return data.departamentos && data.departamentos.length > 0;
+      // Se estiver na aba de departments, precisa ter pelo menos um departamento
+      if (activeTab === "departments") {
+        return data.departments && data.departments.length > 0;
       }
       // Se estiver na aba individual, precisa ter um usuário
       return !!data.usuarioId;
     },
     {
       message:
-        activeTab === "departamentos"
+        activeTab === "departments"
           ? "Selecione pelo menos um departamento"
           : "Selecione um usuário",
-      path: activeTab === "departamentos" ? ["departamentos"] : ["usuarioId"],
+      path: activeTab === "departments" ? ["departments"] : ["usuarioId"],
     }
   );
 
@@ -112,7 +112,7 @@ export function TesteDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       canal: "EMAIL",
-      departamentos: [],
+      departments: [],
       usuarioId: undefined,
     },
   });
@@ -126,19 +126,17 @@ export function TesteDialog({
     if (testeParaEditar) {
       form.reset({
         canal: testeParaEditar.canal,
-        departamentos: testeParaEditar.departamentos?.map(
-          (d) => d.department.id
-        ),
+        departments: testeParaEditar.departments?.map((d) => d.department.id),
         usuarioId: undefined,
       });
       setSelectedDepartamentos(
-        testeParaEditar.departamentos?.map((d) => d.departamento)
+        testeParaEditar.departments?.map((d) => d.departamento)
       );
-      setActiveTab("departamentos");
+      setActiveTab("departments");
     } else {
       form.reset({
         canal: "EMAIL",
-        departamentos: [],
+        departments: [],
         usuarioId: undefined,
       });
       setSelectedDepartamentos([]);
@@ -147,10 +145,10 @@ export function TesteDialog({
 
   // Limpa os campos da tab inativa quando trocar de tab
   useEffect(() => {
-    if (activeTab === "departamentos") {
+    if (activeTab === "departments") {
       form.setValue("usuarioId", undefined);
     } else {
-      form.setValue("departamentos", []);
+      form.setValue("departments", []);
       setSelectedDepartamentos([]);
     }
   }, [activeTab, form]);
@@ -158,13 +156,13 @@ export function TesteDialog({
   async function fetchDepartamentos() {
     try {
       const response = await get<Departamento[]>(
-        "/departamentos/ativos-com-usuarios"
+        "/departments/ativos-com-usuarios"
       );
       if (response) {
         setDepartamentos(response);
       }
     } catch (error) {
-      console.error("Error fetching departamentos:", error);
+      console.error("Error fetching departments:", error);
     }
   }
 
@@ -188,13 +186,13 @@ export function TesteDialog({
         prev?.filter((d) => d.id !== departamento.id)
       );
       form.setValue(
-        "departamentos",
-        form.getValues("departamentos")?.filter((id) => id !== departamento.id)
+        "departments",
+        form.getValues("departments")?.filter((id) => id !== departamento.id)
       );
     } else {
       setSelectedDepartamentos((prev) => [...prev, departamento]);
-      form.setValue("departamentos", [
-        ...(form.getValues("departamentos") || []),
+      form.setValue("departments", [
+        ...(form.getValues("departments") || []),
         departamento.id,
       ]);
     }
@@ -209,7 +207,7 @@ export function TesteDialog({
     );
   });
 
-  const departamentosFiltrados = departamentos?.filter((departamento) => {
+  const departmentsFiltrados = departments?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
     return departamento.nome.toLowerCase().includes(termoBusca);
@@ -223,8 +221,8 @@ export function TesteDialog({
       const payload = {
         canal: data.canal,
         nomeEmpresa: "Empresa",
-        ...(activeTab === "departamentos"
-          ? { departamentos: data.departamentos }
+        ...(activeTab === "departments"
+          ? { departments: data.departments }
           : { usuarioId: data.usuarioId }),
       };
 
@@ -290,13 +288,13 @@ export function TesteDialog({
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="departamentos">
+                <TabsTrigger value="departments">
                   Envio por departamento
                 </TabsTrigger>
                 <TabsTrigger value="individual">Envio individual</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="departamentos">
+              <TabsContent value="departments">
                 <Alert className="mb-4 bg-muted border-muted-foreground/20">
                   <Info className="h-4 w-4 stroke-muted-foreground" />
                   <AlertDescription className="text-muted-foreground">
@@ -320,14 +318,13 @@ export function TesteDialog({
                 <Alert className="mb-4 bg-yellow-50 border-yellow-200 text-yellow-800">
                   <Info className="h-4 w-4 stroke-yellow-800" />
                   <AlertDescription>
-                    Apenas departamentos com usuários cadastrados serão
-                    exibidos.
+                    Apenas departments com usuários cadastrados serão exibidos.
                   </AlertDescription>
                 </Alert>
 
                 <FormField
                   control={form.control}
-                  name="departamentos"
+                  name="departments"
                   render={() => (
                     <FormItem>
                       <div className="flex items-center justify-between">
@@ -337,7 +334,7 @@ export function TesteDialog({
                         </span>
                       </div>
                       <div className="space-y-2">
-                        {departamentos.length === 0 ? (
+                        {departments.length === 0 ? (
                           <div className="text-center py-4 text-muted-foreground">
                             Nenhum departamento com usuários cadastrados
                             encontrado.
@@ -357,12 +354,12 @@ export function TesteDialog({
                             </div>
 
                             <div className="border rounded-md p-2 space-y-2 max-h-40 overflow-y-auto">
-                              {departamentosFiltrados.length === 0 ? (
+                              {departmentsFiltrados.length === 0 ? (
                                 <p className="text-sm text-muted-foreground text-center py-2">
                                   Nenhum departamento encontrado.
                                 </p>
                               ) : (
-                                departamentosFiltrados?.map((departamento) => {
+                                departmentsFiltrados?.map((departamento) => {
                                   const isSelecionado =
                                     selectedDepartamentos?.some(
                                       (d) => d.id === departamento.id

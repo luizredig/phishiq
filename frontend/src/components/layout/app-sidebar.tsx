@@ -74,7 +74,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: "Departamentos",
-            url: "/gerenciar-departamentos",
+            url: "/gerenciar-departments",
             icon: <Grid2x2Plus className={"text-primary"} />,
             show: true,
           },

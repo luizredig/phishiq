@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { Inject, Injectable } from '@nestjs/common'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
 export class DashboardService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
   async getStats() {
     const [
@@ -13,30 +13,26 @@ export class DashboardService {
       campanhasAtivas,
       testesPorDepartamento,
       usuariosMaisFalhas,
-      departamentosMaisFalhas,
+      departmentsMaisFalhas,
     ] = await Promise.all([
-      // Total de testes
-      this.prisma.teste.count({
+      this.prisma.phishing.count({
         where: { ativo: true },
       }),
 
-      // Testes bem sucedidos (não caíram no teste)
-      this.prisma.teste.count({
+      this.prisma.phishing.count({
         where: {
           ativo: true,
           caiuNoTeste: false,
         },
       }),
 
-      // Testes com falha (caíram no teste)
-      this.prisma.teste.count({
+      this.prisma.phishing.count({
         where: {
           ativo: true,
           caiuNoTeste: true,
         },
       }),
 
-      // Campanhas ativas
       this.prisma.campanha.count({
         where: {
           ativo: true,
@@ -44,7 +40,6 @@ export class DashboardService {
         },
       }),
 
-      // Testes por departamento
       this.prisma.department.findMany({
         where: { ativo: true },
         select: {
@@ -67,7 +62,6 @@ export class DashboardService {
         },
       }),
 
-      // Usuários com mais falhas
       this.prisma.user.findMany({
         where: { ativo: true, cargo: 'FUNCIONARIO' },
         select: {
@@ -75,7 +69,7 @@ export class DashboardService {
           nome: true,
           sobrenome: true,
           email: true,
-          departamentos: {
+          departments: {
             select: {
               departamento: {
                 select: {
@@ -98,14 +92,13 @@ export class DashboardService {
         take: 5,
       }),
 
-      // Departamentos com mais falhas
       this.prisma.department.findMany({
         where: {
           ativo: true,
           usuarios: {
             some: {
               usuario: {
-                departamentos: {
+                departments: {
                   some: {
                     departamento: {
                       testes: {
@@ -142,8 +135,7 @@ export class DashboardService {
       }),
     ])
 
-    // Processa os dados dos departamentos
-    const departamentosProcessados = testesPorDepartamento
+    const departmentsProcessados = testesPorDepartamento
       ?.map((dept) => {
         const falhas = dept.testes.length
 
@@ -154,10 +146,9 @@ export class DashboardService {
       })
       .sort((a, b) => b.falhas - a.falhas)
 
-    // Processa os dados dos usuários com mais falhas
     const usuariosProcessados = usuariosMaisFalhas
       ?.map((usuario) => {
-        const falhas = usuario.departamentos.reduce((acc, dept) => {
+        const falhas = usuario.departments.reduce((acc, dept) => {
           return acc + dept.department.testes.length
         }, 0)
 
@@ -171,8 +162,7 @@ export class DashboardService {
       ?.filter((usuario) => usuario.falhas > 0)
       .sort((a, b) => b.falhas - a.falhas)
 
-    // Processa os dados dos departamentos com mais falhas
-    const departamentosFalhasProcessados = departamentosMaisFalhas
+    const departmentsFalhasProcessados = departmentsMaisFalhas
       ?.map((dept) => {
         const falhas = dept.testes.length
 
@@ -189,9 +179,9 @@ export class DashboardService {
       testesSucesso,
       testesFalha,
       campanhasAtivas,
-      testesPorDepartamento: departamentosProcessados,
+      testesPorDepartamento: departmentsProcessados,
       usuariosMaisFalhas: usuariosProcessados,
-      departamentosMaisFalhas: departamentosFalhasProcessados,
+      departmentsMaisFalhas: departmentsFalhasProcessados,
     }
   }
 }

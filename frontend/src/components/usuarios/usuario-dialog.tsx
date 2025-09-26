@@ -48,7 +48,7 @@ interface UsuarioDialogProps {
     sobrenome: string | null;
     email: string;
     cargo: CargoUsuario;
-    departamentos: {
+    departments: {
       departamento: Departamento;
     }[];
   };
@@ -69,8 +69,8 @@ export function UsuarioDialog({
   usuarioParaEditar,
 }: UsuarioDialogProps) {
   const { post, put, get, delete: deleteRequest, loading } = useApi();
-  const [departamentos, setDepartamentos] = useState<Departamento[]>([]);
-  const [departamentosSelecionados, setDepartamentosSelecionados] = useState<
+  const [departments, setDepartamentos] = useState<Departamento[]>([]);
+  const [departmentsSelecionados, setDepartamentosSelecionados] = useState<
     string[]
   >([]);
   const [buscaDepartamento, setBuscaDepartamento] = useState("");
@@ -96,7 +96,7 @@ export function UsuarioDialog({
           cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados(
-          usuarioParaEditar.departamentos?.map((d) => d.department.id)
+          usuarioParaEditar.departments?.map((d) => d.department.id)
         );
       } else {
         form.reset({
@@ -112,12 +112,12 @@ export function UsuarioDialog({
 
   async function fetchDepartamentos() {
     try {
-      const response = await get<Departamento[]>("/departamentos");
+      const response = await get<Departamento[]>("/departments");
       if (response) {
         setDepartamentos(response);
       }
     } catch (error) {
-      console.error("Error fetching departamentos:", error);
+      console.error("Error fetching departments:", error);
     }
   }
 
@@ -130,29 +130,29 @@ export function UsuarioDialog({
       if (usuarioParaEditar) {
         const response = await put(`/usuarios/${usuarioParaEditar.id}`, data);
         if (response) {
-          // Atualiza departamentos do usuário
-          const departamentosAtuais = usuarioParaEditar.departamentos?.map(
+          // Atualiza departments do usuário
+          const departmentsAtuais = usuarioParaEditar.departments?.map(
             (d) => d.department.id
           );
-          const departamentosParaAdicionar = departamentosSelecionados?.filter(
-            (id) => !departamentosAtuais.includes(id)
+          const departmentsParaAdicionar = departmentsSelecionados?.filter(
+            (id) => !departmentsAtuais.includes(id)
           );
-          const departamentosParaRemover = departamentosAtuais?.filter(
-            (id) => !departamentosSelecionados.includes(id)
+          const departmentsParaRemover = departmentsAtuais?.filter(
+            (id) => !departmentsSelecionados.includes(id)
           );
 
           await Promise.all([
-            // Adiciona novos departamentos
-            ...departamentosParaAdicionar?.map((departamentoId) =>
+            // Adiciona novos departments
+            ...departmentsParaAdicionar?.map((departamentoId) =>
               post(
-                `/departamentos/${departamentoId}/usuarios/${usuarioParaEditar.id}`,
+                `/departments/${departamentoId}/usuarios/${usuarioParaEditar.id}`,
                 {}
               )
             ),
-            // Remove departamentos
-            ...departamentosParaRemover?.map((departamentoId) =>
+            // Remove departments
+            ...departmentsParaRemover?.map((departamentoId) =>
               deleteRequest(
-                `/departamentos/${departamentoId}/usuarios/${usuarioParaEditar.id}`
+                `/departments/${departamentoId}/usuarios/${usuarioParaEditar.id}`
               )
             ),
           ]);
@@ -162,13 +162,10 @@ export function UsuarioDialog({
         }
       } else {
         const response = await post<{ id: string }>("/usuarios", data);
-        if (response && departamentosSelecionados.length > 0) {
+        if (response && departmentsSelecionados.length > 0) {
           await Promise.all(
-            departamentosSelecionados?.map((departamentoId) =>
-              post(
-                `/departamentos/${departamentoId}/usuarios/${response.id}`,
-                {}
-              )
+            departmentsSelecionados?.map((departamentoId) =>
+              post(`/departments/${departamentoId}/usuarios/${response.id}`, {})
             )
           );
         }
@@ -181,7 +178,7 @@ export function UsuarioDialog({
     }
   }
 
-  const departamentosFiltrados = departamentos?.filter((departamento) => {
+  const departmentsFiltrados = departments?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
     return departamento.nome.toLowerCase().includes(termoBusca);
@@ -290,7 +287,7 @@ export function UsuarioDialog({
                   </span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {departamentosSelecionados.length} selecionado(s)
+                  {departmentsSelecionados.length} selecionado(s)
                 </span>
               </div>
               <div className="relative">
@@ -304,13 +301,13 @@ export function UsuarioDialog({
               </div>
 
               <div className="border rounded-md p-2 space-y-2 max-h-40 overflow-y-auto">
-                {departamentosFiltrados.length === 0 ? (
+                {departmentsFiltrados.length === 0 ? (
                   <p className="text-sm text-muted-foreground text-center py-2">
                     Nenhum departamento encontrado.
                   </p>
                 ) : (
-                  departamentosFiltrados?.map((departamento) => {
-                    const isSelecionado = departamentosSelecionados.includes(
+                  departmentsFiltrados?.map((departamento) => {
+                    const isSelecionado = departmentsSelecionados.includes(
                       departamento.id
                     );
                     return (

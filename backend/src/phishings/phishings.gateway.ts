@@ -7,30 +7,32 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
-import { TestesService } from './testes.service'
+import { PhishingsService } from './phishings.service'
 
 @WebSocketGateway({
   cors: {
     origin: [process.env.FRONTEND_URL],
   },
 })
-export class TestesGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class PhishingsGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server
 
-  constructor(private readonly testesService: TestesService) {}
+  constructor(private readonly service: PhishingsService) {}
 
   handleConnection(client: Socket) {}
 
   handleDisconnect(client: Socket) {}
 
-  @SubscribeMessage('testeCaiu')
-  async handleTesteCaiu(client: Socket, id: string) {
-    const teste = await this.testesService.updateResultado(id, {
+  @SubscribeMessage('phishing_clicked')
+  async handlePhishingClicked(client: Socket, id: string) {
+    const teste = await this.service.updateResultado(id, {
       caiuNoTeste: true,
       reportouPhishing: false,
     })
-    this.server.emit('testeAtualizado', teste)
+    this.server.emit('phishing_updated', teste)
     return teste
   }
 }

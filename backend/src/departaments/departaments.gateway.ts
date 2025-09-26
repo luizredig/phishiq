@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -9,55 +6,51 @@ import {
   OnGatewayDisconnect,
 } from '@nestjs/websockets'
 import { Server, Socket } from 'socket.io'
-import { DepartamentosService } from './departamentos.service'
+import { DepartamentsService as DepartmentsService } from './departaments.service'
 
 @WebSocketGateway({
   cors: {
     origin: [process.env.FRONTEND_URL],
   },
 })
-export class DepartamentosGateway
+export class DepartamentsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer()
   server: Server
 
-  constructor(private readonly departamentosService: DepartamentosService) {}
+  constructor(private readonly service: DepartmentsService) {}
 
   handleConnection(client: Socket) {}
 
   handleDisconnect(client: Socket) {}
 
-  @SubscribeMessage('findAllDepartamentos')
+  @SubscribeMessage('find_all_departments')
   async handleFindAll(client: Socket, includeInactive = false) {
-    const departamentos =
-      await this.departamentosService.findAll(includeInactive)
-    return departamentos
+    const departments = await this.service.findAll(includeInactive)
+    return departments
   }
 
-  @SubscribeMessage('findOneDepartamento')
+  @SubscribeMessage('find_one_department')
   async handleFindOneDepartamento(client: Socket, id: string) {
-    const departamento = await this.departamentosService.findOne(id)
+    const departamento = await this.service.findOne(id)
     return departamento
   }
 
-  @SubscribeMessage('createDepartamento')
+  @SubscribeMessage('create_department')
   async handleCreateDepartamento(client: Socket, data: { nome: string }) {
-    const departamento = await this.departamentosService.create(data)
+    const departamento = await this.service.create(data)
     this.server.emit('departamentoCreated', departamento)
     return departamento
   }
 
-  @SubscribeMessage('updateDepartamento')
+  @SubscribeMessage('update_department')
   async handleUpdateDepartamento(
     client: Socket,
     payload: { id: string; data: { nome?: string } },
   ) {
     try {
-      const departamento = await this.departamentosService.update(
-        payload.id,
-        payload.data,
-      )
+      const departamento = await this.service.update(payload.id, payload.data)
       this.server.emit('departamentoUpdated', departamento)
       return departamento
     } catch (error) {
@@ -66,12 +59,12 @@ export class DepartamentosGateway
     }
   }
 
-  @SubscribeMessage('updateDepartamentoStatus')
+  @SubscribeMessage('update_department_status')
   async handleUpdateStatus(
     client: Socket,
     payload: { id: string; ativo: boolean },
   ) {
-    const departamento = await this.departamentosService.updateStatus(
+    const departamento = await this.service.updateStatus(
       payload.id,
       payload.ativo,
     )
@@ -79,25 +72,25 @@ export class DepartamentosGateway
     return departamento
   }
 
-  @SubscribeMessage('removeDepartamento')
+  @SubscribeMessage('remove_department')
   async handleRemoveDepartamento(client: Socket, id: string) {
-    const departamento = await this.departamentosService.remove(id)
+    const departamento = await this.service.remove(id)
     this.server.emit('departamentoRemoved', departamento)
     return departamento
   }
 
-  @SubscribeMessage('getDepartamentoUsuarios')
+  @SubscribeMessage('get_department_users')
   async handleGetDepartamentoUsuarios(client: Socket, id: string) {
-    const usuarios = await this.departamentosService.getUsuarios(id)
+    const usuarios = await this.service.getUsuarios(id)
     return usuarios
   }
 
-  @SubscribeMessage('addDepartamentoUsuario')
+  @SubscribeMessage('add_department_user')
   async handleAddDepartamentoUsuario(
     client: Socket,
     payload: { departamentoId: string; usuarioId: string },
   ) {
-    const departamento = await this.departamentosService.addUsuario(
+    const departamento = await this.service.addUsuario(
       payload.departamentoId,
       payload.usuarioId,
     )
@@ -105,12 +98,12 @@ export class DepartamentosGateway
     return departamento
   }
 
-  @SubscribeMessage('inativarDepartamentoUsuario')
+  @SubscribeMessage('inativar_department_user')
   async handleInativarDepartamentoUsuario(
     client: Socket,
     payload: { departamentoId: string; usuarioId: string },
   ) {
-    const departamento = await this.departamentosService.removeUsuario(
+    const departamento = await this.service.removeUsuario(
       payload.departamentoId,
       payload.usuarioId,
     )
@@ -118,12 +111,12 @@ export class DepartamentosGateway
     return departamento
   }
 
-  @SubscribeMessage('removeDepartamentoUsuario')
+  @SubscribeMessage('remove_department_user')
   async handleRemoveDepartamentoUsuario(
     client: Socket,
     payload: { departamentoId: string; usuarioId: string },
   ) {
-    const departamento = await this.departamentosService.removeUsuario(
+    const departamento = await this.service.removeUsuario(
       payload.departamentoId,
       payload.usuarioId,
     )

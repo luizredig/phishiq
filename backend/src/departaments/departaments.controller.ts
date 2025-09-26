@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Controller,
   Get,
@@ -11,30 +9,30 @@ import {
   Query,
   Put,
 } from '@nestjs/common'
-import { DepartamentosService } from './departamentos.service'
+import { DepartamentsService as DepartamentsService } from './departaments.service'
 
-@Controller('departamentos')
-export class DepartamentosController {
-  constructor(private readonly departamentosService: DepartamentosService) {}
+@Controller('departments')
+export class DepartamentsController {
+  constructor(private readonly service: DepartamentsService) {}
 
   @Get()
   findAll(@Query('includeInactive') includeInactive?: string) {
-    return this.departamentosService.findAll(includeInactive === 'true')
+    return this.service.findAll(includeInactive === 'true')
   }
 
   @Get('ativos-com-usuarios')
   findActiveWithUsers() {
-    return this.departamentosService.findActiveWithUsers()
+    return this.service.findActiveWithUsers()
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.departamentosService.findOne(id)
+    return this.service.findOne(id)
   }
 
   @Post()
   create(@Body() createDepartamentoDto: { nome: string }) {
-    return this.departamentosService.create(createDepartamentoDto)
+    return this.service.create(createDepartamentoDto)
   }
 
   @Patch(':id')
@@ -42,7 +40,7 @@ export class DepartamentosController {
     @Param('id') id: string,
     @Body() updateDepartamentoDto: { nome?: string },
   ) {
-    return this.departamentosService.update(id, updateDepartamentoDto)
+    return this.service.update(id, updateDepartamentoDto)
   }
 
   @Put(':id')
@@ -50,27 +48,27 @@ export class DepartamentosController {
     @Param('id') id: string,
     @Body() updateDepartamentoDto: { nome?: string },
   ) {
-    return this.departamentosService.update(id, updateDepartamentoDto)
+    return this.service.update(id, updateDepartamentoDto)
   }
 
   @Put(':id/status')
   updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
-    return this.departamentosService.updateStatus(id, ativo)
+    return this.service.updateStatus(id, ativo)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.departamentosService.remove(id)
+    return this.service.remove(id)
   }
 
   @Get(':id/usuarios')
   getUsuarios(@Param('id') id: string) {
-    return this.departamentosService.getUsuarios(id)
+    return this.service.getUsuarios(id)
   }
 
   @Post(':id/usuarios/:usuarioId')
   addUsuario(@Param('id') id: string, @Param('usuarioId') usuarioId: string) {
-    return this.departamentosService.addUsuario(id, usuarioId)
+    return this.service.addUsuario(id, usuarioId)
   }
 
   @Delete(':id/usuarios/:usuarioId')
@@ -78,6 +76,6 @@ export class DepartamentosController {
     @Param('id') id: string,
     @Param('usuarioId') usuarioId: string,
   ) {
-    return this.departamentosService.removeUsuario(id, usuarioId)
+    return this.service.removeUsuario(id, usuarioId)
   }
 }

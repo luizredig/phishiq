@@ -9,55 +9,55 @@ import {
   Query,
   Patch,
 } from '@nestjs/common'
-import { StatusTeste } from '../../prisma/generated/schema'
-import { TestesService } from './testes.service'
+import { PhishingStatus } from '../../prisma/generated/schema'
+import { PhishingsService } from './phishings.service'
 
 interface CreateTesteDto {
   canal: 'EMAIL'
-  departamentos?: string[]
+  departments?: string[]
   usuarioId?: string
   nomeEmpresa: string
 }
 
 interface UpdateTesteDto {
   canal?: 'EMAIL'
-  departamentos?: string[]
+  departments?: string[]
   usuarioId?: string
   nomeEmpresa?: string
 }
 
-@Controller('testes')
-export class TestesController {
-  constructor(private readonly testesService: TestesService) {}
+@Controller('phishings')
+export class PhishingsController {
+  constructor(private readonly service: PhishingsService) {}
 
   @Get()
   findAll(@Query('includeInactive') includeInactive?: string) {
-    return this.testesService.findAll(includeInactive === 'true')
+    return this.service.findAll(includeInactive === 'true')
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.testesService.findOne(id)
+    return this.service.findOne(id)
   }
 
   @Post()
   create(@Body() createTesteDto: CreateTesteDto) {
-    return this.testesService.create(createTesteDto)
+    return this.service.create(createTesteDto)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTesteDto: UpdateTesteDto) {
-    return this.testesService.update(id, updateTesteDto)
+    return this.service.update(id, updateTesteDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.testesService.remove(id)
+    return this.service.remove(id)
   }
 
   @Put(':id/status')
   updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
-    return this.testesService.updateStatus(id, ativo)
+    return this.service.updateStatus(id, ativo)
   }
 
   @Put(':id/resultado')
@@ -69,14 +69,14 @@ export class TestesController {
       reportouPhishing: boolean
     },
   ) {
-    return this.testesService.updateResultado(id, resultado)
+    return this.service.updateResultado(id, resultado)
   }
 
   @Put(':id/status-teste')
   updateStatusTeste(
     @Param('id') id: string,
-    @Body('status') status: StatusTeste,
+    @Body('status') status: PhishingStatus,
   ) {
-    return this.testesService.updateStatusTeste(id, status)
+    return this.service.updateStatusTeste(id, status)
   }
 }

@@ -1,18 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { Departamento, Usuario } from '../../prisma/generated/schema'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import { Department, User } from '../../prisma/generated/schema'
+import { PrismaClient } from '@prisma/client'
 
 @Injectable()
-export class DepartamentosService {
-  constructor(private prisma: PrismaService) {}
+export class DepartamentsService {
+  constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
-  async findAll(includeInactive = false): Promise<Departamento[]> {
+  async findAll(includeInactive = false): Promise<Department[]> {
     return this.prisma.department.findMany({
       where: {
         ativo: includeInactive ? false : true,
@@ -30,7 +24,7 @@ export class DepartamentosService {
     })
   }
 
-  async findActiveWithUsers(): Promise<Departamento[]> {
+  async findActiveWithUsers(): Promise<Department[]> {
     return this.prisma.department.findMany({
       where: {
         ativo: true,
@@ -62,7 +56,7 @@ export class DepartamentosService {
     })
   }
 
-  async findOne(id: string): Promise<Departamento | null> {
+  async findOne(id: string): Promise<Department | null> {
     const departamento = await this.prisma.department.findUnique({
       where: { id },
       include: {
@@ -75,13 +69,13 @@ export class DepartamentosService {
     })
 
     if (!departamento) {
-      throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
+      throw new NotFoundException()
     }
 
     return departamento
   }
 
-  async create(data: { nome: string }): Promise<Departamento> {
+  async create(data: { nome: string }): Promise<Department> {
     return this.prisma.department.create({
       data,
       include: {
@@ -94,18 +88,16 @@ export class DepartamentosService {
     })
   }
 
-  async update(id: string, data: { nome?: string }): Promise<Departamento> {
+  async update(id: string, data: { nome?: string }): Promise<Department> {
     try {
-      // Primeiro verifica se o departamento existe
       const exists = await this.prisma.department.findUnique({
         where: { id },
       })
 
       if (!exists) {
-        throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
+        throw new NotFoundException()
       }
 
-      // Se existe, atualiza
       return await this.prisma.department.update({
         where: { id },
         data,
@@ -118,18 +110,17 @@ export class DepartamentosService {
         },
       })
     } catch (error) {
-      console.error(`Erro ao atualizar departamento ${id}:`, error)
       throw error
     }
   }
 
-  async updateStatus(id: string, ativo: boolean): Promise<Departamento> {
+  async updateStatus(id: string, ativo: boolean): Promise<Department> {
     const exists = await this.prisma.department.findUnique({
       where: { id },
     })
 
     if (!exists) {
-      throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
+      throw new NotFoundException()
     }
 
     return this.prisma.department.update({
@@ -149,13 +140,13 @@ export class DepartamentosService {
     })
   }
 
-  async remove(id: string): Promise<Departamento> {
+  async remove(id: string): Promise<Department> {
     const exists = await this.prisma.department.findUnique({
       where: { id },
     })
 
     if (!exists) {
-      throw new NotFoundException(`Departamento com ID ${id} não encontrado`)
+      throw new NotFoundException()
     }
 
     return this.prisma.department.update({
@@ -174,7 +165,7 @@ export class DepartamentosService {
     })
   }
 
-  async getUsuarios(departamentoId: string): Promise<Usuario[]> {
+  async getUsuarios(departamentoId: string): Promise<User[]> {
     const departamento = await this.prisma.department.findUnique({
       where: { id: departamentoId },
       include: {
@@ -188,9 +179,7 @@ export class DepartamentosService {
     })
 
     if (!departamento) {
-      throw new NotFoundException(
-        `Departamento com ID ${departamentoId} não encontrado`,
-      )
+      throw new NotFoundException()
     }
 
     return departamento.usuarios?.map((ud) => ud.usuario)
@@ -199,7 +188,7 @@ export class DepartamentosService {
   async addUsuario(
     departamentoId: string,
     usuarioId: string,
-  ): Promise<Departamento> {
+  ): Promise<Department> {
     try {
       await this.prisma.usuarioDepartamento.create({
         data: {
@@ -209,14 +198,9 @@ export class DepartamentosService {
       })
 
       const departamento = await this.findOne(departamentoId)
-      if (!departamento)
-        throw new NotFoundException('Departamento não encontrado')
+      if (!departamento) throw new NotFoundException()
       return departamento
     } catch (error) {
-      console.error(
-        `Erro ao adicionar usuário ${usuarioId} ao departamento ${departamentoId}:`,
-        error,
-      )
       throw error
     }
   }
@@ -224,7 +208,7 @@ export class DepartamentosService {
   async removeUsuario(
     departamentoId: string,
     usuarioId: string,
-  ): Promise<Departamento> {
+  ): Promise<Department> {
     try {
       await this.prisma.usuarioDepartamento.deleteMany({
         where: {
@@ -234,14 +218,9 @@ export class DepartamentosService {
       })
 
       const departamento = await this.findOne(departamentoId)
-      if (!departamento)
-        throw new NotFoundException('Departamento não encontrado')
+      if (!departamento) throw new NotFoundException()
       return departamento
     } catch (error) {
-      console.error(
-        `Erro ao remover usuário ${usuarioId} do departamento ${departamentoId}:`,
-        error,
-      )
       throw error
     }
   }

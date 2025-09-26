@@ -43,7 +43,7 @@ interface Usuario {
   cargo: "ADMIN" | "FUNCIONARIO";
   ativo: boolean;
   criadoEm: string;
-  departamentos: {
+  departments: {
     departamento: {
       id: string;
       nome: string;
@@ -115,7 +115,7 @@ export default function GerenciarUsuarios() {
       usuario.email.toLowerCase().includes(termoBusca) ||
       (usuario.sobrenome &&
         usuario.sobrenome.toLowerCase().includes(termoBusca)) ||
-      usuario.departamentos?.some((d) =>
+      usuario.departments?.some((d) =>
         d.department.nome.toLowerCase().includes(termoBusca)
       )
     );
@@ -226,13 +226,13 @@ export default function GerenciarUsuarios() {
 
                     <TableCell>
                       <div className="flex justify-center items-center">
-                        {usuario.departamentos.length > 0 ? (
+                        {usuario.departments.length > 0 ? (
                           <Badge
                             variant="secondary"
                             className="flex items-center gap-1"
                           >
                             <Building2 className="h-3 w-3" />
-                            {usuario.departamentos.length}
+                            {usuario.departments.length}
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground text-sm">

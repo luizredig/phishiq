@@ -130,7 +130,7 @@ export function DepartamentoDialog({
   async function onSubmit(data: DepartamentoFormData) {
     try {
       if (departamentoParaEditar) {
-        await put(`/departamentos/${departamentoParaEditar.id}`, {
+        await put(`/departments/${departamentoParaEditar.id}`, {
           nome: data.nome,
         });
 
@@ -149,26 +149,26 @@ export function DepartamentoDialog({
           // Adiciona novos usuários
           ...usuariosParaAdicionar?.map((usuarioId) =>
             post(
-              `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`,
+              `/departments/${departamentoParaEditar.id}/usuarios/${usuarioId}`,
               {}
             )
           ),
           // Remove usuários (exclui o registro da tabela de relacionamento)
           ...usuariosParaRemover?.map((usuarioId) =>
             deleteRequest(
-              `/departamentos/${departamentoParaEditar.id}/usuarios/${usuarioId}`
+              `/departments/${departamentoParaEditar.id}/usuarios/${usuarioId}`
             )
           ),
         ]);
       } else {
-        const response = await post<Departamento>("/departamentos", {
+        const response = await post<Departamento>("/departments", {
           nome: data.nome,
         });
 
         if (response && usuariosSelecionados.length > 0) {
           await Promise.all(
             usuariosSelecionados?.map((usuarioId) =>
-              post(`/departamentos/${response.id}/usuarios/${usuarioId}`, {})
+              post(`/departments/${response.id}/usuarios/${usuarioId}`, {})
             )
           );
         }
