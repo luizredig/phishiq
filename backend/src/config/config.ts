@@ -11,11 +11,4 @@ export default () => ({
     namePrefix: process.env.DB_NAME_PREFIX,
     schema: process.env.DB_SCHEMA,
   },
-  keycloak: {
-    url: process.env.KEYCLOAK_URL,
-    realm: process.env.KEYCLOAK_REALM,
-    clientId: process.env.KEYCLOAK_CLIENT_ID,
-    clientSecret: process.env.KEYCLOAK_CLIENT_SECRET,
-    issuer: process.env.KEYCLOAK_ISSUER,
-  },
-});
+})

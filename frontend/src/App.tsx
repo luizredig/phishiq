@@ -2,11 +2,10 @@ import { Outlet, Route, Routes } from "react-router-dom";
 import AppLayout from "./components/layout/app-layout";
 
 import { Dashboard } from "./pages/dashboard";
-import GerenciarCampanhas from "./pages/gerenciar-campanhas";
-import GerenciarDepartamentos from "./pages/gerenciar-departments";
-import GerenciarTestes from "./pages/gerenciar-testes";
-import GerenciarUsuarios from "./pages/gerenciar-usuarios";
 import Home from "./pages/home";
+import ManageDepartments from "./pages/manage-departments";
+import ManagePhishings from "./pages/manage-phishings";
+import ManageUsers from "./pages/manage-users";
 import Materiais from "./pages/materiais";
 import NaoEncontrado from "./pages/pagina-nao-encontrada";
 import Quiz from "./pages/quiz";
@@ -32,13 +31,9 @@ export default function App() {
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/materiais" element={<Materiais />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/gerenciar-usuarios" element={<GerenciarUsuarios />} />
-        <Route
-          path="/gerenciar-departments"
-          element={<GerenciarDepartamentos />}
-        />
-        <Route path="/gerenciar-testes" element={<GerenciarTestes />} />
-        <Route path="/gerenciar-campanhas" element={<GerenciarCampanhas />} />
+        <Route path="/gerenciar-usuarios" element={<ManageUsers />} />
+        <Route path="/gerenciar-departments" element={<ManageDepartments />} />
+        <Route path="/gerenciar-testes" element={<ManagePhishings />} />
         <Route path="/templates" element={<GerenciarTemplates />} />
       </Route>
 

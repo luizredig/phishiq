@@ -9,7 +9,7 @@ set -e
 for i in "$@"; do
   case $i in
     --tenant=*)
-      TENANT="${i#*=}"     # slug (ex: "speed")
+      TENANT="${i#*=}"
       shift
       ;;
     *)
@@ -33,7 +33,7 @@ TENANT_DB="phishiq_tenant_${TENANT_DB_SAFE}"
 
 DB_USER="admin"
 DB_PASS="admin"
-POSTGRES_CONTAINER="postgres16"
+POSTGRES_CONTAINER="postgres16-phishiq"
 BACKEND_CONTAINER="phishiq-backend"
 MASTER_DB="phishiq_master"
 
@@ -84,26 +84,10 @@ echo ">>> Criando usuário admin no banco $TENANT_DB ..."
 run_psql "$TENANT_DB" "
 CREATE EXTENSION IF NOT EXISTS \"pgcrypto\";
 
-INSERT INTO \"User\" (id, name, email, password, roles, tenant_id, owner_id, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'Administrador', 'admin@admin.com', 'admin', '{admin}', '$TENANT_ID', '$TENANT_ID', now(), 'system', now()
+INSERT INTO \"User\" (id, name, email, roles, tenant_id, created_by, created_at, updated_by, updated_at)
+SELECT gen_random_uuid(), 'Administrador', 'admin@admin.com', '{admin}', '$TENANT_ID', '$TENANT_ID', now(), 'system', now()
 WHERE NOT EXISTS (SELECT 1 FROM \"User\" u WHERE u.email = 'admin@admin.com');
 
--- Inserir LaneTypes padrão (ENTRADA e SAÍDA) caso não existam
-INSERT INTO \"LaneType\" (id, name, slug, owner_id, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'ENTRADA', 'entrada', '$TENANT_ID', now(), 'system', now()
-WHERE NOT EXISTS (SELECT 1 FROM \"LaneType\" lt WHERE lt.slug = 'entrada');
-
-INSERT INTO \"LaneType\" (id, name, slug, owner_id, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'SAÍDA', 'saida', '$TENANT_ID', now(), 'system', now()
-WHERE NOT EXISTS (SELECT 1 FROM \"LaneType\" lt WHERE lt.slug = 'saida');
-
-INSERT INTO \"VehicleType\" (id, name, slug, owner_id, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'CARRO', 'carro', '$TENANT_ID', now(), 'system', now()
-WHERE NOT EXISTS (SELECT 1 FROM \"VehicleType\" vt WHERE vt.slug = 'carro');
-
-INSERT INTO \"VehicleType\" (id, name, slug, owner_id, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'CAMINHÃO', 'caminhao', '$TENANT_ID', now(), 'system', now()
-WHERE NOT EXISTS (SELECT 1 FROM \"VehicleType\" vt WHERE vt.slug = 'caminhao');
 "
 
 echo ">>> Finalizado com sucesso!"
