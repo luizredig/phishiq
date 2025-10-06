@@ -2,6 +2,11 @@ export default () => ({
   server: {
     port: process.env.PORT,
   },
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    accessTtl: process.env.JWT_ACCESS_TTL,
+    refreshTtl: process.env.JWT_REFRESH_TTL,
+  },
   database: {
     connectionString: process.env.DATABASE_URL,
     user: process.env.DB_USER,

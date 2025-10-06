@@ -62,11 +62,11 @@ export class DepartamentsGateway
   @SubscribeMessage('update_department_status')
   async handleUpdateStatus(
     client: Socket,
-    payload: { id: string; ativo: boolean },
+    payload: { id: string; is_active: boolean },
   ) {
     const departamento = await this.service.updateStatus(
       payload.id,
-      payload.ativo,
+      payload.is_active,
     )
     this.server.emit('departamentoUpdated', departamento)
     return departamento

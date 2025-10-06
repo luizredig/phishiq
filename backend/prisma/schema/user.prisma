@@ -1,11 +1,14 @@
 model User {
-  id               String           @id @default(uuid())
-  name             String
-  email            String           @unique
-  roles            String[]
-  tenant_id        String
-  phishings        Phishing[]
-  user_departments UserDepartment[]
+  id                 String           @id @default(uuid())
+  name               String
+  email              String           @unique
+  password_hash      String
+  refresh_token_hash String?
+  last_login_at      DateTime?
+  roles              String[]
+  tenant_id          String
+  phishings          Phishing[]
+  user_departments   UserDepartment[]
 
   is_active      Boolean   @default(true)
   created_at     DateTime  @default(now())

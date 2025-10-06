@@ -2,7 +2,7 @@ model UserDepartment {
   id            String     @id @default(uuid())
   user_id       String
   department_id String
-  usuario       User       @relation(fields: [user_id], references: [id])
+  user       User       @relation(fields: [user_id], references: [id])
   department    Department @relation(fields: [department_id], references: [id])
 
   is_active      Boolean   @default(true)

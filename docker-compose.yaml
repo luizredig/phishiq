@@ -31,7 +31,7 @@ services:
   
   postgres:
     image: postgres:16
-    container_name: postgres16-phishiq
+    container_name: postgres16
     restart: always
     environment:
       POSTGRES_USER: admin
@@ -46,7 +46,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin-phishiq
+    container_name: pgadmin
     restart: always
     ports:
       - "5050:80"

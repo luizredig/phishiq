@@ -2,6 +2,7 @@ model Module {
   id             String    @id @default(uuid())
   name           String
   slug           String    @unique
+  
   is_active      Boolean   @default(true)
   created_by     String
   created_at     DateTime  @default(now())

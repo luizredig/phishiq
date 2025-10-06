@@ -36,7 +36,7 @@ interface Usuario {
 interface Departamento {
   id: string;
   nome: string;
-  ativo: boolean;
+  is_active: boolean;
   criadoEm: string;
   usuarios: {
     usuario: Usuario;
@@ -80,16 +80,18 @@ export default function ManageDepartments() {
     }
   }
 
-  async function handleToggleStatus(id: string, ativo: boolean) {
+  async function handleToggleStatus(id: string, is_active: boolean) {
     try {
       const response = await put<Departamento>(`/departments/${id}/status`, {
-        ativo,
+        is_active,
       });
 
       if (response) {
         setDepartamentos((prev) =>
           prev?.map((departamento) =>
-            departamento.id === id ? { ...departamento, ativo } : departamento
+            departamento.id === id
+              ? { ...departamento, is_active }
+              : departamento
           )
         );
       }
@@ -146,7 +148,7 @@ export default function ManageDepartments() {
   );
 
   function getStatusBadge(departamento: Departamento) {
-    if (!departamento.ativo) {
+    if (!departamento.is_active) {
       return (
         <Badge
           variant="outline"
@@ -256,7 +258,7 @@ export default function ManageDepartments() {
 
                     <TableCell className="text-center">
                       <Switch
-                        checked={departamento.ativo}
+                        checked={departamento.is_active}
                         onCheckedChange={(checked) =>
                           handleToggleStatus(departamento.id, checked)
                         }

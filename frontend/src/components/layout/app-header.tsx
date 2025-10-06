@@ -12,6 +12,7 @@ import {
 import { SidebarTrigger } from "../ui/sidebar";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { useAuth } from "../../contexts/auth-context";
 
 interface UserInfo {
   name: string;
@@ -20,6 +21,7 @@ interface UserInfo {
 }
 
 export function AppHeader() {
+  const { isAuthenticated, logout } = useAuth();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +83,10 @@ export function AppHeader() {
                   </span>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => logout()}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Sair
                 </DropdownMenuItem>

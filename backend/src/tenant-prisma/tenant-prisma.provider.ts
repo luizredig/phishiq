@@ -1,9 +1,9 @@
-import { FactoryProvider, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { Request } from 'express';
-import { PrismaClient } from '../../prisma/generated/schema';
-import { TenantPrismaService } from './tenant-prisma.service';
-import { MasterPrismaService } from '../master-prisma/master-prisma.service';
+import { FactoryProvider, Scope } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
+import { Request } from 'express'
+import { PrismaClient } from '../../prisma/generated/schema'
+import { TenantPrismaService } from './tenant-prisma.service'
+import { MasterPrismaService } from '../master-prisma/master-prisma.service'
 
 export const TenantPrismaProvider: FactoryProvider<PrismaClient> = {
   provide: 'TENANT_PRISMA',
@@ -14,29 +14,18 @@ export const TenantPrismaProvider: FactoryProvider<PrismaClient> = {
     tenantPrisma: TenantPrismaService,
     masterPrisma: MasterPrismaService,
   ) => {
-    const tenantIdOrSlug =
-      (req as any)?.user?.tenant_id || req.headers['x-tenant-id'];
-    if (!tenantIdOrSlug || typeof tenantIdOrSlug !== 'string') {
-      throw new Error('Tenant ID is requiredddd');
-    }
+    const slug = process.env.TENANT_SPEED
 
-    let tenant = await masterPrisma.tenant.findUnique({
-      where: { id: tenantIdOrSlug },
+    const tenant = await masterPrisma.tenant.findUnique({
+      where: { slug: slug },
       select: { id: true, slug: true },
-    });
+    })
 
     if (!tenant) {
-      tenant = await masterPrisma.tenant.findUnique({
-        where: { slug: tenantIdOrSlug },
-        select: { id: true, slug: true },
-      });
+      throw new Error('Invalid tenant')
     }
 
-    if (!tenant) {
-      throw new Error('Invalid tenant');
-    }
-
-    const normalized = tenant.slug.replaceAll('-', '_');
-    return tenantPrisma.getClient(normalized);
+    const normalized = tenant.slug.replaceAll('-', '_')
+    return tenantPrisma.getClient(normalized)
   },
-};
+}

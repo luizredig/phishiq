@@ -33,7 +33,7 @@ TENANT_DB="phishiq_tenant_${TENANT_DB_SAFE}"
 
 DB_USER="admin"
 DB_PASS="admin"
-POSTGRES_CONTAINER="postgres16-phishiq"
+POSTGRES_CONTAINER="postgres16"
 BACKEND_CONTAINER="phishiq-backend"
 MASTER_DB="phishiq_master"
 
@@ -84,8 +84,8 @@ echo ">>> Criando usuário admin no banco $TENANT_DB ..."
 run_psql "$TENANT_DB" "
 CREATE EXTENSION IF NOT EXISTS \"pgcrypto\";
 
-INSERT INTO \"User\" (id, name, email, roles, tenant_id, created_by, created_at, updated_by, updated_at)
-SELECT gen_random_uuid(), 'Administrador', 'admin@admin.com', '{admin}', '$TENANT_ID', '$TENANT_ID', now(), 'system', now()
+INSERT INTO \"User\" (id, name, email, password_hash, roles, tenant_id, created_by, created_at, updated_by, updated_at)
+SELECT gen_random_uuid(), 'Administrador', 'admin@admin.com', 'admin', '{admin}', '$TENANT_ID', '$TENANT_ID', now(), 'system', now()
 WHERE NOT EXISTS (SELECT 1 FROM \"User\" u WHERE u.email = 'admin@admin.com');
 
 "

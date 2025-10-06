@@ -41,7 +41,7 @@ interface Usuario {
   sobrenome: string | null;
   email: string;
   cargo: "ADMIN" | "FUNCIONARIO";
-  ativo: boolean;
+  is_active: boolean;
   criadoEm: string;
   departments: {
     departamento: {
@@ -74,7 +74,7 @@ export default function ManageUsers() {
     setLoading(true);
     try {
       const response = await get<Usuario[]>(
-        `/usuarios?includeInactive=${includeInactive}`
+        `/users?includeInactive=${includeInactive}`
       );
       if (response) {
         setUsuarios(response);
@@ -86,14 +86,16 @@ export default function ManageUsers() {
     }
   }
 
-  async function handleToggleStatus(id: string, ativo: boolean) {
+  async function handleToggleStatus(id: string, is_active: boolean) {
     try {
-      const response = await put<Usuario>(`/usuarios/${id}/status`, { ativo });
+      const response = await put<Usuario>(`/users/${id}/status`, {
+        is_active,
+      });
 
       if (response) {
         setUsuarios((prev) =>
           prev?.map((usuario) =>
-            usuario.id === id ? { ...usuario, ativo } : usuario
+            usuario.id === id ? { ...usuario, is_active } : usuario
           )
         );
       }
@@ -129,7 +131,7 @@ export default function ManageUsers() {
   );
 
   function getStatusBadge(usuario: Usuario) {
-    if (!usuario.ativo) {
+    if (!usuario.is_active) {
       return (
         <Badge
           variant="outline"
@@ -250,7 +252,7 @@ export default function ManageUsers() {
 
                     <TableCell className="text-center">
                       <Switch
-                        checked={usuario.ativo}
+                        checked={usuario.is_active}
                         onCheckedChange={(checked) =>
                           handleToggleStatus(usuario.id, checked)
                         }

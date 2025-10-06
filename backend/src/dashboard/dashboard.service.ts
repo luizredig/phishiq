@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../prisma/generated/schema'
 
 @Injectable()
 export class DashboardService {
@@ -10,51 +10,43 @@ export class DashboardService {
       totalTestes,
       testesSucesso,
       testesFalha,
-      campanhasAtivas,
       testesPorDepartamento,
       usuariosMaisFalhas,
       departmentsMaisFalhas,
     ] = await Promise.all([
       this.prisma.phishing.count({
-        where: { ativo: true },
+        where: { is_active: true },
       }),
 
       this.prisma.phishing.count({
         where: {
-          ativo: true,
-          caiuNoTeste: false,
+          is_active: true,
+          clicked: false,
         },
       }),
 
       this.prisma.phishing.count({
         where: {
-          ativo: true,
-          caiuNoTeste: true,
-        },
-      }),
-
-      this.prisma.campanha.count({
-        where: {
-          ativo: true,
-          status: 'EM_ANDAMENTO',
+          is_active: true,
+          clicked: true,
         },
       }),
 
       this.prisma.department.findMany({
-        where: { ativo: true },
+        where: { is_active: true },
         select: {
-          nome: true,
-          testes: {
+          name: true,
+          phishings: {
             where: {
-              teste: {
-                ativo: true,
-                caiuNoTeste: true,
+              phishing: {
+                is_active: true,
+                clicked: true,
               },
             },
             select: {
-              teste: {
+              phishing: {
                 select: {
-                  caiuNoTeste: true,
+                  clicked: true,
                 },
               },
             },
@@ -63,23 +55,22 @@ export class DashboardService {
       }),
 
       this.prisma.user.findMany({
-        where: { ativo: true, cargo: 'FUNCIONARIO' },
+        where: { is_active: true },
         select: {
           id: true,
-          nome: true,
-          sobrenome: true,
+          name: true,
           email: true,
-          departments: {
+          user_departments: {
             select: {
-              departamento: {
+              department: {
                 select: {
-                  testes: {
-                    where: { teste: { ativo: true, caiuNoTeste: true } },
+                  phishings: {
+                    where: { phishing: { is_active: true, clicked: true } },
                     select: {
-                      teste: {
+                      phishing: {
                         select: {
                           id: true,
-                          caiuNoTeste: true,
+                          clicked: true,
                         },
                       },
                     },
@@ -94,38 +85,18 @@ export class DashboardService {
 
       this.prisma.department.findMany({
         where: {
-          ativo: true,
-          usuarios: {
-            some: {
-              usuario: {
-                departments: {
-                  some: {
-                    departamento: {
-                      testes: {
-                        some: {
-                          teste: {
-                            ativo: true,
-                            caiuNoTeste: true,
-                          },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
+          is_active: true,
         },
         select: {
           id: true,
-          nome: true,
-          testes: {
-            where: { teste: { ativo: true, caiuNoTeste: true } },
+          name: true,
+          phishings: {
+            where: { phishing: { is_active: true, clicked: true } },
             select: {
-              teste: {
+              phishing: {
                 select: {
                   id: true,
-                  caiuNoTeste: true,
+                  clicked: true,
                 },
               },
             },
@@ -137,10 +108,10 @@ export class DashboardService {
 
     const departmentsProcessados = testesPorDepartamento
       ?.map((dept) => {
-        const falhas = dept.testes.length
+        const falhas = dept.phishings.length
 
         return {
-          departamento: dept.nome,
+          department: dept.name,
           falhas,
         }
       })
@@ -148,13 +119,13 @@ export class DashboardService {
 
     const usuariosProcessados = usuariosMaisFalhas
       ?.map((usuario) => {
-        const falhas = usuario.departments.reduce((acc, dept) => {
-          return acc + dept.department.testes.length
+        const falhas = usuario.user_departments.reduce((acc, dept) => {
+          return acc + dept.department.phishings.length
         }, 0)
 
         return {
           id: usuario.id,
-          nome: `${usuario.nome} ${usuario.sobrenome}`,
+          name: `${usuario.name}`,
           email: usuario.email,
           falhas,
         }
@@ -164,11 +135,11 @@ export class DashboardService {
 
     const departmentsFalhasProcessados = departmentsMaisFalhas
       ?.map((dept) => {
-        const falhas = dept.testes.length
+        const falhas = dept.phishings.length
 
         return {
           id: dept.id,
-          nome: dept.nome,
+          name: dept.name,
           falhas,
         }
       })
@@ -178,7 +149,6 @@ export class DashboardService {
       totalTestes,
       testesSucesso,
       testesFalha,
-      campanhasAtivas,
       testesPorDepartamento: departmentsProcessados,
       usuariosMaisFalhas: usuariosProcessados,
       departmentsMaisFalhas: departmentsFalhasProcessados,

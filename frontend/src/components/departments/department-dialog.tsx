@@ -36,7 +36,7 @@ interface Usuario {
 interface Departamento {
   id: string;
   nome: string;
-  ativo: boolean;
+  is_active: boolean;
   usuarios: {
     usuario: Usuario;
   }[];
@@ -118,7 +118,7 @@ export function DepartmentDialog({
 
   async function fetchUsuarios() {
     try {
-      const response = await get<Usuario[]>("/usuarios");
+      const response = await get<Usuario[]>("/users");
       if (response) {
         setUsuarios(response);
       }
@@ -149,14 +149,14 @@ export function DepartmentDialog({
           // Adiciona novos usuários
           ...usuariosParaAdicionar?.map((usuarioId) =>
             post(
-              `/departments/${departamentoParaEditar.id}/usuarios/${usuarioId}`,
+              `/departments/${departamentoParaEditar.id}/users/${usuarioId}`,
               {}
             )
           ),
           // Remove usuários (exclui o registro da tabela de relacionamento)
           ...usuariosParaRemover?.map((usuarioId) =>
             deleteRequest(
-              `/departments/${departamentoParaEditar.id}/usuarios/${usuarioId}`
+              `/departments/${departamentoParaEditar.id}/users/${usuarioId}`
             )
           ),
         ]);
@@ -168,7 +168,7 @@ export function DepartmentDialog({
         if (response && usuariosSelecionados.length > 0) {
           await Promise.all(
             usuariosSelecionados?.map((usuarioId) =>
-              post(`/departments/${response.id}/usuarios/${usuarioId}`, {})
+              post(`/departments/${response.id}/users/${usuarioId}`, {})
             )
           );
         }

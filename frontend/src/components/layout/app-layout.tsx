@@ -1,8 +1,10 @@
 import { AppHeader } from "./app-header";
 import { SidebarProvider } from "../ui/sidebar";
 import { AppSidebar } from "./app-sidebar";
+import { useAuth } from "../../contexts/auth-context";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
   return (
     <SidebarProvider>
       <AppSidebar />

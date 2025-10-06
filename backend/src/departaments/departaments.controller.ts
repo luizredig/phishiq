@@ -52,8 +52,8 @@ export class DepartamentsController {
   }
 
   @Put(':id/status')
-  updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
-    return this.service.updateStatus(id, ativo)
+  updateStatus(@Param('id') id: string, @Body('is_active') is_active: boolean) {
+    return this.service.updateStatus(id, is_active)
   }
 
   @Delete(':id')
@@ -61,17 +61,17 @@ export class DepartamentsController {
     return this.service.remove(id)
   }
 
-  @Get(':id/usuarios')
+  @Get(':id/users')
   getUsuarios(@Param('id') id: string) {
     return this.service.getUsuarios(id)
   }
 
-  @Post(':id/usuarios/:usuarioId')
+  @Post(':id/users/:usuarioId')
   addUsuario(@Param('id') id: string, @Param('usuarioId') usuarioId: string) {
     return this.service.addUsuario(id, usuarioId)
   }
 
-  @Delete(':id/usuarios/:usuarioId')
+  @Delete(':id/users/:usuarioId')
   removeUsuario(
     @Param('id') id: string,
     @Param('usuarioId') usuarioId: string,

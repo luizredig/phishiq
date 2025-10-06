@@ -52,7 +52,7 @@ interface Teste {
       nome: string;
     };
   }[];
-  ativo: boolean;
+  is_active: boolean;
   criadoEm: string;
   usuario?: {
     id: string;
@@ -114,7 +114,7 @@ export default function ManagePhishings() {
   async function fetchTestes() {
     setLoading(true);
     try {
-      const response = await get<Teste[]>(`/testes`);
+      const response = await get<Teste[]>(`/phishings`);
       if (response) {
         setTestes(response);
       }

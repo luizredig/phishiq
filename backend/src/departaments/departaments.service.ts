@@ -9,17 +9,7 @@ export class DepartamentsService {
   async findAll(includeInactive = false): Promise<Department[]> {
     return this.prisma.department.findMany({
       where: {
-        ativo: includeInactive ? false : true,
-      },
-      include: {
-        usuarios: {
-          include: {
-            usuario: true,
-          },
-        },
-      },
-      orderBy: {
-        nome: 'asc',
+        is_active: includeInactive ? false : true,
       },
     })
   }
@@ -27,31 +17,7 @@ export class DepartamentsService {
   async findActiveWithUsers(): Promise<Department[]> {
     return this.prisma.department.findMany({
       where: {
-        ativo: true,
-        usuarios: {
-          some: {
-            ativo: true,
-            usuario: {
-              ativo: true,
-            },
-          },
-        },
-      },
-      include: {
-        usuarios: {
-          where: {
-            ativo: true,
-            usuario: {
-              ativo: true,
-            },
-          },
-          include: {
-            usuario: true,
-          },
-        },
-      },
-      orderBy: {
-        nome: 'asc',
+        is_active: true,
       },
     })
   }
@@ -59,13 +25,6 @@ export class DepartamentsService {
   async findOne(id: string): Promise<Department | null> {
     const departamento = await this.prisma.department.findUnique({
       where: { id },
-      include: {
-        usuarios: {
-          include: {
-            usuario: true,
-          },
-        },
-      },
     })
 
     if (!departamento) {
@@ -78,13 +37,6 @@ export class DepartamentsService {
   async create(data: { nome: string }): Promise<Department> {
     return this.prisma.department.create({
       data,
-      include: {
-        usuarios: {
-          include: {
-            usuario: true,
-          },
-        },
-      },
     })
   }
 
@@ -101,20 +53,13 @@ export class DepartamentsService {
       return await this.prisma.department.update({
         where: { id },
         data,
-        include: {
-          usuarios: {
-            include: {
-              usuario: true,
-            },
-          },
-        },
       })
     } catch (error) {
       throw error
     }
   }
 
-  async updateStatus(id: string, ativo: boolean): Promise<Department> {
+  async updateStatus(id: string, is_active: boolean): Promise<Department> {
     const exists = await this.prisma.department.findUnique({
       where: { id },
     })
@@ -126,16 +71,9 @@ export class DepartamentsService {
     return this.prisma.department.update({
       where: { id },
       data: {
-        ativo,
-        inativadoEm: ativo ? null : new Date(),
-        inativadoPor: ativo ? null : 'system',
-      },
-      include: {
-        usuarios: {
-          include: {
-            usuario: true,
-          },
-        },
+        is_active,
+        inactivated_by: is_active ? null : 'system',
+        inactivated_at: is_active ? null : new Date(),
       },
     })
   }
@@ -152,15 +90,9 @@ export class DepartamentsService {
     return this.prisma.department.update({
       where: { id },
       data: {
-        ativo: false,
-        inativadoEm: new Date(),
-      },
-      include: {
-        usuarios: {
-          include: {
-            usuario: true,
-          },
-        },
+        is_active: false,
+        inactivated_by: 'system',
+        inactivated_at: new Date(),
       },
     })
   }
@@ -168,36 +100,25 @@ export class DepartamentsService {
   async getUsuarios(departamentoId: string): Promise<User[]> {
     const departamento = await this.prisma.department.findUnique({
       where: { id: departamentoId },
-      include: {
-        usuarios: {
-          where: { ativo: true },
-          include: {
-            usuario: true,
-          },
-        },
-      },
     })
 
     if (!departamento) {
       throw new NotFoundException()
     }
 
-    return departamento.usuarios?.map((ud) => ud.usuario)
+    return departamento.users
   }
 
-  async addUsuario(
-    departamentoId: string,
-    usuarioId: string,
-  ): Promise<Department> {
+  async addUsuario(departmentId: string, userId: string): Promise<Department> {
     try {
-      await this.prisma.usuarioDepartamento.create({
+      await this.prisma.userDepartment.create({
         data: {
-          departamentoId,
-          usuarioId,
+          departamento_id: departmentId,
+          user_id: userId,
         },
       })
 
-      const departamento = await this.findOne(departamentoId)
+      const departamento = await this.findOne(departmentId)
       if (!departamento) throw new NotFoundException()
       return departamento
     } catch (error) {
@@ -206,18 +127,18 @@ export class DepartamentsService {
   }
 
   async removeUsuario(
-    departamentoId: string,
-    usuarioId: string,
+    departmentId: string,
+    userId: string,
   ): Promise<Department> {
     try {
-      await this.prisma.usuarioDepartamento.deleteMany({
+      await this.prisma.userDepartment.deleteMany({
         where: {
-          departamentoId,
-          usuarioId,
+          department_id: departmentId,
+          user_id: userId,
         },
       })
 
-      const departamento = await this.findOne(departamentoId)
+      const departamento = await this.findOne(departmentId)
       if (!departamento) throw new NotFoundException()
       return departamento
     } catch (error) {

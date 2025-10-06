@@ -2,6 +2,7 @@ model TenantModule {
   id             String    @id @default(uuid())
   tenant_id      String
   module_id      String
+  
   is_active      Boolean   @default(true)
   created_by     String
   created_at     DateTime  @default(now())

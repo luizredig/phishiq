@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+import { APP_GUARD } from '@nestjs/core'
 import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -11,6 +12,9 @@ import { MasterPrismaModule } from './master-prisma/master-prisma.module'
 import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { PhishingsModule } from './phishings/phishings.module'
 import { TenantPrismaModule } from './tenant-prisma/tenant-prisma.module'
+import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module'
+import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
   imports: [
@@ -23,12 +27,13 @@ import { TenantPrismaModule } from './tenant-prisma/tenant-prisma.module'
     TenantPrismaModule,
     PhishingsModule,
     DashboardModule,
-    TenantPrismaModule,
     MasterPrismaModule,
     CaslModule,
     LicensingModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../lib/socket";
 
-export default function Teste() {
+export default function PhishingClicked() {
   const { id } = useParams();
   const [isProcessed, setIsProcessed] = useState(false);
 

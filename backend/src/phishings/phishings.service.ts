@@ -19,7 +19,7 @@ export class PhishingsService {
 
   async findAll(includeInactive = false): Promise<Phishing[]> {
     return this.prisma.teste.findMany({
-      where: includeInactive ? { ativo: false } : { ativo: true },
+      where: includeInactive ? { is_active: false } : { is_active: true },
       include: {
         departments: {
           include: {
@@ -78,9 +78,9 @@ export class PhishingsService {
                 include: {
                   usuarios: {
                     where: {
-                      ativo: true,
+                      is_active: true,
                       usuario: {
-                        ativo: true,
+                        is_active: true,
                       },
                     },
                     include: {
@@ -104,7 +104,7 @@ export class PhishingsService {
       //           nomeEmpresa: nomeEmpresa,
       //           urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
       //           nomeUsuario: `${usuarioDepartamento.user.nome} ${usuarioDepartamento.user.sobrenome || ''}`,
-      //           linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+      //           linkBotao: `${process.env.FRONTEND_URL}/phishing/${teste.id}`,
       //         },
       //       )
       //     }
@@ -151,7 +151,7 @@ export class PhishingsService {
       //   nomeEmpresa: nomeEmpresa,
       //   urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
       //   nomeUsuario: `${usuario.nome} ${usuario.sobrenome || ''}`,
-      //   linkBotao: `${process.env.FRONTEND_URL}/teste/${teste.id}`,
+      //   linkBotao: `${process.env.FRONTEND_URL}/phishing/${teste.id}`,
       // })
 
       return teste
@@ -222,7 +222,7 @@ export class PhishingsService {
     return this.prisma.phishing.update({
       where: { id },
       data: {
-        ativo: false,
+        is_active: false,
         inativadoEm: new Date(),
       },
       include: {
@@ -235,13 +235,13 @@ export class PhishingsService {
     })
   }
 
-  async updateStatus(id: string, ativo: boolean): Promise<Phishing> {
+  async updateStatus(id: string, is_active: boolean): Promise<Phishing> {
     return this.prisma.phishing.update({
       where: { id },
       data: {
-        ativo,
-        inativadoEm: ativo ? null : new Date(),
-        inativadoPor: ativo ? null : 'system',
+        is_active: is_active,
+        inativadoEm: is_active ? null : new Date(),
+        inativadoPor: is_active ? null : 'system',
       },
       include: {
         departments: {

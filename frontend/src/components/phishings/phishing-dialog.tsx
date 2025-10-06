@@ -168,7 +168,7 @@ export function PhishingDialog({
 
   async function fetchUsuarios() {
     try {
-      const response = await get<Usuario[]>("/usuarios");
+      const response = await get<Usuario[]>("/users");
       if (response) {
         setUsuarios(response);
       }
@@ -227,13 +227,13 @@ export function PhishingDialog({
       };
 
       if (testeParaEditar) {
-        const response = await put(`/testes/${testeParaEditar.id}`, payload);
+        const response = await put(`/phishings/${testeParaEditar.id}`, payload);
         if (response) {
           onOpenChange(false);
           form.reset();
         }
       } else {
-        const response = await post("/testes", payload);
+        const response = await post("/phishings", payload);
         if (response) {
           onOpenChange(false);
           form.reset();

@@ -128,7 +128,7 @@ export function UsuarioDialog({
 
     try {
       if (usuarioParaEditar) {
-        const response = await put(`/usuarios/${usuarioParaEditar.id}`, data);
+        const response = await put(`/users/${usuarioParaEditar.id}`, data);
         if (response) {
           // Atualiza departments do usuário
           const departmentsAtuais = usuarioParaEditar.departments?.map(
@@ -145,14 +145,14 @@ export function UsuarioDialog({
             // Adiciona novos departments
             ...departmentsParaAdicionar?.map((departamentoId) =>
               post(
-                `/departments/${departamentoId}/usuarios/${usuarioParaEditar.id}`,
+                `/departments/${departamentoId}/users/${usuarioParaEditar.id}`,
                 {}
               )
             ),
             // Remove departments
             ...departmentsParaRemover?.map((departamentoId) =>
               deleteRequest(
-                `/departments/${departamentoId}/usuarios/${usuarioParaEditar.id}`
+                `/departments/${departamentoId}/users/${usuarioParaEditar.id}`
               )
             ),
           ]);
@@ -161,11 +161,11 @@ export function UsuarioDialog({
           form.reset();
         }
       } else {
-        const response = await post<{ id: string }>("/usuarios", data);
+        const response = await post<{ id: string }>("/users", data);
         if (response && departmentsSelecionados.length > 0) {
           await Promise.all(
             departmentsSelecionados?.map((departamentoId) =>
-              post(`/departments/${departamentoId}/usuarios/${response.id}`, {})
+              post(`/departments/${departamentoId}/users/${response.id}`, {})
             )
           );
         }

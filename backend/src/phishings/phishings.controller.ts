@@ -56,8 +56,8 @@ export class PhishingsController {
   }
 
   @Put(':id/status')
-  updateStatus(@Param('id') id: string, @Body('ativo') ativo: boolean) {
-    return this.service.updateStatus(id, ativo)
+  updateStatus(@Param('id') id: string, @Body('is_active') is_active: boolean) {
+    return this.service.updateStatus(id, is_active)
   }
 
   @Put(':id/resultado')
