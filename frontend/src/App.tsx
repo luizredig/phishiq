@@ -41,7 +41,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/gerenciar-usuarios" element={<ManageUsers />} />
             <Route
-              path="/gerenciar-departments"
+              path="/gerenciar-departamentos"
               element={<ManageDepartments />}
             />
             <Route path="/gerenciar-testes" element={<ManagePhishings />} />

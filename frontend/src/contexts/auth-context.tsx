@@ -9,8 +9,9 @@ import {
 import { useApi } from "../hooks/use-api";
 
 type AuthUser = {
-  id: string;
-  email: string;
+  id?: string;
+  name?: string;
+  email?: string;
   roles?: string[];
   tenant_id?: string;
 };
@@ -38,7 +39,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 const STORAGE_KEY = "auth_tokens";
 
 export function AuthProvider({ children }: { children: any }) {
-  const { post, loading, error } = useApi();
+  const { get, post, loading, error } = useApi();
   const [accessToken, setAccessToken] = useState<string | null>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -93,6 +94,24 @@ export function AuthProvider({ children }: { children: any }) {
     [user]
   );
 
+  const fetchProfile = useCallback(async () => {
+    const me = await get<{ name: string; email: string }>("/auth/me");
+    if (me) {
+      const merged: AuthUser = { ...user, name: me.name, email: me.email };
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            accessToken,
+            refreshToken,
+            user: merged,
+          })
+        );
+      } catch {}
+      setUser(merged);
+    }
+  }, [get, user, accessToken, refreshToken]);
+
   const login = useCallback(
     async (email: string, password: string) => {
       const result = await post<{ accessToken: string; refreshToken: string }>(
@@ -105,9 +124,10 @@ export function AuthProvider({ children }: { children: any }) {
         refreshToken: result.refreshToken,
         user,
       });
+      await fetchProfile();
       return true;
     },
-    [post, persist, user]
+    [post, persist, user, fetchProfile]
   );
 
   const signup = useCallback(
@@ -127,9 +147,10 @@ export function AuthProvider({ children }: { children: any }) {
         refreshToken: result.refreshToken,
         user,
       });
+      await fetchProfile();
       return true;
     },
-    [post, persist, user]
+    [post, persist, user, fetchProfile]
   );
 
   const refresh = useCallback(async () => {
@@ -188,6 +209,12 @@ export function AuthProvider({ children }: { children: any }) {
       logout,
     ]
   );
+
+  useEffect(() => {
+    if (accessToken && (!user || !user.name || !user.email)) {
+      fetchProfile();
+    }
+  }, [accessToken, user, fetchProfile]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

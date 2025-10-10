@@ -1,6 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
+import { User } from 'prisma/generated/schema'
 
 @Injectable()
 export class UsersService {
@@ -8,7 +9,7 @@ export class UsersService {
 
   findAll(includeInactive = false) {
     return this.prisma.user.findMany({
-      where: includeInactive ? {} : { is_active: true },
+      where: includeInactive ? { is_active: false } : { is_active: true },
       select: {
         id: true,
         name: true,
@@ -18,6 +19,11 @@ export class UsersService {
         created_at: true,
         updated_at: true,
         tenant_id: true,
+        user_departments: {
+          include: {
+            department: true,
+          },
+        },
       },
       orderBy: { created_at: 'desc' },
     })
@@ -92,5 +98,24 @@ export class UsersService {
       },
     })
     return updated
+  }
+
+  async updateStatus(id: string, is_active: boolean): Promise<User> {
+    const exists = await this.prisma.user.findUnique({
+      where: { id },
+    })
+
+    if (!exists) {
+      throw new NotFoundException()
+    }
+
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        is_active,
+        inactivated_by: is_active ? null : 'system',
+        inactivated_at: is_active ? null : new Date(),
+      },
+    })
   }
 }

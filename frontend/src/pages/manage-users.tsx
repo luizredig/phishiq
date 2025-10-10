@@ -1,19 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  BadgeCheck,
-  Building2,
-  Edit,
-  Plus,
-  Search,
-  Trash,
-  X,
-} from "lucide-react";
+import { BadgeCheck, Building2, Edit, Plus, Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { ConfirmDialog } from "../components/ui/confirm-dialog";
+
 import { Input } from "../components/ui/input";
 import {
   Pagination,
@@ -37,16 +29,15 @@ import { useApi } from "../hooks/use-api";
 
 interface Usuario {
   id: string;
-  nome: string;
-  sobrenome: string | null;
+  name: string;
   email: string;
   cargo: "ADMIN" | "FUNCIONARIO";
   is_active: boolean;
-  criadoEm: string;
-  departments: {
-    departamento: {
+  created_at: string;
+  user_departments: {
+    department: {
       id: string;
-      nome: string;
+      name: string;
     };
   }[];
 }
@@ -109,21 +100,18 @@ export default function ManageUsers() {
     setIsNovoUsuarioOpen(true);
   }
 
-  const filteredUsuarios = usuarios?.filter((usuario) => {
+  const filteredUsuarios = usuarios?.filter((user) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
-      usuario.nome.toLowerCase().includes(termoBusca) ||
-      usuario.email.toLowerCase().includes(termoBusca) ||
-      (usuario.sobrenome &&
-        usuario.sobrenome.toLowerCase().includes(termoBusca)) ||
-      usuario.departments?.some((d) =>
-        d.department.nome.toLowerCase().includes(termoBusca)
+      user.name.toLowerCase().includes(termoBusca) ||
+      user.email.toLowerCase().includes(termoBusca) ||
+      user.user_departments?.some((d) =>
+        d.department.name.toLowerCase().includes(termoBusca)
       )
     );
   });
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredUsuarios.length / itemsPerPage);
   const paginatedUsuarios = filteredUsuarios.slice(
     (currentPage - 1) * itemsPerPage,
@@ -218,23 +206,21 @@ export default function ManageUsers() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedUsuarios?.map((usuario) => (
-                  <TableRow key={usuario.id}>
-                    <TableCell className="font-medium">
-                      {usuario.nome} {usuario.sobrenome}
-                    </TableCell>
+                paginatedUsuarios?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.name}</TableCell>
 
-                    <TableCell>{usuario.email}</TableCell>
+                    <TableCell>{user.email}</TableCell>
 
                     <TableCell>
                       <div className="flex justify-center items-center">
-                        {usuario.departments.length > 0 ? (
+                        {user.user_departments.length > 0 ? (
                           <Badge
                             variant="secondary"
                             className="flex items-center gap-1"
                           >
                             <Building2 className="h-3 w-3" />
-                            {usuario.departments.length}
+                            {user.user_departments.length}
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground text-sm">
@@ -246,15 +232,15 @@ export default function ManageUsers() {
 
                     <TableCell className="text-center">
                       <div className="flex justify-center items-center">
-                        {getStatusBadge(usuario)}
+                        {getStatusBadge(user)}
                       </div>
                     </TableCell>
 
                     <TableCell className="text-center">
                       <Switch
-                        checked={usuario.is_active}
+                        checked={user.is_active}
                         onCheckedChange={(checked) =>
-                          handleToggleStatus(usuario.id, checked)
+                          handleToggleStatus(user.id, checked)
                         }
                       />
                     </TableCell>
@@ -264,7 +250,7 @@ export default function ManageUsers() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleEditar(usuario)}
+                          onClick={() => handleEditar(user)}
                           title="Editar"
                           className="text-xs sm:text-sm"
                         >

@@ -28,11 +28,11 @@ export class PhishingsGateway
 
   @SubscribeMessage('phishing_clicked')
   async handlePhishingClicked(client: Socket, id: string) {
-    const teste = await this.service.updateResultado(id, {
-      caiuNoTeste: true,
-      reportouPhishing: false,
+    const phishing = await this.service.updateResultado(id, {
+      clicked: true,
+      reported: false,
     })
-    this.server.emit('phishing_updated', teste)
-    return teste
+    this.server.emit('phishing_updated', phishing)
+    return phishing
   }
 }

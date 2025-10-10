@@ -11,6 +11,9 @@ export class DepartamentsService {
       where: {
         is_active: includeInactive ? false : true,
       },
+      include: {
+        users: true,
+      },
     })
   }
 
@@ -34,13 +37,17 @@ export class DepartamentsService {
     return departamento
   }
 
-  async create(data: { nome: string }): Promise<Department> {
+  async create(data: { name: string }): Promise<Department> {
     return this.prisma.department.create({
-      data,
+      data: {
+        name: data.name,
+        created_by: 'system',
+        updated_by: 'system',
+      },
     })
   }
 
-  async update(id: string, data: { nome?: string }): Promise<Department> {
+  async update(id: string, data: { name?: string }): Promise<Department> {
     try {
       const exists = await this.prisma.department.findUnique({
         where: { id },
@@ -52,7 +59,10 @@ export class DepartamentsService {
 
       return await this.prisma.department.update({
         where: { id },
-        data,
+        data: {
+          name: data.name,
+          updated_by: 'system',
+        },
       })
     } catch (error) {
       throw error

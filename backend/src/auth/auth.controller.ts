@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { Public } from './public.decorator'
 import { z } from 'zod'
@@ -42,5 +42,12 @@ export class AuthController {
   async refresh(@Body() body: unknown) {
     const data = RefreshSchema.parse(body)
     return this.auth.refreshToken(data.refresh_token)
+  }
+
+  @Get('me')
+  async me(@Req() req: any) {
+    const userId = req.user?.id as string | undefined
+    if (!userId) return { name: null, email: null }
+    return this.auth.me(userId)
   }
 }

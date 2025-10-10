@@ -38,7 +38,7 @@ export class DepartamentsGateway
   }
 
   @SubscribeMessage('create_department')
-  async handleCreateDepartamento(client: Socket, data: { nome: string }) {
+  async handleCreateDepartamento(client: Socket, data: { name: string }) {
     const departamento = await this.service.create(data)
     this.server.emit('departamentoCreated', departamento)
     return departamento
@@ -47,7 +47,7 @@ export class DepartamentsGateway
   @SubscribeMessage('update_department')
   async handleUpdateDepartamento(
     client: Socket,
-    payload: { id: string; data: { nome?: string } },
+    payload: { id: string; data: { name?: string } },
   ) {
     try {
       const departamento = await this.service.update(payload.id, payload.data)

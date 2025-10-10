@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
@@ -58,5 +59,10 @@ export class UsersController {
     const data = UpdateUserSchema.parse(body)
     const user = req.user as any
     return this.users.update(id, data, { updatedBy: user?.id || 'system' })
+  }
+
+  @Put(':id/status')
+  updateStatus(@Param('id') id: string, @Body('is_active') is_active: boolean) {
+    return this.users.updateStatus(id, is_active)
   }
 }

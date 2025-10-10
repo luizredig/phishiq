@@ -1,38 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import { SidebarTrigger } from "../ui/sidebar";
-import { useState } from "react";
-import { Skeleton } from "../ui/skeleton";
 import { useAuth } from "../../contexts/auth-context";
-
-interface UserInfo {
-  name: string;
-  email: string;
-  picture?: string;
-}
+import { LogOutIcon } from "lucide-react";
 
 export function AppHeader() {
-  const { isAuthenticated, logout } = useAuth();
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      ?.map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
+  const { logout } = useAuth();
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background px-4">
@@ -41,59 +13,14 @@ export function AppHeader() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              {loading ? (
-                <Skeleton className="h-10 w-10 rounded-full" />
-              ) : (
-                <Avatar>
-                  <AvatarImage src={userInfo?.picture} alt={userInfo?.name} />
-                  <AvatarFallback className="bg-primary text-primary-foreground font-bold">
-                    {userInfo?.name ? (
-                      getInitials(userInfo.name)
-                    ) : (
-                      <Skeleton className="h-6 w-6 rounded-full" />
-                    )}
-                  </AvatarFallback>
-                </Avatar>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-48">
-            {loading ? (
-              <>
-                <div className="p-2">
-                  <Skeleton className="h-4 w-24 mb-2" />
-                  <Skeleton className="h-3 w-32" />
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sair
-                </DropdownMenuItem>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col items-start p-2">
-                  <span className="font-semibold">{userInfo?.name || "?"}</span>
-                  <span className="text-muted-foreground text-sm">
-                    {userInfo?.email || ""}
-                  </span>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => logout()}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sair
-                </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          variant="ghost"
+          onClick={() => logout()}
+          className="font-medium"
+        >
+          <LogOutIcon className="text-primary" />
+          <p className="text-primary">{"Sair"}</p>
+        </Button>
       </div>
     </header>
   );

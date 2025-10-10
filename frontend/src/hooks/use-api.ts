@@ -16,31 +16,29 @@ export function useApi() {
       setError(null);
 
       try {
-        // lê tokens atualizados a cada requisição
         let parsed: any = null;
         try {
           const saved = localStorage.getItem("auth_tokens");
           parsed = saved ? JSON.parse(saved) : null;
         } catch {}
         const accessToken = parsed?.accessToken as string | undefined;
-        const headers = accessToken
-          ? { Authorization: `Bearer ${accessToken}` }
-          : undefined;
+        const mergedHeaders = {
+          ...(config?.headers || {}),
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        };
+
         const response = await api[method](
           url,
-          method === "get"
-            ? { ...config, headers: { ...(config?.headers || {}), ...headers } }
-            : data,
-          method !== "get"
-            ? { ...config, headers: { ...(config?.headers || {}), ...headers } }
-            : undefined
+          method === "get" ? { ...config, headers: mergedHeaders } : data,
+          method !== "get" ? { ...config, headers: mergedHeaders } : undefined
         );
+
         return response.data as T;
       } catch (err: any) {
         const message =
           err.response?.data?.message || "Ocorreu um erro. Tente novamente.";
         setError(message);
-        // 401: tenta refresh automático uma vez
+
         if (err.response?.status === 401) {
           try {
             const saved = localStorage.getItem("auth_tokens");
@@ -61,22 +59,27 @@ export function useApi() {
                     user: parsed?.user || null,
                   })
                 );
-                const headers2 = { Authorization: `Bearer ${newAT}` };
+
+                try {
+                  api.defaults.headers.common[
+                    "Authorization"
+                  ] = `Bearer ${newAT}`;
+                } catch {}
+                const mergedHeaders2 = {
+                  ...(config?.headers || {}),
+                  Authorization: `Bearer ${newAT}`,
+                };
+
                 const retry = await api[method](
                   url,
                   method === "get"
-                    ? {
-                        ...config,
-                        headers: { ...(config?.headers || {}), ...headers2 },
-                      }
+                    ? { ...config, headers: mergedHeaders2 }
                     : data,
                   method !== "get"
-                    ? {
-                        ...config,
-                        headers: { ...(config?.headers || {}), ...headers2 },
-                      }
+                    ? { ...config, headers: mergedHeaders2 }
                     : undefined
                 );
+
                 return retry.data as T;
               }
             }
@@ -88,7 +91,7 @@ export function useApi() {
         setLoading(false);
       }
     },
-    [] // [logout]
+    []
   );
 
   return {

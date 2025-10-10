@@ -34,9 +34,9 @@ import {
   SelectValue,
 } from "../ui/select";
 
-interface Departamento {
+interface Department {
   id: string;
-  nome: string;
+  name: string;
 }
 
 interface UsuarioDialogProps {
@@ -44,19 +44,17 @@ interface UsuarioDialogProps {
   onOpenChange: (open: boolean) => void;
   usuarioParaEditar?: {
     id: string;
-    nome: string;
-    sobrenome: string | null;
+    name: string;
     email: string;
     cargo: CargoUsuario;
-    departments: {
-      departamento: Departamento;
+    user_departments: {
+      department: Department;
     }[];
   };
 }
 
 const formSchema = z.object({
-  nome: z.string().min(1, "Nome é obrigatório"),
-  sobrenome: z.string().min(1, "Sobrenome é obrigatório"),
+  name: z.string().min(1, "Nome é obrigatório"),
   email: z.string().email("Email inválido"),
   cargo: z.enum(["FUNCIONARIO"]),
 });
@@ -69,7 +67,7 @@ export function UsuarioDialog({
   usuarioParaEditar,
 }: UsuarioDialogProps) {
   const { post, put, get, delete: deleteRequest, loading } = useApi();
-  const [departments, setDepartamentos] = useState<Departamento[]>([]);
+  const [departments, setDepartamentos] = useState<Department[]>([]);
   const [departmentsSelecionados, setDepartamentosSelecionados] = useState<
     string[]
   >([]);
@@ -78,8 +76,8 @@ export function UsuarioDialog({
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: "",
-      sobrenome: "",
+      name: "",
+
       email: "",
       cargo: "FUNCIONARIO",
     },
@@ -90,18 +88,18 @@ export function UsuarioDialog({
       fetchDepartamentos();
       if (usuarioParaEditar) {
         form.reset({
-          nome: usuarioParaEditar.nome,
-          sobrenome: usuarioParaEditar.sobrenome || "",
+          name: usuarioParaEditar.name,
+
           email: usuarioParaEditar.email,
           cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados(
-          usuarioParaEditar.departments?.map((d) => d.department.id)
+          usuarioParaEditar.user_departments?.map((d) => d.department.id)
         );
       } else {
         form.reset({
-          nome: "",
-          sobrenome: "",
+          name: "",
+
           email: "",
           cargo: "FUNCIONARIO",
         });
@@ -112,7 +110,7 @@ export function UsuarioDialog({
 
   async function fetchDepartamentos() {
     try {
-      const response = await get<Departamento[]>("/departments");
+      const response = await get<Department[]>("/departments");
       if (response) {
         setDepartamentos(response);
       }
@@ -122,16 +120,13 @@ export function UsuarioDialog({
   }
 
   async function onSubmit(data: FormValues) {
-    data.nome = data.nome.charAt(0).toUpperCase() + data.nome.slice(1);
-    data.sobrenome =
-      data.sobrenome.charAt(0).toUpperCase() + data.sobrenome.slice(1);
+    data.name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
 
     try {
       if (usuarioParaEditar) {
         const response = await put(`/users/${usuarioParaEditar.id}`, data);
         if (response) {
-          // Atualiza departments do usuário
-          const departmentsAtuais = usuarioParaEditar.departments?.map(
+          const departmentsAtuais = usuarioParaEditar.user_departments?.map(
             (d) => d.department.id
           );
           const departmentsParaAdicionar = departmentsSelecionados?.filter(
@@ -181,7 +176,7 @@ export function UsuarioDialog({
   const departmentsFiltrados = departments?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
-    return departamento.nome.toLowerCase().includes(termoBusca);
+    return departamento.name.toLowerCase().includes(termoBusca);
   });
 
   function toggleDepartamento(departamentoId: string) {
@@ -210,26 +205,12 @@ export function UsuarioDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="nome"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input placeholder="Nome do usuário" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="sobrenome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sobrenome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Sobrenome do usuário" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -322,7 +303,7 @@ export function UsuarioDialog({
                       >
                         <div className="flex items-center gap-2">
                           <div className="text-sm">
-                            <p>{departamento.nome}</p>
+                            <p>{departamento.name}</p>
                           </div>
                         </div>
                         {isSelecionado && (

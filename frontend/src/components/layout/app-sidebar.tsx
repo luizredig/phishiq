@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   ChartNoAxesCombined,
   Grid2x2Plus,
@@ -10,7 +9,6 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
-import { useState, useEffect } from "react";
 
 import {
   Sidebar,
@@ -22,6 +20,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "../../components/ui/sidebar";
 
 import { Button } from "../ui/button";
@@ -29,6 +28,7 @@ import { Button } from "../ui/button";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const pathname = location.pathname;
+  const { isMobile, setOpenMobile } = useSidebar();
 
   const data = {
     navMain: [
@@ -74,7 +74,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           },
           {
             title: "Departamentos",
-            url: "/gerenciar-departments",
+            url: "/gerenciar-departamentos",
             icon: <Grid2x2Plus className={"text-primary"} />,
             show: true,
           },
@@ -97,7 +97,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link to="/home">
+        <Link
+          to="/home"
+          onClick={() => {
+            if (isMobile) setOpenMobile(false);
+          }}
+        >
           <h1 className="text-primary pl-2 text-xl font-bold select-none">
             PhishIQ
           </h1>
@@ -107,7 +112,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         {true && (
           <div className="w-full p-2">
-            <Link to="/gerenciar-testes?new=true">
+            <Link
+              to="/gerenciar-testes?new=true"
+              onClick={() => {
+                if (isMobile) setOpenMobile(false);
+              }}
+            >
               <Button className="w-full">
                 <Plus /> Novo teste
               </Button>
@@ -122,7 +132,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {group.items
                   ?.filter((item) => item.show)
                   ?.map((item) => (
-                    <Link to={item.url} key={item.title}>
+                    <Link
+                      to={item.url}
+                      key={item.title}
+                      onClick={() => {
+                        if (isMobile) setOpenMobile(false);
+                      }}
+                    >
                       <SidebarMenuItem>
                         <SidebarMenuButton asChild>
                           <div

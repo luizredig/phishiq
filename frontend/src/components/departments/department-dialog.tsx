@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from "react";
 import { Search, User, X } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -27,41 +26,38 @@ import {
   FormMessage,
 } from "../ui/form";
 
-interface Usuario {
+interface User {
   id: string;
-  nome: string;
+  name: string;
   email: string;
 }
 
-interface Departamento {
+interface Department {
   id: string;
-  nome: string;
+  name: string;
   is_active: boolean;
-  usuarios: {
-    usuario: Usuario;
+  users: {
+    user: User;
   }[];
 }
 
-interface DepartamentoDialogProps {
+interface DepartmentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  departamentoParaEditar?: Departamento;
+  department?: Department;
 }
 
-const departamentoFormSchema = z.object({
-  nome: z
+const departmentFormSchema = z.object({
+  name: z
     .string()
     .min(3, "O nome deve ter pelo menos 3 caracteres")
     .max(50, "O nome deve ter no máximo 50 caracteres")
     .nonempty("O nome do departamento é obrigatório")
     .transform((name) => {
-      // Se a string estiver vazia, retorna ela mesma
       if (!name) return name;
 
-      // Divide o nome em palavras
       const words = name.split(" ");
 
-      // Capitaliza a primeira letra da primeira palavra se estiver em minúscula
       if (words[0]) {
         const firstWord = words[0];
         const firstLetter = firstWord.charAt(0);
@@ -71,54 +67,51 @@ const departamentoFormSchema = z.object({
         }
       }
 
-      // Junta as palavras de volta
       return words.join(" ");
     }),
 });
 
-type DepartamentoFormData = z.infer<typeof departamentoFormSchema>;
+type DepartmentFormData = z.infer<typeof departmentFormSchema>;
 
 export function DepartmentDialog({
   open,
   onOpenChange,
-  departamentoParaEditar,
-}: DepartamentoDialogProps) {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  department,
+}: DepartmentDialogProps) {
+  const [usuarios, setUsuarios] = useState<User[]>([]);
   const [usuariosSelecionados, setUsuariosSelecionados] = useState<string[]>(
     []
   );
   const [buscaUsuario, setBuscaUsuario] = useState("");
   const { post, put, get, delete: deleteRequest, loading } = useApi();
 
-  const form = useForm<DepartamentoFormData>({
-    resolver: zodResolver(departamentoFormSchema),
+  const form = useForm<DepartmentFormData>({
+    resolver: zodResolver(departmentFormSchema),
     defaultValues: {
-      nome: "",
+      name: "",
     },
   });
 
   useEffect(() => {
     if (open) {
       fetchUsuarios();
-      if (departamentoParaEditar) {
+      if (department) {
         form.reset({
-          nome: departamentoParaEditar.nome,
+          name: department.name,
         });
-        setUsuariosSelecionados(
-          departamentoParaEditar.usuarios?.map((u) => u.user.id)
-        );
+        setUsuariosSelecionados(department.users?.map((u) => u.user.id));
       } else {
         form.reset({
-          nome: "",
+          name: "",
         });
         setUsuariosSelecionados([]);
       }
     }
-  }, [open, departamentoParaEditar, form]);
+  }, [open, department, form]);
 
   async function fetchUsuarios() {
     try {
-      const response = await get<Usuario[]>("/users");
+      const response = await get<User[]>("/users");
       if (response) {
         setUsuarios(response);
       }
@@ -127,17 +120,14 @@ export function DepartmentDialog({
     }
   }
 
-  async function onSubmit(data: DepartamentoFormData) {
+  async function onSubmit(data: DepartmentFormData) {
     try {
-      if (departamentoParaEditar) {
-        await put(`/departments/${departamentoParaEditar.id}`, {
-          nome: data.nome,
+      if (department) {
+        await put(`/departments/${department.id}`, {
+          name: data.name,
         });
 
-        // Atualiza usuários do departamento
-        const usuariosAtuais = departamentoParaEditar.usuarios?.map(
-          (u) => u.user.id
-        );
+        const usuariosAtuais = department.users?.map((u) => u.user.id);
         const usuariosParaAdicionar = usuariosSelecionados?.filter(
           (id) => !usuariosAtuais.includes(id)
         );
@@ -146,23 +136,17 @@ export function DepartmentDialog({
         );
 
         await Promise.all([
-          // Adiciona novos usuários
           ...usuariosParaAdicionar?.map((usuarioId) =>
-            post(
-              `/departments/${departamentoParaEditar.id}/users/${usuarioId}`,
-              {}
-            )
+            post(`/departments/${department.id}/users/${usuarioId}`, {})
           ),
-          // Remove usuários (exclui o registro da tabela de relacionamento)
+
           ...usuariosParaRemover?.map((usuarioId) =>
-            deleteRequest(
-              `/departments/${departamentoParaEditar.id}/users/${usuarioId}`
-            )
+            deleteRequest(`/departments/${department.id}/users/${usuarioId}`)
           ),
         ]);
       } else {
-        const response = await post<Departamento>("/departments", {
-          nome: data.nome,
+        const response = await post<Department>("/departments", {
+          name: data.name,
         });
 
         if (response && usuariosSelecionados.length > 0) {
@@ -183,7 +167,7 @@ export function DepartmentDialog({
     if (!buscaUsuario) return true;
     const termoBusca = buscaUsuario.toLowerCase();
     return (
-      usuario.nome.toLowerCase().includes(termoBusca) ||
+      usuario.name.toLowerCase().includes(termoBusca) ||
       usuario.email.toLowerCase().includes(termoBusca)
     );
   });
@@ -201,7 +185,7 @@ export function DepartmentDialog({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>
-            {departamentoParaEditar ? "Editar" : "Novo"} departamento
+            {department ? "Editar" : "Novo"} departamento
           </DialogTitle>
           <DialogDescription>
             Preencha as informações do departamento abaixo.
@@ -212,7 +196,7 @@ export function DepartmentDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="nome"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
@@ -272,7 +256,7 @@ export function DepartmentDialog({
                         <div className="flex items-center gap-2">
                           <User className="h-4 w-4 text-muted-foreground" />
                           <div className="text-sm">
-                            <p>{usuario.nome}</p>
+                            <p>{usuario.name}</p>
                             <p className="text-muted-foreground">
                               {usuario.email}
                             </p>
@@ -302,7 +286,7 @@ export function DepartmentDialog({
                 Cancelar
               </Button>
               <Button type="submit" disabled={loading}>
-                {departamentoParaEditar ? "Salvar" : "Criar"}
+                {department ? "Salvar" : "Criar"}
               </Button>
             </DialogFooter>
           </form>

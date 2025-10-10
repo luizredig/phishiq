@@ -57,6 +57,8 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     networks:
       - phishiq-network
+    depends_on:
+      - postgres
 
 networks:
   phishiq-network:

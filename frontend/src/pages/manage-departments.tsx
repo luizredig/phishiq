@@ -27,29 +27,29 @@ import {
 import { DepartmentDialog } from "../components/departments/department-dialog";
 import { useApi } from "../hooks/use-api";
 
-interface Usuario {
+interface User {
   id: string;
-  nome: string;
+  name: string;
   email: string;
 }
 
-interface Departamento {
+interface Department {
   id: string;
-  nome: string;
+  name: string;
   is_active: boolean;
-  criadoEm: string;
-  usuarios: {
-    usuario: Usuario;
+  created_at: string;
+  users: {
+    user: User;
   }[];
 }
 
 export default function ManageDepartments() {
-  const [departments, setDepartamentos] = useState<Departamento[]>([]);
+  const [departments, setDepartamentos] = useState<Department[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoDepartamentoOpen, setIsNovoDepartamentoOpen] = useState(false);
   const [departamentoParaEditar, setDepartamentoParaEditar] = useState<
-    Departamento | undefined
+    Department | undefined
   >(undefined);
   const [departamentoParaExcluir, setDepartamentoParaExcluir] = useState<
     string | null
@@ -67,7 +67,7 @@ export default function ManageDepartments() {
   async function fetchDepartamentos() {
     setLoading(true);
     try {
-      const response = await get<Departamento[]>(
+      const response = await get<Department[]>(
         `/departments?includeInactive=${includeInactive}`
       );
       if (response) {
@@ -82,7 +82,7 @@ export default function ManageDepartments() {
 
   async function handleToggleStatus(id: string, is_active: boolean) {
     try {
-      const response = await put<Departamento>(`/departments/${id}/status`, {
+      const response = await put<Department>(`/departments/${id}/status`, {
         is_active,
       });
 
@@ -100,7 +100,7 @@ export default function ManageDepartments() {
     }
   }
 
-  function handleEditar(departamento: Departamento) {
+  function handleEditar(departamento: Department) {
     setDepartamentoParaEditar(departamento);
     setIsNovoDepartamentoOpen(true);
   }
@@ -127,27 +127,26 @@ export default function ManageDepartments() {
     }
   }
 
-  const filteredDepartamentos = departments?.filter((departamento) => {
+  const filteredDepartamentos = departments?.filter((department) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
     return (
-      departamento?.nome.toLowerCase().includes(termoBusca) ||
-      departamento?.usuarios?.some(
+      department?.name.toLowerCase().includes(termoBusca) ||
+      department?.users?.some(
         (u) =>
-          u.user.nome.toLowerCase().includes(termoBusca) ||
+          u.user.name.toLowerCase().includes(termoBusca) ||
           u.user.email.toLowerCase().includes(termoBusca)
       )
     );
   });
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredDepartamentos.length / itemsPerPage);
   const paginatedDepartamentos = filteredDepartamentos.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  function getStatusBadge(departamento: Departamento) {
+  function getStatusBadge(departamento: Department) {
     if (!departamento.is_active) {
       return (
         <Badge
@@ -232,10 +231,10 @@ export default function ManageDepartments() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedDepartamentos?.map((departamento) => (
-                  <TableRow key={departamento.id}>
+                paginatedDepartamentos?.map((department) => (
+                  <TableRow key={department.id}>
                     <TableCell className="font-medium">
-                      {departamento.nome}
+                      {department.name}
                     </TableCell>
 
                     <TableCell>
@@ -245,22 +244,22 @@ export default function ManageDepartments() {
                           className="flex items-center gap-1"
                         >
                           <User className="h-3 w-3" />
-                          {departamento.usuarios.length}
+                          {department.users.length}
                         </Badge>
                       </div>
                     </TableCell>
 
                     <TableCell className="text-center">
                       <div className="flex justify-center items-center">
-                        {getStatusBadge(departamento)}
+                        {getStatusBadge(department)}
                       </div>
                     </TableCell>
 
                     <TableCell className="text-center">
                       <Switch
-                        checked={departamento.is_active}
+                        checked={department.is_active}
                         onCheckedChange={(checked) =>
-                          handleToggleStatus(departamento.id, checked)
+                          handleToggleStatus(department.id, checked)
                         }
                       />
                     </TableCell>
@@ -270,7 +269,7 @@ export default function ManageDepartments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleEditar(departamento)}
+                          onClick={() => handleEditar(department)}
                           title="Editar"
                           className="text-xs sm:text-sm"
                         >
@@ -340,7 +339,7 @@ export default function ManageDepartments() {
             fetchDepartamentos();
           }
         }}
-        departamentoParaEditar={departamentoParaEditar}
+        department={departamentoParaEditar}
       />
 
       <ConfirmDialog

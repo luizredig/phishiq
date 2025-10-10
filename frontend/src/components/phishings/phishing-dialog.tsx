@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -45,7 +44,7 @@ interface TesteDialogProps {
     caiuNoTeste: boolean;
     reportouPhishing: boolean;
     departments: {
-      departamento: {
+      department: {
         id: string;
         nome: string;
       };
@@ -92,11 +91,10 @@ export function PhishingDialog({
 
   const formSchema = baseFormSchema.refine(
     (data) => {
-      // Se estiver na aba de departments, precisa ter pelo menos um departamento
       if (activeTab === "departments") {
         return data.departments && data.departments.length > 0;
       }
-      // Se estiver na aba individual, precisa ter um usuário
+
       return !!data.usuarioId;
     },
     {
@@ -130,7 +128,7 @@ export function PhishingDialog({
         usuarioId: undefined,
       });
       setSelectedDepartamentos(
-        testeParaEditar.departments?.map((d) => d.departamento)
+        testeParaEditar.departments?.map((d) => d.department)
       );
       setActiveTab("departments");
     } else {
@@ -143,7 +141,6 @@ export function PhishingDialog({
     }
   }, [testeParaEditar, form]);
 
-  // Limpa os campos da tab inativa quando trocar de tab
   useEffect(() => {
     if (activeTab === "departments") {
       form.setValue("usuarioId", undefined);

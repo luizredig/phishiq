@@ -8,7 +8,7 @@ import {
   PhishingStatus,
 } from '../../prisma/generated/schema'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../prisma/generated/schema'
 
 @Injectable()
 export class PhishingsService {
@@ -18,29 +18,29 @@ export class PhishingsService {
   ) {}
 
   async findAll(includeInactive = false): Promise<Phishing[]> {
-    return this.prisma.teste.findMany({
+    return this.prisma.phishing.findMany({
       where: includeInactive ? { is_active: false } : { is_active: true },
       include: {
         departments: {
           include: {
-            departamento: true,
+            department: true,
           },
         },
-        usuario: true,
+        user: true,
       },
       orderBy: {
-        criadoEm: 'desc',
+        created_at: 'desc',
       },
     })
   }
 
   async findOne(id: string): Promise<Phishing | null> {
-    return this.prisma.teste.findUnique({
+    return this.prisma.phishing.findUnique({
       where: { id },
       include: {
         departments: {
           include: {
-            departamento: true,
+            department: true,
           },
         },
       },
@@ -48,43 +48,46 @@ export class PhishingsService {
   }
 
   async create(createTesteDto: {
-    canal: PhishingChannel
+    channel: PhishingChannel
     departments?: string[]
-    usuarioId?: string
-    nomeEmpresa: string
+    userId?: string
+    companyName: string
   }) {
-    const { canal, departments, usuarioId, nomeEmpresa } = createTesteDto
+    const { channel, departments, userId, companyName } = createTesteDto
 
-    // Se tiver departments, cria o teste com os departments
     if (departments && departments.length > 0) {
-      const teste = await this.prisma.phishing.create({
+      const phishing = await this.prisma.phishing.create({
         data: {
-          canal,
-          status: 'ENVIADO',
+          channel,
+          status: 'SENT',
           departments: {
-            create: departments?.map((departamentoId) => ({
-              departamento: {
+            create: departments?.map((departmentId) => ({
+              department: {
                 connect: {
-                  id: departamentoId,
+                  id: departmentId,
                 },
               },
+              created_by: 'system',
+              updated_by: 'system',
             })),
           },
+          created_by: 'system',
+          updated_by: 'system',
         },
         include: {
           departments: {
             include: {
-              departamento: {
+              department: {
                 include: {
-                  usuarios: {
+                  users: {
                     where: {
                       is_active: true,
-                      usuario: {
+                      user: {
                         is_active: true,
                       },
                     },
                     include: {
-                      usuario: true,
+                      user: true,
                     },
                   },
                 },
@@ -111,111 +114,54 @@ export class PhishingsService {
       //   }
       // }
 
-      return teste
+      return phishing
     }
 
-    // Se tiver usuário, cria o teste com o usuário
-    if (usuarioId) {
-      const usuario = await this.prisma.user.findUnique({
-        where: { id: usuarioId },
+    if (userId) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
         include: {
-          departments: {
+          user_departments: {
             include: {
-              departamento: true,
+              department: true,
             },
           },
         },
       })
 
-      if (!usuario) {
+      if (!user) {
         throw new Error('Usuário não encontrado')
       }
 
-      const teste = await this.prisma.teste.create({
+      const phishing = await this.prisma.phishing.create({
         data: {
-          canal,
-          status: 'ENVIADO',
-          usuario: {
+          channel,
+          status: 'SENT',
+          user: {
             connect: {
-              id: usuarioId,
+              id: userId,
             },
           },
+          created_by: 'system',
+          updated_by: 'system',
         },
         include: {
-          usuario: true,
+          user: true,
         },
       })
 
       // Envio individual
-      // await this.nodemailerService.sendPhishingEmail(usuario.email, {
-      //   nomeEmpresa: nomeEmpresa,
+      // await this.nodemailerService.sendPhishingEmail(user.email, {
+      //   nomeEmpresa: companyName,
       //   urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-      //   nomeUsuario: `${usuario.nome} ${usuario.sobrenome || ''}`,
-      //   linkBotao: `${process.env.FRONTEND_URL}/phishing/${teste.id}`,
+      //   nomeUsuario: `${user.name} ${user.sobrenome || ''}`,
+      //   linkBotao: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
       // })
 
-      return teste
+      return phishing
     }
 
     throw new Error('É necessário informar departments ou usuário')
-  }
-
-  async update(
-    id: string,
-    updateTesteDto: {
-      canal?: PhishingChannel
-      departments?: string[]
-      usuarioId?: string
-    },
-  ) {
-    const { canal, departments, usuarioId } = updateTesteDto
-
-    // Primeiro, remove todas as relações existentes
-    await this.prisma.phishing.update({
-      where: { id },
-      data: {
-        departments: {
-          deleteMany: {},
-        },
-        usuario: {
-          disconnect: true,
-        },
-      },
-    })
-
-    // Depois, atualiza com as novas relações
-    return this.prisma.phishing.update({
-      where: { id },
-      data: {
-        ...(canal && { canal }),
-        ...(departments && {
-          departments: {
-            create: departments?.map((departamentoId) => ({
-              departamento: {
-                connect: {
-                  id: departamentoId,
-                },
-              },
-            })),
-          },
-        }),
-        ...(usuarioId && {
-          usuario: {
-            connect: {
-              id: usuarioId,
-            },
-          },
-        }),
-      },
-      include: {
-        departments: {
-          include: {
-            departamento: true,
-          },
-        },
-        usuario: true,
-      },
-    })
   }
 
   async remove(id: string): Promise<Phishing> {
@@ -223,30 +169,13 @@ export class PhishingsService {
       where: { id },
       data: {
         is_active: false,
-        inativadoEm: new Date(),
+        inactivated_at: new Date(),
+        inactivated_by: 'system',
       },
       include: {
         departments: {
           include: {
-            departamento: true,
-          },
-        },
-      },
-    })
-  }
-
-  async updateStatus(id: string, is_active: boolean): Promise<Phishing> {
-    return this.prisma.phishing.update({
-      where: { id },
-      data: {
-        is_active: is_active,
-        inativadoEm: is_active ? null : new Date(),
-        inativadoPor: is_active ? null : 'system',
-      },
-      include: {
-        departments: {
-          include: {
-            departamento: true,
+            department: true,
           },
         },
       },
@@ -256,20 +185,20 @@ export class PhishingsService {
   async updateResultado(
     id: string,
     data: {
-      caiuNoTeste: boolean
-      reportouPhishing: boolean
+      clicked: boolean
+      reported: boolean
     },
   ): Promise<Phishing> {
     return this.prisma.phishing.update({
       where: { id },
       data: {
-        caiuNoTeste: data.caiuNoTeste,
-        reportouPhishing: data.reportouPhishing,
+        clicked: data.clicked,
+        reported: data.reported,
       },
       include: {
         departments: {
           include: {
-            departamento: true,
+            department: true,
           },
         },
       },
@@ -288,7 +217,7 @@ export class PhishingsService {
       include: {
         departments: {
           include: {
-            departamento: true,
+            department: true,
           },
         },
       },

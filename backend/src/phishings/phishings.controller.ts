@@ -13,17 +13,17 @@ import { PhishingStatus } from '../../prisma/generated/schema'
 import { PhishingsService } from './phishings.service'
 
 interface CreateTesteDto {
-  canal: 'EMAIL'
+  channel: 'EMAIL'
   departments?: string[]
-  usuarioId?: string
-  nomeEmpresa: string
+  userId?: string
+  companyName: string
 }
 
 interface UpdateTesteDto {
-  canal?: 'EMAIL'
+  channel?: 'EMAIL'
   departments?: string[]
-  usuarioId?: string
-  nomeEmpresa?: string
+  userId?: string
+  companyName?: string
 }
 
 @Controller('phishings')
@@ -45,19 +45,9 @@ export class PhishingsController {
     return this.service.create(createTesteDto)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTesteDto: UpdateTesteDto) {
-    return this.service.update(id, updateTesteDto)
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.service.remove(id)
-  }
-
-  @Put(':id/status')
-  updateStatus(@Param('id') id: string, @Body('is_active') is_active: boolean) {
-    return this.service.updateStatus(id, is_active)
   }
 
   @Put(':id/resultado')
@@ -65,8 +55,8 @@ export class PhishingsController {
     @Param('id') id: string,
     @Body()
     resultado: {
-      caiuNoTeste: boolean
-      reportouPhishing: boolean
+      clicked: boolean
+      reported: boolean
     },
   ) {
     return this.service.updateResultado(id, resultado)

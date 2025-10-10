@@ -164,4 +164,15 @@ export class AuthService {
       throw new UnauthorizedException('Refresh inválido')
     }
   }
+
+  async me(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true, email: true },
+    })
+    if (!user) {
+      throw new UnauthorizedException('Usuário não encontrado')
+    }
+    return user
+  }
 }

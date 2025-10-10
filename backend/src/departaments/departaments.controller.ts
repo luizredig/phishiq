@@ -31,14 +31,14 @@ export class DepartamentsController {
   }
 
   @Post()
-  create(@Body() createDepartamentoDto: { nome: string }) {
+  create(@Body() createDepartamentoDto: { name: string }) {
     return this.service.create(createDepartamentoDto)
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateDepartamentoDto: { nome?: string },
+    @Body() updateDepartamentoDto: { name?: string },
   ) {
     return this.service.update(id, updateDepartamentoDto)
   }
@@ -46,7 +46,7 @@ export class DepartamentsController {
   @Put(':id')
   updatePut(
     @Param('id') id: string,
-    @Body() updateDepartamentoDto: { nome?: string },
+    @Body() updateDepartamentoDto: { name?: string },
   ) {
     return this.service.update(id, updateDepartamentoDto)
   }
