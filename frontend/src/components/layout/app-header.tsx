@@ -14,12 +14,12 @@ export function AppHeader() {
 
       <div className="flex items-center space-x-2">
         <Button
-          variant="ghost"
+          variant="default"
           onClick={() => logout()}
           className="font-medium"
         >
-          <LogOutIcon className="text-primary" />
-          <p className="text-primary">{"Sair"}</p>
+          <LogOutIcon className="text-primary-foreground" />
+          <p className="text-primary-foreground">{"Sair"}</p>
         </Button>
       </div>
     </header>

@@ -9,6 +9,7 @@ import {
 } from '../../prisma/generated/schema'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { PrismaClient } from '../../prisma/generated/schema'
+import { decryptText, encryptText } from '../utils/crypto'
 
 @Injectable()
 export class PhishingsService {
@@ -18,24 +19,35 @@ export class PhishingsService {
   ) {}
 
   async findAll(includeInactive = false): Promise<Phishing[]> {
-    return this.prisma.phishing.findMany({
-      where: includeInactive ? { is_active: false } : { is_active: true },
-      include: {
-        departments: {
-          include: {
-            department: true,
+    return this.prisma.phishing
+      .findMany({
+        where: includeInactive ? { is_active: false } : { is_active: true },
+        include: {
+          departments: {
+            include: {
+              department: true,
+            },
           },
+          user: true,
         },
-        user: true,
-      },
-      orderBy: {
-        created_at: 'desc',
-      },
-    })
+        orderBy: {
+          created_at: 'desc',
+        },
+      })
+      .then((rows) =>
+        rows.map((p) => ({
+          ...p,
+          created_by: decryptText(p.created_by as unknown as string),
+          updated_by: decryptText(p.updated_by as unknown as string),
+          inactivated_by: p.inactivated_by
+            ? decryptText(p.inactivated_by as unknown as string)
+            : null,
+        })),
+      )
   }
 
   async findOne(id: string): Promise<Phishing | null> {
-    return this.prisma.phishing.findUnique({
+    const row = await this.prisma.phishing.findUnique({
       where: { id },
       include: {
         departments: {
@@ -45,6 +57,15 @@ export class PhishingsService {
         },
       },
     })
+    if (!row) return row
+    return {
+      ...row,
+      created_by: decryptText(row.created_by as unknown as string),
+      updated_by: decryptText(row.updated_by as unknown as string),
+      inactivated_by: row.inactivated_by
+        ? decryptText(row.inactivated_by as unknown as string)
+        : null,
+    }
   }
 
   async create(createTesteDto: {
@@ -67,12 +88,12 @@ export class PhishingsService {
                   id: departmentId,
                 },
               },
-              created_by: 'system',
-              updated_by: 'system',
+              created_by: encryptText('system'),
+              updated_by: encryptText('system'),
             })),
           },
-          created_by: 'system',
-          updated_by: 'system',
+          created_by: encryptText('system'),
+          updated_by: encryptText('system'),
         },
         include: {
           departments: {
@@ -114,7 +135,14 @@ export class PhishingsService {
       //   }
       // }
 
-      return phishing
+      return {
+        ...phishing,
+        created_by: decryptText(phishing.created_by as unknown as string),
+        updated_by: decryptText(phishing.updated_by as unknown as string),
+        inactivated_by: phishing.inactivated_by
+          ? decryptText(phishing.inactivated_by as unknown as string)
+          : null,
+      }
     }
 
     if (userId) {
@@ -142,8 +170,8 @@ export class PhishingsService {
               id: userId,
             },
           },
-          created_by: 'system',
-          updated_by: 'system',
+          created_by: encryptText('system'),
+          updated_by: encryptText('system'),
         },
         include: {
           user: true,
@@ -158,19 +186,26 @@ export class PhishingsService {
       //   linkBotao: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
       // })
 
-      return phishing
+      return {
+        ...phishing,
+        created_by: decryptText(phishing.created_by as unknown as string),
+        updated_by: decryptText(phishing.updated_by as unknown as string),
+        inactivated_by: phishing.inactivated_by
+          ? decryptText(phishing.inactivated_by as unknown as string)
+          : null,
+      }
     }
 
     throw new Error('É necessário informar departments ou usuário')
   }
 
   async remove(id: string): Promise<Phishing> {
-    return this.prisma.phishing.update({
+    const updated = await this.prisma.phishing.update({
       where: { id },
       data: {
         is_active: false,
         inactivated_at: new Date(),
-        inactivated_by: 'system',
+        inactivated_by: encryptText('system'),
       },
       include: {
         departments: {
@@ -180,6 +215,14 @@ export class PhishingsService {
         },
       },
     })
+    return {
+      ...updated,
+      created_by: decryptText(updated.created_by as unknown as string),
+      updated_by: decryptText(updated.updated_by as unknown as string),
+      inactivated_by: updated.inactivated_by
+        ? decryptText(updated.inactivated_by as unknown as string)
+        : null,
+    }
   }
 
   async updateResultado(

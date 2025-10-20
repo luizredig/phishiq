@@ -1,7 +1,8 @@
 model User {
   id                 String           @id @default(uuid())
   name               String
-  email              String           @unique
+  email              String
+  email_search       String?          @unique
   password_hash      String
   refresh_token_hash String?
   last_login_at      DateTime?

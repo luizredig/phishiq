@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config'
 import { PrismaClient } from '@prisma/client'
 import { MasterPrismaService } from '../master-prisma/master-prisma.service'
 import * as bcrypt from 'bcrypt'
+import { computeEmailSearch, decryptText, encryptText } from '../utils/crypto'
 
 interface JwtPayload {
   sub: string
@@ -62,7 +63,9 @@ export class AuthService {
       throw new BadRequestException('Tenant não encontrado')
     }
 
-    const exists = await this.prisma.user.findUnique({ where: { email } })
+    const exists = await this.prisma.user.findUnique({
+      where: { email_search: computeEmailSearch(email) },
+    })
     if (exists) {
       throw new ConflictException('E-mail já cadastrado')
     }
@@ -71,10 +74,11 @@ export class AuthService {
 
     const user = await this.prisma.user.create({
       data: {
-        name,
-        email,
+        name: encryptText(name),
+        email: encryptText(email),
+        email_search: computeEmailSearch(email),
         roles,
-        tenant_id: tenant.id,
+        tenant_id: encryptText(tenant.id),
         password_hash,
         created_by,
         updated_by: created_by,
@@ -89,11 +93,18 @@ export class AuthService {
       },
     })
 
-    return this.issueTokens(user)
+    return this.issueTokens({
+      ...user,
+      name: decryptText(user.name as unknown as string),
+      email: decryptText(user.email as unknown as string),
+      tenant_id: decryptText(user.tenant_id as unknown as string),
+    })
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.prisma.user.findUnique({ where: { email } })
+    const user = await this.prisma.user.findUnique({
+      where: { email_search: computeEmailSearch(email) },
+    })
     if (!user || !user.is_active || !user.password_hash) {
       throw new UnauthorizedException('Credenciais inválidas')
     }
@@ -105,7 +116,12 @@ export class AuthService {
       where: { id: user.id },
       data: { last_login_at: new Date() },
     })
-    return user
+    return {
+      ...user,
+      name: decryptText(user.name as unknown as string),
+      email: decryptText(user.email as unknown as string),
+      tenant_id: decryptText(user.tenant_id as unknown as string),
+    }
   }
 
   async login(email: string, password: string) {
@@ -173,6 +189,9 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Usuário não encontrado')
     }
-    return user
+    return {
+      name: decryptText(user.name as unknown as string),
+      email: decryptText(user.email as unknown as string),
+    }
   }
 }

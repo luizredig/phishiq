@@ -93,6 +93,7 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
+    "email_search" TEXT,
     "password_hash" TEXT NOT NULL,
     "refresh_token_hash" TEXT,
     "last_login_at" TIMESTAMP(3),
@@ -116,7 +117,7 @@ CREATE UNIQUE INDEX "PhishingDepartment_phishing_id_department_id_key" ON "Phish
 CREATE UNIQUE INDEX "UserDepartment_user_id_department_id_key" ON "UserDepartment"("user_id", "department_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX "User_email_search_key" ON "User"("email_search");
 
 -- AddForeignKey
 ALTER TABLE "PhishingDepartment" ADD CONSTRAINT "PhishingDepartment_phishing_id_fkey" FOREIGN KEY ("phishing_id") REFERENCES "Phishing"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

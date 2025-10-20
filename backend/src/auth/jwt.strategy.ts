@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { ConfigService } from '@nestjs/config'
 import { ModuleRef, ContextIdFactory } from '@nestjs/core'
 import { Request } from 'express'
+import { decryptText } from '../utils/crypto'
 
 type JwtPayload = { sub: string; tenant_id?: string }
 
@@ -47,6 +48,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     if (!user || !user.is_active) {
       throw new UnauthorizedException('Usuário inválido ou inativo')
     }
-    return user
+    return {
+      ...user,
+      email: decryptText(user.email as unknown as string),
+      tenant_id: decryptText(user.tenant_id as unknown as string),
+    }
   }
 }
