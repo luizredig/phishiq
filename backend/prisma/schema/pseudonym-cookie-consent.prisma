@@ -1,0 +1,21 @@
+model PseudonymCookieConsent {
+  id             String          @id @default(uuid())
+  pseudonym_id   String
+  pseudonym      Pseudonym       @relation(fields: [pseudonym_id], references: [id])
+  category       CookieCategory
+  consented      Boolean
+  consented_at   DateTime        @default(now())
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  @@unique([pseudonym_id, category])
+}
+
+
+

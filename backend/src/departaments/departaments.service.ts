@@ -14,7 +14,7 @@ export class DepartamentsService {
           is_active: includeInactive ? false : true,
         },
         include: {
-          users: true,
+          pseudonyms: true,
         },
       })
       .then((rows) =>

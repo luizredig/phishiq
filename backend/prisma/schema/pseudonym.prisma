@@ -1,0 +1,19 @@
+model Pseudonym {
+  id                    String                @id @default(uuid())
+  pseudonym             String                @unique
+  user_id               String?
+  user                  User?                 @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  phishings             Phishing[]
+  pseudonym_departments PseudonymDepartment[]
+  cookie_consents       PseudonymCookieConsent[]
+
+  is_active      Boolean   @default(true)
+  created_at     DateTime  @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime  @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+
+  @@unique([user_id])
+}

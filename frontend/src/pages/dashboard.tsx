@@ -46,23 +46,25 @@ interface DashboardStats {
   testesSucesso: number;
   testesFalha: number;
   testesPorDepartamento: {
-    departamento: string;
+    department: string;
     falhas: number;
   }[];
   usuariosMaisFalhas: {
-    id: string;
-    nome: string;
-    email: string;
-    falhas: number;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    };
+    falhas?: number;
   }[];
   departmentsMaisFalhas: {
     id: string;
-    nome: string;
+    name: string;
     falhas: number;
   }[];
 }
 
-const SUCCESS_COLORS = ["#22c55e", "#ef4444"]; // Verde para sucesso, Vermelho para falha
+const SUCCESS_COLORS = ["#22c55e", "#ef4444"];
 
 function PDFHeader() {
   return (
@@ -79,8 +81,7 @@ function PDFHeader() {
 
 function DashboardContent({
   stats,
-}: // meterInfo,
-{
+}: {
   stats: DashboardStats;
   meterInfo: any;
 }) {
@@ -98,7 +99,7 @@ function DashboardContent({
   ];
 
   const barData = stats.testesPorDepartamento?.map((dept) => ({
-    name: dept.departamento,
+    name: dept.department,
     falhas: dept.falhas,
   }));
 
@@ -262,9 +263,9 @@ function DashboardContent({
                 </TableHeader>
                 <TableBody>
                   {stats.usuariosMaisFalhas?.map((usuario) => (
-                    <TableRow key={usuario.id}>
-                      <TableCell>{usuario.nome}</TableCell>
-                      <TableCell>{usuario.email}</TableCell>
+                    <TableRow key={usuario.user.id}>
+                      <TableCell>{usuario.user.name}</TableCell>
+                      <TableCell>{usuario.user.email}</TableCell>
                       <TableCell className="text-right">
                         {usuario.falhas}
                       </TableCell>
@@ -296,7 +297,7 @@ function DashboardContent({
                 <TableBody>
                   {stats.departmentsMaisFalhas?.map((departamento) => (
                     <TableRow key={departamento.id}>
-                      <TableCell>{departamento.nome}</TableCell>
+                      <TableCell>{departamento.name}</TableCell>
                       <TableCell className="text-right">
                         {departamento.falhas}
                       </TableCell>

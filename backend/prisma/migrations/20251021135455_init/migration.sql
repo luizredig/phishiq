@@ -2,7 +2,10 @@
 CREATE TYPE "Action" AS ENUM ('CREATE', 'READ', 'UPDATE', 'DELETE', 'OPEN', 'SEND', 'ERROR');
 
 -- CreateEnum
-CREATE TYPE "Entity" AS ENUM ('DEPARTMENT', 'ENUM', 'MODULE', 'PHISHING', 'PHISHING_DEPARTMENT', 'PHISHING_TEMPLATE', 'PSEUDONYM', 'TENANT', 'TENANT_MODULE', 'USER', 'USER_DEPARTMENT');
+CREATE TYPE "CookieCategory" AS ENUM ('STRICTLY_NECESSARY', 'FUNCTIONAL', 'ANALYTICS', 'ADVERTISING');
+
+-- CreateEnum
+CREATE TYPE "Entity" AS ENUM ('DEPARTMENT', 'ENUM', 'MODULE', 'PHISHING', 'PHISHING_DEPARTMENT', 'PHISHING_TEMPLATE', 'PSEUDONYM', 'PSEUDONYM_COOKIE_CONSENT', 'TENANT', 'TENANT_MODULE', 'USER', 'USER_DEPARTMENT');
 
 -- CreateEnum
 CREATE TYPE "PhishingChannel" AS ENUM ('EMAIL');
@@ -60,7 +63,7 @@ CREATE TABLE "Phishing" (
     "reported" BOOLEAN NOT NULL DEFAULT false,
     "channel" "PhishingChannel" NOT NULL,
     "status" "PhishingStatus" NOT NULL,
-    "userId" TEXT,
+    "pseudonymId" TEXT,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "created_by" TEXT NOT NULL,
@@ -73,9 +76,27 @@ CREATE TABLE "Phishing" (
 );
 
 -- CreateTable
-CREATE TABLE "UserDepartment" (
+CREATE TABLE "PseudonymCookieConsent" (
     "id" TEXT NOT NULL,
-    "user_id" TEXT NOT NULL,
+    "pseudonym_id" TEXT NOT NULL,
+    "category" "CookieCategory" NOT NULL,
+    "consented" BOOLEAN NOT NULL,
+    "consented_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+    "updated_by" TEXT NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "inactivated_at" TIMESTAMP(3),
+    "inactivated_by" TEXT,
+
+    CONSTRAINT "PseudonymCookieConsent_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PseudonymDepartment" (
+    "id" TEXT NOT NULL,
+    "pseudonym_id" TEXT NOT NULL,
     "department_id" TEXT NOT NULL,
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -85,7 +106,23 @@ CREATE TABLE "UserDepartment" (
     "inactivated_at" TIMESTAMP(3),
     "inactivated_by" TEXT,
 
-    CONSTRAINT "UserDepartment_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "PseudonymDepartment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Pseudonym" (
+    "id" TEXT NOT NULL,
+    "pseudonym" TEXT NOT NULL,
+    "user_id" TEXT,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+    "updated_by" TEXT NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "inactivated_at" TIMESTAMP(3),
+    "inactivated_by" TEXT,
+
+    CONSTRAINT "Pseudonym_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -114,7 +151,16 @@ CREATE TABLE "User" (
 CREATE UNIQUE INDEX "PhishingDepartment_phishing_id_department_id_key" ON "PhishingDepartment"("phishing_id", "department_id");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UserDepartment_user_id_department_id_key" ON "UserDepartment"("user_id", "department_id");
+CREATE UNIQUE INDEX "PseudonymCookieConsent_pseudonym_id_category_key" ON "PseudonymCookieConsent"("pseudonym_id", "category");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PseudonymDepartment_pseudonym_id_department_id_key" ON "PseudonymDepartment"("pseudonym_id", "department_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Pseudonym_pseudonym_key" ON "Pseudonym"("pseudonym");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Pseudonym_user_id_key" ON "Pseudonym"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_search_key" ON "User"("email_search");
@@ -126,10 +172,16 @@ ALTER TABLE "PhishingDepartment" ADD CONSTRAINT "PhishingDepartment_phishing_id_
 ALTER TABLE "PhishingDepartment" ADD CONSTRAINT "PhishingDepartment_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "Department"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Phishing" ADD CONSTRAINT "Phishing_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Phishing" ADD CONSTRAINT "Phishing_pseudonymId_fkey" FOREIGN KEY ("pseudonymId") REFERENCES "Pseudonym"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserDepartment" ADD CONSTRAINT "UserDepartment_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PseudonymCookieConsent" ADD CONSTRAINT "PseudonymCookieConsent_pseudonym_id_fkey" FOREIGN KEY ("pseudonym_id") REFERENCES "Pseudonym"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UserDepartment" ADD CONSTRAINT "UserDepartment_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "Department"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "PseudonymDepartment" ADD CONSTRAINT "PseudonymDepartment_pseudonym_id_fkey" FOREIGN KEY ("pseudonym_id") REFERENCES "Pseudonym"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PseudonymDepartment" ADD CONSTRAINT "PseudonymDepartment_department_id_fkey" FOREIGN KEY ("department_id") REFERENCES "Department"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pseudonym" ADD CONSTRAINT "Pseudonym_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

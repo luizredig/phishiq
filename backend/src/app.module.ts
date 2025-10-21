@@ -14,6 +14,7 @@ import { PhishingsModule } from './phishings/phishings.module'
 import { TenantPrismaModule } from './tenant-prisma/tenant-prisma.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
+import { CookiesModule } from './cookies/cookies.module'
 import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
@@ -32,6 +33,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard'
     LicensingModule,
     AuthModule,
     UsersModule,
+    CookiesModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

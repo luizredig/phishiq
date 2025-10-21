@@ -173,7 +173,7 @@ export default function ManageDepartments() {
   return (
     <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gerenciar departments</h1>
+        <h1 className="text-2xl font-bold">Gerenciar departmentos</h1>
         <Button onClick={() => setIsNovoDepartamentoOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Novo departamento

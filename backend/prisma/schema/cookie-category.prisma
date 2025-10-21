@@ -1,0 +1,9 @@
+enum CookieCategory {
+  STRICTLY_NECESSARY
+  FUNCTIONAL
+  ANALYTICS
+  ADVERTISING
+}
+
+
+

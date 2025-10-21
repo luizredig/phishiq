@@ -1,8 +1,8 @@
-model UserDepartment {
+model PseudonymDepartment {
   id            String     @id @default(uuid())
-  user_id       String
+  pseudonym_id  String
   department_id String
-  user       User       @relation(fields: [user_id], references: [id])
+  pseudonym     Pseudonym  @relation(fields: [pseudonym_id], references: [id])
   department    Department @relation(fields: [department_id], references: [id])
 
   is_active      Boolean   @default(true)
@@ -13,5 +13,5 @@ model UserDepartment {
   inactivated_at DateTime?
   inactivated_by String?
 
-  @@unique([user_id, department_id])
+  @@unique([pseudonym_id, department_id])
 }

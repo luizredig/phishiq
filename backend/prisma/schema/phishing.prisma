@@ -8,8 +8,8 @@ model Phishing {
   channel     PhishingChannel
   status      PhishingStatus
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  pseudonym   Pseudonym? @relation(fields: [pseudonymId], references: [id])
+  pseudonymId String?
 
   is_active      Boolean   @default(true)
   created_at     DateTime  @default(now())

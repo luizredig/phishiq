@@ -28,7 +28,8 @@ export class PhishingsService {
               department: true,
             },
           },
-          user: true,
+
+          pseudonym: true,
         },
         orderBy: {
           created_at: 'desc',
@@ -100,15 +101,15 @@ export class PhishingsService {
             include: {
               department: {
                 include: {
-                  users: {
+                  pseudonyms: {
                     where: {
                       is_active: true,
-                      user: {
+                      pseudonym: {
                         is_active: true,
                       },
                     },
                     include: {
-                      user: true,
+                      pseudonym: true,
                     },
                   },
                 },
@@ -149,9 +150,13 @@ export class PhishingsService {
       const user = await this.prisma.user.findUnique({
         where: { id: userId },
         include: {
-          user_departments: {
+          pseudonym: {
             include: {
-              department: true,
+              pseudonym_departments: {
+                include: {
+                  department: true,
+                },
+              },
             },
           },
         },
@@ -165,16 +170,17 @@ export class PhishingsService {
         data: {
           channel,
           status: 'SENT',
-          user: {
-            connect: {
-              id: userId,
-            },
-          },
+
+          pseudonym: user?.pseudonym
+            ? {
+                connect: { id: user.pseudonym.id },
+              }
+            : undefined,
           created_by: encryptText('system'),
           updated_by: encryptText('system'),
         },
         include: {
-          user: true,
+          pseudonym: true,
         },
       })
 

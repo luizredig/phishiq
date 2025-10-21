@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { PrismaClient } from '../../prisma/generated/schema'
+import { decryptText } from '../utils/crypto'
 
 @Injectable()
 export class DashboardService {
@@ -54,23 +55,22 @@ export class DashboardService {
         },
       }),
 
-      this.prisma.user.findMany({
+      this.prisma.pseudonym.findMany({
         where: { is_active: true },
         select: {
-          id: true,
-          name: true,
-          email: true,
-          user_departments: {
+          user: {
             select: {
-              department: {
+              id: true,
+              name: true,
+              email: true,
+              pseudonym: {
                 select: {
-                  phishings: {
-                    where: { phishing: { is_active: true, clicked: true } },
-                    select: {
-                      phishing: {
+                  pseudonym_departments: {
+                    include: {
+                      department: {
                         select: {
                           id: true,
-                          clicked: true,
+                          name: true,
                         },
                       },
                     },
@@ -117,22 +117,6 @@ export class DashboardService {
       })
       .sort((a, b) => b.falhas - a.falhas)
 
-    const usuariosProcessados = usuariosMaisFalhas
-      ?.map((usuario) => {
-        const falhas = usuario.user_departments.reduce((acc, dept) => {
-          return acc + dept.department.phishings.length
-        }, 0)
-
-        return {
-          id: usuario.id,
-          name: `${usuario.name}`,
-          email: usuario.email,
-          falhas,
-        }
-      })
-      ?.filter((usuario) => usuario.falhas > 0)
-      .sort((a, b) => b.falhas - a.falhas)
-
     const departmentsFalhasProcessados = departmentsMaisFalhas
       ?.map((dept) => {
         const falhas = dept.phishings.length
@@ -145,12 +129,27 @@ export class DashboardService {
       })
       .sort((a, b) => b.falhas - a.falhas)
 
+    const usuariosMaisFalhasDecrypted = usuariosMaisFalhas
+      ?.map((row) =>
+        row.user
+          ? {
+              ...row,
+              user: {
+                ...row.user,
+                name: decryptText(row.user.name as unknown as string),
+                email: decryptText(row.user.email as unknown as string),
+              },
+            }
+          : row,
+      )
+      ?.filter((row) => Boolean(row.user))
+
     return {
       totalTestes,
       testesSucesso,
       testesFalha,
       testesPorDepartamento: departmentsProcessados,
-      usuariosMaisFalhas: usuariosProcessados,
+      usuariosMaisFalhas: usuariosMaisFalhasDecrypted,
       departmentsMaisFalhas: departmentsFalhasProcessados,
     }
   }

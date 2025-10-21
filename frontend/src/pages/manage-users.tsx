@@ -34,12 +34,14 @@ interface Usuario {
   cargo: "ADMIN" | "FUNCIONARIO";
   is_active: boolean;
   created_at: string;
-  user_departments: {
-    department: {
-      id: string;
-      name: string;
-    };
-  }[];
+  pseudonym?: {
+    pseudonym_departments: {
+      department: {
+        id: string;
+        name: string;
+      };
+    }[];
+  };
 }
 
 export default function ManageUsers() {
@@ -106,7 +108,7 @@ export default function ManageUsers() {
     return (
       user.name.toLowerCase().includes(termoBusca) ||
       user.email.toLowerCase().includes(termoBusca) ||
-      user.user_departments?.some((d) =>
+      user.pseudonym?.pseudonym_departments?.some((d) =>
         d.department.name.toLowerCase().includes(termoBusca)
       )
     );
@@ -214,13 +216,14 @@ export default function ManageUsers() {
 
                     <TableCell>
                       <div className="flex justify-center items-center">
-                        {user.user_departments.length > 0 ? (
+                        {(user.pseudonym?.pseudonym_departments?.length ?? 0) >
+                        0 ? (
                           <Badge
                             variant="secondary"
                             className="flex items-center gap-1"
                           >
                             <Building2 className="h-3 w-3" />
-                            {user.user_departments.length}
+                            {user.pseudonym?.pseudonym_departments?.length ?? 0}
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground text-sm">

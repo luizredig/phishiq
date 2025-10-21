@@ -47,9 +47,11 @@ interface UsuarioDialogProps {
     name: string;
     email: string;
     cargo: CargoUsuario;
-    user_departments: {
-      department: Department;
-    }[];
+    pseudonym?: {
+      pseudonym_departments: {
+        department: Department;
+      }[];
+    };
   };
 }
 
@@ -94,7 +96,9 @@ export function UsuarioDialog({
           cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados(
-          usuarioParaEditar.user_departments?.map((d) => d.department.id)
+          usuarioParaEditar.pseudonym?.pseudonym_departments?.map(
+            (d) => d.department.id
+          ) || []
         );
       } else {
         form.reset({
@@ -126,9 +130,10 @@ export function UsuarioDialog({
       if (usuarioParaEditar) {
         const response = await put(`/users/${usuarioParaEditar.id}`, data);
         if (response) {
-          const departmentsAtuais = usuarioParaEditar.user_departments?.map(
-            (d) => d.department.id
-          );
+          const departmentsAtuais =
+            usuarioParaEditar.pseudonym?.pseudonym_departments?.map(
+              (d) => d.department.id
+            ) || [];
           const departmentsParaAdicionar = departmentsSelecionados?.filter(
             (id) => !departmentsAtuais.includes(id)
           );

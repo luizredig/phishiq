@@ -27,9 +27,13 @@ export class UsersService {
           created_by: true,
           updated_by: true,
           inactivated_by: true,
-          user_departments: {
-            include: {
-              department: true,
+          pseudonym: {
+            select: {
+              pseudonym_departments: {
+                include: {
+                  department: true,
+                },
+              },
             },
           },
         },

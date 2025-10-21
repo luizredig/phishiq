@@ -93,6 +93,15 @@ export class AuthService {
       },
     })
 
+    await this.prisma.pseudonym.create({
+      data: {
+        pseudonym: `p-${user.id}`,
+        user: { connect: { id: user.id } },
+        created_by,
+        updated_by: created_by,
+      },
+    })
+
     return this.issueTokens({
       ...user,
       name: decryptText(user.name as unknown as string),
@@ -116,6 +125,21 @@ export class AuthService {
       where: { id: user.id },
       data: { last_login_at: new Date() },
     })
+
+    // garante pseudônimo existente para o usuário
+    const existingPseudonym = await this.prisma.pseudonym.findUnique({
+      where: { user_id: user.id },
+    })
+    if (!existingPseudonym) {
+      await this.prisma.pseudonym.create({
+        data: {
+          pseudonym: `p-${user.id}`,
+          user: { connect: { id: user.id } },
+          created_by: 'system',
+          updated_by: 'system',
+        },
+      })
+    }
     return {
       ...user,
       name: decryptText(user.name as unknown as string),

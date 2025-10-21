@@ -1,8 +1,8 @@
 model Department {
-  id        String               @id @default(uuid())
-  name      String
-  phishings PhishingDepartment[]
-  users     UserDepartment[]
+  id         String                @id @default(uuid())
+  name       String
+  phishings  PhishingDepartment[]
+  pseudonyms PseudonymDepartment[]
 
   is_active      Boolean   @default(true)
   created_at     DateTime  @default(now())
