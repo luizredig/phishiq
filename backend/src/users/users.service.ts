@@ -1,14 +1,12 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../prisma/generated/schema'
 import * as bcrypt from 'bcrypt'
-import { User } from 'prisma/generated/schema'
+import { PhishingChannel } from '../../prisma/generated/schema'
 import { decryptText, encryptText, computeEmailSearch } from '../utils/crypto'
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
-
-  // Crypto util importado de ../utils/crypto
 
   findAll(includeInactive = false) {
     return this.prisma.user
@@ -100,46 +98,106 @@ export class UsersService {
   ) {
     const temporaryPassword = Math.random().toString(36).slice(-12)
     const password_hash = await bcrypt.hash(temporaryPassword, 10)
-    const created = await this.prisma.user.create({
-      data: {
-        name: encryptText(data.name),
-        email: encryptText(data.email),
-        email_search: computeEmailSearch(data.email),
-        roles: data.roles || ['user'],
-        password_hash,
-        created_by: encryptText(meta.createdBy),
-        updated_by: encryptText(meta.createdBy),
-        tenant_id: encryptText(meta.tenantId),
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        roles: true,
-        is_active: true,
-        tenant_id: true,
-        created_at: true,
-        updated_at: true,
-        inactivated_at: true,
-        created_by: true,
-        updated_by: true,
-        inactivated_by: true,
-      },
-    })
-    return {
-      ...created,
-      name: decryptText(created.name as unknown as string),
-      email: decryptText(created.email as unknown as string),
-      tenant_id: decryptText(created.tenant_id as unknown as string),
-      created_by: created.created_by
-        ? decryptText(created.created_by as unknown as string)
-        : null,
-      updated_by: created.updated_by
-        ? decryptText(created.updated_by as unknown as string)
-        : null,
-      inactivated_by: created.inactivated_by
-        ? decryptText(created.inactivated_by as unknown as string)
-        : null,
+
+    try {
+      const { user: created, pseudonymId } = await this.prisma.$transaction(
+        async (tx) => {
+          const user = await tx.user.create({
+            data: {
+              name: encryptText(data.name),
+              email: encryptText(data.email),
+              email_search: computeEmailSearch(data.email),
+              roles: data.roles || ['user'],
+              password_hash,
+              created_by: encryptText(meta.createdBy),
+              updated_by: encryptText(meta.createdBy),
+              tenant_id: encryptText(meta.tenantId),
+            },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              roles: true,
+              is_active: true,
+              tenant_id: true,
+              created_at: true,
+              updated_at: true,
+              inactivated_at: true,
+              created_by: true,
+              updated_by: true,
+              inactivated_by: true,
+            },
+          })
+
+          const pseudonym = await tx.pseudonym.create({
+            data: {
+              pseudonym: `p-${user.id}`,
+              user: { connect: { id: user.id } },
+              created_by: encryptText(meta.createdBy),
+              updated_by: encryptText(meta.createdBy),
+            },
+            select: { id: true },
+          })
+
+          console.log('UsersService.create tx1 created', {
+            userId: user.id,
+            pseudonymId: pseudonym.id,
+          })
+          return { user, pseudonymId: pseudonym.id }
+        },
+      )
+
+      await this.prisma.$transaction(async (tx) => {
+        const pseudonym = await tx.pseudonym.findUnique({
+          where: { id: pseudonymId },
+          select: { id: true },
+        })
+        if (!pseudonym) return
+        const channels = Object.values(PhishingChannel)
+        for (const ch of channels) {
+          await tx.pseudonymChannelConsent.upsert({
+            where: {
+              pseudonym_id_channel: {
+                pseudonym_id: pseudonym.id,
+                channel: ch,
+              },
+            },
+            update: {
+              consented: true,
+              updated_by: encryptText(meta.createdBy),
+            },
+            create: {
+              pseudonym: { connect: { id: pseudonym.id } },
+              channel: ch,
+              consented: true,
+              created_by: encryptText(meta.createdBy),
+              updated_by: encryptText(meta.createdBy),
+            },
+          })
+        }
+        console.log('UsersService.create tx2 consents created for', {
+          pseudonymId: pseudonym.id,
+          channels,
+        })
+      })
+
+      return {
+        ...created,
+        name: decryptText(created.name as unknown as string),
+        email: decryptText(created.email as unknown as string),
+        tenant_id: decryptText(created.tenant_id as unknown as string),
+        created_by: created.created_by
+          ? decryptText(created.created_by as unknown as string)
+          : null,
+        updated_by: created.updated_by
+          ? decryptText(created.updated_by as unknown as string)
+          : null,
+        inactivated_by: created.inactivated_by
+          ? decryptText(created.inactivated_by as unknown as string)
+          : null,
+      }
+    } catch (err) {
+      throw err
     }
   }
 
@@ -188,7 +246,7 @@ export class UsersService {
     }
   }
 
-  async updateStatus(id: string, is_active: boolean): Promise<User> {
+  async updateStatus(id: string, is_active: boolean) {
     const exists = await this.prisma.user.findUnique({
       where: { id },
     })

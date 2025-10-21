@@ -15,6 +15,7 @@ import { TenantPrismaModule } from './tenant-prisma/tenant-prisma.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
 import { CookiesModule } from './cookies/cookies.module'
+import { ChannelsModule } from './channels/channels.module'
 import { JwtAuthGuard } from './auth/jwt-auth.guard'
 
 @Module({
@@ -34,6 +35,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard'
     AuthModule,
     UsersModule,
     CookiesModule,
+    ChannelsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

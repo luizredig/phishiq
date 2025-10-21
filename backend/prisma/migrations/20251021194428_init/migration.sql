@@ -5,7 +5,7 @@ CREATE TYPE "Action" AS ENUM ('CREATE', 'READ', 'UPDATE', 'DELETE', 'OPEN', 'SEN
 CREATE TYPE "CookieCategory" AS ENUM ('STRICTLY_NECESSARY', 'FUNCTIONAL', 'ANALYTICS', 'ADVERTISING');
 
 -- CreateEnum
-CREATE TYPE "Entity" AS ENUM ('DEPARTMENT', 'ENUM', 'MODULE', 'PHISHING', 'PHISHING_DEPARTMENT', 'PHISHING_TEMPLATE', 'PSEUDONYM', 'PSEUDONYM_COOKIE_CONSENT', 'TENANT', 'TENANT_MODULE', 'USER', 'USER_DEPARTMENT');
+CREATE TYPE "Entity" AS ENUM ('DEPARTMENT', 'ENUM', 'MODULE', 'PHISHING', 'PHISHING_DEPARTMENT', 'PHISHING_TEMPLATE', 'PSEUDONYM', 'PSEUDONYM_COOKIE_CONSENT', 'PSEUDONYM_CHANNEL_CONSENT', 'TENANT', 'TENANT_MODULE', 'USER', 'USER_DEPARTMENT');
 
 -- CreateEnum
 CREATE TYPE "PhishingChannel" AS ENUM ('EMAIL');
@@ -73,6 +73,24 @@ CREATE TABLE "Phishing" (
     "inactivated_by" TEXT,
 
     CONSTRAINT "Phishing_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "PseudonymChannelConsent" (
+    "id" TEXT NOT NULL,
+    "pseudonym_id" TEXT NOT NULL,
+    "channel" "PhishingChannel" NOT NULL,
+    "consented" BOOLEAN NOT NULL,
+    "consented_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_by" TEXT NOT NULL,
+    "updated_by" TEXT NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "inactivated_at" TIMESTAMP(3),
+    "inactivated_by" TEXT,
+
+    CONSTRAINT "PseudonymChannelConsent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -151,6 +169,9 @@ CREATE TABLE "User" (
 CREATE UNIQUE INDEX "PhishingDepartment_phishing_id_department_id_key" ON "PhishingDepartment"("phishing_id", "department_id");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "PseudonymChannelConsent_pseudonym_id_channel_key" ON "PseudonymChannelConsent"("pseudonym_id", "channel");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "PseudonymCookieConsent_pseudonym_id_category_key" ON "PseudonymCookieConsent"("pseudonym_id", "category");
 
 -- CreateIndex
@@ -173,6 +194,9 @@ ALTER TABLE "PhishingDepartment" ADD CONSTRAINT "PhishingDepartment_department_i
 
 -- AddForeignKey
 ALTER TABLE "Phishing" ADD CONSTRAINT "Phishing_pseudonymId_fkey" FOREIGN KEY ("pseudonymId") REFERENCES "Pseudonym"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "PseudonymChannelConsent" ADD CONSTRAINT "PseudonymChannelConsent_pseudonym_id_fkey" FOREIGN KEY ("pseudonym_id") REFERENCES "Pseudonym"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "PseudonymCookieConsent" ADD CONSTRAINT "PseudonymCookieConsent_pseudonym_id_fkey" FOREIGN KEY ("pseudonym_id") REFERENCES "Pseudonym"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

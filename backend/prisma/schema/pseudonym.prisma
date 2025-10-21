@@ -6,6 +6,7 @@ model Pseudonym {
   phishings             Phishing[]
   pseudonym_departments PseudonymDepartment[]
   cookie_consents       PseudonymCookieConsent[]
+  channel_consents      PseudonymChannelConsent[]
 
   is_active      Boolean   @default(true)
   created_at     DateTime  @default(now())

@@ -2,30 +2,25 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaClient } from '../../prisma/generated/schema'
 
 @Injectable()
-export class CookiesService {
+export class ChannelsService {
   constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
-  async getCurrentUserConsents(userId: string) {
+  async getChannelConsents(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { pseudonym: { include: { cookie_consents: true } } },
+      include: { pseudonym: { include: { channel_consents: true } } },
     })
     if (!user) throw new NotFoundException('Usuário não encontrado')
-    const consents = user.pseudonym?.cookie_consents || []
-    const toMap = consents.reduce<Record<string, boolean>>((acc, c) => {
-      acc[c.category] = c.consented
+    const consents = user.pseudonym?.channel_consents || []
+    return consents.reduce<Record<string, boolean>>((acc, c) => {
+      acc[c.channel] = c.consented
       return acc
     }, {})
-    return toMap
   }
 
-  async saveCurrentUserConsents(
+  async saveChannelConsents(
     userId: string,
-    payload: {
-      functional?: boolean
-      analytics?: boolean
-      advertising?: boolean
-    },
+    payload: Partial<Record<'EMAIL', boolean>>,
   ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -33,7 +28,6 @@ export class CookiesService {
     })
     if (!user) throw new NotFoundException('Usuário não encontrado')
 
-    // Garante pseudônimo
     const pseudonym = user.pseudonym
       ? user.pseudonym
       : await this.prisma.pseudonym.create({
@@ -45,31 +39,22 @@ export class CookiesService {
           },
         })
 
-    const categories: Array<{
-      key: 'FUNCTIONAL' | 'ANALYTICS' | 'ADVERTISING'
-      value: boolean | undefined
-    }> = [
-      { key: 'FUNCTIONAL', value: payload.functional },
-      { key: 'ANALYTICS', value: payload.analytics },
-      { key: 'ADVERTISING', value: payload.advertising },
-    ]
-
-    for (const { key, value } of categories) {
+    const entries = Object.entries(payload) as Array<
+      ['EMAIL', boolean | undefined]
+    >
+    for (const [key, value] of entries) {
       if (typeof value === 'boolean') {
-        await this.prisma.pseudonymCookieConsent.upsert({
+        await this.prisma.pseudonymChannelConsent.upsert({
           where: {
-            pseudonym_id_category: {
+            pseudonym_id_channel: {
               pseudonym_id: pseudonym.id,
-              category: key,
+              channel: key,
             },
           },
-          update: {
-            consented: value,
-            updated_by: 'system',
-          },
+          update: { consented: value, updated_by: 'system' },
           create: {
             pseudonym: { connect: { id: pseudonym.id } },
-            category: key,
+            channel: key,
             consented: value,
             created_by: 'system',
             updated_by: 'system',
@@ -77,7 +62,6 @@ export class CookiesService {
         })
       }
     }
-
     return { ok: true }
   }
 }

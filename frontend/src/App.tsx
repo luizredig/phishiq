@@ -15,6 +15,7 @@ import PhishingClicked from "./pages/phishing-clicked";
 import LoginPage from "./pages/login";
 import SignupPage from "./pages/signup";
 import ProtectedRoute from "./components/auth/protected-route";
+import ProfilePage from "./pages/profile";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
             />
             <Route path="/gerenciar-testes" element={<ManagePhishings />} />
             <Route path="/templates" element={<GerenciarTemplates />} />
+            <Route path="/perfil" element={<ProfilePage />} />
           </Route>
         </Route>
 
