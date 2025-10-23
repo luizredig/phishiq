@@ -1,5 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaClient } from '../../prisma/generated/schema'
+import { PrismaClient, Action, Entity } from '../../prisma/generated/schema'
+import { encryptText } from '../utils/crypto'
 
 @Injectable()
 export class CookiesService {
@@ -16,6 +17,16 @@ export class CookiesService {
       acc[c.category] = c.consented
       return acc
     }, {})
+    try {
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PSEUDONYM_COOKIE_CONSENT,
+          entity_id: user.pseudonym?.id || userId,
+          action: Action.READ,
+          created_by: encryptText('system'),
+        },
+      })
+    } catch {}
     return toMap
   }
 
@@ -75,6 +86,16 @@ export class CookiesService {
             updated_by: 'system',
           },
         })
+        try {
+          await this.prisma.log.create({
+            data: {
+              entity: Entity.PSEUDONYM_COOKIE_CONSENT,
+              entity_id: `${pseudonym.id}:${key}`,
+              action: Action.UPDATE,
+              created_by: encryptText('system'),
+            },
+          })
+        } catch {}
       }
     }
 

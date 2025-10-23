@@ -8,12 +8,15 @@ import {
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { PrismaClient } from '@prisma/client'
+import { Entity } from '../../prisma/generated/schema'
 import { MasterPrismaService } from '../master-prisma/master-prisma.service'
 import * as bcrypt from 'bcrypt'
 import { computeEmailSearch, decryptText, encryptText } from '../utils/crypto'
+import { Action } from '../../prisma/generated/schema'
 
 interface JwtPayload {
   sub: string
+  name: string
   email: string
   tenant_id: string
   roles: string[]
@@ -93,6 +96,15 @@ export class AuthService {
       },
     })
 
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.SIGNUP,
+        entity_id: user.id,
+        action: Action.CREATE,
+        created_by: created_by,
+      },
+    })
+
     await this.prisma.pseudonym.create({
       data: {
         pseudonym: `p-${user.id}`,
@@ -130,6 +142,17 @@ export class AuthService {
       data: { last_login_at: new Date() },
     })
 
+    try {
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.LOGIN,
+          entity_id: user.id,
+          action: Action.CREATE as any,
+          created_by: decryptText(user.email as unknown as string),
+        },
+      })
+    } catch {}
+
     const existingPseudonym = await this.prisma.pseudonym.findUnique({
       where: { user_id: user.id },
     })
@@ -160,12 +183,14 @@ export class AuthService {
 
   private async issueTokens(user: {
     id: string
+    name: string
     email: string
     roles: string[]
     tenant_id: string
   }) {
     const payload: JwtPayload = {
       sub: user.id,
+      name: user.name,
       email: user.email,
       tenant_id: user.tenant_id,
       roles: user.roles || [],

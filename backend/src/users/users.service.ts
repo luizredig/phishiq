@@ -1,7 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaClient } from '../../prisma/generated/schema'
 import * as bcrypt from 'bcrypt'
-import { PhishingChannel } from '../../prisma/generated/schema'
+import { PhishingChannel, Action, Entity } from '../../prisma/generated/schema'
 import { decryptText, encryptText, computeEmailSearch } from '../utils/crypto'
 
 @Injectable()
@@ -139,10 +139,15 @@ export class UsersService {
             select: { id: true },
           })
 
-          console.log('UsersService.create tx1 created', {
-            userId: user.id,
-            pseudonymId: pseudonym.id,
+          await this.prisma.log.create({
+            data: {
+              entity: Entity.USER,
+              entity_id: user.id,
+              action: Action.CREATE,
+              created_by: encryptText(meta.createdBy),
+            },
           })
+
           return { user, pseudonymId: pseudonym.id }
         },
       )
@@ -175,13 +180,9 @@ export class UsersService {
             },
           })
         }
-        console.log('UsersService.create tx2 consents created for', {
-          pseudonymId: pseudonym.id,
-          channels,
-        })
       })
 
-      return {
+      const result = {
         ...created,
         name: decryptText(created.name as unknown as string),
         email: decryptText(created.email as unknown as string),
@@ -196,6 +197,7 @@ export class UsersService {
           ? decryptText(created.inactivated_by as unknown as string)
           : null,
       }
+      return result
     } catch (err) {
       throw err
     }
@@ -227,6 +229,14 @@ export class UsersService {
         created_by: true,
         updated_by: true,
         inactivated_by: true,
+      },
+    })
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.USER,
+        entity_id: id,
+        action: Action.UPDATE,
+        created_by: encryptText(meta.updatedBy),
       },
     })
     return {
@@ -275,6 +285,14 @@ export class UsersService {
         created_by: true,
         updated_by: true,
         inactivated_by: true,
+      },
+    })
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.USER,
+        entity_id: id,
+        action: Action.UPDATE,
+        created_by: encryptText('system'),
       },
     })
     return {

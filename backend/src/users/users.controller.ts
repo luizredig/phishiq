@@ -44,19 +44,10 @@ export class UsersController {
 
   @Post()
   create(@Body() body: unknown, @Req() req: Request) {
-    console.log('POST /users called')
     const data = CreateUserSchema.parse(body)
     const user = req.user as any
     const tenantId =
       (user && user.tenant_id) || (req.headers['x-tenant-id'] as string)
-
-    console.log('UsersController.create payload', {
-      name: data.name,
-      email: data.email,
-      hasRoles: Array.isArray((data as any).roles),
-      tenantIdPresent: Boolean(tenantId),
-      createdBy: user?.id || 'system',
-    })
 
     return this.users.create(data, {
       tenantId,
@@ -66,6 +57,17 @@ export class UsersController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: unknown, @Req() req: Request) {
+    const data = UpdateUserSchema.parse(body)
+    const user = req.user as any
+    return this.users.update(id, data, { updatedBy: user?.id || 'system' })
+  }
+
+  @Put(':id')
+  updatePut(
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Req() req: Request,
+  ) {
     const data = UpdateUserSchema.parse(body)
     const user = req.user as any
     return this.users.update(id, data, { updatedBy: user?.id || 'system' })

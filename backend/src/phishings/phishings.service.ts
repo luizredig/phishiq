@@ -6,6 +6,8 @@ import {
   Phishing,
   PhishingChannel,
   PhishingStatus,
+  Action,
+  Entity,
 } from '../../prisma/generated/schema'
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { PrismaClient } from '../../prisma/generated/schema'
@@ -119,6 +121,15 @@ export class PhishingsService {
         },
       })
 
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PHISHING,
+          entity_id: phishing.id,
+          action: Action.CREATE,
+          created_by: encryptText('system'),
+        },
+      })
+
       // Envio por departamento
       // for (const departamento of teste.departments) {
       //   for (const usuarioDepartamento of departamento.department.usuarios) {
@@ -184,6 +195,15 @@ export class PhishingsService {
         },
       })
 
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PHISHING,
+          entity_id: phishing.id,
+          action: Action.CREATE,
+          created_by: encryptText('system'),
+        },
+      })
+
       // Envio individual
       // await this.nodemailerService.sendPhishingEmail(user.email, {
       //   nomeEmpresa: companyName,
@@ -221,6 +241,14 @@ export class PhishingsService {
         },
       },
     })
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.PHISHING,
+        entity_id: id,
+        action: Action.DELETE,
+        created_by: encryptText('system'),
+      },
+    })
     return {
       ...updated,
       created_by: decryptText(updated.created_by as unknown as string),
@@ -238,7 +266,7 @@ export class PhishingsService {
       reported: boolean
     },
   ): Promise<Phishing> {
-    return this.prisma.phishing.update({
+    const row = await this.prisma.phishing.update({
       where: { id },
       data: {
         clicked: data.clicked,
@@ -252,13 +280,22 @@ export class PhishingsService {
         },
       },
     })
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.PHISHING,
+        entity_id: id,
+        action: Action.UPDATE,
+        created_by: encryptText('system'),
+      },
+    })
+    return row
   }
 
   async updateStatusTeste(
     id: string,
     status: PhishingStatus,
   ): Promise<Phishing> {
-    return this.prisma.phishing.update({
+    const row = await this.prisma.phishing.update({
       where: { id },
       data: {
         status,
@@ -271,5 +308,14 @@ export class PhishingsService {
         },
       },
     })
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.PHISHING,
+        entity_id: id,
+        action: Action.UPDATE,
+        created_by: encryptText('system'),
+      },
+    })
+    return row
   }
 }
