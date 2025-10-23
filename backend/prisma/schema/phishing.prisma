@@ -2,14 +2,16 @@ model Phishing {
   id String @id @default(uuid())
 
   clicked  Boolean @default(false)
-  reported Boolean @default(false)
-
+  
   departments PhishingDepartment[]
   channel     PhishingChannel
   status      PhishingStatus
 
   pseudonym   Pseudonym? @relation(fields: [pseudonymId], references: [id])
   pseudonymId String?
+
+  template    PhishingTemplate? @relation(fields: [template_id], references: [id])
+  template_id String?
 
   is_active      Boolean   @default(true)
   created_at     DateTime  @default(now())

@@ -40,25 +40,29 @@ import {
   HoverCardTrigger,
 } from "../components/ui/hover-card";
 
-interface Teste {
+interface Phishing {
   id: string;
-  canal: "EMAIL";
+  channel: "EMAIL";
   status: "ENVIADO" | "FALHA";
-  caiuNoTeste: boolean;
-  reportouPhishing: boolean;
+  clicked: boolean;
+  template?: {
+    id: string;
+    name: string;
+  };
   departments: {
-    departamento: {
+    departament: {
       id: string;
-      nome: string;
+      name: string;
     };
   }[];
   is_active: boolean;
-  criadoEm: string;
-  usuario?: {
-    id: string;
-    nome: string;
-    sobrenome: string;
-    email: string;
+  created_at: Date;
+  pseudonym?: {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    };
   };
 }
 
@@ -74,7 +78,7 @@ interface Filtros {
 
 export default function ManagePhishings() {
   const [searchParams] = useSearchParams();
-  const [testes, setTestes] = useState<Teste[]>([]);
+  const [phishings, setPhishings] = useState<Phishing[]>([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoTesteOpen, setIsNovoTesteOpen] = useState(false);
@@ -92,14 +96,12 @@ export default function ManagePhishings() {
   useEffect(() => {
     fetchTestes();
 
-    // Check if we should open the dialog
     if (searchParams.get("new") === "true") {
       setIsNovoTesteOpen(true);
     }
 
-    // Escuta o evento de atualização do teste
-    socket.on("testeAtualizado", (testeAtualizado: Teste) => {
-      setTestes((prevTestes) =>
+    socket.on("testeAtualizado", (testeAtualizado: Phishing) => {
+      setPhishings((prevTestes) =>
         prevTestes?.map((teste) =>
           teste.id === testeAtualizado.id ? testeAtualizado : teste
         )
@@ -114,9 +116,9 @@ export default function ManagePhishings() {
   async function fetchTestes() {
     setLoading(true);
     try {
-      const response = await get<Teste[]>(`/phishings`);
+      const response = await get<Phishing[]>(`/phishings`);
       if (response) {
-        setTestes(response);
+        setPhishings(response);
       }
     } catch (error) {
       console.error("Error fetching testes:", error);
@@ -125,20 +127,18 @@ export default function ManagePhishings() {
     }
   }
 
-  const filteredTestes = testes?.filter((teste) => {
-    // Filtro de busca por departamento
+  const filteredPhishings = phishings?.filter((teste) => {
     if (busca) {
       const termoBusca = busca.toLowerCase();
       if (
         !teste.departments?.some((d) =>
-          d.department.nome.toLowerCase().includes(termoBusca)
+          d.departament.name.toLowerCase().includes(termoBusca)
         )
       ) {
         return false;
       }
     }
 
-    // Filtro por tipo de envio
     if (filtros.tipoEnvio !== "TODOS") {
       if (filtros.tipoEnvio === "INDIVIDUAL" && teste.departments.length > 0) {
         return false;
@@ -151,18 +151,16 @@ export default function ManagePhishings() {
       }
     }
 
-    // Filtro por status
     if (filtros.status !== "TODOS" && teste.status !== filtros.status) {
       return false;
     }
 
-    // Filtro por resultado
     if (filtros.resultado !== "TODOS") {
-      if (filtros.resultado === "CAIU" && !teste.caiuNoTeste) {
+      if (filtros.resultado === "CAIU" && !teste.clicked) {
         return false;
       }
 
-      if (filtros.resultado === "SEM_INTERACOES" && teste.caiuNoTeste) {
+      if (filtros.resultado === "SEM_INTERACOES" && teste.clicked) {
         return false;
       }
     }
@@ -170,27 +168,27 @@ export default function ManagePhishings() {
     return true;
   });
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredTestes.length / itemsPerPage);
-  const paginatedTestes = filteredTestes.slice(
+  const totalPages = Math.ceil(filteredPhishings.length / itemsPerPage);
+  const paginatedPhishings = filteredPhishings.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  function getTesteStatusBadge(teste: Teste) {
-    const statusColors = {
-      ENVIADO: "bg-green-100 text-green-700",
-      FALHA: "bg-red-100 text-red-700",
+  function getTesteStatusBadge(teste: Phishing) {
+    const map: Record<string, { label: string; cls: string }> = {
+      SENT: { label: "Enviado", cls: "bg-green-100 text-green-700" },
+      CLICKED: { label: "Clicado", cls: "bg-yellow-100 text-yellow-800" },
+      SEND_FAILED: { label: "Falha no envio", cls: "bg-red-100 text-red-700" },
+      ENVIADO: { label: "Enviado", cls: "bg-green-100 text-green-700" },
+      FALHA: { label: "Falha", cls: "bg-red-100 text-red-700" },
     };
-
+    const meta = map[teste.status] || {
+      label: teste.status,
+      cls: "bg-gray-100 text-gray-700",
+    };
     return (
-      <Badge
-        variant="secondary"
-        className={`${statusColors[teste.status]} border-0 w-fit hover:bg-${
-          statusColors[teste.status]
-        }`}
-      >
-        {teste.status}
+      <Badge variant="secondary" className={`${meta.cls} border-0 w-fit`}>
+        {meta.label}
       </Badge>
     );
   }
@@ -206,10 +204,10 @@ export default function ManagePhishings() {
   return (
     <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gerenciar testes</h1>
+        <h1 className="text-2xl font-bold">Gerenciar phishings</h1>
         <Button onClick={() => setIsNovoTesteOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Novo teste
+          Novo phishing
         </Button>
       </div>
 
@@ -293,7 +291,7 @@ export default function ManagePhishings() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
-                <SelectItem value="CAIU">Caiu no teste</SelectItem>
+                <SelectItem value="CAIU">Caiu no phishing</SelectItem>
                 <SelectItem value="SEM_INTERACOES">Sem interações</SelectItem>
               </SelectContent>
             </Select>
@@ -313,13 +311,14 @@ export default function ManagePhishings() {
                 <TableHead>Enviado para</TableHead>
                 <TableHead>Data de Envio</TableHead>
                 <TableHead>Canal</TableHead>
+                <TableHead>Template</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Resultado</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {paginatedTestes.length === 0 ? (
+              {paginatedPhishings.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={6}
@@ -329,10 +328,10 @@ export default function ManagePhishings() {
                   </TableCell>
                 </TableRow>
               ) : (
-                paginatedTestes?.map((teste) => (
-                  <TableRow key={teste.id}>
+                paginatedPhishings?.map((phishing) => (
+                  <TableRow key={phishing.id}>
                     <TableCell>
-                      {teste.departments.length > 0 ? (
+                      {phishing.departments.length > 0 ? (
                         <HoverCard>
                           <HoverCardTrigger asChild>
                             <div className="flex items-center gap-1">
@@ -340,14 +339,14 @@ export default function ManagePhishings() {
                                 variant="secondary"
                                 className="hover:none bg-gray-200 text-gray-700 hover:bg-gray-200"
                               >
-                                {teste.departments[0].department.nome}
+                                {phishing.departments[0]?.departament?.name}
                               </Badge>
-                              {teste.departments.length > 1 && (
+                              {phishing.departments.length > 1 && (
                                 <Badge
                                   variant="secondary"
                                   className="hover:bg-gray-200 bg-gray-200 text-gray-700"
                                 >
-                                  +{teste.departments.length - 1}
+                                  +{phishing.departments.length - 1}
                                 </Badge>
                               )}
                             </div>
@@ -356,13 +355,13 @@ export default function ManagePhishings() {
                             <div className="space-y-2">
                               <h4 className="font-medium">Departamentos</h4>
                               <div className="flex flex-wrap gap-1">
-                                {teste.departments?.map((d) => (
+                                {phishing.departments?.map((d) => (
                                   <Badge
-                                    key={d.department.id}
+                                    key={d?.departament?.id}
                                     variant="secondary"
                                     className="hover:bg-gray-100 bg-gray-100 text-gray-700"
                                   >
-                                    {d.department.nome}
+                                    {d?.departament?.name}
                                   </Badge>
                                 ))}
                               </div>
@@ -372,27 +371,29 @@ export default function ManagePhishings() {
                       ) : (
                         <HoverCard>
                           <HoverCardTrigger asChild>
-                            <Badge
-                              variant="outline"
-                              className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-100"
-                            >
-                              {teste.usuario
-                                ? `${teste.user.nome} ${teste.user.sobrenome}`
-                                : "Usuário não encontrado"}
-                            </Badge>
+                            <div className="flex items-center gap-1">
+                              <Badge
+                                variant="outline"
+                                className="bg-blue-100 text-blue-700 border-0 hover:bg-blue-100"
+                              >
+                                {phishing.pseudonym
+                                  ? `${phishing.pseudonym.user?.name}`
+                                  : "Não informado"}
+                              </Badge>
+                            </div>
                           </HoverCardTrigger>
                           <HoverCardContent className="w-80">
                             <div className="space-y-2">
                               <h4 className="font-medium">Usuário</h4>
-                              {teste.usuario ? (
+                              {phishing.pseudonym ? (
                                 <div className="space-y-1">
                                   <p className="text-sm">
                                     <span className="font-medium">Nome:</span>{" "}
-                                    {teste.user.nome} {teste.user.sobrenome}
+                                    {phishing.pseudonym.user?.name}
                                   </p>
                                   <p className="text-sm">
                                     <span className="font-medium">Email:</span>{" "}
-                                    {teste.user.email}
+                                    {phishing.pseudonym.user?.email}
                                   </p>
                                 </div>
                               ) : (
@@ -413,7 +414,7 @@ export default function ManagePhishings() {
                         year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
-                      }).format(new Date(teste.criadoEm))}
+                      }).format(new Date(phishing.created_at))}
                     </TableCell>
 
                     <TableCell>
@@ -422,15 +423,19 @@ export default function ManagePhishings() {
                         className="bg-blue-100 text-blue-800 border-0 flex items-center gap-1 w-fit hover:bg-blue-100"
                       >
                         <Mail className="h-3 w-3" />
-                        {teste.canal}
+                        {phishing.channel}
                       </Badge>
                     </TableCell>
 
-                    <TableCell>{getTesteStatusBadge(teste)}</TableCell>
+                    <TableCell>
+                      {phishing.template ? phishing.template.name : "-"}
+                    </TableCell>
+
+                    <TableCell>{getTesteStatusBadge(phishing)}</TableCell>
 
                     <TableCell>
                       <div className="flex flex-col gap-1 w-fit">
-                        {teste.caiuNoTeste ? (
+                        {phishing.clicked ? (
                           <Badge
                             variant="destructive"
                             className="w-fit hover:bg-red-100"

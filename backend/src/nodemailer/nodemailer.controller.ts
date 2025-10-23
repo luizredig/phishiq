@@ -2,14 +2,6 @@
 import { Body, Controller, Post } from '@nestjs/common'
 import { NodemailerService } from './nodemailer.service'
 
-interface PhishingEmailData {
-  nomeEmpresa: string
-  urlLogoEmpresa: string
-  nomeUsuario: string
-  artigoEmpresa: string
-  linkBotao: string
-}
-
 @Controller('nodemailer')
 export class NodemailerController {
   constructor(private readonly nodemailerService: NodemailerService) {}
@@ -19,7 +11,7 @@ export class NodemailerController {
     @Body()
     data: {
       to: string
-      data: PhishingEmailData
+      data: any
     },
   ) {
     return this.nodemailerService.sendPhishingEmail(data.to, data.data)

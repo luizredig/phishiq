@@ -5,7 +5,6 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   Phishing,
   PhishingChannel,
-  PhishingStatus,
   Action,
   Entity,
 } from '../../prisma/generated/schema'
@@ -27,11 +26,29 @@ export class PhishingsService {
         include: {
           departments: {
             include: {
-              department: true,
+              department: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
-
-          pseudonym: true,
+          pseudonym: {
+            include: {
+              user: {
+                select: {
+                  name: true,
+                  email: true,
+                },
+              },
+            },
+          },
+          template: {
+            select: {
+              name: true,
+            },
+          },
         },
         orderBy: {
           created_at: 'desc',
@@ -40,6 +57,21 @@ export class PhishingsService {
       .then((rows) =>
         rows.map((p) => ({
           ...p,
+          pseudonym: {
+            user: {
+              name: decryptText(p.pseudonym?.user?.name as unknown as string),
+              email: decryptText(p.pseudonym?.user?.email as unknown as string),
+            },
+          },
+          departments: p.departments.map((d) => ({
+            departament: {
+              id: d.department.id,
+              name: decryptText(d.department.name as unknown as string),
+            },
+          })),
+          template: {
+            name: decryptText(p.template?.name as unknown as string),
+          },
           created_by: decryptText(p.created_by as unknown as string),
           updated_by: decryptText(p.updated_by as unknown as string),
           inactivated_by: p.inactivated_by
@@ -75,9 +107,19 @@ export class PhishingsService {
     channel: PhishingChannel
     departments?: string[]
     userId?: string
-    companyName: string
+    templateId?: string
+    template_id?: string
   }) {
-    const { channel, departments, userId, companyName } = createTesteDto
+    const { channel, departments, userId } = createTesteDto
+    const templateId = createTesteDto.template_id ?? createTesteDto.templateId
+
+    const template = await this.prisma.phishingTemplate.findUnique({
+      where: { id: templateId },
+    })
+
+    if (!template) {
+      throw new Error('Template não encontrado')
+    }
 
     if (departments && departments.length > 0) {
       const phishing = await this.prisma.phishing.create({
@@ -95,6 +137,11 @@ export class PhishingsService {
               updated_by: encryptText('system'),
             })),
           },
+          template: templateId
+            ? {
+                connect: { id: templateId },
+              }
+            : undefined,
           created_by: encryptText('system'),
           updated_by: encryptText('system'),
         },
@@ -111,13 +158,20 @@ export class PhishingsService {
                       },
                     },
                     include: {
-                      pseudonym: true,
+                      pseudonym: {
+                        include: {
+                          user: {
+                            select: { name: true, email: true },
+                          },
+                        },
+                      },
                     },
                   },
                 },
               },
             },
           },
+          template: true,
         },
       })
 
@@ -130,22 +184,35 @@ export class PhishingsService {
         },
       })
 
-      // Envio por departamento
-      // for (const departamento of teste.departments) {
-      //   for (const usuarioDepartamento of departamento.department.usuarios) {
-      //     if (usuarioDepartamento.usuario) {
-      //       await this.nodemailerService.sendPhishingEmail(
-      //         usuarioDepartamento.user.email,
-      //         {
-      //           nomeEmpresa: nomeEmpresa,
-      //           urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-      //           nomeUsuario: `${usuarioDepartamento.user.nome} ${usuarioDepartamento.user.sobrenome || ''}`,
-      //           linkBotao: `${process.env.FRONTEND_URL}/phishing/${teste.id}`,
-      //         },
-      //       )
-      //     }
-      //   }
-      // }
+      // Envio por departamento (coleta e-mails dos usuários dos departamentos)
+      try {
+        const subject = phishing.template
+          ? decryptText(phishing.template.name as unknown as string)
+          : 'Simulação de Phishing'
+        const body = phishing.template
+          ? decryptText(phishing.template.text as unknown as string)
+          : 'Você recebeu uma simulação de phishing.'
+
+        const recipients = Array.from(
+          new Set(
+            phishing.departments.flatMap((d) =>
+              (d.department.pseudonyms || [])
+                .map((pd) => pd.pseudonym?.user?.email)
+                .filter((enc): enc is string => Boolean(enc))
+                .map((enc) => decryptText(enc as unknown as string)),
+            ),
+          ),
+        )
+
+        for (const to of recipients) {
+          await this.nodemailerService.sendPhishingEmail(to, {
+            userName: '',
+            link: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
+            subject,
+            body,
+          })
+        }
+      } catch {}
 
       return {
         ...phishing,
@@ -181,10 +248,14 @@ export class PhishingsService {
         data: {
           channel,
           status: 'SENT',
-
           pseudonym: user?.pseudonym
             ? {
                 connect: { id: user.pseudonym.id },
+              }
+            : undefined,
+          template: templateId
+            ? {
+                connect: { id: templateId },
               }
             : undefined,
           created_by: encryptText('system'),
@@ -192,6 +263,7 @@ export class PhishingsService {
         },
         include: {
           pseudonym: true,
+          template: true,
         },
       })
 
@@ -204,13 +276,26 @@ export class PhishingsService {
         },
       })
 
-      // Envio individual
-      // await this.nodemailerService.sendPhishingEmail(user.email, {
-      //   nomeEmpresa: companyName,
-      //   urlLogoEmpresa: `${process.env.FRONTEND_URL}/logo-exemplo.png`,
-      //   nomeUsuario: `${user.name} ${user.sobrenome || ''}`,
-      //   linkBotao: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
-      // })
+      // Envio individual (descriptografar campos)
+      try {
+        const to = decryptText(user.email as unknown as string)
+        const userName = decryptText(user.name as unknown as string)
+        const subject = phishing.template
+          ? decryptText(phishing.template.name as unknown as string)
+          : 'Simulação de Phishing'
+        const body = phishing.template
+          ? decryptText(phishing.template.text as unknown as string)
+          : 'Você recebeu uma simulação de phishing.'
+
+        if (to) {
+          await this.nodemailerService.sendPhishingEmail(to, {
+            userName,
+            link: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
+            subject,
+            body,
+          })
+        }
+      } catch {}
 
       return {
         ...phishing,
@@ -222,7 +307,7 @@ export class PhishingsService {
       }
     }
 
-    throw new Error('É necessário informar departments ou usuário')
+    throw new Error('É necessário informar departmentos ou usuário')
   }
 
   async remove(id: string): Promise<Phishing> {
@@ -263,59 +348,30 @@ export class PhishingsService {
     id: string,
     data: {
       clicked: boolean
-      reported: boolean
     },
   ): Promise<Phishing> {
+    const before = await this.prisma.phishing.findUnique({
+      where: { id },
+      select: { clicked: true },
+    })
+
     const row = await this.prisma.phishing.update({
       where: { id },
       data: {
         clicked: data.clicked,
-        reported: data.reported,
-      },
-      include: {
-        departments: {
-          include: {
-            department: true,
-          },
-        },
       },
     })
-    await this.prisma.log.create({
-      data: {
-        entity: Entity.PHISHING,
-        entity_id: id,
-        action: Action.UPDATE,
-        created_by: encryptText('system'),
-      },
-    })
-    return row
-  }
 
-  async updateStatusTeste(
-    id: string,
-    status: PhishingStatus,
-  ): Promise<Phishing> {
-    const row = await this.prisma.phishing.update({
-      where: { id },
-      data: {
-        status,
-      },
-      include: {
-        departments: {
-          include: {
-            department: true,
-          },
+    if (before && before.clicked === false && data.clicked === true) {
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PHISHING,
+          entity_id: id,
+          action: Action.CLICKED,
+          created_by: encryptText('system'),
         },
-      },
-    })
-    await this.prisma.log.create({
-      data: {
-        entity: Entity.PHISHING,
-        entity_id: id,
-        action: Action.UPDATE,
-        created_by: encryptText('system'),
-      },
-    })
+      })
+    }
     return row
   }
 }

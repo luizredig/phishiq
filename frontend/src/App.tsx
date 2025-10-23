@@ -45,7 +45,7 @@ export default function App() {
               path="/gerenciar-departamentos"
               element={<ManageDepartments />}
             />
-            <Route path="/gerenciar-testes" element={<ManagePhishings />} />
+            <Route path="/gerenciar-phishings" element={<ManagePhishings />} />
             <Route path="/templates" element={<GerenciarTemplates />} />
             <Route path="/perfil" element={<ProfilePage />} />
           </Route>

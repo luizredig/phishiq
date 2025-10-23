@@ -3,7 +3,9 @@ enum Action {
   READ
   UPDATE
   DELETE
-  OPEN
+  CLICKED
   SEND
   ERROR
+  LOGIN
+  SIGNUP
 }

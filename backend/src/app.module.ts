@@ -17,6 +17,7 @@ import { UsersModule } from './users/users.module'
 import { CookiesModule } from './cookies/cookies.module'
 import { ChannelsModule } from './channels/channels.module'
 import { JwtAuthGuard } from './auth/jwt-auth.guard'
+import { PhishingTemplatesModule } from './phishing-templates/phishing-templates.module'
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard'
     UsersModule,
     CookiesModule,
     ChannelsModule,
+    PhishingTemplatesModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

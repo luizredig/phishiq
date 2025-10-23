@@ -60,8 +60,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             show: true,
           },
           {
-            title: "Testes",
-            url: "/gerenciar-testes",
+            title: "Phishings",
+            url: "/gerenciar-phishings",
             icon: <TestTubeDiagonal className={"text-primary"} />,
             show: true,
           },
@@ -122,13 +122,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {isAdmin && (
           <div className="w-full p-2">
             <Link
-              to="/gerenciar-testes?new=true"
+              to="/gerenciar-phishings?new=true"
               onClick={() => {
                 if (isMobile) setOpenMobile(false);
               }}
             >
               <Button className="w-full">
-                <Plus /> Novo teste
+                <Plus /> Novo phishing
               </Button>
             </Link>
           </div>

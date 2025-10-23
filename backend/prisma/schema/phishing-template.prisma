@@ -1,0 +1,17 @@
+model PhishingTemplate {
+  id            String   @id @default(uuid())
+  name          String
+  text          String
+
+  phishings Phishing[]
+
+  is_active      Boolean  @default(true)
+  created_at     DateTime @default(now())
+  created_by     String
+  updated_by     String
+  updated_at     DateTime @updatedAt
+  inactivated_at DateTime?
+  inactivated_by String?
+}
+
+

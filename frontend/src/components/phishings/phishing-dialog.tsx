@@ -34,40 +34,46 @@ import {
 } from "../ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
-interface TesteDialogProps {
+interface PhishingDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  testeParaEditar?: {
+  phishingParaEditar?: {
     id: string;
-    canal: "EMAIL";
+    channel: "EMAIL";
     status: "ENVIADO" | "FALHA";
-    caiuNoTeste: boolean;
-    reportouPhishing: boolean;
+    clicked: boolean;
     departments: {
       department: {
         id: string;
-        nome: string;
+        name: string;
       };
     }[];
   };
 }
 
-interface Departamento {
+interface Department {
   id: string;
-  nome: string;
+  name: string;
 }
 
-interface Usuario {
+interface User {
   id: string;
-  nome: string;
-  sobrenome: string;
+  name: string;
   email: string;
 }
 
+interface TemplateItem {
+  id: string;
+  name: string;
+}
+
 const baseFormSchema = z.object({
-  canal: z.enum(["EMAIL"]),
+  channel: z.enum(["EMAIL"]),
   departments: z.array(z.string()).optional(),
-  usuarioId: z.string().optional(),
+  userId: z.string().optional(),
+  templateId: z
+    .string({ required_error: "Selecione um template" })
+    .min(1, "Selecione um template"),
 });
 
 type FormValues = z.infer<typeof baseFormSchema>;
@@ -75,19 +81,20 @@ type FormValues = z.infer<typeof baseFormSchema>;
 export function PhishingDialog({
   open,
   onOpenChange,
-  testeParaEditar,
-}: TesteDialogProps) {
+  phishingParaEditar,
+}: PhishingDialogProps) {
   const { post, put, get, loading } = useApi();
 
-  const [departments, setDepartamentos] = useState<Departamento[]>([]);
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [departments, setDepartamentos] = useState<Department[]>([]);
+  const [usuarios, setUsuarios] = useState<User[]>([]);
   const [selectedDepartamentos, setSelectedDepartamentos] = useState<
-    Departamento[]
+    Department[]
   >([]);
   const [activeTab, setActiveTab] = useState("departments");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buscaUsuario, setBuscaUsuario] = useState("");
   const [buscaDepartamento, setBuscaDepartamento] = useState("");
+  const [templates, setTemplates] = useState<TemplateItem[]>([]);
 
   const formSchema = baseFormSchema.refine(
     (data) => {
@@ -95,55 +102,58 @@ export function PhishingDialog({
         return data.departments && data.departments.length > 0;
       }
 
-      return !!data.usuarioId;
+      return !!data.userId;
     },
     {
       message:
         activeTab === "departments"
           ? "Selecione pelo menos um departamento"
           : "Selecione um usuário",
-      path: activeTab === "departments" ? ["departments"] : ["usuarioId"],
+      path: activeTab === "departments" ? ["departments"] : ["userId"],
     }
   );
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      canal: "EMAIL",
+      channel: "EMAIL",
       departments: [],
-      usuarioId: undefined,
+      userId: undefined,
     },
   });
 
   useEffect(() => {
     fetchDepartamentos();
     fetchUsuarios();
+    fetchTemplates();
   }, []);
 
   useEffect(() => {
-    if (testeParaEditar) {
+    if (phishingParaEditar) {
       form.reset({
-        canal: testeParaEditar.canal,
-        departments: testeParaEditar.departments?.map((d) => d.department.id),
-        usuarioId: undefined,
+        channel: phishingParaEditar.channel,
+        departments: phishingParaEditar.departments?.map(
+          (d) => d.department.id
+        ),
+        userId: undefined,
       });
       setSelectedDepartamentos(
-        testeParaEditar.departments?.map((d) => d.department)
+        phishingParaEditar.departments?.map((d) => d.department)
       );
       setActiveTab("departments");
     } else {
       form.reset({
-        canal: "EMAIL",
+        channel: "EMAIL",
         departments: [],
-        usuarioId: undefined,
+        userId: undefined,
       });
       setSelectedDepartamentos([]);
     }
-  }, [testeParaEditar, form]);
+  }, [phishingParaEditar, form]);
 
   useEffect(() => {
     if (activeTab === "departments") {
-      form.setValue("usuarioId", undefined);
+      form.setValue("userId", undefined);
     } else {
       form.setValue("departments", []);
       setSelectedDepartamentos([]);
@@ -152,7 +162,7 @@ export function PhishingDialog({
 
   async function fetchDepartamentos() {
     try {
-      const response = await get<Departamento[]>(
+      const response = await get<Department[]>(
         "/departments/ativos-com-usuarios"
       );
       if (response) {
@@ -165,7 +175,7 @@ export function PhishingDialog({
 
   async function fetchUsuarios() {
     try {
-      const response = await get<Usuario[]>("/users");
+      const response = await get<User[]>("/users");
       if (response) {
         setUsuarios(response);
       }
@@ -174,7 +184,18 @@ export function PhishingDialog({
     }
   }
 
-  function handleDepartamentoSelect(departamento: Departamento) {
+  async function fetchTemplates() {
+    try {
+      const response = await get<TemplateItem[]>("/phishing-templates");
+      if (response) {
+        setTemplates(response.map((t) => ({ id: t.id, name: t.name })));
+      }
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+    }
+  }
+
+  function handleDepartamentoSelect(departamento: Department) {
     const isSelected = selectedDepartamentos?.some(
       (d) => d.id === departamento.id
     );
@@ -199,7 +220,7 @@ export function PhishingDialog({
     if (!buscaUsuario) return true;
     const termoBusca = buscaUsuario.toLowerCase();
     return (
-      usuario.nome.toLowerCase().includes(termoBusca) ||
+      usuario.name.toLowerCase().includes(termoBusca) ||
       usuario.email.toLowerCase().includes(termoBusca)
     );
   });
@@ -207,7 +228,7 @@ export function PhishingDialog({
   const departmentsFiltrados = departments?.filter((departamento) => {
     if (!buscaDepartamento) return true;
     const termoBusca = buscaDepartamento.toLowerCase();
-    return departamento.nome.toLowerCase().includes(termoBusca);
+    return departamento.name.toLowerCase().includes(termoBusca);
   });
 
   async function onSubmit(data: FormValues) {
@@ -216,15 +237,18 @@ export function PhishingDialog({
     setIsSubmitting(true);
     try {
       const payload = {
-        canal: data.canal,
-        nomeEmpresa: "Empresa",
+        channel: data.channel,
+        template_id: data.templateId,
         ...(activeTab === "departments"
           ? { departments: data.departments }
-          : { usuarioId: data.usuarioId }),
+          : { userId: data.userId }),
       };
 
-      if (testeParaEditar) {
-        const response = await put(`/phishings/${testeParaEditar.id}`, payload);
+      if (phishingParaEditar) {
+        const response = await put(
+          `/phishings/${phishingParaEditar.id}`,
+          payload
+        );
         if (response) {
           onOpenChange(false);
           form.reset();
@@ -248,12 +272,12 @@ export function PhishingDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {testeParaEditar ? "Editar teste" : "Novo teste"}
+            {phishingParaEditar ? "Editar phishing" : "Novo phishing"}
           </DialogTitle>
           <DialogDescription>
-            {testeParaEditar
-              ? "Edite as informações do teste."
-              : "Preencha as informações para criar um novo teste."}
+            {phishingParaEditar
+              ? "Edite as informações do phishing."
+              : "Preencha as informações para criar um novo phishing."}
           </DialogDescription>
         </DialogHeader>
 
@@ -261,7 +285,7 @@ export function PhishingDialog({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="canal"
+              name="channel"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Canal</FormLabel>
@@ -292,30 +316,46 @@ export function PhishingDialog({
               </TabsList>
 
               <TabsContent value="departments">
-                <Alert className="mb-4 bg-muted border-muted-foreground/20">
-                  <Info className="h-4 w-4 stroke-muted-foreground" />
-                  <AlertDescription className="text-muted-foreground">
-                    Atualmente, há apenas uma opção de template de e-mail
-                    disponível e ele será automaticamente selecionado.
-                  </AlertDescription>
-                </Alert>
-
                 <div className="mb-4">
-                  <FormLabel>Template</FormLabel>
-                  <Select disabled defaultValue="bonus">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um template" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="bonus">Bônus surpresa</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormField
+                    control={form.control}
+                    name="templateId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Template</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um template" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {templates.length === 0 ? (
+                              <div className="px-2 py-1 text-sm text-muted-foreground">
+                                Nenhum template cadastrado.
+                              </div>
+                            ) : (
+                              templates.map((t) => (
+                                <SelectItem key={t.id} value={t.id}>
+                                  {t.name}
+                                </SelectItem>
+                              ))
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
                 <Alert className="mb-4 bg-yellow-50 border-yellow-200 text-yellow-800">
                   <Info className="h-4 w-4 stroke-yellow-800" />
                   <AlertDescription>
-                    Apenas departments com usuários cadastrados serão exibidos.
+                    Apenas departmentos com usuários cadastrados serão exibidos.
                   </AlertDescription>
                 </Alert>
 
@@ -356,27 +396,27 @@ export function PhishingDialog({
                                   Nenhum departamento encontrado.
                                 </p>
                               ) : (
-                                departmentsFiltrados?.map((departamento) => {
+                                departmentsFiltrados?.map((department) => {
                                   const isSelecionado =
                                     selectedDepartamentos?.some(
-                                      (d) => d.id === departamento.id
+                                      (d) => d.id === department.id
                                     );
                                   return (
                                     <div
-                                      key={departamento.id}
+                                      key={department.id}
                                       className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
                                         isSelecionado
                                           ? "bg-primary/10 hover:bg-primary/20"
                                           : "hover:bg-muted/50"
                                       }`}
                                       onClick={() =>
-                                        handleDepartamentoSelect(departamento)
+                                        handleDepartamentoSelect(department)
                                       }
                                     >
                                       <div className="flex items-center gap-2">
                                         <User className="h-4 w-4 text-muted-foreground" />
                                         <div className="text-sm">
-                                          <p>{departamento.nome}</p>
+                                          <p>{department.name}</p>
                                         </div>
                                       </div>
                                       {isSelecionado && (
@@ -402,29 +442,45 @@ export function PhishingDialog({
               </TabsContent>
 
               <TabsContent value="individual">
-                <Alert className="mb-4 bg-muted border-muted-foreground/20">
-                  <Info className="h-4 w-4 stroke-muted-foreground" />
-                  <AlertDescription className="text-muted-foreground">
-                    Atualmente, há apenas uma opção de template de e-mail
-                    disponível e ele será automaticamente selecionado.
-                  </AlertDescription>
-                </Alert>
-
                 <div className="mb-4">
-                  <FormLabel>Template</FormLabel>
-                  <Select disabled defaultValue="bonus">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um template" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="bonus">Bônus surpresa</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <FormField
+                    control={form.control}
+                    name="templateId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Template</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione um template" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {templates.length === 0 ? (
+                              <div className="px-2 py-1 text-sm text-muted-foreground">
+                                Nenhum template cadastrado.
+                              </div>
+                            ) : (
+                              templates.map((t) => (
+                                <SelectItem key={t.id} value={t.id}>
+                                  {t.name}
+                                </SelectItem>
+                              ))
+                            )}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
 
                 <FormField
                   control={form.control}
-                  name="usuarioId"
+                  name="userId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Usuário</FormLabel>
@@ -450,24 +506,22 @@ export function PhishingDialog({
                                 Nenhum usuário encontrado.
                               </p>
                             ) : (
-                              usuariosFiltrados?.map((usuario) => (
+                              usuariosFiltrados?.map((user) => (
                                 <div
-                                  key={usuario.id}
+                                  key={user.id}
                                   className={`flex items-center justify-between p-2 rounded-md cursor-pointer transition-colors ${
-                                    field.value === usuario.id
+                                    field.value === user.id
                                       ? "bg-primary/10 hover:bg-primary/20"
                                       : "hover:bg-muted/50"
                                   }`}
-                                  onClick={() => field.onChange(usuario.id)}
+                                  onClick={() => field.onChange(user.id)}
                                 >
                                   <div className="flex items-center gap-2">
                                     <User className="h-4 w-4 text-muted-foreground" />
                                     <div className="text-sm">
-                                      <p>
-                                        {usuario.nome} {usuario.sobrenome}
-                                      </p>
+                                      <p>{user.name}</p>
                                       <p className="text-muted-foreground">
-                                        {usuario.email}
+                                        {user.email}
                                       </p>
                                     </div>
                                   </div>
@@ -495,7 +549,7 @@ export function PhishingDialog({
               </Button>
 
               <Button type="submit" disabled={loading || isSubmitting}>
-                {testeParaEditar ? "Salvar" : "Criar"}
+                {phishingParaEditar ? "Salvar" : "Criar"}
               </Button>
             </DialogFooter>
           </form>

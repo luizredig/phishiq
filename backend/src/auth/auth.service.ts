@@ -44,14 +44,12 @@ export class AuthService {
     name: string
     email: string
     password: string
-    roles?: string[]
     created_by?: string
   }) {
     const {
       name,
       email,
       password,
-      roles = ['user'],
       created_by = 'system',
     } = params
 
@@ -80,7 +78,7 @@ export class AuthService {
         name: encryptText(name),
         email: encryptText(email),
         email_search: computeEmailSearch(email),
-        roles,
+        roles: ['user'],
         tenant_id: encryptText(tenant.id),
         password_hash,
         created_by,
@@ -98,9 +96,9 @@ export class AuthService {
 
     await this.prisma.log.create({
       data: {
-        entity: Entity.SIGNUP,
+        entity: Entity.USER,
         entity_id: user.id,
-        action: Action.CREATE,
+        action: Action.SIGNUP,
         created_by: created_by,
       },
     })
@@ -145,10 +143,10 @@ export class AuthService {
     try {
       await this.prisma.log.create({
         data: {
-          entity: Entity.LOGIN,
+          entity: Entity.USER,
           entity_id: user.id,
-          action: Action.CREATE as any,
-          created_by: decryptText(user.email as unknown as string),
+          action: Action.LOGIN,
+          created_by: user.email,
         },
       })
     } catch {}

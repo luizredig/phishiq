@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common'
 import { PhishingStatus } from '../../prisma/generated/schema'
 import { PhishingsService } from './phishings.service'
+import { Public } from '../auth/public.decorator'
 
 interface CreateTesteDto {
   channel: 'EMAIL'
@@ -50,23 +51,15 @@ export class PhishingsController {
     return this.service.remove(id)
   }
 
+  @Public()
   @Put(':id/resultado')
   updateResultado(
     @Param('id') id: string,
     @Body()
     resultado: {
       clicked: boolean
-      reported: boolean
     },
   ) {
     return this.service.updateResultado(id, resultado)
-  }
-
-  @Put(':id/status-teste')
-  updateStatusTeste(
-    @Param('id') id: string,
-    @Body('status') status: PhishingStatus,
-  ) {
-    return this.service.updateStatusTeste(id, status)
   }
 }

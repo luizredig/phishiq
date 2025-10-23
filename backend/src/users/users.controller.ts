@@ -42,19 +42,6 @@ export class UsersController {
     return this.users.findOne(id)
   }
 
-  @Post()
-  create(@Body() body: unknown, @Req() req: Request) {
-    const data = CreateUserSchema.parse(body)
-    const user = req.user as any
-    const tenantId =
-      (user && user.tenant_id) || (req.headers['x-tenant-id'] as string)
-
-    return this.users.create(data, {
-      tenantId,
-      createdBy: user?.id || 'system',
-    })
-  }
-
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: unknown, @Req() req: Request) {
     const data = UpdateUserSchema.parse(body)

@@ -17,16 +17,7 @@ export class CookiesService {
       acc[c.category] = c.consented
       return acc
     }, {})
-    try {
-      await this.prisma.log.create({
-        data: {
-          entity: Entity.PSEUDONYM_COOKIE_CONSENT,
-          entity_id: user.pseudonym?.id || userId,
-          action: Action.READ,
-          created_by: encryptText('system'),
-        },
-      })
-    } catch {}
+
     return toMap
   }
 
