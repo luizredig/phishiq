@@ -244,7 +244,7 @@ export default function ManageDepartments() {
                           className="flex items-center gap-1"
                         >
                           <User className="h-3 w-3" />
-                          {department.users.length}
+                          {department.users?.length || 0}
                         </Badge>
                       </div>
                     </TableCell>

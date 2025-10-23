@@ -14,45 +14,126 @@ export class DepartamentsService {
           is_active: includeInactive ? false : true,
         },
         include: {
-          pseudonyms: true,
+          pseudonyms: {
+            include: {
+              pseudonym: {
+                include: { user: true },
+              },
+            },
+          },
         },
       })
       .then((rows) =>
-        rows.map((d) => ({
-          ...d,
-          name: decryptText(d.name as unknown as string),
-          created_by: d.created_by
-            ? decryptText(d.created_by as unknown as string)
-            : null,
-          updated_by: d.updated_by
-            ? decryptText(d.updated_by as unknown as string)
-            : null,
-          inactivated_by: d.inactivated_by
-            ? decryptText(d.inactivated_by as unknown as string)
-            : null,
-        })),
+        rows.map((d) => {
+          const users = (d.pseudonyms || [])
+            .map((pd) => pd.pseudonym?.user)
+            .filter((u): u is User => !!u)
+            .map((u) => ({
+              user: {
+                ...u,
+                name: decryptText(u.name as unknown as string),
+                email: decryptText(u.email as unknown as string),
+              },
+            }))
+
+          return {
+            ...d,
+            // shape esperado no frontend
+            users,
+            name: decryptText(d.name as unknown as string),
+            created_by: d.created_by
+              ? decryptText(d.created_by as unknown as string)
+              : null,
+            updated_by: d.updated_by
+              ? decryptText(d.updated_by as unknown as string)
+              : null,
+            inactivated_by: d.inactivated_by
+              ? decryptText(d.inactivated_by as unknown as string)
+              : null,
+          }
+        }),
       )
   }
 
   async findActiveWithUsers(): Promise<Department[]> {
-    return this.prisma.department.findMany({
-      where: {
-        is_active: true,
-      },
-    })
+    return this.prisma.department
+      .findMany({
+        where: {
+          is_active: true,
+        },
+        include: {
+          pseudonyms: {
+            include: {
+              pseudonym: {
+                include: { user: true },
+              },
+            },
+          },
+        },
+      })
+      .then((rows) =>
+        rows.map((d) => {
+          const users = (d.pseudonyms || [])
+            .map((pd) => pd.pseudonym?.user)
+            .filter((u): u is User => !!u)
+            .map((u) => ({
+              user: {
+                ...u,
+                name: decryptText(u.name as unknown as string),
+                email: decryptText(u.email as unknown as string),
+              },
+            }))
+
+          return {
+            ...d,
+            users,
+            name: decryptText(d.name as unknown as string),
+            created_by: d.created_by
+              ? decryptText(d.created_by as unknown as string)
+              : null,
+            updated_by: d.updated_by
+              ? decryptText(d.updated_by as unknown as string)
+              : null,
+            inactivated_by: d.inactivated_by
+              ? decryptText(d.inactivated_by as unknown as string)
+              : null,
+          }
+        }),
+      )
   }
 
   async findOne(id: string): Promise<Department | null> {
     const departamento = await this.prisma.department.findUnique({
       where: { id },
+      include: {
+        pseudonyms: {
+          include: {
+            pseudonym: {
+              include: { user: true },
+            },
+          },
+        },
+      },
     })
 
     if (!departamento) {
       throw new NotFoundException()
     }
 
+    const users = (departamento.pseudonyms || [])
+      .map((pd) => pd.pseudonym?.user)
+      .filter((u): u is User => !!u)
+      .map((u) => ({
+        user: {
+          ...u,
+          name: decryptText(u.name as unknown as string),
+          email: decryptText(u.email as unknown as string),
+        },
+      }))
+
     return {
       ...departamento,
+      users,
       name: decryptText(departamento.name as unknown as string),
       created_by: departamento.created_by
         ? decryptText(departamento.created_by as unknown as string)
@@ -182,24 +263,60 @@ export class DepartamentsService {
   }
 
   async getUsuarios(departamentoId: string): Promise<User[]> {
-    const departamento = await this.prisma.department.findUnique({
+    const exists = await this.prisma.department.findUnique({
       where: { id: departamentoId },
+      select: { id: true },
     })
 
-    if (!departamento) {
+    if (!exists) {
       throw new NotFoundException()
     }
 
-    return departamento.users
+    const links = await this.prisma.pseudonymDepartment.findMany({
+      where: { department_id: departamentoId },
+      include: { pseudonym: { include: { user: true } } },
+    })
+
+    return links
+      .map((l) => l.pseudonym?.user)
+      .filter((u): u is User => !!u)
+      .map((u) => ({
+        ...u,
+        name: decryptText(u.name as unknown as string),
+        email: decryptText(u.email as unknown as string),
+      }))
   }
 
   async addUsuario(departmentId: string, userId: string): Promise<Department> {
     try {
-      await this.prisma.userDepartment.create({
-        data: {
-          departamento_id: departmentId,
-          user_id: userId,
-        },
+      // garante pseudonym
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        include: { pseudonym: true },
+      })
+      if (!user) throw new NotFoundException('Usuário não encontrado')
+
+      const pseudonym = user.pseudonym
+        ? user.pseudonym
+        : await this.prisma.pseudonym.create({
+            data: {
+              pseudonym: `p-${userId}`,
+              user: { connect: { id: userId } },
+              created_by: encryptText('system'),
+              updated_by: encryptText('system'),
+            },
+          })
+
+      await this.prisma.pseudonymDepartment.createMany({
+        data: [
+          {
+            department_id: departmentId,
+            pseudonym_id: pseudonym.id,
+            created_by: encryptText('system'),
+            updated_by: encryptText('system'),
+          },
+        ],
+        skipDuplicates: true,
       })
 
       const departamento = await this.findOne(departmentId)
@@ -215,12 +332,19 @@ export class DepartamentsService {
     userId: string,
   ): Promise<Department> {
     try {
-      await this.prisma.userDepartment.deleteMany({
-        where: {
-          department_id: departmentId,
-          user_id: userId,
-        },
+      const pseudo = await this.prisma.pseudonym.findFirst({
+        where: { user_id: userId },
+        select: { id: true },
       })
+
+      if (pseudo) {
+        await this.prisma.pseudonymDepartment.deleteMany({
+          where: {
+            department_id: departmentId,
+            pseudonym_id: pseudo.id,
+          },
+        })
+      }
 
       const departamento = await this.findOne(departmentId)
       if (!departamento) throw new NotFoundException()

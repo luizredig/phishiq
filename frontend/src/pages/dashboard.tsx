@@ -174,7 +174,7 @@ function DashboardContent({
           <CardContent>
             {stats.testesSucesso === 0 && stats.testesFalha === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
-                Nenhum teste realizado ainda.
+                Nenhum teste de phishing realizado ainda.
               </div>
             ) : (
               <div className="h-[350px]">
@@ -216,7 +216,7 @@ function DashboardContent({
             {stats.testesPorDepartamento?.length === 0 ||
             stats.testesPorDepartamento?.every((dept) => dept.falhas === 0) ? (
               <div className="text-center py-4 text-muted-foreground">
-                Nenhuma falha registrada por departamento ainda.
+                Nenhuma falha de phishing registrada por departamento ainda.
               </div>
             ) : (
               <div className="h-[350px]">
@@ -250,7 +250,7 @@ function DashboardContent({
           <CardContent>
             {stats.usuariosMaisFalhas?.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
-                Nenhum usuário encontrado.
+                Nenhum usuário caiu em algum teste de phishing.
               </div>
             ) : (
               <Table>
@@ -284,7 +284,7 @@ function DashboardContent({
           <CardContent>
             {stats.departmentsMaisFalhas?.length === 0 ? (
               <div className="text-center py-4 text-muted-foreground">
-                Nenhum departamento encontrado.
+                Nenhum departamento caiu em algum teste de phishing.
               </div>
             ) : (
               <Table>

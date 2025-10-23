@@ -51,7 +51,7 @@ export default function ProfilePage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h3 className="font-medium">Consentimento por Canal</h3>
+            <h3 className="font-medium">Consentimento por canal de envio</h3>
             <div className="mt-3 flex items-center justify-between rounded-md border p-3">
               <div className="pr-4">
                 <p className="font-medium text-gray-900">E-mail</p>

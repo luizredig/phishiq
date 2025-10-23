@@ -99,7 +99,7 @@ export function DepartmentDialog({
         form.reset({
           name: department.name,
         });
-        setUsuariosSelecionados(department.users?.map((u) => u.user.id));
+        setUsuariosSelecionados(department.users?.map((u) => u.user.id) ?? []);
       } else {
         form.reset({
           name: "",
@@ -127,17 +127,17 @@ export function DepartmentDialog({
           name: data.name,
         });
 
-        const usuariosAtuais = department.users?.map((u) => u.user.id);
-        const usuariosParaAdicionar = usuariosSelecionados?.filter(
+        const usuariosAtuais = department.users?.map((u) => u.user.id) ?? [];
+        const usuariosParaAdicionar = usuariosSelecionados.filter(
           (id) => !usuariosAtuais.includes(id)
         );
-        const usuariosParaRemover = usuariosAtuais?.filter(
+        const usuariosParaRemover = usuariosAtuais.filter(
           (id) => !usuariosSelecionados.includes(id)
         );
 
         await Promise.all([
           ...usuariosParaAdicionar?.map((usuarioId) =>
-            post(`/departments/${department.id}/users/${usuarioId}`, {})
+            post(`/departments/${department.id}/users/${usuarioId}`)
           ),
 
           ...usuariosParaRemover?.map((usuarioId) =>
@@ -152,7 +152,7 @@ export function DepartmentDialog({
         if (response && usuariosSelecionados.length > 0) {
           await Promise.all(
             usuariosSelecionados?.map((usuarioId) =>
-              post(`/departments/${response.id}/users/${usuarioId}`, {})
+              post(`/departments/${response.id}/users/${usuarioId}`)
             )
           );
         }
@@ -175,7 +175,7 @@ export function DepartmentDialog({
   function toggleUsuario(usuarioId: string) {
     setUsuariosSelecionados((prev) =>
       prev.includes(usuarioId)
-        ? prev?.filter((id) => id !== usuarioId)
+        ? prev.filter((id) => id !== usuarioId)
         : [...prev, usuarioId]
     );
   }
@@ -220,7 +220,7 @@ export function DepartmentDialog({
                   </span>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {usuariosSelecionados.length} selecionado(s)
+                  {usuariosSelecionados?.length || 0} selecionado(s)
                 </span>
               </div>
               <div className="relative">
@@ -240,7 +240,7 @@ export function DepartmentDialog({
                   </p>
                 ) : (
                   usuariosFiltrados?.map((usuario) => {
-                    const isSelecionado = usuariosSelecionados.includes(
+                    const isSelecionado = usuariosSelecionados?.includes(
                       usuario.id
                     );
                     return (

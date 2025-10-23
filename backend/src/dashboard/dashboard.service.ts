@@ -12,7 +12,7 @@ export class DashboardService {
       testesSucesso,
       testesFalha,
       testesPorDepartamento,
-      usuariosMaisFalhas,
+      usuariosMaisFalhasRaw,
       departmentsMaisFalhas,
     ] = await Promise.all([
       this.prisma.phishing.count({
@@ -55,32 +55,21 @@ export class DashboardService {
         },
       }),
 
-      this.prisma.pseudonym.findMany({
+      this.prisma.user.findMany({
         where: { is_active: true },
         select: {
-          user: {
+          id: true,
+          name: true,
+          email: true,
+          pseudonym: {
             select: {
-              id: true,
-              name: true,
-              email: true,
-              pseudonym: {
-                select: {
-                  pseudonym_departments: {
-                    include: {
-                      department: {
-                        select: {
-                          id: true,
-                          name: true,
-                        },
-                      },
-                    },
-                  },
-                },
+              phishings: {
+                where: { is_active: true, clicked: true },
+                select: { id: true },
               },
             },
           },
         },
-        take: 5,
       }),
 
       this.prisma.department.findMany({
@@ -111,10 +100,11 @@ export class DashboardService {
         const falhas = dept.phishings.length
 
         return {
-          department: dept.name,
+          department: decryptText(dept.name as unknown as string),
           falhas,
         }
       })
+      .filter((d) => d.falhas > 0)
       .sort((a, b) => b.falhas - a.falhas)
 
     const departmentsFalhasProcessados = departmentsMaisFalhas
@@ -123,26 +113,25 @@ export class DashboardService {
 
         return {
           id: dept.id,
-          name: dept.name,
+          name: decryptText(dept.name as unknown as string),
           falhas,
         }
       })
+      .filter((d) => d.falhas > 0)
       .sort((a, b) => b.falhas - a.falhas)
 
-    const usuariosMaisFalhasDecrypted = usuariosMaisFalhas
-      ?.map((row) =>
-        row.user
-          ? {
-              ...row,
-              user: {
-                ...row.user,
-                name: decryptText(row.user.name as unknown as string),
-                email: decryptText(row.user.email as unknown as string),
-              },
-            }
-          : row,
-      )
-      ?.filter((row) => Boolean(row.user))
+    const usuariosMaisFalhasDecrypted = usuariosMaisFalhasRaw
+      ?.map((u) => ({
+        user: {
+          id: u.id,
+          name: decryptText(u.name as unknown as string),
+          email: decryptText(u.email as unknown as string),
+        },
+        falhas: u.pseudonym?.phishings?.length || 0,
+      }))
+      .filter((row) => row.falhas > 0)
+      .sort((a, b) => b.falhas - a.falhas)
+      .slice(0, 5)
 
     return {
       totalTestes,
