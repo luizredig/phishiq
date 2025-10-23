@@ -94,7 +94,7 @@ export function TemplateDialog({
         <DialogHeader>
           <DialogTitle>{template ? "Editar" : "Novo"} template</DialogTitle>
           <DialogDescription>
-            Defina nome, conteúdo HTML e miniatura (opcional).
+            Defina o título e o conteúdo do template.
           </DialogDescription>
         </DialogHeader>
 

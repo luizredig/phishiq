@@ -49,7 +49,7 @@ export class NodemailerService {
   }
 
   async sendPhishingEmail(to: string, data: PhishingEmailData) {
-    const bodyWithLink = `${data.body}\n\n${data.link}`
+    const bodyWithLink = `${data.body}<br /><br /><a href="${data.link}">Vou anexar aqui</a>`
     return this.sendEmail({
       to,
       subject: data.subject,
