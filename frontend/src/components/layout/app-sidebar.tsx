@@ -24,11 +24,20 @@ import {
 } from "../../components/ui/sidebar";
 
 import { Button } from "../ui/button";
+import { useAuth } from "../../contexts/auth-context";
+import { getRolesFromToken } from "../auth/jwt-roles";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
   const pathname = location.pathname;
   const { isMobile, setOpenMobile } = useSidebar();
+  const { accessToken } = useAuth();
+
+  const roles = React.useMemo(
+    () => getRolesFromToken(accessToken),
+    [accessToken]
+  );
+  const isAdmin = roles.includes("admin");
 
   const data = {
     navMain: [
@@ -110,7 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {true && (
+        {isAdmin && (
           <div className="w-full p-2">
             <Link
               to="/gerenciar-testes?new=true"
@@ -131,6 +140,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {group.items
                   ?.filter((item) => item.show)
+                  ?.filter((item) => (isAdmin ? true : item.url === "/home"))
                   ?.map((item) => (
                     <Link
                       to={item.url}
