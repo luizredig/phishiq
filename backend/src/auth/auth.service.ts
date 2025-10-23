@@ -114,22 +114,26 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email_search: computeEmailSearch(email) },
     })
+
     if (!user || !user.is_active || !user.password_hash) {
       throw new UnauthorizedException('Credenciais inválidas')
     }
+
     const ok = await this.compare(password, user.password_hash)
+
     if (!ok) {
       throw new UnauthorizedException('Credenciais inválidas')
     }
+
     await this.prisma.user.update({
       where: { id: user.id },
       data: { last_login_at: new Date() },
     })
 
-    // garante pseudônimo existente para o usuário
     const existingPseudonym = await this.prisma.pseudonym.findUnique({
       where: { user_id: user.id },
     })
+
     if (!existingPseudonym) {
       await this.prisma.pseudonym.create({
         data: {
@@ -140,6 +144,7 @@ export class AuthService {
         },
       })
     }
+
     return {
       ...user,
       name: decryptText(user.name as unknown as string),
