@@ -24,6 +24,7 @@
   "dependencies": {
     "@casl/ability": "^6.7.3",
     "@casl/prisma": "^1.5.2",
+    "@nestjs/bull": "^11.0.4",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -36,7 +37,9 @@
     "@prisma/client": "^6.5.0",
     "@types/nodemailer": "^6.4.17",
     "bcrypt": "^5.1.1",
+    "bull": "^4.16.5",
     "dotenv": "^17.2.2",
+    "ioredis": "^5.8.2",
     "jwks-rsa": "^3.2.0",
     "nestjs-zod": "^4.3.1",
     "nodemailer": "^7.0.3",

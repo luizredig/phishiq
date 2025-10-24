@@ -11,6 +11,7 @@ import { LicensingModule } from './licensing/licensing.module'
 import { MasterPrismaModule } from './master-prisma/master-prisma.module'
 import { NodemailerModule } from './nodemailer/nodemailer.module'
 import { PhishingsModule } from './phishings/phishings.module'
+import { EmailModule } from './email/email.module'
 import { TenantPrismaModule } from './tenant-prisma/tenant-prisma.module'
 import { AuthModule } from './auth/auth.module'
 import { UsersModule } from './users/users.module'
@@ -38,6 +39,7 @@ import { PhishingTemplatesModule } from './phishing-templates/phishing-templates
     CookiesModule,
     ChannelsModule,
     PhishingTemplatesModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

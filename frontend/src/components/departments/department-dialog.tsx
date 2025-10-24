@@ -36,8 +36,10 @@ interface Department {
   id: string;
   name: string;
   is_active: boolean;
-  users: {
-    user: User;
+  pseudonyms: {
+    pseudonym: {
+      user: User;
+    };
   }[];
 }
 
@@ -99,7 +101,10 @@ export function DepartmentDialog({
         form.reset({
           name: department.name,
         });
-        setUsuariosSelecionados(department.users?.map((u) => u.user.id) ?? []);
+
+        setUsuariosSelecionados(
+          department.pseudonyms?.map((u) => u.pseudonym?.user?.id) ?? []
+        );
       } else {
         form.reset({
           name: "",
@@ -127,7 +132,8 @@ export function DepartmentDialog({
           name: data.name,
         });
 
-        const usuariosAtuais = department.users?.map((u) => u.user.id) ?? [];
+        const usuariosAtuais =
+          department.pseudonyms?.map((p) => p.pseudonym?.user?.id) ?? [];
         const usuariosParaAdicionar = usuariosSelecionados.filter(
           (id) => !usuariosAtuais.includes(id)
         );

@@ -37,6 +37,16 @@ export class UsersController {
     return this.users.findAll(includeInactive === 'true')
   }
 
+  @Post()
+  create(@Body() body: unknown, @Req() req: Request) {
+    const data = CreateUserSchema.parse(body)
+    const user = req.user as any
+    return this.users.create(data, {
+      createdBy: user?.id || 'system',
+      tenantId: user?.tenant_id,
+    })
+  }
+
   @Get(':id')
   get(@Param('id') id: string) {
     return this.users.findOne(id)

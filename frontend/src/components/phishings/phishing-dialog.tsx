@@ -355,7 +355,7 @@ export function PhishingDialog({
                 <Alert className="mb-4 bg-yellow-50 border-yellow-200 text-yellow-800">
                   <Info className="h-4 w-4 stroke-yellow-800" />
                   <AlertDescription>
-                    Apenas departmentos com usuários cadastrados serão exibidos.
+                    Apenas departamentos que tenham usuários serão exibidos.
                   </AlertDescription>
                 </Alert>
 

@@ -38,8 +38,10 @@ interface Department {
   name: string;
   is_active: boolean;
   created_at: string;
-  users: {
-    user: User;
+  pseudonyms: {
+    pseudonym: {
+      user: User;
+    };
   }[];
 }
 
@@ -132,10 +134,10 @@ export default function ManageDepartments() {
     const termoBusca = busca.toLowerCase();
     return (
       department?.name.toLowerCase().includes(termoBusca) ||
-      department?.users?.some(
-        (u) =>
-          u.user.name.toLowerCase().includes(termoBusca) ||
-          u.user.email.toLowerCase().includes(termoBusca)
+      department?.pseudonyms?.some(
+        (p) =>
+          p.pseudonym.user.name.toLowerCase().includes(termoBusca) ||
+          p.pseudonym.user.email.toLowerCase().includes(termoBusca)
       )
     );
   });
@@ -173,7 +175,7 @@ export default function ManageDepartments() {
   return (
     <div className="w-full py-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Gerenciar departmentos</h1>
+        <h1 className="text-2xl font-bold">Gerenciar departamentos</h1>
         <Button onClick={() => setIsNovoDepartamentoOpen(true)}>
           <Plus className="w-4 h-4 mr-2" />
           Novo departamento
@@ -244,7 +246,7 @@ export default function ManageDepartments() {
                           className="flex items-center gap-1"
                         >
                           <User className="h-3 w-3" />
-                          {department.users?.length || 0}
+                          {department.pseudonyms?.length || 0}
                         </Badge>
                       </div>
                     </TableCell>

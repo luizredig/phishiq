@@ -1,7 +1,13 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common'
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common'
 import { PrismaClient } from '../../prisma/generated/schema'
 import * as bcrypt from 'bcrypt'
-import { PhishingChannel, Action, Entity } from '../../prisma/generated/schema'
+import { Action, Entity } from '../../prisma/generated/schema'
 import { decryptText, encryptText, computeEmailSearch } from '../utils/crypto'
 
 @Injectable()
@@ -32,6 +38,13 @@ export class UsersService {
                   department: true,
                 },
               },
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                },
+              },
             },
           },
         },
@@ -54,6 +67,75 @@ export class UsersService {
             : null,
         })),
       )
+  }
+
+  async create(
+    data: { name: string; email: string; roles?: string[] },
+    meta: { createdBy: string; tenantId: string },
+  ) {
+    if (!meta.tenantId) {
+      throw new BadRequestException('Tenant não informado')
+    }
+    const exists = await this.prisma.user.findUnique({
+      where: { email_search: computeEmailSearch(data.email) },
+    })
+    if (exists) {
+      throw new ConflictException('E-mail já cadastrado')
+    }
+
+    const nameUpper = data.name.trim().toUpperCase()
+    const prefix = nameUpper.slice(0, 3).padEnd(3, 'X')
+    const year = new Date().getFullYear()
+    const tempPassword = `${prefix}@${year}`
+    const password_hash = await bcrypt.hash(tempPassword, 10)
+
+    const user = await this.prisma.user.create({
+      data: {
+        name: encryptText(data.name),
+        email: encryptText(data.email),
+        email_search: computeEmailSearch(data.email),
+        roles: data.roles && data.roles.length > 0 ? data.roles : ['user'],
+        tenant_id: encryptText(meta.tenantId),
+        password_hash,
+        created_by: encryptText(meta.createdBy),
+        updated_by: encryptText(meta.createdBy),
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        roles: true,
+        tenant_id: true,
+        is_active: true,
+      },
+    })
+
+    await this.prisma.pseudonym.create({
+      data: {
+        pseudonym: `p-${user.id}`,
+        user: { connect: { id: user.id } },
+        created_by: meta.createdBy,
+        updated_by: meta.createdBy,
+      },
+    })
+
+    await this.prisma.log.create({
+      data: {
+        entity: Entity.USER,
+        entity_id: user.id,
+        action: Action.CREATE,
+        created_by: meta.createdBy,
+      },
+    })
+
+    return {
+      ...user,
+      name: decryptText(user.name as unknown as string),
+      email: decryptText(user.email as unknown as string),
+      tenant_id: user.tenant_id
+        ? decryptText(user.tenant_id as unknown as string)
+        : null,
+    }
   }
 
   async findOne(id: string) {
@@ -91,8 +173,6 @@ export class UsersService {
         : null,
     }
   }
-
-  
 
   async update(
     id: string,

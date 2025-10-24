@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CargoUsuario } from "../../types/cargo-usuario";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -26,13 +25,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 interface Department {
   id: string;
@@ -46,7 +38,6 @@ interface UsuarioDialogProps {
     id: string;
     name: string;
     email: string;
-    cargo: CargoUsuario;
     pseudonym?: {
       pseudonym_departments: {
         department: Department;
@@ -58,7 +49,6 @@ interface UsuarioDialogProps {
 const formSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
   email: z.string().email("Email inválido"),
-  cargo: z.enum(["FUNCIONARIO"]),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -79,9 +69,7 @@ export function UsuarioDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-
       email: "",
-      cargo: "FUNCIONARIO",
     },
   });
 
@@ -91,10 +79,9 @@ export function UsuarioDialog({
       if (usuarioParaEditar) {
         form.reset({
           name: usuarioParaEditar.name,
-
           email: usuarioParaEditar.email,
-          cargo: "FUNCIONARIO",
         });
+
         setDepartamentosSelecionados(
           usuarioParaEditar.pseudonym?.pseudonym_departments?.map(
             (d) => d.department.id
@@ -103,9 +90,7 @@ export function UsuarioDialog({
       } else {
         form.reset({
           name: "",
-
           email: "",
-          cargo: "FUNCIONARIO",
         });
         setDepartamentosSelecionados([]);
       }
@@ -235,30 +220,6 @@ export function UsuarioDialog({
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="cargo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cargo</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione um cargo" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="FUNCIONARIO">Funcionário</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
