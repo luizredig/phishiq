@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common'
 import { PhishingStatus } from '../../prisma/generated/schema'
 import { PhishingsService } from './phishings.service'
+import { EmailProducerService } from '../email/email-producer.service'
 import { Public } from '../auth/public.decorator'
 
 interface CreateTesteDto {
@@ -29,7 +30,10 @@ interface UpdateTesteDto {
 
 @Controller('phishings')
 export class PhishingsController {
-  constructor(private readonly service: PhishingsService) {}
+  constructor(
+    private readonly service: PhishingsService,
+    private readonly emailProducer: EmailProducerService,
+  ) {}
 
   @Get()
   findAll(@Query('includeInactive') includeInactive?: string) {
@@ -61,5 +65,17 @@ export class PhishingsController {
     },
   ) {
     return this.service.updateResultado(id, resultado)
+  }
+
+  @Post('test-job')
+  async testJob() {
+    await this.emailProducer.enqueueBatches(['dev@example.com'], {
+      batchSize: 1,
+      intervalMs: 0,
+      phishingId: 'test',
+      subject: 'Teste fila',
+      body: 'Só um teste via fila.',
+    })
+    return { ok: true }
   }
 }

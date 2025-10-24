@@ -9,12 +9,14 @@ import {
 import { NodemailerService } from '../nodemailer/nodemailer.service'
 import { PrismaClient } from '../../prisma/generated/schema'
 import { decryptText, encryptText } from '../utils/crypto'
+import { EmailProducerService } from '../email/email-producer.service'
 
 @Injectable()
 export class PhishingsService {
   constructor(
     @Inject('TENANT_PRISMA') private readonly prisma: PrismaClient,
     private nodemailerService: NodemailerService,
+    private emailProducer: EmailProducerService,
   ) {}
 
   async findAll(includeInactive = false): Promise<Phishing[]> {
@@ -202,14 +204,13 @@ export class PhishingsService {
           ),
         )
 
-        for (const to of recipients) {
-          await this.nodemailerService.sendPhishingEmail(to, {
-            userName: '',
-            link: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
-            subject,
-            body,
-          })
-        }
+        await this.emailProducer.enqueueBatches(recipients, {
+          batchSize: 5,
+          intervalMs: 30 * 60 * 1000,
+          phishingId: phishing.id,
+          subject,
+          body,
+        })
       } catch {}
 
       return {
@@ -286,9 +287,10 @@ export class PhishingsService {
           : 'Você recebeu uma simulação de phishing.'
 
         if (to) {
-          await this.nodemailerService.sendPhishingEmail(to, {
-            userName,
-            link: `${process.env.FRONTEND_URL}/phishing/${phishing.id}`,
+          await this.emailProducer.enqueueBatches([to], {
+            batchSize: 1,
+            intervalMs: 0,
+            phishingId: phishing.id,
             subject,
             body,
           })
