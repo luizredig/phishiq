@@ -13,6 +13,8 @@ async function bootstrap() {
     credentials: true,
   })
 
+  app.setGlobalPrefix('/api')
+
   // Bull Board em /admin/queues
   const serverAdapter = new ExpressAdapter()
   serverAdapter.setBasePath('/admin/queues')
