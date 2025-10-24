@@ -1,0 +1,60 @@
+services:
+  frontend:
+    container_name: phishiq-frontend
+    image: node:latest
+    restart: unless-stopped
+    working_dir: /frontend
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - "1413:1413"
+    depends_on:
+      - backend
+    networks:
+      - phishiq-network
+    stdin_open: true
+    tty: true
+
+  backend:
+    container_name: phishiq-backend
+    image: node:latest
+    restart: unless-stopped
+    working_dir: /backend
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "1421:1421"
+    networks:
+      - phishiq-network
+    stdin_open: true
+    tty: true
+
+  redis:
+    container_name: phishiq-redis
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - phishiq_redis_data:/data
+
+  postgres:
+    container_name: postgres16-phishiq
+    image: postgres:16
+    restart: unless-stopped
+    enviroment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: SpeedTCC@321
+      POSTGRES_DB: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - phishiq_postgres16_data:/var/lib/postgresql/data
+
+networks:
+  phishiq-network:
+    driver: bridge
+
+volumes:
+  phishiq_redis_data:
+  phishiq_postgres16_data:
