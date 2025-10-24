@@ -42,7 +42,7 @@ services:
     container_name: postgres16-phishiq
     image: postgres:16
     restart: unless-stopped
-    enviroment:
+    environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: SpeedTCC@321
       POSTGRES_DB: admin
