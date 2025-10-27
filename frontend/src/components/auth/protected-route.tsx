@@ -17,7 +17,14 @@ export default function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  const allowedForUser = new Set(["/", "/home", "/quiz"]);
+  const allowedForUser = new Set([
+    "/",
+    "/home",
+    "/quiz",
+    "/materiais",
+    "/perfil",
+  ]);
+
   if (!isAdmin && !allowedForUser.has(location.pathname)) {
     return <Navigate to="/home" replace />;
   }
