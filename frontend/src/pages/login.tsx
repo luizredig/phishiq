@@ -10,16 +10,28 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { z } from "zod";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login, loading, error } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  const emailSchema = z.string().trim().toLowerCase().email("E-mail inválido");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const ok = await login(email, password);
+    const parsed = emailSchema.safeParse(email);
+    if (!parsed.success) {
+      setEmailError(parsed.error.errors[0]?.message ?? "E-mail inválido");
+      return;
+    }
+    const normalizedEmail = parsed.data;
+    setEmail(normalizedEmail);
+
+    const ok = await login(normalizedEmail, password);
     if (ok) navigate("/dashboard");
   }
 
@@ -35,8 +47,13 @@ export default function LoginPage() {
             <Input
               placeholder="E-mail"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value.toLowerCase());
+                if (emailError) setEmailError(null);
+              }}
+              onBlur={() => setEmail((prev) => prev.trim())}
             />
+            {emailError && <p className="text-sm text-red-600">{emailError}</p>}
             <Input
               placeholder="Senha"
               type="password"
