@@ -21,8 +21,8 @@ export class DepartamentsController {
   }
 
   @Get('ativos-com-usuarios')
-  findActiveWithUsers() {
-    return this.service.findActiveWithUsers()
+  findActiveWithUsers(@Query('channel') channel?: string) {
+    return this.service.findActiveWithUsers(channel as any)
   }
 
   @Get(':id')

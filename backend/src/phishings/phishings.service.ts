@@ -193,16 +193,51 @@ export class PhishingsService {
           ? decryptText(phishing.template.text as unknown as string)
           : 'Você recebeu uma simulação de phishing.'
 
-        const recipients = Array.from(
-          new Set(
-            phishing.departments.flatMap((d) =>
-              (d.department.pseudonyms || [])
+        const basePseudonyms = phishing.departments.flatMap(
+          (d) => d.department.pseudonyms || [],
+        )
+
+        let recipients: string[] = []
+        if (channel === PhishingChannel.EMAIL) {
+          const pseudonymIds = Array.from(
+            new Set(
+              basePseudonyms
+                .map((pd) => pd.pseudonym?.id)
+                .filter((id): id is string => Boolean(id)),
+            ),
+          )
+
+          const consented = await this.prisma.pseudonymChannelConsent.findMany({
+            where: {
+              pseudonym_id: { in: pseudonymIds },
+              channel: PhishingChannel.EMAIL,
+              consented: true,
+            },
+            select: { pseudonym_id: true },
+          })
+          const consentedSet = new Set(consented.map((c) => c.pseudonym_id))
+
+          recipients = Array.from(
+            new Set(
+              basePseudonyms
+                .filter(
+                  (pd) => pd.pseudonym?.id && consentedSet.has(pd.pseudonym.id),
+                )
                 .map((pd) => pd.pseudonym?.user?.email)
                 .filter((enc): enc is string => Boolean(enc))
                 .map((enc) => decryptText(enc as unknown as string)),
             ),
-          ),
-        )
+          )
+        } else {
+          recipients = Array.from(
+            new Set(
+              basePseudonyms
+                .map((pd) => pd.pseudonym?.user?.email)
+                .filter((enc): enc is string => Boolean(enc))
+                .map((enc) => decryptText(enc as unknown as string)),
+            ),
+          )
+        }
 
         await this.emailProducer.enqueueBatches(recipients, {
           batchSize: 5,
@@ -286,7 +321,20 @@ export class PhishingsService {
           ? decryptText(phishing.template.text as unknown as string)
           : 'Você recebeu uma simulação de phishing.'
 
-        if (to) {
+        let canSend = true
+        if (channel === PhishingChannel.EMAIL && user.pseudonym?.id) {
+          const consent = await this.prisma.pseudonymChannelConsent.findFirst({
+            where: {
+              pseudonym_id: user.pseudonym.id,
+              channel: PhishingChannel.EMAIL,
+              consented: true,
+            },
+            select: { id: true },
+          })
+          canSend = Boolean(consent)
+        }
+
+        if (to && canSend) {
           await this.emailProducer.enqueueBatches([to], {
             batchSize: 1,
             intervalMs: 0,

@@ -129,6 +129,12 @@ export function PhishingDialog({
   }, []);
 
   useEffect(() => {
+    // Recarregar listas quando o canal mudar
+    fetchDepartamentos();
+    fetchUsuarios();
+  }, [form.watch("channel")]);
+
+  useEffect(() => {
     if (phishingParaEditar) {
       form.reset({
         channel: phishingParaEditar.channel,
@@ -163,7 +169,7 @@ export function PhishingDialog({
   async function fetchDepartamentos() {
     try {
       const response = await get<Department[]>(
-        "/departments/ativos-com-usuarios"
+        `/departments/ativos-com-usuarios?channel=${form.getValues("channel")}`
       );
       if (response) {
         setDepartamentos(response);
@@ -175,7 +181,9 @@ export function PhishingDialog({
 
   async function fetchUsuarios() {
     try {
-      const response = await get<User[]>("/users");
+      const response = await get<User[]>(
+        `/users?channel=${form.getValues("channel")}`
+      );
       if (response) {
         setUsuarios(response);
       }

@@ -7,15 +7,15 @@ import {
 } from '@nestjs/common'
 import { PrismaClient } from '../../prisma/generated/schema'
 import * as bcrypt from 'bcrypt'
-import { Action, Entity } from '../../prisma/generated/schema'
+import { Action, Entity, PhishingChannel } from '../../prisma/generated/schema'
 import { decryptText, encryptText, computeEmailSearch } from '../utils/crypto'
 
 @Injectable()
 export class UsersService {
   constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
-  findAll(includeInactive = false) {
-    return this.prisma.user
+  async findAll(includeInactive = false, channel?: 'EMAIL') {
+    return await this.prisma.user
       .findMany({
         where: includeInactive ? { is_active: false } : { is_active: true },
         select: {
@@ -45,13 +45,35 @@ export class UsersService {
                   email: true,
                 },
               },
+              id: true,
             },
           },
         },
         orderBy: { created_at: 'desc' },
       })
-      .then((users) =>
-        users.map((u) => ({
+      .then(async (users) => {
+        let consentedSet: Set<string> | null = null
+        if (channel === 'EMAIL') {
+          const pseudonymIds = users
+            .map((u) => u.pseudonym?.id)
+            .filter((id): id is string => Boolean(id))
+          if (pseudonymIds.length > 0) {
+            const consented =
+              await this.prisma.pseudonymChannelConsent.findMany({
+                where: {
+                  pseudonym_id: { in: pseudonymIds },
+                  channel: 'EMAIL',
+                  consented: true,
+                },
+                select: { pseudonym_id: true },
+              })
+            consentedSet = new Set(consented.map((c) => c.pseudonym_id))
+          } else {
+            consentedSet = new Set()
+          }
+        }
+
+        const mapped = users.map((u) => ({
           ...u,
           name: decryptText(u.name as unknown as string),
           email: decryptText(u.email as unknown as string),
@@ -65,8 +87,14 @@ export class UsersService {
           inactivated_by: u.inactivated_by
             ? decryptText(u.inactivated_by as unknown as string)
             : null,
-        })),
-      )
+        }))
+
+        return channel === 'EMAIL'
+          ? mapped.filter(
+              (u) => u.pseudonym?.id && consentedSet!.has(u.pseudonym.id),
+            )
+          : mapped
+      })
   }
 
   async create(
@@ -110,14 +138,57 @@ export class UsersService {
       },
     })
 
-    await this.prisma.pseudonym.create({
+    const createdPseudonym = await this.prisma.pseudonym.create({
       data: {
         pseudonym: `p-${user.id}`,
         user: { connect: { id: user.id } },
         created_by: meta.createdBy,
         updated_by: meta.createdBy,
       },
+      select: { id: true },
     })
+
+    // Log: pseudonym criado
+    try {
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PSEUDONYM,
+          entity_id: createdPseudonym.id,
+          action: Action.CREATE,
+          created_by: meta.createdBy,
+        },
+      })
+    } catch {}
+
+    // Criar consentimentos padrão para todos os canais de phishing
+    const allChannels = Object.values(PhishingChannel)
+    console.log('allChannels', allChannels)
+    if (allChannels.length > 0 && createdPseudonym?.id) {
+      await this.prisma.pseudonymChannelConsent.createMany({
+        data: allChannels.map((channel) => ({
+          pseudonym_id: createdPseudonym.id,
+          channel,
+          consented: true,
+          created_by: meta.createdBy,
+          updated_by: meta.createdBy,
+        })),
+        skipDuplicates: true,
+      })
+
+      // Logs: consents criados por canal
+      for (const channel of allChannels) {
+        try {
+          await this.prisma.log.create({
+            data: {
+              entity: Entity.PSEUDONYM_CHANNEL_CONSENT,
+              entity_id: `${createdPseudonym.id}:${channel}`,
+              action: Action.CREATE,
+              created_by: meta.createdBy,
+            },
+          })
+        } catch {}
+      }
+    }
 
     await this.prisma.log.create({
       data: {

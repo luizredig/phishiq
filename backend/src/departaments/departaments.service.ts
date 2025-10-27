@@ -53,47 +53,83 @@ export class DepartamentsService {
       )
   }
 
-  async findActiveWithUsers(): Promise<DepartmentWithUsers[]> {
-    return this.prisma.department
-      .findMany({
-        where: {
-          is_active: true,
-        },
-        include: {
-          pseudonyms: {
-            include: {
-              pseudonym: {
-                include: { user: true },
-              },
+  async findActiveWithUsers(channel?: 'EMAIL'): Promise<DepartmentWithUsers[]> {
+    const rows = await this.prisma.department.findMany({
+      where: {
+        is_active: true,
+      },
+      include: {
+        pseudonyms: {
+          include: {
+            pseudonym: {
+              include: { user: true },
             },
           },
         },
-      })
-      .then((rows) =>
-        rows.map((d) => {
-          const users = (d.pseudonyms || [])
-            .map((pd) => pd.pseudonym?.user)
-            .filter((u): u is User => !!u)
-            .map((u) => ({
-              user: {
-                ...u,
-                name: decryptText(u.name as unknown as string),
-                email: decryptText(u.email as unknown as string),
-              },
-            }))
+      },
+    })
 
-          return {
-            ...d,
-            users,
-            name: decryptText(d.name as unknown as string),
-            created_by: decryptText(d.created_by as unknown as string),
-            updated_by: decryptText(d.updated_by as unknown as string),
-            inactivated_by: d.inactivated_by
-              ? decryptText(d.inactivated_by as unknown as string)
-              : null,
-          }
-        }),
+    let consentedSet: Set<string> | null = null
+    if (channel === 'EMAIL') {
+      const allPseudonymIds = Array.from(
+        new Set(
+          rows
+            .flatMap((d) => d.pseudonyms || [])
+            .map((pd) => pd.pseudonym?.id)
+            .filter((id): id is string => Boolean(id)),
+        ),
       )
+
+      if (allPseudonymIds.length > 0) {
+        const consented = await this.prisma.pseudonymChannelConsent.findMany({
+          where: {
+            pseudonym_id: { in: allPseudonymIds },
+            channel: 'EMAIL',
+            consented: true,
+          },
+          select: { pseudonym_id: true },
+        })
+        consentedSet = new Set(consented.map((c) => c.pseudonym_id))
+      } else {
+        consentedSet = new Set()
+      }
+    }
+
+    const mapped = rows.map((d) => {
+      const base = d.pseudonyms || []
+      const filtered =
+        channel === 'EMAIL' && consentedSet
+          ? base.filter(
+              (pd) => pd.pseudonym?.id && consentedSet!.has(pd.pseudonym.id),
+            )
+          : base
+
+      const users = filtered
+        .map((pd) => pd.pseudonym?.user)
+        .filter((u): u is User => !!u)
+        .map((u) => ({
+          user: {
+            ...u,
+            name: decryptText(u.name as unknown as string),
+            email: decryptText(u.email as unknown as string),
+          },
+        }))
+
+      return {
+        ...d,
+        users,
+        name: decryptText(d.name as unknown as string),
+        created_by: decryptText(d.created_by as unknown as string),
+        updated_by: decryptText(d.updated_by as unknown as string),
+        inactivated_by: d.inactivated_by
+          ? decryptText(d.inactivated_by as unknown as string)
+          : null,
+      }
+    })
+
+    return channel === 'EMAIL'
+      ? mapped.filter((d) => d.users.length > 0)
+      : mapped
   }
 
   async findOne(id: string): Promise<DepartmentWithUsers> {

@@ -8,7 +8,7 @@ import {
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import { PrismaClient } from '@prisma/client'
-import { Entity } from '../../prisma/generated/schema'
+import { Entity, PhishingChannel } from '../../prisma/generated/schema'
 import { MasterPrismaService } from '../master-prisma/master-prisma.service'
 import * as bcrypt from 'bcrypt'
 import { computeEmailSearch, decryptText, encryptText } from '../utils/crypto'
@@ -46,12 +46,7 @@ export class AuthService {
     password: string
     created_by?: string
   }) {
-    const {
-      name,
-      email,
-      password,
-      created_by = 'system',
-    } = params
+    const { name, email, password, created_by = 'system' } = params
 
     const tenant_slug = process.env.TENANT_SPEED
 
@@ -103,14 +98,56 @@ export class AuthService {
       },
     })
 
-    await this.prisma.pseudonym.create({
+    const createdPseudonym = await this.prisma.pseudonym.create({
       data: {
         pseudonym: `p-${user.id}`,
         user: { connect: { id: user.id } },
         created_by,
         updated_by: created_by,
       },
+      select: { id: true },
     })
+
+    // Log: pseudonym criado
+    try {
+      await this.prisma.log.create({
+        data: {
+          entity: Entity.PSEUDONYM,
+          entity_id: createdPseudonym.id,
+          action: Action.CREATE,
+          created_by,
+        },
+      })
+    } catch {}
+
+    // Consents padrão para todos os canais de phishing
+    const allChannels = Object.values(PhishingChannel)
+    if (allChannels.length > 0 && createdPseudonym?.id) {
+      await this.prisma.pseudonymChannelConsent.createMany({
+        data: allChannels.map((channel) => ({
+          pseudonym_id: createdPseudonym.id,
+          channel,
+          consented: true,
+          created_by,
+          updated_by: created_by,
+        })),
+        skipDuplicates: true,
+      })
+
+      // Logs: consents criados por canal
+      for (const channel of allChannels) {
+        try {
+          await this.prisma.log.create({
+            data: {
+              entity: Entity.PSEUDONYM_CHANNEL_CONSENT,
+              entity_id: `${createdPseudonym.id}:${channel}`,
+              action: Action.CREATE,
+              created_by,
+            },
+          })
+        } catch {}
+      }
+    }
 
     return this.issueTokens({
       ...user,
@@ -156,14 +193,52 @@ export class AuthService {
     })
 
     if (!existingPseudonym) {
-      await this.prisma.pseudonym.create({
+      const created = await this.prisma.pseudonym.create({
         data: {
           pseudonym: `p-${user.id}`,
           user: { connect: { id: user.id } },
           created_by: 'system',
           updated_by: 'system',
         },
+        select: { id: true },
       })
+      // Log: pseudonym criado
+      try {
+        await this.prisma.log.create({
+          data: {
+            entity: Entity.PSEUDONYM,
+            entity_id: created.id,
+            action: Action.CREATE,
+            created_by: 'system',
+          },
+        })
+      } catch {}
+      const allChannels = Object.values(PhishingChannel)
+      if (allChannels.length > 0) {
+        await this.prisma.pseudonymChannelConsent.createMany({
+          data: allChannels.map((channel) => ({
+            pseudonym_id: created.id,
+            channel,
+            consented: true,
+            created_by: 'system',
+            updated_by: 'system',
+          })),
+          skipDuplicates: true,
+        })
+        // Logs: consents criados por canal
+        for (const channel of allChannels) {
+          try {
+            await this.prisma.log.create({
+              data: {
+                entity: Entity.PSEUDONYM_CHANNEL_CONSENT,
+                entity_id: `${created.id}:${channel}`,
+                action: Action.CREATE,
+                created_by: 'system',
+              },
+            })
+          } catch {}
+        }
+      }
     }
 
     return {

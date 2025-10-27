@@ -33,8 +33,11 @@ export class UsersController {
   constructor(private readonly users: UsersService) {}
 
   @Get()
-  list(@Query('includeInactive') includeInactive?: string) {
-    return this.users.findAll(includeInactive === 'true')
+  list(
+    @Query('includeInactive') includeInactive?: string,
+    @Query('channel') channel?: string,
+  ) {
+    return this.users.findAll(includeInactive === 'true', channel as any)
   }
 
   @Post()
