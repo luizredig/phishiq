@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +23,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { ConfirmDialog } from "../ui/confirm-dialog";
 
 interface PhishingTemplate {
   id: string;
@@ -54,6 +55,8 @@ export function TemplateDialog({
   template,
 }: TemplateDialogProps) {
   const { post, put, loading } = useApi();
+  const [confirmSaveOpen, setConfirmSaveOpen] = useState(false);
+  const [pendingData, setPendingData] = useState<TemplateFormData | null>(null);
 
   const form = useForm<TemplateFormData>({
     resolver: zodResolver(templateFormSchema),
@@ -75,7 +78,7 @@ export function TemplateDialog({
     }
   }, [open, template, form]);
 
-  async function onSubmit(data: TemplateFormData) {
+  async function doSave(data: TemplateFormData) {
     try {
       if (template) {
         await put(`/phishing-templates/${template.id}`, data);
@@ -83,70 +86,97 @@ export function TemplateDialog({
         await post(`/phishing-templates`, data);
       }
       onOpenChange(false);
-    } catch (e) {
+    } catch {
       // noop (erros já são tratados no hook)
     }
   }
 
+  function onSubmit(data: TemplateFormData) {
+    setPendingData(data);
+    setConfirmSaveOpen(true);
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px]">
-        <DialogHeader>
-          <DialogTitle>{template ? "Editar" : "Novo"} template</DialogTitle>
-          <DialogDescription>
-            Defina o título e o conteúdo do template.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-[700px]">
+          <DialogHeader>
+            <DialogTitle>{template ? "Editar" : "Novo"} template</DialogTitle>
+            <DialogDescription>
+              Defina o título e o conteúdo do template.
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Título</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Este será o título do email enviado" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Título</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Este será o título do email enviado"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="text"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Texto</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      className="min-h-[220px] font-mono text-sm"
-                      placeholder="Escreva o texto que será enviado no e-mail"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="text"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Texto</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="min-h-[220px] font-mono text-sm"
+                        placeholder="Escreva o texto que será enviado no e-mail"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={loading}>
-                {template ? "Salvar" : "Criar"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {template ? "Salvar" : "Criar"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+
+      <ConfirmDialog
+        open={confirmSaveOpen}
+        onOpenChange={setConfirmSaveOpen}
+        title={template ? "Confirmar salvamento" : "Confirmar criação"}
+        description={
+          template
+            ? "Deseja salvar as alterações deste template?"
+            : "Deseja criar este novo template?"
+        }
+        confirmText={template ? "Salvar" : "Criar"}
+        onConfirm={() => {
+          if (pendingData) void doSave(pendingData);
+          setConfirmSaveOpen(false);
+          setPendingData(null);
+        }}
+      />
+    </>
   );
 }

@@ -9,12 +9,21 @@ type DepartmentWithUsers = Department & { users: { user: User }[] }
 export class DepartamentsService {
   constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
-  async findAll(includeInactive = false): Promise<DepartmentWithUsers[]> {
-    return this.prisma.department
-      .findMany({
-        where: {
-          is_active: includeInactive ? false : true,
-        },
+  async findAll(
+    includeInactive = false,
+    page?: number,
+    pageSize?: number,
+  ): Promise<{ items: DepartmentWithUsers[]; total: number }> {
+    const where = {
+      is_active: includeInactive ? false : true,
+    }
+    const hasPagination = Boolean(page && pageSize && page > 0 && pageSize > 0)
+    const skip = hasPagination ? (page! - 1) * pageSize! : undefined
+    const take = hasPagination ? pageSize : undefined
+
+    const [rows, total] = await Promise.all([
+      this.prisma.department.findMany({
+        where,
         include: {
           pseudonyms: {
             include: {
@@ -24,33 +33,72 @@ export class DepartamentsService {
             },
           },
         },
-      })
-      .then((rows) =>
-        rows.map((d) => {
-          const users = (d.pseudonyms || [])
-            .map((pd) => pd.pseudonym?.user)
-            .filter((u): u is User => !!u)
-            .map((u) => ({
-              user: {
-                ...u,
-                name: decryptText(u.name as unknown as string),
-                email: decryptText(u.email as unknown as string),
-              },
-            }))
+        skip,
+        take,
+      }),
+      this.prisma.department.count({ where }),
+    ])
 
-          return {
-            ...d,
-            // shape esperado no frontend
-            users,
-            name: decryptText(d.name as unknown as string),
-            created_by: decryptText(d.created_by as unknown as string),
-            updated_by: decryptText(d.updated_by as unknown as string),
-            inactivated_by: d.inactivated_by
-              ? decryptText(d.inactivated_by as unknown as string)
-              : null,
-          }
-        }),
-      )
+    const mapped = rows.map((d) => {
+      const pseudonyms = (d.pseudonyms || []).map((pd) => {
+        const user = pd.pseudonym?.user
+        const decryptedUser = user
+          ? {
+              ...user,
+              name: decryptText(user.name as unknown as string),
+              email: decryptText(user.email as unknown as string),
+              tenant_id: user.tenant_id
+                ? (decryptText(user.tenant_id as unknown as string) as any)
+                : null,
+              created_by: user.created_by
+                ? (decryptText(user.created_by as unknown as string) as any)
+                : null,
+              updated_by: user.updated_by
+                ? (decryptText(user.updated_by as unknown as string) as any)
+                : null,
+              inactivated_by: user.inactivated_by
+                ? (decryptText(user.inactivated_by as unknown as string) as any)
+                : null,
+            }
+          : null
+
+        return {
+          ...pd,
+          pseudonym: pd.pseudonym
+            ? { ...pd.pseudonym, user: decryptedUser }
+            : null,
+        }
+      })
+
+      const users = (d.pseudonyms || [])
+        .map((pd) => pd.pseudonym?.user)
+        .filter((u): u is User => !!u)
+        .map((u) => ({
+          user: {
+            ...u,
+            name: decryptText(u.name as unknown as string),
+            email: decryptText(u.email as unknown as string),
+          },
+        }))
+
+      return {
+        ...d,
+        pseudonyms,
+        users,
+        name: decryptText(d.name as unknown as string),
+        created_by: decryptText(d.created_by as unknown as string),
+        updated_by: decryptText(d.updated_by as unknown as string),
+        inactivated_by: d.inactivated_by
+          ? decryptText(d.inactivated_by as unknown as string)
+          : null,
+      }
+    })
+
+    mapped.sort((a, b) =>
+      a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }),
+    )
+
+    return { items: mapped, total }
   }
 
   async findActiveWithUsers(channel?: 'EMAIL'): Promise<DepartmentWithUsers[]> {

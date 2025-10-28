@@ -45,8 +45,14 @@ interface Department {
   }[];
 }
 
+interface DepartmentsResponse {
+  items: Department[];
+  total: number;
+}
+
 export default function ManageDepartments() {
   const [departments, setDepartamentos] = useState<Department[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoDepartamentoOpen, setIsNovoDepartamentoOpen] = useState(false);
@@ -62,18 +68,29 @@ export default function ManageDepartments() {
 
   const { get, put, delete: deleteRequest, loading: apiLoading } = useApi();
 
+  // confirmação de edição será feita dentro do DepartmentDialog ao salvar
+  const [confirmToggle, setConfirmToggle] = useState<{
+    id: string;
+    next: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [includeInactive]);
+
   useEffect(() => {
     fetchDepartamentos();
-  }, [includeInactive]);
+  }, [includeInactive, currentPage]);
 
   async function fetchDepartamentos() {
     setLoading(true);
     try {
-      const response = await get<Department[]>(
-        `/departments?includeInactive=${includeInactive}`
+      const response = await get<DepartmentsResponse>(
+        `/departments?includeInactive=${includeInactive}&page=${currentPage}&pageSize=${itemsPerPage}`
       );
       if (response) {
-        setDepartamentos(response);
+        setDepartamentos(response.items);
+        setTotal(response.total);
       }
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -132,6 +149,7 @@ export default function ManageDepartments() {
   const filteredDepartamentos = departments?.filter((department) => {
     if (!busca) return true;
     const termoBusca = busca.toLowerCase();
+
     return (
       department?.name.toLowerCase().includes(termoBusca) ||
       department?.pseudonyms?.some(
@@ -142,11 +160,10 @@ export default function ManageDepartments() {
     );
   });
 
-  const totalPages = Math.ceil(filteredDepartamentos.length / itemsPerPage);
-  const paginatedDepartamentos = filteredDepartamentos.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const totalPages = Math.ceil(
+    (busca ? filteredDepartamentos.length : total) / itemsPerPage
   );
+  const paginatedDepartamentos = filteredDepartamentos;
 
   function getStatusBadge(departamento: Department) {
     if (!departamento.is_active) {
@@ -261,7 +278,7 @@ export default function ManageDepartments() {
                       <Switch
                         checked={department.is_active}
                         onCheckedChange={(checked) =>
-                          handleToggleStatus(department.id, checked)
+                          setConfirmToggle({ id: department.id, next: checked })
                         }
                       />
                     </TableCell>
@@ -346,12 +363,38 @@ export default function ManageDepartments() {
 
       <ConfirmDialog
         open={!!departamentoParaExcluir}
-        onOpenChange={() => setDepartamentoParaExcluir(null)}
+        onOpenChange={(open) => {
+          if (!open) setDepartamentoParaExcluir(null);
+        }}
         title="Excluir Departamento"
         description="Tem certeza que deseja excluir este departamento? Esta ação não pode ser desfeita."
         confirmText="Sim, excluir"
         cancelText="Não, cancelar"
         onConfirm={handleExcluir}
+      />
+
+      {/* confirmação de edição movida para o DepartmentDialog */}
+
+      {/* Confirmar ativar/inativar */}
+      <ConfirmDialog
+        open={!!confirmToggle}
+        onOpenChange={(open) => {
+          if (!open) setConfirmToggle(null);
+        }}
+        title={
+          confirmToggle?.next ? "Ativar departamento" : "Inativar departamento"
+        }
+        description={
+          confirmToggle?.next
+            ? "Tem certeza que deseja ativar este departamento?"
+            : "Tem certeza que deseja inativar este departamento?"
+        }
+        confirmText={confirmToggle?.next ? "Ativar" : "Inativar"}
+        onConfirm={async () => {
+          if (confirmToggle)
+            await handleToggleStatus(confirmToggle.id, confirmToggle.next);
+          setConfirmToggle(null);
+        }}
       />
     </div>
   );

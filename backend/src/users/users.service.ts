@@ -14,10 +14,20 @@ import { decryptText, encryptText, computeEmailSearch } from '../utils/crypto'
 export class UsersService {
   constructor(@Inject('TENANT_PRISMA') private readonly prisma: PrismaClient) {}
 
-  async findAll(includeInactive = false, channel?: 'EMAIL') {
-    return await this.prisma.user
-      .findMany({
-        where: includeInactive ? { is_active: false } : { is_active: true },
+  async findAll(
+    includeInactive = false,
+    channel?: 'EMAIL',
+    page?: number,
+    pageSize?: number,
+  ): Promise<{ items: any[]; total: number }> {
+    const where = includeInactive ? { is_active: false } : { is_active: true }
+    const hasPagination = Boolean(page && pageSize && page > 0 && pageSize > 0)
+    const skip = hasPagination ? (page! - 1) * pageSize! : undefined
+    const take = hasPagination ? pageSize : undefined
+
+    const [users, total] = await Promise.all([
+      this.prisma.user.findMany({
+        where,
         select: {
           id: true,
           name: true,
@@ -49,32 +59,77 @@ export class UsersService {
             },
           },
         },
-        orderBy: { created_at: 'desc' },
-      })
-      .then(async (users) => {
-        let consentedSet: Set<string> | null = null
-        if (channel === 'EMAIL') {
-          const pseudonymIds = users
-            .map((u) => u.pseudonym?.id)
-            .filter((id): id is string => Boolean(id))
-          if (pseudonymIds.length > 0) {
-            const consented =
-              await this.prisma.pseudonymChannelConsent.findMany({
-                where: {
-                  pseudonym_id: { in: pseudonymIds },
-                  channel: 'EMAIL',
-                  consented: true,
-                },
-                select: { pseudonym_id: true },
-              })
-            consentedSet = new Set(consented.map((c) => c.pseudonym_id))
-          } else {
-            consentedSet = new Set()
-          }
-        }
+        skip,
+        take,
+      }),
+      this.prisma.user.count({ where }),
+    ])
 
-        const mapped = users.map((u) => ({
+    const result = await (async () => {
+      let consentedSet: Set<string> | null = null
+      if (channel === 'EMAIL') {
+        const pseudonymIds = users
+          .map((u) => u.pseudonym?.id)
+          .filter((id): id is string => Boolean(id))
+        if (pseudonymIds.length > 0) {
+          const consented = await this.prisma.pseudonymChannelConsent.findMany({
+            where: {
+              pseudonym_id: { in: pseudonymIds },
+              channel: 'EMAIL',
+              consented: true,
+            },
+            select: { pseudonym_id: true },
+          })
+          consentedSet = new Set(consented.map((c) => c.pseudonym_id))
+        } else {
+          consentedSet = new Set()
+        }
+      }
+
+      const mapped = users.map((u) => {
+        const decryptedPseudonymUser = u.pseudonym?.user
+          ? {
+              ...u.pseudonym.user,
+              name: decryptText(u.pseudonym.user.name as unknown as string),
+              email: decryptText(u.pseudonym.user.email as unknown as string),
+            }
+          : null
+
+        const decryptedDepartments = (
+          u.pseudonym?.pseudonym_departments || []
+        ).map((pd) => {
+          const dept = pd.department
+          const decryptedDept = dept
+            ? {
+                ...dept,
+                name: decryptText(dept.name as unknown as string),
+                created_by: dept.created_by
+                  ? (decryptText(dept.created_by as unknown as string) as any)
+                  : null,
+                updated_by: dept.updated_by
+                  ? (decryptText(dept.updated_by as unknown as string) as any)
+                  : null,
+                inactivated_by: dept.inactivated_by
+                  ? (decryptText(
+                      dept.inactivated_by as unknown as string,
+                    ) as any)
+                  : null,
+              }
+            : null
+          return { ...pd, department: decryptedDept }
+        })
+
+        const pseudonym = u.pseudonym
+          ? {
+              ...u.pseudonym,
+              user: decryptedPseudonymUser,
+              pseudonym_departments: decryptedDepartments,
+            }
+          : null
+
+        return {
           ...u,
+          pseudonym,
           name: decryptText(u.name as unknown as string),
           email: decryptText(u.email as unknown as string),
           tenant_id: decryptText(u.tenant_id as unknown as string),
@@ -87,14 +142,23 @@ export class UsersService {
           inactivated_by: u.inactivated_by
             ? decryptText(u.inactivated_by as unknown as string)
             : null,
-        }))
+        }
+      })
 
-        return channel === 'EMAIL'
+      const filtered =
+        channel === 'EMAIL'
           ? mapped.filter(
               (u) => u.pseudonym?.id && consentedSet!.has(u.pseudonym.id),
             )
           : mapped
-      })
+
+      filtered.sort((a, b) =>
+        a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }),
+      )
+      return filtered
+    })()
+
+    return { items: result, total }
   }
 
   async create(
@@ -162,7 +226,7 @@ export class UsersService {
 
     // Criar consentimentos padrão para todos os canais de phishing
     const allChannels = Object.values(PhishingChannel)
-    console.log('allChannels', allChannels)
+
     if (allChannels.length > 0 && createdPseudonym?.id) {
       await this.prisma.pseudonymChannelConsent.createMany({
         data: allChannels.map((channel) => ({

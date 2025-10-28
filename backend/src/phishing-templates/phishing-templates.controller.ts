@@ -16,8 +16,14 @@ export class PhishingTemplatesController {
   constructor(private readonly service: PhishingTemplatesService) {}
 
   @Get()
-  list(@Query('includeInactive') includeInactive?: string) {
-    return this.service.findAll(includeInactive === 'true')
+  list(
+    @Query('includeInactive') includeInactive?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    const pageNum = page ? parseInt(page, 10) : undefined
+    const sizeNum = pageSize ? parseInt(pageSize, 10) : undefined
+    return this.service.findAll(includeInactive === 'true', pageNum, sizeNum)
   }
 
   @Get(':id')

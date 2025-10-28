@@ -4,6 +4,16 @@ import { Button } from "../components/ui/button";
 import { Switch } from "../components/ui/switch";
 import { useApi } from "../hooks/use-api";
 import { TemplateDialog } from "../components/templates/template-dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/ui/pagination";
+import { ConfirmDialog } from "../components/ui/confirm-dialog";
+import { Edit, Trash } from "lucide-react";
 
 interface PhishingTemplate {
   id: string;
@@ -13,28 +23,36 @@ interface PhishingTemplate {
 }
 
 export default function Templates() {
-  const { get, put, delete: del } = useApi();
+  const { get, delete: del } = useApi();
   const [items, setItems] = useState<PhishingTemplate[]>([]);
+  const [total, setTotal] = useState(0);
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<PhishingTemplate | undefined>(
     undefined
   );
   const [includeInactive, setIncludeInactive] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const [confirmEdit, setConfirmEdit] = useState<PhishingTemplate | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [includeInactive]);
 
   useEffect(() => {
     void fetchTemplates();
-  }, [includeInactive]);
+  }, [includeInactive, currentPage]);
 
   async function fetchTemplates() {
-    const data = await get<PhishingTemplate[]>(
-      `/phishing-templates?includeInactive=${includeInactive}`
+    const data = await get<{ items: PhishingTemplate[]; total: number }>(
+      `/phishing-templates?includeInactive=${includeInactive}&page=${currentPage}&pageSize=${itemsPerPage}`
     );
-    if (data) setItems(data);
-  }
-
-  async function toggleStatus(id: string, is_active: boolean) {
-    const ok = await put(`/phishing-templates/${id}/status`, { is_active });
-    if (ok) fetchTemplates();
+    if (data) {
+      setItems(data.items);
+      setTotal(data.total);
+    }
   }
 
   async function remove(id: string) {
@@ -100,24 +118,18 @@ export default function Templates() {
                     <div className="flex gap-2 justify-end">
                       <Button
                         variant="outline"
-                        onClick={() => {
-                          setEditing(t);
-                          setOpen(true);
-                        }}
+                        size="icon"
+                        onClick={() => setConfirmEdit(t)}
                       >
-                        Editar
+                        <Edit className="h-4 w-4 text-primary" />
                       </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => toggleStatus(t.id, !t.is_active)}
-                      >
-                        {t.is_active ? "Inativar" : "Ativar"}
-                      </Button>
+
                       <Button
                         variant="destructive"
-                        onClick={() => remove(t.id)}
+                        size="icon"
+                        onClick={() => setConfirmDelete(t.id)}
                       >
-                        Excluir
+                        <Trash />
                       </Button>
                     </div>
                   </td>
@@ -128,6 +140,54 @@ export default function Templates() {
         )}
       </div>
 
+      {Math.ceil(total / itemsPerPage) > 1 && (
+        <div className="mt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  className={
+                    currentPage === 1 ? "pointer-events-none opacity-50" : ""
+                  }
+                />
+              </PaginationItem>
+
+              {Array.from(
+                { length: Math.ceil(total / itemsPerPage) },
+                (_, i) => i + 1
+              )?.map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => setCurrentPage(page)}
+                    isActive={currentPage === page}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, Math.ceil(total / itemsPerPage))
+                    )
+                  }
+                  className={
+                    currentPage === Math.ceil(total / itemsPerPage)
+                      ? "pointer-events-none opacity-50"
+                      : ""
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
+
       <TemplateDialog
         open={open}
         onOpenChange={(state) => {
@@ -135,6 +195,37 @@ export default function Templates() {
           if (!state) fetchTemplates();
         }}
         template={editing}
+      />
+
+      {/* Confirmar iniciar edição */}
+      <ConfirmDialog
+        open={!!confirmEdit}
+        onOpenChange={(open) => {
+          if (!open) setConfirmEdit(null);
+        }}
+        title="Editar template"
+        description="Deseja editar este template?"
+        confirmText="Editar"
+        onConfirm={() => {
+          if (confirmEdit) setEditing(confirmEdit);
+          setConfirmEdit(null);
+          setOpen(true);
+        }}
+      />
+
+      {/* Confirmar exclusão */}
+      <ConfirmDialog
+        open={!!confirmDelete}
+        onOpenChange={(open) => {
+          if (!open) setConfirmDelete(null);
+        }}
+        title="Excluir template"
+        description="Esta ação não pode ser desfeita. Deseja excluir este template?"
+        confirmText="Excluir"
+        onConfirm={async () => {
+          if (confirmDelete) await remove(confirmDelete);
+          setConfirmDelete(null);
+        }}
       />
     </div>
   );

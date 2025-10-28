@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/layout/loading-spinner";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
+import { ConfirmDialog } from "../components/ui/confirm-dialog";
 
 import { Input } from "../components/ui/input";
 import {
@@ -44,8 +45,14 @@ interface Usuario {
   };
 }
 
+interface UsersResponse {
+  items: Usuario[];
+  total: number;
+}
+
 export default function ManageUsers() {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState("");
   const [isNovoUsuarioOpen, setIsNovoUsuarioOpen] = useState(false);
@@ -59,18 +66,28 @@ export default function ManageUsers() {
 
   const { get, put, loading: apiLoading } = useApi();
 
+  const [confirmToggle, setConfirmToggle] = useState<{
+    id: string;
+    next: boolean;
+  } | null>(null);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [includeInactive]);
+
   useEffect(() => {
     fetchUsuarios();
-  }, [includeInactive]);
+  }, [includeInactive, currentPage]);
 
   async function fetchUsuarios() {
     setLoading(true);
     try {
-      const response = await get<Usuario[]>(
-        `/users?includeInactive=${includeInactive}`
+      const response = await get<UsersResponse>(
+        `/users?includeInactive=${includeInactive}&page=${currentPage}&pageSize=${itemsPerPage}`
       );
       if (response) {
-        setUsuarios(response);
+        setUsuarios(response.items);
+        setTotal(response.total);
       }
     } catch (error) {
       console.error("Error fetching usuarios:", error);
@@ -114,11 +131,10 @@ export default function ManageUsers() {
     );
   });
 
-  const totalPages = Math.ceil(filteredUsuarios.length / itemsPerPage);
-  const paginatedUsuarios = filteredUsuarios.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const totalPages = Math.ceil(
+    (busca ? filteredUsuarios.length : total) / itemsPerPage
   );
+  const paginatedUsuarios = filteredUsuarios;
 
   function getStatusBadge(usuario: Usuario) {
     if (!usuario.is_active) {
@@ -243,7 +259,7 @@ export default function ManageUsers() {
                       <Switch
                         checked={user.is_active}
                         onCheckedChange={(checked) =>
-                          handleToggleStatus(user.id, checked)
+                          setConfirmToggle({ id: user.id, next: checked })
                         }
                       />
                     </TableCell>
@@ -324,6 +340,25 @@ export default function ManageUsers() {
           }
         }}
         usuarioParaEditar={usuarioParaEditar}
+      />
+      {/* Confirmar ativar/inativar */}
+      <ConfirmDialog
+        open={!!confirmToggle}
+        onOpenChange={(open) => {
+          if (!open) setConfirmToggle(null);
+        }}
+        title={confirmToggle?.next ? "Ativar usuário" : "Inativar usuário"}
+        description={
+          confirmToggle?.next
+            ? "Tem certeza que deseja ativar este usuário?"
+            : "Tem certeza que deseja inativar este usuário?"
+        }
+        confirmText={confirmToggle?.next ? "Ativar" : "Inativar"}
+        onConfirm={async () => {
+          if (confirmToggle)
+            await handleToggleStatus(confirmToggle.id, confirmToggle.next);
+          setConfirmToggle(null);
+        }}
       />
     </div>
   );

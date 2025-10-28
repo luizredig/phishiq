@@ -67,7 +67,7 @@ interface Phishing {
 }
 
 type TipoEnvio = "TODOS" | "INDIVIDUAL" | "DEPARTAMENTO";
-type Status = "TODOS" | "ENVIADO" | "FALHA";
+type Status = "TODOS" | "SENT" | "SEND_FAILED";
 type Resultado = "TODOS" | "CAIU" | "SEM_INTERACOES";
 
 interface Filtros {
@@ -272,8 +272,8 @@ export default function ManagePhishings() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="TODOS">Todos</SelectItem>
-                <SelectItem value="ENVIADO">Enviado</SelectItem>
-                <SelectItem value="FALHA">Falha</SelectItem>
+                <SelectItem value="SENT">Enviado</SelectItem>
+                <SelectItem value="SEND_FAILED">Falha</SelectItem>
               </SelectContent>
             </Select>
           </div>

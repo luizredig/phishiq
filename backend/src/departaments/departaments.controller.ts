@@ -16,8 +16,14 @@ export class DepartamentsController {
   constructor(private readonly service: DepartamentsService) {}
 
   @Get()
-  findAll(@Query('includeInactive') includeInactive?: string) {
-    return this.service.findAll(includeInactive === 'true')
+  findAll(
+    @Query('includeInactive') includeInactive?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    const pageNum = page ? parseInt(page, 10) : undefined
+    const sizeNum = pageSize ? parseInt(pageSize, 10) : undefined
+    return this.service.findAll(includeInactive === 'true', pageNum, sizeNum)
   }
 
   @Get('ativos-com-usuarios')

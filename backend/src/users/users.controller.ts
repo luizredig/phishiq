@@ -36,8 +36,17 @@ export class UsersController {
   list(
     @Query('includeInactive') includeInactive?: string,
     @Query('channel') channel?: string,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
   ) {
-    return this.users.findAll(includeInactive === 'true', channel as any)
+    const pageNum = page ? parseInt(page, 10) : undefined
+    const sizeNum = pageSize ? parseInt(pageSize, 10) : undefined
+    return this.users.findAll(
+      includeInactive === 'true',
+      channel as any,
+      pageNum,
+      sizeNum,
+    )
   }
 
   @Post()
