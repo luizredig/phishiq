@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   })
 
-  app.setGlobalPrefix('/api')
+  app.setGlobalPrefix(process.env.API_PREFIX!)
 
   // Bull Board em /admin/queues
   const serverAdapter = new ExpressAdapter()
