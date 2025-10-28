@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/auth-context";
+import { useApi } from "../hooks/use-api";
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import { z } from "zod";
 export default function SignupPage() {
   const navigate = useNavigate();
   const { signup, loading, error } = useAuth();
+  const api = useApi();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -82,7 +84,12 @@ export default function SignupPage() {
       email: normalizedEmail,
       password,
     });
-    if (ok) navigate("/dashboard");
+    if (ok) {
+      try {
+        await api.get("/cookies/consents");
+      } catch {}
+      navigate("/dashboard");
+    }
   }
 
   return (

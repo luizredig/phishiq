@@ -12,43 +12,6 @@ type CookieConsent = {
   advertising: boolean;
 };
 
-const COOKIE_CONSENT_STORAGE_KEY = "cookie-consent.phishiq";
-
-function loadCookieConsent(): CookieConsent | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
-
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as CookieConsent;
-
-    if (parsed && typeof parsed === "object") {
-      return {
-        strictlyNecessary: true,
-        functional: !!parsed.functional,
-        analytics: !!parsed.analytics,
-        advertising: !!parsed.advertising,
-      };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-function saveCookieConsent(consent: CookieConsent) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(
-    COOKIE_CONSENT_STORAGE_KEY,
-    JSON.stringify({
-      strictlyNecessary: true,
-      functional: !!consent.functional,
-      analytics: !!consent.analytics,
-      advertising: !!consent.advertising,
-    })
-  );
-}
-
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [showCookieModal, setShowCookieModal] = useState(false);
   const [consent, setConsent] = useState<CookieConsent>({
@@ -60,35 +23,32 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const api = useApi();
 
   useEffect(() => {
-    const existing = loadCookieConsent();
-    if (existing) {
-      setConsent(existing);
-      setShowCookieModal(false);
-    } else {
-      setShowCookieModal(true);
-    }
-
     void (async () => {
       try {
         const server = await api.get<Record<string, boolean>>(
           "/cookies/consents"
         );
-        if (server) {
+        const hasAnyConsentKey =
+          !!server &&
+          (Object.prototype.hasOwnProperty.call(server, "FUNCTIONAL") ||
+            Object.prototype.hasOwnProperty.call(server, "ANALYTICS") ||
+            Object.prototype.hasOwnProperty.call(server, "ADVERTISING"));
+
+        if (hasAnyConsentKey) {
           const merged: CookieConsent = {
             strictlyNecessary: true,
             functional: !!server.FUNCTIONAL,
             analytics: !!server.ANALYTICS,
             advertising: !!server.ADVERTISING,
           };
-
-          if (!existing) {
-            setConsent(merged);
-          } else {
-            saveCookieConsent(merged);
-            setConsent(merged);
-          }
+          setConsent(merged);
+          setShowCookieModal(false);
+        } else {
+          setShowCookieModal(true);
         }
-      } catch {}
+      } catch {
+        setShowCookieModal(true);
+      }
     })();
   }, []);
 
@@ -99,7 +59,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       analytics: true,
       advertising: true,
     };
-    saveCookieConsent(all);
     setConsent(all);
     setShowCookieModal(false);
     void api.post("/cookies/consents", {
@@ -116,7 +75,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       analytics: false,
       advertising: false,
     };
-    saveCookieConsent(none);
     setConsent(none);
     setShowCookieModal(false);
     void api.post("/cookies/consents", {
@@ -133,7 +91,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       analytics: !!consent.analytics,
       advertising: !!consent.advertising,
     };
-    saveCookieConsent(normalized);
     setConsent(normalized);
     setShowCookieModal(false);
     void api.post("/cookies/consents", {
