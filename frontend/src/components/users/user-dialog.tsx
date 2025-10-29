@@ -144,10 +144,9 @@ export function UsuarioDialog({
 
     try {
       if (usuarioParaEditar) {
-        const response = await put(
-          `/users/${usuarioParaEditar.id}`,
-          normalized
-        );
+        const response = await put(`/users/${usuarioParaEditar.id}`, {
+          name: normalized.name,
+        });
         if (response) {
           const departmentsAtuais =
             usuarioParaEditar.pseudonym?.pseudonym_departments?.map(
@@ -255,6 +254,7 @@ export function UsuarioDialog({
                       <Input
                         type="email"
                         placeholder="Email do usuário"
+                        disabled={Boolean(usuarioParaEditar)}
                         {...field}
                       />
                     </FormControl>
