@@ -67,6 +67,15 @@ interface TemplateItem {
   name: string;
 }
 
+interface UsersApiResponse {
+  items: Array<{
+    id: string;
+    name: string;
+    email: string;
+  }>;
+  total: number;
+}
+
 const baseFormSchema = z.object({
   channel: z.enum(["EMAIL"]),
   departments: z.array(z.string()).optional(),
@@ -181,11 +190,16 @@ export function PhishingDialog({
 
   async function fetchUsuarios() {
     try {
-      const response = await get<User[]>(
+      const response = await get<UsersApiResponse>(
         `/users?channel=${form.getValues("channel")}`
       );
       if (response) {
-        setUsuarios(response);
+        const users = (response.items || []).map((u) => ({
+          id: u.id,
+          name: u.name,
+          email: u.email,
+        }));
+        setUsuarios(users);
       }
     } catch (error) {
       console.error("Error fetching usuarios:", error);

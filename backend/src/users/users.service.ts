@@ -20,7 +20,9 @@ export class UsersService {
     page?: number,
     pageSize?: number,
   ): Promise<{ items: any[]; total: number }> {
-    const where = includeInactive ? { is_active: false } : { is_active: true }
+    const where = includeInactive
+      ? { is_active: false, roles: { has: 'user' } }
+      : { is_active: true, roles: { has: 'user' } }
     const hasPagination = Boolean(page && pageSize && page > 0 && pageSize > 0)
     const skip = hasPagination ? (page! - 1) * pageSize! : undefined
     const take = hasPagination ? pageSize : undefined
